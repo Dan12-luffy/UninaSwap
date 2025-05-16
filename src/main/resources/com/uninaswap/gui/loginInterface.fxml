@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" stylesheets="@../guiCSS/loginInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.LoginController">
+   <top>
+      <VBox alignment="CENTER" prefHeight="150.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label id="app-title" prefHeight="84.0" prefWidth="261.0" text=" Unina Swap">
+               <font>
+                  <Font name="Noto Kufi Arabic Bold" size="39.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label id="login-title" text="Accedi">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Label>
+            <VBox prefWidth="300.0" spacing="5.0">
+               <children>
+                  <Label styleClass="form-label" text="Username">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="usernameField" promptText="Inserisci il tuo username" styleClass="form-field">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </TextField>
+               </children>
+            </VBox>
+            <VBox prefWidth="300.0" spacing="5.0">
+               <children>
+                  <Label styleClass="form-label" text="Password">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Label>
+                  <PasswordField fx:id="passwordField" promptText="Inserisci la tua password" styleClass="form-field">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </PasswordField>
+               </children>
+            </VBox>
+            <Hyperlink id="forgot-password" text="Password dimenticata?">
+               <font>
+                  <Font size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="-10.0" />
+               </VBox.margin>
+            </Hyperlink>
+            <Button id="login-button" fx:id="loginButton" mnemonicParsing="false" onAction="#onLoginButtonClicked" prefHeight="45.0" prefWidth="300.0" text="Accedi">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+            <HBox alignment="CENTER" prefWidth="300.0" spacing="20.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets left="50.0" right="50.0" />
+         </padding>
+      </VBox>
+   </center>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="80.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label styleClass="footer-text" text="Non hai un account? ">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Hyperlink id="register-link" fx:id="registerButton" onAction="#navigateToRegister" text="Registrati">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Hyperlink>
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

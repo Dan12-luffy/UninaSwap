@@ -1,0 +1,415 @@
+/* Base styles */
+.root {
+    -fx-background-color: white;
+    -fx-font-family: "System";
+}
+
+/* Header styles */
+BorderPane > HBox {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Logo label */
+BorderPane > HBox > HBox > Label {
+    -fx-text-fill: #21a9b9;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+
+/* Back button */
+#backButton {
+    -fx-background-color: #f5f5f5;
+    -fx-text-fill: #424242;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5 15;
+}
+
+#backButton:hover {
+    -fx-background-color: #eeeeee;
+}
+
+/* Page title */
+BorderPane > VBox > Label {
+    -fx-text-fill: #424242;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Tab pane styling */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1 1 0 1;
+    -fx-border-radius: 5 5 0 0;
+    -fx-background-radius: 5 5 0 0;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: white;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #424242;
+    -fx-font-size: 14px;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #21a9b9;
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab-content-area {
+    -fx-background-color: white;
+}
+
+/* Filter box */
+.filter-box {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 8;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+/* Filter label */
+.filter-box Label {
+    -fx-text-fill: #424242;
+    -fx-font-size: 14px;
+}
+
+/* Action buttons */
+#applyFiltersButton, #exportReportButton {
+    -fx-background-color: #21a9b9;
+    -fx-background-radius: 20;
+    -fx-text-fill: WHITE;
+    -fx-font-size: 14px;
+    -fx-padding: 5 15;
+}
+
+#applyFiltersButton:hover, #exportReportButton:hover {
+    -fx-background-color: #1d98a7;
+}
+
+#resetFiltersButton, #refreshReportButton {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 20;
+    -fx-text-fill: #424242;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-font-size: 14px;
+    -fx-padding: 5 15;
+}
+
+#resetFiltersButton:hover, #refreshReportButton:hover {
+    -fx-background-color: #eeeeee;
+}
+
+/* Table styling */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+/* Stile specifico per la tabella delle offerte con righe più alte */
+.offer-table {
+    -fx-font-size: 14px;
+}
+
+.offer-table .table-row-cell {
+    -fx-cell-size: 45;
+    -fx-min-height: 45px;
+    -fx-padding: 8px 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 5;
+    -fx-pref-height: 40px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #424242;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #F5F5F5;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #FAFAFA;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #E8F5F7;
+    -fx-text-fill: #424242;
+}
+
+.table-view .table-cell {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8;
+    -fx-text-fill: #333333;
+}
+
+/* ComboBox styling */
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #424242;
+    -fx-padding: 5 10;
+}
+
+/* Statistics cards */
+.stats-box {
+    -fx-background-color: transparent;
+}
+
+.stats-card {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 2);
+}
+
+/* Statistics card titles */
+.stats-card-title {
+    -fx-text-fill: #757575;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Statistics card values */
+#totalOffersStat {
+    -fx-text-fill: #424242;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+#acceptedOffersStat {
+    -fx-text-fill: #4CAF50;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+#pendingOffersStat {
+    -fx-text-fill: #FFC107;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+#rejectedOffersStat {
+    -fx-text-fill: #F44336;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Section titles */
+.section-title {
+    -fx-text-fill: #424242;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* Chart containers */
+.chart-container {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+}
+
+/* Price statistics */
+.price-stats-container {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.price-stat-card {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+/* Price label titles */
+.price-stat-title {
+    -fx-text-fill: #757575;
+    -fx-font-size: 14px;
+}
+
+/* Price label values */
+#avgPriceLabel, #minPriceLabel, #maxPriceLabel {
+    -fx-text-fill: #21a9b9;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+/* Counter label */
+#totalOffersLabel {
+    -fx-text-fill: #21a9b9;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* Separator */
+.separator .line {
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 0.5;
+}
+
+/* PieChart styling */
+.chart-pie {
+    -fx-border-color: white;
+    -fx-border-width: 1;
+}
+
+.chart-pie-label {
+    -fx-fill: #424242;
+}
+
+.chart-pie-label-line {
+    -fx-stroke: #757575;
+    -fx-fill: #757575;
+}
+
+.default-color0.chart-pie { -fx-pie-color: #21a9b9; }
+.default-color1.chart-pie { -fx-pie-color: #75C2BD; }
+.default-color2.chart-pie { -fx-pie-color: #4CAF50; }
+.default-color3.chart-pie { -fx-pie-color: #FFC107; }
+.default-color4.chart-pie { -fx-pie-color: #F44336; }
+
+/* BarChart styling */
+.chart-bar {
+    -fx-bar-fill: #21a9b9;
+    -fx-background-radius: 5;
+}
+
+.chart-bar.default-color1 {
+    -fx-bar-fill: #75C2BD;
+}
+
+.chart-bar.default-color2 {
+    -fx-bar-fill: #4CAF50;
+}
+
+.chart-plot-background {
+    -fx-background-color: white;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #E0E0E0;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #E0E0E0;
+}
+
+.axis {
+    -fx-tick-label-fill: #424242;
+    -fx-font-size: 12px;
+}
+
+.axis-label {
+    -fx-text-fill: #757575;
+}
+
+/* Status cells in TableView */
+.status-pending {
+    -fx-background-color: #FFF8E1;
+    -fx-text-fill: #FF8F00;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-padding: 5 10;
+    -fx-background-radius: 4;
+}
+
+.status-accepted {
+    -fx-background-color: #E8F5E9;
+    -fx-text-fill: #2E7D32;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-padding: 5 10;
+    -fx-background-radius: 4;
+}
+
+.status-rejected {
+    -fx-background-color: #FFEBEE;
+    -fx-text-fill: #C62828;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-padding: 5 10;
+    -fx-background-radius: 4;
+}
+
+/* Action buttons in table cells */
+.edit-button {
+    -fx-background-color: #E8F5F7;
+    -fx-text-fill: #21a9b9;
+    -fx-border-color: #21a9b9;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-font-size: 13px;
+    -fx-padding: 6 12;
+    -fx-min-height: 30px;
+}
+
+.edit-button:hover {
+    -fx-background-color: #21a9b9;
+    -fx-text-fill: white;
+}
+
+.delete-button {
+    -fx-background-color: #FFEBEE;
+    -fx-text-fill: #F44336;
+    -fx-border-color: #F44336;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-font-size: 13px;
+    -fx-padding: 6 12;
+    -fx-min-height: 30px;
+}
+
+.delete-button:hover {
+    -fx-background-color: #F44336;
+    -fx-text-fill: white;
+}

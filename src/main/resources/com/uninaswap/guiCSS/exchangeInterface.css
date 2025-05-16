@@ -1,0 +1,191 @@
+/* Base styles */
+.root {
+    -fx-background-color: white;
+    -fx-font-family: "System";
+}
+
+/* Header styles */
+.header-container {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Logo label */
+.app-title {
+    -fx-text-fill: #21a9b9;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+
+/* Back button */
+.back-button {
+    -fx-background-color: #f5f5f5;
+    -fx-text-fill: #424242;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5 15;
+}
+
+.back-button:hover {
+    -fx-background-color: #eeeeee;
+}
+
+/* Page title */
+.page-title {
+    -fx-text-fill: #424242;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Product containers */
+.product-container {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 2);
+}
+
+.product-container:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 3);
+}
+
+/* Product titles */
+.product-title {
+    -fx-text-fill: #424242;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* Image container */
+.image-container {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-min-height: 280px;
+}
+
+/* Product name */
+.product-name {
+    -fx-text-fill: #424242;
+    -fx-font-size: 16px;
+    -fx-text-alignment: center;
+}
+
+/* Price labels */
+.price-label {
+    -fx-text-fill: #757575;
+    -fx-font-size: 16px;
+}
+
+.price-value {
+    -fx-text-fill: #21a9b9;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* Arrows container */
+.arrows-container {
+    -fx-min-height: 80px;
+    -fx-min-width: 120px;
+}
+
+.arrows-box {
+    -fx-spacing: 20;
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 40;
+    -fx-padding: 15;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 40;
+    -fx-border-width: 1;
+}
+
+.arrow-left, .arrow-right {
+    -fx-opacity: 0.8;
+}
+
+.arrow-left:hover, .arrow-right:hover {
+    -fx-opacity: 1.0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 1);
+}
+
+/* Separator */
+.separator .line {
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 0.5;
+}
+
+/* Difference container */
+.difference-container {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.difference-title {
+    -fx-text-fill: #424242;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.difference-label {
+    -fx-text-fill: #757575;
+    -fx-font-size: 16px;
+}
+
+.difference-amount {
+    -fx-text-fill: #FF6D00;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.payment-method-label {
+    -fx-text-fill: #757575;
+    -fx-font-size: 14px;
+}
+
+/* Buttons */
+.confirm-button {
+    -fx-background-color: #21a9b9;
+    -fx-background-radius: 25;
+    -fx-text-fill: WHITE;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+.confirm-button:hover {
+    -fx-background-color: #1d98a7;
+}
+
+.cancel-button {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 25;
+    -fx-text-fill: #424242;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 25;
+    -fx-font-size: 16px;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #eeeeee;
+}
+
+/* TextField */
+TextField {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-font-size: 14px;
+    -fx-padding: 5 10;
+}
+
+TextField:focused {
+    -fx-border-color: #21a9b9;
+}

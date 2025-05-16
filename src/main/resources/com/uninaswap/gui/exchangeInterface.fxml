@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@../guiCSS/exchangeInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.ExchangeController">
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="10.0" styleClass="header-container" BorderPane.alignment="CENTER">
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="60.0">
+                    <children>
+                        <Label styleClass="app-title" text="UninaSwap">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <padding>
+                        <Insets left="20.0" />
+                    </padding>
+                </HBox>
+                <HBox alignment="CENTER_RIGHT" prefHeight="60.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets right="20.0" />
+                    </padding>
+                    <children>
+                        <Button fx:id="backButton" mnemonicParsing="false" styleClass="back-button" text="Indietro" />
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <VBox spacing="30.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+            </padding>
+            <children>
+                <Label styleClass="page-title" text="Proposta di Scambio" wrapText="true">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                <HBox alignment="CENTER" spacing="20.0">
+                    <children>
+                        <VBox alignment="CENTER" prefWidth="380.0" spacing="15.0" styleClass="product-container">
+                            <children>
+                                <Label styleClass="product-title" text="Il tuo prodotto" textAlignment="CENTER">
+                                    <font>
+                                        <Font name="System Bold" size="18.0" />
+                                    </font>
+                                </Label>
+                                <StackPane prefHeight="291.0" prefWidth="353.0" styleClass="image-container">
+                                    <children>
+                                        <ImageView fx:id="yourProductImageView" fitHeight="280.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true" />
+                                    </children>
+                                </StackPane>
+                                <HBox alignment="CENTER" spacing="10.0">
+                                    <children>
+                                        <Label fx:id="youProductValueLabel" prefHeight="22.0" prefWidth="138.0" styleClass="price-label" text="Valore:">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="yourProductPriceLabel" styleClass="price-value">
+                                            <font>
+                                                <Font name="System Bold" size="16.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                            </children>
+                            <padding>
+                                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                            </padding>
+                        </VBox>
+
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="160.0" spacing="5.0">
+                            <children>
+                        <ImageView fitHeight="114.0" fitWidth="174.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/swapArrows.png" />
+                           </image>
+                        </ImageView>
+
+                                <Label text="Scambio" textAlignment="CENTER">
+                                    <font>
+                                        <Font name="System Bold" size="16.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER" prefWidth="380.0" spacing="15.0" styleClass="product-container">
+                            <children>
+                                <Label styleClass="product-title" text="Prodotto desiderato" textAlignment="CENTER">
+                                    <font>
+                                        <Font name="System Bold" size="18.0" />
+                                    </font>
+                                </Label>
+                                <StackPane styleClass="image-container">
+                                    <children>
+                                        <ImageView fx:id="wantedProductImageView" fitHeight="280.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true" />
+                                    </children>
+                                </StackPane>
+                                <HBox alignment="CENTER" spacing="10.0">
+                                    <children>
+                                        <Label fx:id="desiredProductValueLabel" prefHeight="22.0" prefWidth="138.0" styleClass="price-label" text="Valore:">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="wantedProductPriceLabel" styleClass="price-value">
+                                            <font>
+                                                <Font name="System Bold" size="16.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                            </children>
+                            <padding>
+                                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                            </padding>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <Separator prefWidth="200.0" />
+
+                <VBox alignment="CENTER" spacing="15.0" styleClass="difference-container">
+                    <children>
+                        <Label styleClass="difference-title" text="Differenza di valore">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <HBox alignment="CENTER" spacing="15.0">
+                            <children>
+                                <Label fx:id="moneyDifferenceValueLabel" prefHeight="22.0" prefWidth="216.0" styleClass="difference-label" text="Importo da pagare:">
+                                    <font>
+                                        <Font size="16.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" spacing="10.0" />
+                    </children>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                </VBox>
+
+                <HBox alignment="CENTER" spacing="30.0">
+                    <children>
+                        <Button fx:id="cancelTradeButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" styleClass="cancel-button" text="Annulla">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="acceptTradeButton" defaultButton="true" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" styleClass="confirm-button" text="Conferma Scambio">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

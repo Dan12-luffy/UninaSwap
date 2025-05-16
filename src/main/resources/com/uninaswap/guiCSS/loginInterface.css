@@ -1,0 +1,62 @@
+/* Main styles */
+.root {
+    -fx-background-color: white;
+}
+
+/* Title styles */
+#app-title {
+    -fx-text-fill: #21a9b9;
+    -fx-font-family: "Noto Kufi Arabic Bold";
+    -fx-font-size: 39px;
+}
+
+#login-title {
+    -fx-text-fill: #424242;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+
+/* Form styles */
+.form-label {
+    -fx-text-fill: #757575;
+    -fx-font-size: 12px;
+}
+
+.form-field {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-font-size: 14px;
+}
+
+/* Button styles */
+#login-button {
+    -fx-background-color: #75C2BD;
+    -fx-background-radius: 25;
+    -fx-text-fill: WHITE;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+#login-button:hover {
+    -fx-background-color: #65b2ad;
+}
+
+/* Link styles */
+#forgot-password {
+    -fx-text-fill: #75c2bd;
+    -fx-font-size: 12px;
+}
+
+#register-link {
+    -fx-text-fill: #75c2bd;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* Footer styles */
+.footer-text {
+    -fx-text-fill: #757575;
+    -fx-font-size: 14px;
+}
