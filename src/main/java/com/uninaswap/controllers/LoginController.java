@@ -9,6 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.nio.charset.StandardCharsets;
@@ -78,7 +80,6 @@ public class LoginController {
             showAlert(Alert.AlertType.ERROR, "Login Fallito", "Username o password errati.");
         }
     }
-
 
     @FXML
     private void navigateToRegister(ActionEvent actionEvent){

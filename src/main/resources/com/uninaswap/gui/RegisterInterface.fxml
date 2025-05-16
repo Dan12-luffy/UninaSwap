@@ -134,7 +134,7 @@
                         </PasswordField>
                     </children>
                 </VBox>
-                <Button id="register-button" fx:id="registerButton" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="45.0" prefWidth="300.0" text="Registrati" translateY="-44.0">
+                <Button id="register-button" fx:id="registerButton" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="45.0" prefWidth="300.0" text="Registrati" translateY="-44.0" defaultButton="true">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>

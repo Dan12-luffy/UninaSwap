@@ -76,7 +76,7 @@
                   <Insets bottom="5.0" top="-10.0" />
                </VBox.margin>
             </Hyperlink>
-            <Button id="login-button" fx:id="loginButton" mnemonicParsing="false" onAction="#onLoginButtonClicked" prefHeight="45.0" prefWidth="300.0" text="Accedi">
+            <Button id="login-button" fx:id="loginButton" mnemonicParsing="false" onAction="#onLoginButtonClicked" prefHeight="45.0" prefWidth="300.0" text="Accedi" defaultButton="true">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
