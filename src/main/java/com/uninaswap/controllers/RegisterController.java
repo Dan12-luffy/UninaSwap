@@ -27,6 +27,9 @@ public class RegisterController {
     private TextField surnameField;
 
     @FXML
+    private ComboBox<String> facultyComboBox;
+
+    @FXML
     private TextField usernameField;
 
     @FXML
@@ -42,8 +45,9 @@ public class RegisterController {
     private Button registerButton;
 
     @FXML
-    public void inizialize(){
+    public void initialize(){
         //Inizializzazione della registrazione
+        facultyComboBox.getItems().addAll("Informatica", "Scienze", "Matematica", "Economia", "Arte", "Medicina", "Biologia", "Filosofia", "Geografia", "Psychologia", "Chimica", "Astronomia", "Turismo", "Linguistica", "Musica");
     }
 
     public void onRegisterButtonClicked(ActionEvent actionEvent){
@@ -114,16 +118,18 @@ public class RegisterController {
 
         String name = nameField.getText();
         String surname = surnameField.getText();
+        String faculty = facultyComboBox.getValue();
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        String sql = "INSERT INTO users (name, surname, username, password) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (name, surname,faculty, username, password) VALUES (?, ?, ?, ?, ?)";
         try{Connection connection = DatabaseUtil.getConnection();
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, name);
             stmt.setString(2, surname);
-            stmt.setString(3, username);
-            stmt.setString(4, hashPassword(password));
+            stmt.setString(3, faculty);
+            stmt.setString(4, username);
+            stmt.setString(5, hashPassword(password));
 
             int rowInserted = stmt.executeUpdate();
 
