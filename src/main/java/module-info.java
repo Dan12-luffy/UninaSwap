@@ -14,6 +14,7 @@ module com.uninaswap.uninaswap {
     requires java.sql;
     requires org.postgresql.jdbc;
     requires com.google.common;
+    requires annotations;
 
 
     exports com.uninaswap.controllers;

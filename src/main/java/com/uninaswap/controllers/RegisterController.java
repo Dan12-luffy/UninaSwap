@@ -1,5 +1,8 @@
 package com.uninaswap.controllers;
 
+import com.uninaswap.services.AuthenticationService;
+import com.uninaswap.services.NavigationService;
+import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import com.uninaswap.utility.DatabaseUtil;    // non vede questo
@@ -46,111 +49,35 @@ public class RegisterController {
 
     @FXML
     public void initialize(){
-        //Inizializzazione della registrazione
         facultyComboBox.getItems().addAll("Informatica", "Scienze", "Matematica", "Economia", "Arte", "Medicina", "Biologia", "Filosofia", "Geografia", "Psychologia", "Chimica", "Astronomia", "Turismo", "Linguistica", "Musica");
     }
 
-    public void onRegisterButtonClicked(ActionEvent actionEvent){
-
-        if(!validateInput()){
+    public void onRegisterButtonClicked(ActionEvent actionEvent) {
+        if (!ValidationService.getInstance().validateInputFromRegistration(nameField, surnameField, usernameField, passwordField, confirmPasswordField)) {
             return;
         }
-        if(!validatePassword()){
+        if (!AuthenticationService.getInstance().isValidPassword(passwordField, confirmPasswordField)) {
             return;
         }
-
-        boolean registrationSuccessful = registerUser();
-
-        if(registrationSuccessful){
-            navigateToLogin(actionEvent);
-        }
-    }
-
-    private boolean validateInput(){
-        if(nameField.getText().trim().isEmpty() ||
-            surnameField.getText().trim().isEmpty() ||
-            usernameField.getText().trim().isEmpty()||
-            passwordField.getText().isEmpty() ||
-            confirmPasswordField.getText().isEmpty()){
-
-            showAlert(Alert.AlertType.ERROR, "Errore", "Compila tutti i campi.");
-            return false;
-        }
-
-        if(!isValidUsername(usernameField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Errore", "Attenzione si accettano solo lettere,numeri e underscore");
-            return false;
-        }
-
-        if(!isStrongPassword(passwordField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Errore", "La password deve contenere almeno 8 caratteri, una lettera maiuscola e un numero ");
-            return false;
-        }
-
-        return true;
-
-    }
-
-    private boolean isStrongPassword(String password){
-
-        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$";
-        return password.matches(passwordRegex);
-
-    }
-
-    private boolean isValidUsername(String username){
-        String usernameRegex = "^[a-zA-Z0-9_-]{3,16}$";
-        return username.matches(usernameRegex);
-    }
-
-    private boolean validatePassword(){
-
-        if(!passwordField.getText().equals(confirmPasswordField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Errore", "Le Password non coincidono.");
-            return false;
-        }
-        return true;
-    }
-
-
-    @FXML
-    private boolean registerUser(){
-
-        String name = nameField.getText();
-        String surname = surnameField.getText();
+        String name = nameField.getText().trim();
+        String surname = surnameField.getText().trim();
         String faculty = facultyComboBox.getValue();
-        String username = usernameField.getText();
+        String username = usernameField.getText().trim();
         String password = passwordField.getText();
 
-        String sql = "INSERT INTO users (name, surname,faculty, username, password) VALUES (?, ?, ?, ?, ?)";
-        try{Connection connection = DatabaseUtil.getConnection();
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, name);
-            stmt.setString(2, surname);
-            stmt.setString(3, faculty);
-            stmt.setString(4, username);
-            stmt.setString(5, hashPassword(password));
+        boolean registrationSuccessful = AuthenticationService.getInstance().registerUser(name, surname, faculty, username, password);
 
-            int rowInserted = stmt.executeUpdate();
-
-            if(rowInserted > 0){
-                showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "Registrazione dell' utente avvenuta con successo.");
-                return true;
-            }else{
-                showAlert(Alert.AlertType.ERROR, "Errore", "Registrazione Fallita");
-                return false;
-            }
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Errore", "Errore Database");
-            return false;
+        if (registrationSuccessful) {
+            ValidationService.getInstance().showRegistrationSuccess();
+            navigateToLogin(actionEvent);
+        } else {
+            ValidationService.getInstance().showRegistrationError();
         }
-
     }
+
     @FXML
     private void navigateToLogin(ActionEvent actionEvent){
-
             try {
-                // Carica la vista di login
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/loginInterface.fxml"));
                 Parent loginRoot = loader.load();
 
@@ -159,9 +86,7 @@ public class RegisterController {
                 stage.setScene(new Scene(loginRoot));
                 stage.show();
             } catch (IOException e) {
-                e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Errore","Impossibile aprire la pagina");
+                ValidationService.getInstance().showFailedToOpenPageError();
             }
-
     }
 }
