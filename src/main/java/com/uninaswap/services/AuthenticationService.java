@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import static com.uninaswap.utility.Alert.showAlert;
 import static com.uninaswap.utility.Sha256.hashPassword;
 
 public class AuthenticationService {
@@ -66,7 +65,7 @@ public class AuthenticationService {
 
     public boolean isValidPassword(PasswordField passwordField, PasswordField confirmPasswordField) {
         if(!passwordField.getText().equals(confirmPasswordField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Errore", "Le Password non coincidono.");
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Le Password non coincidono.");
             return false;
         }
         return true;

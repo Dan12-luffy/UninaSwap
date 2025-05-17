@@ -4,9 +4,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
-
-import static com.uninaswap.utility.Alert.showAlert;
 
 public class ValidationService {
     private static final ValidationService instance = new ValidationService();
@@ -95,6 +92,10 @@ public class ValidationService {
     }
 
     public void showAlert(javafx.scene.control.Alert.AlertType alertType, String title, String message) {
-        com.uninaswap.utility.Alert.showAlert(alertType, title, message);
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

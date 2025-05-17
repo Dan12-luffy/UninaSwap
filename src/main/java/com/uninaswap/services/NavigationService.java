@@ -9,8 +9,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-import static com.uninaswap.utility.Alert.showAlert;
-
 public class NavigationService {
     private static final NavigationService instance = new NavigationService();
 
@@ -30,7 +28,7 @@ public class NavigationService {
 
             setScene(event, root);
         } catch (IOException e) {
-            showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore",
+            ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore",
                     "Impossibile aprire la schermata principale.");
         }
     }
