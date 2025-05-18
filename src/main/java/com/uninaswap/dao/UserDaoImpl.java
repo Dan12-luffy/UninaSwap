@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao {
                      User user = new User();
                      user.setId(rs.getInt("id"));
                      user.setUsername(rs.getString("username"));
-                     user.setPassword(rs.getString("password"));
+                     //user.setPassword(rs.getString("password"));
                      return user;
                  }
              }
