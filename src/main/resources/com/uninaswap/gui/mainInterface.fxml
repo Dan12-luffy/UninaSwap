@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.effect.DropShadow?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="main-container" stylesheets="@../guiCSS/mainInterface.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.MainController">
+
+    <!-- Header principale compatto -->
+    <top>
+        <VBox spacing="0">
+            <!-- Banner superiore più compatto -->
+            <HBox styleClass="top-banner" alignment="CENTER_RIGHT" maxHeight="35.0">
+                <Label text="Benvenuto in UninaSwap!" styleClass="welcome-text"/>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="notificationButton" styleClass="icon-button" text="Notifiche" />
+                <Button fx:id="profileButton" styleClass="icon-button" text="Profilo" onAction="#onProfileButtonClicked" />
+                <padding>
+                    <Insets left="15.0" right="15.0" top="5.0" bottom="5.0" />
+                </padding>
+            </HBox>
+
+            <!-- Header principale ottimizzato -->
+            <HBox styleClass="main-header" alignment="CENTER" minHeight="60.0">
+                <!-- Logo container migliorato -->
+                <HBox alignment="CENTER_LEFT" styleClass="logo-container" minWidth="200.0">
+                    <StackPane styleClass="logo-badge">
+                        <!-- Rettangolo bianco con angoli arrotondati e ombra leggera -->
+                        <Rectangle width="180.0" height="50.0" styleClass="logo-background" />
+
+                        <!-- Logo immagine -->
+                        <ImageView fx:id="logoImage" fitHeight="40.0" preserveRatio="true" styleClass="logo-image">
+                            <Image url="@../images/uninaswap_logo.png" />
+                        </ImageView>
+                    </StackPane>
+                </HBox>
+
+                <HBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="search-container">
+                    <TextField fx:id="searchField" promptText="Cosa stai cercando oggi?" styleClass="search-field" HBox.hgrow="ALWAYS" />
+                    <Button fx:id="searchButton" styleClass="search-button" text="Cerca" />
+                </HBox>
+
+                <HBox alignment="CENTER_RIGHT" spacing="15">
+                    <Button fx:id="wishlistButton" styleClass="nav-button" text="Preferiti" />
+                    <Button fx:id="messagesButton" styleClass="nav-button" text="Messaggi" />
+                    <Button fx:id="sellButton" styleClass="sell-button" text="Vendi Articolo" />
+                </HBox>
+                <padding>
+                    <Insets left="15.0" right="15.0" top="8.0" bottom="8.0" />
+                </padding>
+            </HBox>
+
+            <!-- Barra di navigazione categorie -->
+            <HBox styleClass="category-nav" spacing="5">
+                <ToggleButton fx:id="allCategoryButton" styleClass="category-button" text="Tutto" selected="true" />
+                <ToggleButton fx:id="booksCategoryButton" styleClass="category-button" text="Libri" />
+                <ToggleButton fx:id="electronicsCategoryButton" styleClass="category-button" text="Elettronica" />
+                <ToggleButton fx:id="clothingCategoryButton" styleClass="category-button" text="Abbigliamento" />
+                <ToggleButton fx:id="notesCategoryButton" styleClass="category-button" text="Appunti" />
+                <ToggleButton fx:id="toolsCategoryButton" styleClass="category-button" text="Strumenti" />
+                <ToggleButton fx:id="otherCategoryButton" styleClass="category-button" text="Altro" />
+                <padding>
+                    <Insets left="15.0" right="15.0" top="5.0" bottom="5.0" />
+                </padding>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Pannello filtri ottimizzato con ScrollPane -->
+    <left>
+        <ScrollPane fitToWidth="true" styleClass="filters-scroll-pane">
+            <VBox styleClass="filters-panel" prefWidth="250.0">
+                <HBox alignment="CENTER_LEFT" styleClass="filters-header">
+                    <Label text="Filtri" styleClass="filters-title" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="resetFilters" styleClass="text-button" text="Azzera" />
+                </HBox>
+
+                <!-- Filtri principali - tutti chiusi di default -->
+                <TitledPane text="Stato" styleClass="filter-section" expanded="false">
+                    <VBox spacing="8">
+                        <RadioButton fx:id="allConditionsRadio" text="Tutti gli stati" selected="true" />
+                        <RadioButton fx:id="likeNewRadio" text="Come nuovo" />
+                        <RadioButton fx:id="excellentRadio" text="Ottime condizioni" />
+                        <RadioButton fx:id="goodRadio" text="Buone condizioni" />
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="Prezzo" styleClass="filter-section" expanded="false">
+                    <VBox spacing="8">
+                        <HBox alignment="CENTER">
+                            <Label text="0€" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label text="200€" />
+                        </HBox>
+                        <Slider fx:id="priceSlider" min="0" max="200" value="100" />
+                        <HBox styleClass="price-inputs" spacing="8" alignment="CENTER">
+                            <TextField fx:id="minPriceField" promptText="Min" prefWidth="60" />
+                            <Label text="-" />
+                            <TextField fx:id="maxPriceField" promptText="Max" prefWidth="60" />
+                            <Button fx:id="applyPriceButton" text="OK" styleClass="mini-button" />
+                        </HBox>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="Facoltà" styleClass="filter-section" expanded="false">
+                    <VBox spacing="8">
+                        <CheckBox fx:id="engineeringCheck" text="Ingegneria" />
+                        <CheckBox fx:id="economicsCheck" text="Economia" />
+                        <CheckBox fx:id="scienceCheck" text="Scienze" />
+                        <CheckBox fx:id="medicineCheck" text="Medicina" />
+                        <CheckBox fx:id="literatureCheck" text="Lettere" />
+                        <CheckBox fx:id="lawCheck" text="Giurisprudenza" />
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="Autore" styleClass="filter-section" expanded="false">
+                    <VBox spacing="8">
+                        <CheckBox fx:id="studentsCheck" text="Studenti" />
+                        <CheckBox fx:id="professorsCheck" text="Professori" />
+                        <CheckBox fx:id="exStudentsCheck" text="Ex studenti" />
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="Disponibilità" styleClass="filter-section" expanded="false">
+                    <VBox spacing="8">
+                        <CheckBox fx:id="availableNowCheck" text="Disponibile subito" />
+                        <CheckBox fx:id="reservableCheck" text="Prenotabile" />
+                        <CheckBox fx:id="deliveryCheck" text="Consegna inclusa" />
+                    </VBox>
+                </TitledPane>
+
+                <!-- Pulsante Applica -->
+                <Button fx:id="applyFilters" styleClass="apply-button" text="Applica Filtri" />
+
+                <Separator />
+
+                <!-- Sezione utente compatta -->
+                <VBox styleClass="user-section">
+                    <Label fx:id="usernameLabel" text="Ciao, Mario!" styleClass="user-greeting" />
+                    <HBox spacing="8">
+                        <Button fx:id="userItemsButton" styleClass="user-button" text="Miei annunci" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                        <Button fx:id="logoutButton" styleClass="logout-button" text="Logout" HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#onLogoutButtonClicked" />
+                    </HBox>
+                </VBox>
+                <padding>
+                    <Insets top="15.0" right="15.0" bottom="15.0" left="15.0" />
+                </padding>
+            </VBox>
+        </ScrollPane>
+    </left>
+
+    <!-- Area principale contenente gli articoli -->
+    <center>
+        <VBox styleClass="content-area">
+            <!-- Intestazione risultati -->
+            <HBox styleClass="results-header" alignment="CENTER_LEFT">
+                <Label fx:id="resultsCountLabel" text="Caricamento articoli..." styleClass="results-title" />
+                <Region HBox.hgrow="ALWAYS" />
+                <ComboBox fx:id="sortComboBox" promptText="Più recenti" styleClass="sort-dropdown" prefWidth="150.0" />
+                <ToggleButton fx:id="listViewButton" styleClass="view-toggle" text="Lista" selected="true" />
+                <ToggleButton fx:id="gridViewButton" styleClass="view-toggle" text="Griglia" />
+            </HBox>
+
+            <!-- Contenitore principale degli articoli completamente vuoto -->
+            <ScrollPane fx:id="itemsScrollPane" fitToWidth="true" styleClass="items-scroll" VBox.vgrow="ALWAYS">
+                <VBox styleClass="items-container" spacing="5">
+                    <!-- GridPane vuoto dove verranno caricate le inserzioni tramite DAO -->
+                    <GridPane fx:id="itemsGrid" styleClass="items-grid" vgap="8" hgap="15">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="100.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="ALWAYS" />
+                            <ColumnConstraints hgrow="NEVER" minWidth="100.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="NEVER" minWidth="60.0" prefWidth="60.0" />
+                        </columnConstraints>
+                        <!-- Inserzioni caricate dai DAO -->
+                    </GridPane>
+
+                    <!-- Pulsante carica altri risultati -->
+                    <Button fx:id="loadMoreButton" text="Carica altri risultati" styleClass="load-more-button" maxWidth="Infinity" />
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>
