@@ -73,8 +73,9 @@ public class MainController {
     }
 
     @FXML
-    private void onProfileButtonClicked() {
-        // TODO: Implement profile logic
-        System.out.println("Profile button clicked");
+    private void onProfileButtonClicked(ActionEvent event) {
+
+        NavigationService.getInstance().navigateToOfferHistoryView(event);
     }
+
 }

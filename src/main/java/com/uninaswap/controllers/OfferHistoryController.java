@@ -1,5 +1,7 @@
 package com.uninaswap.controllers;
 
+import com.uninaswap.services.NavigationService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
@@ -46,8 +48,8 @@ public class OfferHistoryController {
     }
 
     @FXML
-    private void onBackButtonClicked() {
-        // Handle back button action
+    private void onBackButtonClicked(ActionEvent event) {
+        NavigationService.getInstance().navigateToMainView(event);
     }
 
     @FXML

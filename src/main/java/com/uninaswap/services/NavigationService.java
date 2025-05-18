@@ -39,7 +39,7 @@ public class NavigationService {
         }
     }
 
-    public void navigateToMainView(ActionEvent event, String username) {
+    public void navigateToMainView(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/mainInterface.fxml"));
             Parent root = loader.load();
@@ -50,6 +50,16 @@ public class NavigationService {
                     "Impossibile aprire la schermata principale.");
         }
     }
+    public void navigateToOfferHistoryView(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/offerHistoryInterface.fxml"));
+            Parent root = loader.load();
+            setScene(event, root);
+        } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }
+    }
+
     private void setScene(ActionEvent event, Parent root) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));

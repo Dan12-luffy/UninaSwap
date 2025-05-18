@@ -1,65 +1,131 @@
-/* Main styles */
-.root {
+/* Stili CSS per la schermata di login UninaSwap (sfondo bianco) */
+
+/* ============================
+   VARIABILI PRINCIPALI
+   ============================ */
+* {
+    /* Colori principali */
+    -fx-primary: #9B2000;            /* Bordeaux - colore primario */
+    -fx-primary-dark: #771800;       /* Versione più scura del primario */
+    -fx-primary-light: #CB3522;      /* Versione più chiara del primario */
+    -fx-accent: #FE8A00;             /* Colore accent (arancione) */
+
+    /* Colori neutrali */
+    -fx-background-light: #F8F8F8;   /* Sfondo chiaro */
+    -fx-text-dark: #333333;          /* Testo principale */
+    -fx-text-medium: #666666;        /* Testo secondario */
+    -fx-text-light: #999999;         /* Testo terziario */
+    -fx-divider: #E1E1E1;            /* Linee divisorie */
+}
+
+/* ============================
+   CONTAINER PRINCIPALE
+   ============================ */
+.login-container {
     -fx-background-color: white;
 }
 
-/* Title styles */
-#app-title {
-    -fx-text-fill: #21a9b9;
-    -fx-font-family: "Noto Kufi Arabic Bold";
-    -fx-font-size: 39px;
+/* ============================
+   HEADER E LOGO
+   ============================ */
+.logo-header {
+    -fx-background-color: white;
+    -fx-padding: 20px 0px 10px 0px;
 }
 
-#login-title {
-    -fx-text-fill: #424242;
+.logo-image {
+    /* Nessuna proprietà speciale richiesta, usa le dimensioni naturali */
+}
+
+/* ============================
+   FORM LOGIN
+   ============================ */
+.form-container {
+    -fx-background-color: white;
+    -fx-padding: 20px 10px;
+}
+
+.login-title {
+    -fx-text-fill: -fx-primary;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-font-size: 18px;
 }
-.login-container {
-    -fx-alignment: center;
-    -fx-content-display: center;
+
+.field-container {
+    -fx-spacing: 5px;
 }
-/* Form styles */
+
 .form-label {
-    -fx-text-fill: #757575;
-    -fx-font-size: 12px;
+    -fx-text-fill: -fx-text-medium;
+    -fx-font-size: 13px;
 }
 
 .form-field {
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-    -fx-border-color: #E0E0E0;
-    -fx-border-width: 1;
+    -fx-background-color: -fx-background-light;
+    -fx-background-radius: 6px;
+    -fx-border-color: -fx-divider;
+    -fx-border-radius: 6px;
+    -fx-padding: 10px;
     -fx-font-size: 14px;
+    -fx-prompt-text-fill: -fx-text-light;
 }
 
-/* Button styles */
-#login-button {
-    -fx-background-color: #75C2BD;
-    -fx-background-radius: 25;
-    -fx-text-fill: WHITE;
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
+.form-field:focused {
+    -fx-border-color: -fx-primary;
+    -fx-background-color: white;
 }
 
-#login-button:hover {
-    -fx-background-color: #65b2ad;
-}
-
-/* Link styles */
-#forgot-password {
-    -fx-text-fill: #75c2bd;
+.forgot-password {
+    -fx-text-fill: -fx-primary;
+    -fx-underline: false;
     -fx-font-size: 12px;
 }
 
-#register-link {
-    -fx-text-fill: #75c2bd;
+.forgot-password:hover {
+    -fx-underline: true;
+    -fx-text-fill: -fx-primary-light;
+}
+
+.login-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
+}
+
+.login-button:hover {
+    -fx-background-color: -fx-primary-light;
+}
+
+.login-button:pressed {
+    -fx-background-color: -fx-primary-dark;
+}
+
+/* ============================
+   FOOTER
+   ============================ */
+.footer-container {
+    -fx-background-color: white;
+    -fx-padding: 15px 0px;
+    -fx-border-color: -fx-divider transparent transparent transparent;
+    -fx-border-width: 1px 0px 0px 0px;
+}
+
+.footer-text {
+    -fx-text-fill: -fx-text-medium;
     -fx-font-size: 14px;
 }
 
-/* Footer styles */
-.footer-text {
-    -fx-text-fill: #757575;
+.register-link {
+    -fx-text-fill: -fx-primary;
     -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-underline: false;
+}
+
+.register-link:hover {
+    -fx-text-fill: -fx-primary-light;
+    -fx-underline: true;
 }

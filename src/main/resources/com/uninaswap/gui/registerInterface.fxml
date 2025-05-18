@@ -7,164 +7,181 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="400.0" stylesheets="@../guiCSS/registerInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.RegisterController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="400.0" styleClass="register-container" stylesheets="@../guiCSS/registerInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.RegisterController">
     <top>
-        <VBox alignment="CENTER" prefHeight="120.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER" prefHeight="82.0" prefWidth="400.0" styleClass="logo-header" BorderPane.alignment="CENTER">
             <children>
-                <Label id="app-title" prefHeight="84.0" prefWidth="261.0" text=" Unina Swap" translateY="-15.0">
-                    <font>
-                        <Font name="Noto Kufi Arabic Bold" size="39.0" />
-                    </font>
-                </Label>
+                <!-- Logo direttamente su sfondo bianco -->
+                <ImageView fx:id="logoImage" fitHeight="82.0" fitWidth="246.0" preserveRatio="true" styleClass="logo-image">
+                    <Image url="@../images/uninaswap_logo.png" />
+                </ImageView>
             </children>
         </VBox>
     </top>
     <center>
-        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" BorderPane.alignment="CENTER">
+        <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="562.0" prefWidth="400.0" spacing="0.0" styleClass="form-container" BorderPane.alignment="CENTER">
             <children>
-                <Label id="register-title" text="Registrazione" translateY="7.0">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
+            <Label minHeight="-Infinity" prefHeight="33.0" prefWidth="120.0" text="Registrati" textFill="#9b2000" translateY="-20.0">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+
+                <!-- Campo Nome -->
+                <VBox prefWidth="300.0" spacing="4.0" styleClass="field-container" translateY="-18.0">
+                    <children>
+                        <Label styleClass="form-label" text="Nome">
+                            <font>
+                                <Font size="13.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="nameField" promptText="Inserisci il tuo nome" styleClass="form-field">
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </padding>
+                        </TextField>
+                    </children>
                     <VBox.margin>
-                        <Insets bottom="5.0" />
+                        <Insets bottom="15.0" />
                     </VBox.margin>
-                </Label>
-                <VBox prefWidth="300.0" spacing="5.0">
+                </VBox>
+
+                <!-- Campo Cognome -->
+                <VBox prefWidth="300.0" spacing="4.0" styleClass="field-container" translateY="-23.0">
                     <children>
-                        <Label styleClass="form-label" text="Nome" translateY="-15.0">
+                        <Label styleClass="form-label" text="Cognome">
                             <font>
-                                <Font size="12.0" />
+                                <Font size="13.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="nameField" promptText="Inserisci il tuo nome" styleClass="form-field" translateY="-15.0">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
+                        <TextField fx:id="surnameField" promptText="Inserisci il tuo cognome" styleClass="form-field">
                             <padding>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </TextField>
                     </children>
+                    <VBox.margin>
+                        <Insets bottom="15.0" />
+                    </VBox.margin>
                 </VBox>
-                <VBox prefWidth="300.0" spacing="5.0">
+
+                <!-- Campo Facoltà -->
+                <VBox prefWidth="300.0" spacing="4.0" styleClass="field-container" translateY="-30.0">
                     <children>
-                        <Label styleClass="form-label" text="Cognome" translateY="-19.0">
+                        <Label styleClass="form-label" text="Facoltà">
                             <font>
-                                <Font size="12.0" />
+                                <Font size="13.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="surnameField" promptText="Inserisci il tuo cognome" styleClass="form-field" translateY="-19.0">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
+                        <ComboBox fx:id="facultyComboBox" prefHeight="38.0" prefWidth="300.0" promptText="Seleziona la tua facoltà" styleClass="form-field">
                             <padding>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                            </padding>
-                        </TextField>
-                    </children>
-                </VBox>
-                <VBox prefWidth="300.0" spacing="5.0">
-                    <children>
-                        <Label styleClass="form-label" text="Facoltà" translateY="-20.0">
-                            <font>
-                                <Font size="12.0" />
-                            </font>
-                        </Label>
-                        <ComboBox fx:id="facultyComboBox" prefHeight="38.0" prefWidth="300.0" promptText="Seleziona la tua facoltà" styleClass="form-field" translateY="-20.0">
-                            <padding>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                             </padding>
                         </ComboBox>
                     </children>
+                    <VBox.margin>
+                        <Insets bottom="15.0" />
+                    </VBox.margin>
                 </VBox>
-                <VBox prefHeight="51.0" prefWidth="300.0" spacing="5.0">
+
+                <!-- Campo Username -->
+                <VBox prefWidth="300.0" spacing="4.0" styleClass="field-container" translateY="-37.0">
                     <children>
-                        <Label styleClass="form-label" text="Username" translateY="-20.0">
+                        <Label styleClass="form-label" text="Username">
                             <font>
-                                <Font size="12.0" />
+                                <Font size="13.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="usernameField" promptText="Scegli un username" styleClass="form-field" translateY="-20.0">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
+                        <TextField fx:id="usernameField" promptText="Scegli un username" styleClass="form-field">
                             <padding>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </TextField>
                     </children>
+                    <VBox.margin>
+                        <Insets bottom="15.0" />
+                    </VBox.margin>
                 </VBox>
-                <VBox prefWidth="300.0" spacing="5.0">
+
+                <!-- Campo Password -->
+                <VBox prefWidth="300.0" spacing="4.0" styleClass="field-container" translateY="-45.0">
                     <children>
-                        <Label styleClass="form-label" text="Password" translateY="-29.0">
+                        <Label styleClass="form-label" text="Password">
                             <font>
-                                <Font size="12.0" />
+                                <Font size="13.0" />
                             </font>
                         </Label>
-                        <PasswordField fx:id="passwordField" promptText="Crea una password" styleClass="form-field" translateY="-29.0">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
+                        <PasswordField fx:id="passwordField" promptText="Crea una password" styleClass="form-field">
                             <padding>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </PasswordField>
-                  <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="348.0" text="Deve contenere 8 caratteri, una maiuscola, una minuscola e un carattare speciale" translateY="-35.0">
-                     <font>
-                        <Font size="9.0" />
-                     </font>
-                  </Label>
-                    </children>
-                </VBox>
-                <VBox prefWidth="300.0" spacing="5.0">
-                    <children>
-                        <Label styleClass="form-label" text="Conferma Password" translateY="-42.0">
+                        <Label prefHeight="21.0" prefWidth="378.0" styleClass="password-hint" text="Deve contenere 8 caratteri, una lettera maiuscola e un carattere speciale">
                             <font>
-                                <Font size="12.0" />
+                                <Font size="8.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets top="2.0" />
+                            </VBox.margin>
+                        </Label>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="15.0" />
+                    </VBox.margin>
+                </VBox>
+
+                <!-- Campo Conferma Password -->
+                <VBox prefWidth="300.0" spacing="4.0" styleClass="field-container" translateY="-53.0">
+                    <children>
+                        <Label styleClass="form-label" text="Conferma Password">
+                            <font>
+                                <Font size="13.0" />
                             </font>
                         </Label>
-                        <PasswordField fx:id="confirmPasswordField" promptText="Conferma la tua password" styleClass="form-field" translateY="-40.0">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
+                        <PasswordField fx:id="confirmPasswordField" promptText="Conferma la tua password" styleClass="form-field">
                             <padding>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </PasswordField>
                     </children>
+                    <VBox.margin>
+                        <Insets bottom="25.0" />
+                    </VBox.margin>
                 </VBox>
-                <Button id="register-button" fx:id="registerButton" defaultButton="true" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="45.0" prefWidth="300.0" text="Registrati" translateY="-60.0">
+
+                <!-- Pulsante Registrati -->
+                <Button fx:id="registerButton" defaultButton="true" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="45.0" prefWidth="300.0" styleClass="register-button" text="Registrati" translateY="-55.0">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
-                    <VBox.margin>
-                        <Insets top="15.0" />
-                    </VBox.margin>
                 </Button>
-                <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0" translateY="-14.0">
-                    <children>
-                        <Label styleClass="footer-text" text="Hai già un account? " translateY="-54.0">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
-                        </Label>
-                        <Hyperlink id="login-link" fx:id="loginButton" onAction="#navigateToLogin" text="Accedi" translateY="-54.0">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Hyperlink>
-                    </children>
-                </HBox>
             </children>
             <padding>
                 <Insets left="50.0" right="50.0" />
             </padding>
         </VBox>
     </center>
+    <bottom>
+        <HBox alignment="CENTER" prefHeight="46.0" prefWidth="400.0" styleClass="footer-container" BorderPane.alignment="CENTER">
+            <children>
+                <Label styleClass="footer-text" text="Hai già un account? ">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <Hyperlink fx:id="loginButton" onAction="#navigateToLogin" styleClass="login-link" text="Accedi">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Hyperlink>
+            </children>
+        </HBox>
+    </bottom>
 </BorderPane>

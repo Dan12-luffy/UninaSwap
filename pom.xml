@@ -21,6 +21,17 @@
             <version>25.1-android</version>
         </dependency>
         <dependency>
+            <groupId>com.github.weisj</groupId>
+            <artifactId>jsvg</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kitfox.svg</groupId>
+            <artifactId>svg-salamander</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.5.4</version>

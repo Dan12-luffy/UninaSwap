@@ -6,39 +6,64 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" stylesheets="@../guiCSS/loginInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.LoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="login-container" stylesheets="@../guiCSS/loginInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.LoginController">
    <top>
-      <VBox alignment="CENTER" prefHeight="150.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="150.0" prefWidth="400.0" styleClass="logo-header" BorderPane.alignment="CENTER">
          <children>
-            <Label id="app-title" prefHeight="84.0" prefWidth="261.0" text=" Unina Swap">
-               <font>
-                  <Font name="Noto Kufi Arabic Bold" size="39.0" />
-               </font>
-            </Label>
+            <!-- Logo direttamente su sfondo bianco -->
+            <ImageView fx:id="logoImage" fitHeight="102.0" fitWidth="327.0" preserveRatio="true" styleClass="logo-image" translateY="12.0">
+               <Image url="@../images/uninaswap_logo.png" />
+            </ImageView>
          </children>
+         <padding>
+            <Insets bottom="10.0" top="20.0" />
+         </padding>
       </VBox>
    </top>
    <center>
-      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" styleClass="form-container" BorderPane.alignment="CENTER">
          <children>
-            <Label id="login-title" text="Accedi">
+            <Label styleClass="login-title" text="Accedi">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font name="System Bold" size="22.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="10.0" />
+                  <Insets bottom="20.0" />
                </VBox.margin>
+               <textFill>
+                  <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </textFill>
             </Label>
-            <VBox prefWidth="300.0" spacing="5.0">
+
+            <!-- Campo username -->
+            <VBox prefWidth="300.0" spacing="5.0" styleClass="field-container">
                <children>
                   <Label styleClass="form-label" text="Username">
                      <font>
-                        <Font size="12.0" />
+                        <Font size="13.0" />
                      </font>
                   </Label>
                   <TextField fx:id="usernameField" promptText="Inserisci il tuo username" styleClass="form-field">
@@ -51,11 +76,13 @@
                   </TextField>
                </children>
             </VBox>
-            <VBox prefWidth="300.0" spacing="5.0">
+
+            <!-- Campo password -->
+            <VBox prefWidth="300.0" spacing="5.0" styleClass="field-container">
                <children>
                   <Label styleClass="form-label" text="Password">
                      <font>
-                        <Font size="12.0" />
+                        <Font size="13.0" />
                      </font>
                   </Label>
                   <PasswordField fx:id="passwordField" promptText="Inserisci la tua password" styleClass="form-field">
@@ -68,42 +95,46 @@
                   </PasswordField>
                </children>
             </VBox>
-            <Hyperlink id="forgot-password" text="Password dimenticata?">
-               <font>
-                  <Font size="12.0" />
-               </font>
+            <HBox alignment="CENTER_RIGHT" prefWidth="300.0" />
+
+            <!-- Link password dimenticata -->
+            <HBox alignment="CENTER_RIGHT" prefWidth="300.0" translateY="31.0">
+               <children>
+                  <Hyperlink fx:id="forgotPasswordLink" styleClass="forgot-password" text="Password dimenticata?" translateY="-58.0">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Hyperlink>
+               </children>
                <VBox.margin>
-                  <Insets bottom="5.0" top="-10.0" />
+                  <Insets bottom="5.0" top="-5.0" />
                </VBox.margin>
-            </Hyperlink>
-            <Button id="login-button" fx:id="loginButton" mnemonicParsing="false" onAction="#onLoginButtonClicked" prefHeight="45.0" prefWidth="300.0" text="Accedi" defaultButton="true">
+            </HBox>
+
+            <!-- Pulsante accedi -->
+            <Button fx:id="loginButton" defaultButton="true" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onLoginButtonClicked" prefHeight="46.0" prefWidth="330.0" styleClass="login-button" text="Accedi" translateY="-40.0">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
                <VBox.margin>
-                  <Insets top="10.0" />
+                  <Insets top="15.0" />
                </VBox.margin>
             </Button>
-            <HBox alignment="CENTER" prefWidth="300.0" spacing="20.0">
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </HBox>
          </children>
          <padding>
-            <Insets left="50.0" right="50.0" />
+            <Insets left="50.0" right="50.0" top="10.0" />
          </padding>
       </VBox>
    </center>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="80.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="80.0" styleClass="footer-container" BorderPane.alignment="CENTER">
          <children>
             <Label styleClass="footer-text" text="Non hai un account? ">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Hyperlink id="register-link" fx:id="registerButton" onAction="#navigateToRegister" text="Registrati">
+            <Hyperlink fx:id="registerButton" onAction="#navigateToRegister" styleClass="register-link" text="Registrati">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

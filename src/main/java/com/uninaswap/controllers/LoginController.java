@@ -39,7 +39,7 @@ public class LoginController {
         }
         if (AuthenticationService.getInstance().authenticateUser(username, password)) {
             ValidationService.getInstance().showLoginSuccess(username);
-            NavigationService.getInstance().navigateToMainView(event, username);
+            NavigationService.getInstance().navigateToMainView(event);
         } else {
             ValidationService.getInstance().showLoginError();
         }
