@@ -1,5 +1,7 @@
 package com.uninaswap.services;
 
+import com.uninaswap.dao.UserDao;
+import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.utility.DatabaseUtil;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
@@ -11,8 +13,8 @@ import java.sql.ResultSet;
 import static com.uninaswap.utility.Sha256.hashPassword;
 
 public class AuthenticationService {
-
     private static final AuthenticationService instance = new AuthenticationService();
+    private final UserDao userDao = new UserDaoImpl();
 
     private AuthenticationService() {
         // Singleton
@@ -22,19 +24,9 @@ public class AuthenticationService {
     }
 
     public boolean authenticateUser(String username, String password) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             stmt.setString(1, username);
-             stmt.setString(2, hashPassword(password));
-             try (ResultSet rs = stmt.executeQuery()) {
-                 return rs.next();
-             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        return userDao.authenticate(username, hashPassword(password)) != null;
     }
+
     public boolean registerUser(String name, String surname, String faculty, String username, String password) {
         String sql = "INSERT INTO users (name, surname, faculty, username, password) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();

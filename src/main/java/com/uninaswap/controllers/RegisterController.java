@@ -12,13 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import static com.uninaswap.utility.Alert.showAlert;
-import static com.uninaswap.utility.Sha256.hashPassword;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 
 public class RegisterController {

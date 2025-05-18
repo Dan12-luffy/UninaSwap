@@ -1,0 +1,89 @@
+package com.uninaswap.dao;
+
+import com.uninaswap.model.User;
+import com.uninaswap.utility.DatabaseUtil;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class UserDaoImpl implements UserDao {
+
+    @Override
+    public User findByUsername(String username) {
+        String sql = "SELECT * FROM users WHERE username = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             stmt.setString(1, username);
+             try (ResultSet rs = stmt.executeQuery()) {
+                 if (rs.next()) {
+                     User user = new User();
+                     user.setId(rs.getInt("id"));
+                     user.setUsername(rs.getString("username"));
+                     user.setPassword(rs.getString("password"));
+                     return user;
+                 }
+             }
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+         return null;
+     }
+
+    @Override
+    public User authenticate(String username, String hashedPassword) {
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, hashedPassword);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setUsername(rs.getString("username"));
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean create(String name, String surname, String faculty, String username, String hashedPassword) {
+        String sql = "INSERT INTO users (name, surname, faculty, username, password) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            stmt.setString(2, surname);
+            stmt.setString(3, faculty);
+            stmt.setString(4, username);
+            stmt.setString(5, hashedPassword);
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean usernameExists(String username) {
+        String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+}
