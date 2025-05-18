@@ -20,6 +20,7 @@ public class Main extends Application {
             Image logo = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/uninaswap/images/UninaSwapLogo.png")));
             primaryStage.getIcons().add(logo);
             primaryStage.show();
+            primaryStage.centerOnScreen();
             primaryStage.setResizable(false);
         }
         catch (Exception e){

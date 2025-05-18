@@ -63,7 +63,7 @@ public class UserDaoImpl implements UserDao {
             stmt.setString(4, username);
             stmt.setString(5, hashedPassword);
             int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0;
+            return rowsInserted > 0; //Restituisce true se è stata inserita almeno una riga
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -72,12 +72,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean usernameExists(String username) {
-        String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+        String sql = "SELECT COUNT(*) FROM users WHERE username = ?"; //Conta quante righe ci sono con lo stesso username
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
+                if (rs.next()) { //Cerca se esiste un utente con lo stesso username, se esiste c'è una colonna, quindi restitituirà true ne conta una
                     return rs.getInt(1) > 0;
                 }
             }

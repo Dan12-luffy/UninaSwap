@@ -1,5 +1,6 @@
 package com.uninaswap.controllers;
 
+import com.uninaswap.model.Faculty;
 import com.uninaswap.services.AuthenticationService;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.ValidationService;
@@ -11,10 +12,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
 
 public class RegisterController {
 
@@ -43,45 +44,33 @@ public class RegisterController {
     private Button registerButton;
 
     @FXML
+    private VBox passwordRequirements;
+
+    @FXML
+    private Label uppercaseCheck;
+
+    @FXML
+    private Label specialCharCheck;
+
+    @FXML
+    private Label numberCheck;
+
+    @FXML
+    private Label lengthCheck;
+
+    @FXML
     public void initialize(){
-        facultyComboBox.getItems().addAll("Informatica", "Scienze", "Matematica", "Economia", "Arte", "Medicina", "Biologia", "Filosofia", "Geografia", "Psychologia", "Chimica", "Astronomia", "Turismo", "Linguistica", "Musica");
-    }
-
-    public void onRegisterButtonClicked(ActionEvent actionEvent) {
-        if (!ValidationService.getInstance().validateInputFromRegistration(nameField, surnameField, usernameField, passwordField, confirmPasswordField)) {
-            return;
-        }
-        if (!AuthenticationService.getInstance().isValidPassword(passwordField, confirmPasswordField)) {
-            return;
-        }
-        String name = nameField.getText().trim();
-        String surname = surnameField.getText().trim();
-        String faculty = facultyComboBox.getValue();
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText();
-
-        boolean registrationSuccessful = AuthenticationService.getInstance().registerUser(name, surname, faculty, username, password);
-
-        if (registrationSuccessful) {
-            ValidationService.getInstance().showRegistrationSuccess();
-            navigateToLogin(actionEvent);
-        } else {
-            ValidationService.getInstance().showRegistrationError();
+        for (Faculty faculty : Faculty.values()) {
+            facultyComboBox.getItems().add(faculty.getFacultyName());
         }
     }
 
     @FXML
-    private void navigateToLogin(ActionEvent actionEvent){
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/loginInterface.fxml"));
-                Parent loginRoot = loader.load();
+    public void onRegisterButtonClicked(ActionEvent actionEvent) {
+        boolean registrationSuccessful = AuthenticationService.getInstance().processRegistrationForm(nameField, surnameField, facultyComboBox, usernameField, passwordField, confirmPasswordField);
 
-                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-
-                stage.setScene(new Scene(loginRoot));
-                stage.show();
-            } catch (IOException e) {
-                ValidationService.getInstance().showFailedToOpenPageError();
-            }
+        if (registrationSuccessful) {
+            NavigationService.getInstance().navigateToLoginView(actionEvent);
+        }
     }
 }

@@ -1,6 +1,12 @@
 package com.uninaswap.controllers;
 
+import com.uninaswap.model.User;
+import com.uninaswap.services.NavigationService;
+import com.uninaswap.services.UserSession;
+import com.uninaswap.services.ValidationService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 
 public class MainController {
@@ -19,20 +25,15 @@ public class MainController {
     @FXML
     private Button profileButton;
     @FXML
+    private Button logoutButton;
+    @FXML
     private Label usernameLabel;
 
     @FXML
     private void initialize() {
-        // Optionally set the label if username was set before initialize
-        if (username != null) {
-            usernameLabel.setText("Ciao " + username);
-        }
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-        if (usernameLabel != null) {
-            usernameLabel.setText("Ciao " + username);
+        User currentUser = UserSession.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            usernameLabel.setText("Ciao " + currentUser.getUsername());
         }
     }
 
@@ -41,6 +42,16 @@ public class MainController {
     private void onSearchButtonClicked() {
         // TODO: Implement search logic
         System.out.println("Search button clicked");
+    }
+    @FXML
+    private void onLogoutButtonClicked(ActionEvent event) {
+        UserSession.getInstance().logout();
+        ValidationService.getInstance().showLogoutSuccess();
+        try {
+            NavigationService.getInstance().navigateToLoginView(event);
+        }catch (Exception e) {
+            ValidationService.getInstance().showFailedToOpenLoginPageError();
+        }
     }
 
     @FXML

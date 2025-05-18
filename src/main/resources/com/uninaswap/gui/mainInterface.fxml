@@ -120,11 +120,12 @@
                     </padding>
                 </HBox>
                 <Separator />
-                <Button fx:id="profileButton" mnemonicParsing="false" text="Mio profilo">
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="5.0" top="5.0" />
-                    </VBox.margin>
-                </Button>
+            <HBox prefHeight="56.0" prefWidth="190.0">
+               <children>
+                      <Button fx:id="profileButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="100.0" text="Mio profilo" />
+                  <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#onLogoutButtonClicked" prefHeight="32.0" prefWidth="78.0" text="Logout" translateX="10.0" />
+               </children>
+            </HBox>
             </children>
             <padding>
                 <Insets left="10.0" right="10.0" />

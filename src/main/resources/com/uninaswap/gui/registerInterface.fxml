@@ -27,7 +27,7 @@
     <center>
         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" BorderPane.alignment="CENTER">
             <children>
-                <Label id="register-title" text="Registrazione">
+                <Label id="register-title" text="Registrazione" translateY="7.0">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>
@@ -102,12 +102,12 @@
                 </VBox>
                 <VBox prefWidth="300.0" spacing="5.0">
                     <children>
-                        <Label styleClass="form-label" text="Password" translateY="-22.0">
+                        <Label styleClass="form-label" text="Password" translateY="-29.0">
                             <font>
                                 <Font size="12.0" />
                             </font>
                         </Label>
-                        <PasswordField fx:id="passwordField" promptText="Crea una password" styleClass="form-field" translateY="-22.0">
+                        <PasswordField fx:id="passwordField" promptText="Crea una password" styleClass="form-field" translateY="-29.0">
                             <font>
                                 <Font size="14.0" />
                             </font>
@@ -115,16 +115,21 @@
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </PasswordField>
+                  <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="348.0" text="Deve contenere 8 caratteri, una maiuscola, una minuscola e un carattare speciale" translateY="-35.0">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Label>
                     </children>
                 </VBox>
                 <VBox prefWidth="300.0" spacing="5.0">
                     <children>
-                        <Label styleClass="form-label" text="Conferma Password" translateY="-24.0">
+                        <Label styleClass="form-label" text="Conferma Password" translateY="-42.0">
                             <font>
                                 <Font size="12.0" />
                             </font>
                         </Label>
-                        <PasswordField fx:id="confirmPasswordField" promptText="Conferma la tua password" styleClass="form-field" translateY="-24.0">
+                        <PasswordField fx:id="confirmPasswordField" promptText="Conferma la tua password" styleClass="form-field" translateY="-40.0">
                             <font>
                                 <Font size="14.0" />
                             </font>
@@ -134,7 +139,7 @@
                         </PasswordField>
                     </children>
                 </VBox>
-                <Button id="register-button" fx:id="registerButton" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="45.0" prefWidth="300.0" text="Registrati" translateY="-44.0" defaultButton="true">
+                <Button id="register-button" fx:id="registerButton" defaultButton="true" mnemonicParsing="false" onAction="#onRegisterButtonClicked" prefHeight="45.0" prefWidth="300.0" text="Registrati" translateY="-60.0">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
@@ -142,7 +147,7 @@
                         <Insets top="15.0" />
                     </VBox.margin>
                 </Button>
-                <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0">
+                <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0" translateY="-14.0">
                     <children>
                         <Label styleClass="footer-text" text="Hai già un account? " translateY="-54.0">
                             <font>

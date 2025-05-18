@@ -15,7 +15,10 @@
     -fx-font-weight: bold;
     -fx-font-size: 18px;
 }
-
+.login-container {
+    -fx-alignment: center;
+    -fx-content-display: center;
+}
 /* Form styles */
 .form-label {
     -fx-text-fill: #757575;

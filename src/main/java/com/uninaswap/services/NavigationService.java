@@ -1,6 +1,5 @@
 package com.uninaswap.services;
 
-import com.uninaswap.controllers.MainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -18,24 +17,21 @@ public class NavigationService {
         return instance;
     }
 
-    public void navigateToMainView(ActionEvent event, String username) {
+    public void navigateToLoginView(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/mainInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/loginInterface.fxml"));
             Parent root = loader.load();
-
-            MainController mainController = loader.getController();
-            mainController.setUsername(username);
-
             setScene(event, root);
+
         } catch (IOException e) {
             ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore",
-                    "Impossibile aprire la schermata principale.");
+                    "Impossibile aprire la schermata di login.");
         }
     }
 
     public void navigateToRegisterView(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/RegisterInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/registerInterface.fxml"));
             Parent root = loader.load();
             setScene(event, root);
         } catch (IOException e) {
@@ -43,9 +39,21 @@ public class NavigationService {
         }
     }
 
+    public void navigateToMainView(ActionEvent event, String username) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/mainInterface.fxml"));
+            Parent root = loader.load();
+            setScene(event, root);
+
+        } catch (IOException e) {
+            ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore",
+                    "Impossibile aprire la schermata principale.");
+        }
+    }
     private void setScene(ActionEvent event, Parent root) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+        stage.centerOnScreen();
         stage.show();
     }
 }

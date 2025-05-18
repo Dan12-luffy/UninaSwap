@@ -90,6 +90,12 @@ public class ValidationService {
     public void showPasswordMismatchError() {
         showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Le password non coincidono.");
     }
+    public void showLogoutSuccess() {
+        showAlert(javafx.scene.control.Alert.AlertType.INFORMATION, "Logout", "Logout effettuato con successo.");
+    }
+    public void showFailedToOpenLoginPageError() {
+        showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Impossibile aprire la pagina di login.");
+    }
 
     public void showAlert(javafx.scene.control.Alert.AlertType alertType, String title, String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(alertType);

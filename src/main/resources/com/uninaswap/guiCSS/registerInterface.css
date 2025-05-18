@@ -61,3 +61,34 @@
 #login-link:hover {
     -fx-underline: true;
 }
+.password-requirements-overlay {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
+    -fx-padding: 12px;
+    -fx-spacing: 8px;
+}
+
+.requirement-title {
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-font-size: 13px;
+}
+
+.requirement-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #555555;
+}
+
+.requirement-unchecked {
+    -fx-text-fill: #888888;
+    -fx-font-size: 16px;
+}
+
+.requirement-checked {
+    -fx-text-fill: #28a745;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
