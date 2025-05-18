@@ -73,4 +73,8 @@ public class RegisterController {
             NavigationService.getInstance().navigateToLoginView(actionEvent);
         }
     }
+    @FXML
+    private void navigateToLogin(ActionEvent event) {
+        NavigationService.getInstance().navigateToLoginView(event);
+    }
 }
