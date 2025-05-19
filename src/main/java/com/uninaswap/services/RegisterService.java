@@ -50,7 +50,7 @@ public class RegisterService {
 
         return success;
     }
-    public boolean validateInputFromRegistration(@NotNull TextField nameField, TextField surnameField, TextField usernameField, PasswordField passwordField, PasswordField confirmPasswordField){ //TODO forse si potrebbero implementare delle eccezioni
+    private boolean validateInputFromRegistration(@NotNull TextField nameField, TextField surnameField, TextField usernameField, PasswordField passwordField, PasswordField confirmPasswordField){ //TODO forse si potrebbero implementare delle eccezioni
         if(nameField.getText().trim().isEmpty() ||
                 surnameField.getText().trim().isEmpty() ||
                 usernameField.getText().trim().isEmpty()||

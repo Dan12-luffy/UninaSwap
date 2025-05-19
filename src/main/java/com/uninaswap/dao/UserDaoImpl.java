@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class UserDaoImpl implements UserDao {
 
-    @Override
+    /*@Override
     public User findByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection conn = DatabaseUtil.getConnection();
@@ -29,7 +29,7 @@ public class UserDaoImpl implements UserDao {
              e.printStackTrace();
          }
          return null;
-     }
+     }*/
 
     @Override
     public User authenticate(String username, String hashedPassword) {
