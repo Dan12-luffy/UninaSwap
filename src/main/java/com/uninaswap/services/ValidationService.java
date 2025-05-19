@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ValidationService {
     private static final ValidationService instance = new ValidationService();
-    private final RegisterService registerService = new RegisterService();
+
     private ValidationService() {
         // Singleton
     }
@@ -27,26 +27,7 @@ public class ValidationService {
         }
         return true;
     }
-    public boolean validateInputFromRegistration(@NotNull TextField nameField, TextField surnameField, TextField usernameField, PasswordField passwordField, PasswordField confirmPasswordField){ //TODO forse si potrebbero implementare delle eccezioni
-        if(nameField.getText().trim().isEmpty() ||
-                surnameField.getText().trim().isEmpty() ||
-                usernameField.getText().trim().isEmpty()||
-                passwordField.getText().isEmpty() ||
-                confirmPasswordField.getText().isEmpty()){
-            ValidationService.instance.showRegistrationFieldsEmptyError();
-            return false;
-        }
-        if(!registerService.isValidUsername(usernameField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Errore", "Attenzione si accettano solo lettere,numeri e underscore");
-            return false;
-        }
 
-        if(!registerService.isStrongPassword(passwordField.getText())){
-            showAlert(Alert.AlertType.ERROR, "Errore", "La password deve contenere almeno 8 caratteri, una lettera maiuscola e un numero ");
-            return false;
-        }
-        return true;
-    }
 
     public void showLoginSuccess(String username) {
         showAlert(javafx.scene.control.Alert.AlertType.INFORMATION,"Login Effettuato", "Benvenuto, " + username + "!");
