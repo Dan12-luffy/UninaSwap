@@ -1,12 +1,12 @@
 package com.uninaswap.controllers;
 
 import com.uninaswap.model.Faculty;
-import com.uninaswap.services.AuthenticationService;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import com.uninaswap.utility.DatabaseUtil;    // non vede questo
+import com.uninaswap.services.RegisterService;
+import com.uninaswap.utility.DatabaseUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -58,6 +58,9 @@ public class RegisterController {
     @FXML
     private Label lengthCheck;
 
+    private final RegisterService registerService = new RegisterService();
+
+
     @FXML
     public void initialize(){
         for (Faculty faculty : Faculty.values()) {
@@ -67,7 +70,7 @@ public class RegisterController {
 
     @FXML
     public void onRegisterButtonClicked(ActionEvent actionEvent) {
-        boolean registrationSuccessful = AuthenticationService.getInstance().processRegistrationForm(nameField, surnameField, facultyComboBox, usernameField, passwordField, confirmPasswordField);
+        boolean registrationSuccessful = registerService.processRegistrationForm(nameField, surnameField, facultyComboBox, usernameField, passwordField, confirmPasswordField);
 
         if (registrationSuccessful) {
             NavigationService.getInstance().navigateToLoginView(actionEvent);

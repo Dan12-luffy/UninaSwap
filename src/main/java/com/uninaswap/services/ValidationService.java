@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ValidationService {
     private static final ValidationService instance = new ValidationService();
-
+    private final RegisterService registerService = new RegisterService();
     private ValidationService() {
         // Singleton
     }
@@ -36,28 +36,16 @@ public class ValidationService {
             ValidationService.instance.showRegistrationFieldsEmptyError();
             return false;
         }
-        if(!AuthenticationService.getInstance().isValidUsername(usernameField.getText())){
+        if(!registerService.isValidUsername(usernameField.getText())){
             showAlert(Alert.AlertType.ERROR, "Errore", "Attenzione si accettano solo lettere,numeri e underscore");
             return false;
         }
 
-        if(!AuthenticationService.getInstance().isStrongPassword(passwordField.getText())){
+        if(!registerService.isStrongPassword(passwordField.getText())){
             showAlert(Alert.AlertType.ERROR, "Errore", "La password deve contenere almeno 8 caratteri, una lettera maiuscola e un numero ");
             return false;
         }
         return true;
-    }
-    public boolean isValidUsername(@NotNull String username) {
-        String usernameRegex = "^[a-zA-Z0-9_-]{3,16}$";
-        return username.matches(usernameRegex);
-    }
-    public boolean isStrongPassword(@NotNull String password) {
-        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$";
-        return password.matches(passwordRegex);
-    }
-    public boolean isValidEmail(@NotNull String email) {
-        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-        return email.matches(emailRegex);
     }
 
     public void showLoginSuccess(String username) {

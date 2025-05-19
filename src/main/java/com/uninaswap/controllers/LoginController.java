@@ -1,6 +1,6 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.services.AuthenticationService;
+import com.uninaswap.services.LoginService;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
@@ -24,6 +24,7 @@ public class LoginController {
     @FXML
     private Hyperlink registerButton;
 
+    private final LoginService loginService = new LoginService();
 
     @FXML
     public void initialize() {
@@ -37,7 +38,7 @@ public class LoginController {
         if (!ValidationService.getInstance().areCredentialsValid(username, password)) {
             return;
         }
-        if (AuthenticationService.getInstance().authenticateUser(username, password)) {
+        if (loginService.authenticateUser(username, password)) {
             ValidationService.getInstance().showLoginSuccess(username);
             NavigationService.getInstance().navigateToMainView(event);
         } else {
