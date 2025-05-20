@@ -65,6 +65,9 @@ public class ValidationService {
     public void showFailedToOpenLoginPageError() {
         showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Impossibile aprire la pagina di login.");
     }
+    public void showInvalidPriceError() {
+        showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Il prezzo deve essere un numero valido.");
+    }
 
     public void showAlert(javafx.scene.control.Alert.AlertType alertType, String title, String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(alertType);
@@ -73,4 +76,5 @@ public class ValidationService {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 }

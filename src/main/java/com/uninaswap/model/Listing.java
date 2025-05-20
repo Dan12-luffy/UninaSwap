@@ -13,14 +13,15 @@ public class Listing {
     private ListingStatus status; //ENUM
     private Date publishDate;
     private int userId;
-    private int categoryId;
+    private String category;
+    private Integer categoryId;
 
     public Listing() {}
 
     // Costruttore completo
     public Listing(Integer listingId, String title, String imageUrl, String description,
                    typeListing type, BigDecimal price, ListingStatus status,
-                   Date publishDate, Integer userId, Integer categoryId) {
+                   Date publishDate, Integer userId, String category) {
         this.listingId = listingId;
         this.title = title;
         this.imageUrl = imageUrl;
@@ -30,12 +31,18 @@ public class Listing {
         this.status = status;
         this.publishDate = publishDate;
         this.userId = userId;
-        this.categoryId = categoryId;
+        this.category = category;
     }
 
     // Getter e Setter
     public Integer getListingId() {
         return listingId;
+    }
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
     public void setListingId(Integer listingId) {
@@ -106,12 +113,12 @@ public class Listing {
         this.userId = userId;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     @Override
@@ -126,7 +133,7 @@ public class Listing {
                 ", status=" + status +
                 ", publishDate=" + publishDate +
                 ", userId=" + userId +
-                ", categoryId=" + categoryId +
+                ", categoryId=" + category +
                 '}';
     }
 }

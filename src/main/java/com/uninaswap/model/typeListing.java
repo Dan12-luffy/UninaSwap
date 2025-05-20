@@ -4,7 +4,8 @@ public enum typeListing {
         BUY("Buy"),
         EXCHANGE("Exchange"),
         GYFT("Gift"),
-        SELL("Sell");
+        SELL("Sell"),
+        UNDEFINED("Non definito");
 
         private final String type;
 

@@ -41,7 +41,7 @@ public class UserDaoImpl implements UserDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     User user = new User();
-                    user.setId(rs.getInt("id"));
+                    user.setId(rs.getInt("userId"));
                     user.setUsername(rs.getString("username"));
                     return user;
                 }
@@ -54,7 +54,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean create(String name, String surname, String faculty, String username, String hashedPassword) {
-        String sql = "INSERT INTO users (name, surname, faculty, username, password) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (first_name, last_name, faculty, username, password) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, name);
