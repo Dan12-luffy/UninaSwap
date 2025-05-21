@@ -73,30 +73,25 @@ public class MainController {
         }
         sortComboBox.getItems().addAll("Più recenti", "Prezzo crescente", "Prezzo decrescente");
         sortComboBox.setValue("Più recenti");
-
         loadItems();
     }
 
     private void loadItems() {
         try {
-            // Recupera tutti gli annunci
             ListingDao listingDao = new ListingDaoImpl();
             List<Listing> listings = listingDao.findAll();
-
-            // Pulisce la griglia
             itemsGrid.getChildren().clear();
 
-            // Verifica se ci sono annunci da mostrare
+            itemsGrid.setHgap(100);
+            itemsGrid.setVgap(20);
+
             if (listings != null && !listings.isEmpty()) {
                 int column = 0;
                 int row = 0;
-
-                // Aggiunge ogni annuncio alla griglia
                 for (Listing listing : listings) {
                     VBox itemCard = createItemCard(listing);
                     itemsGrid.add(itemCard, column, row);
 
-                    // Gestisce il layout a griglia
                     column++;
                     if (column > 2) {  // Massimo 3 colonne
                         column = 0;
@@ -120,55 +115,39 @@ public class MainController {
         }
     }
 
-    // Metodo createItemCard() semplificato
     private VBox createItemCard(Listing listing) {
-        // Crea il layout della card
-        VBox card = new VBox(10);  // spaziatura di 10px tra gli elementi
+        // Create card layout
+        VBox card = new VBox(10);
         card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;");
         card.setPrefWidth(200);
         card.setPrefHeight(250);
+        card.setMaxWidth(200);
+        card.setMaxHeight(250);
 
-        // Crea e configura l'immagine
+        // Create and configure image view
         ImageView imageView = new ImageView();
         imageView.setFitWidth(180);
         imageView.setFitHeight(140);
-        imageView.setPreserveRatio(true);
+        imageView.setPreserveRatio(false);
 
-        // Carica l'immagine o usa quella predefinita
+        // Default image path
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
-        if (listing.getImageUrl() == null || listing.getImageUrl().isEmpty()) {
-            // Usa l'immagine predefinita
-            try {
-                imageView.setImage(new Image(getClass().getResourceAsStream(defaultImagePath)));
-            } catch (Exception e) {
-                System.err.println("Impossibile caricare l'immagine predefinita: " + e.getMessage());
-            }
-        } else {
-            // Usa l'URL dell'immagine
-            try {
-                imageView.setImage(new Image(listing.getImageUrl()));
-            } catch (Exception e) {
-                System.err.println("Impossibile caricare l'immagine da URL: " + e.getMessage());
-                // In caso di errore, prova a caricare l'immagine predefinita
-                try {
-                    imageView.setImage(new Image(getClass().getResourceAsStream(defaultImagePath)));
-                } catch (Exception ex) {
-                    // Non fare nulla se anche l'immagine predefinita non può essere caricata
-                }
-            }
+        String imageUrl;
+        try {
+            imageUrl = listing.getImageUrl();
+            imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageUrl))));
+        } catch (Exception e) {
+            System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
+            imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
         }
 
-        // Crea e configura il titolo
         Label titleLabel = new Label(listing.getTitle());
-        titleLabel.setWrapText(true);  // permette al testo di andare a capo
+        titleLabel.setWrapText(true);
         titleLabel.setStyle("-fx-font-weight: bold;");
 
-        // Crea e configura il prezzo
         Label priceLabel = new Label("€" + listing.getPrice());
         priceLabel.setStyle("-fx-font-size: 14px;");
 
-        // Crea e configura l'etichetta della categoria
-        // Usa la categoria o il tipo a seconda di cosa è disponibile
         String labelText = listing.getCategory();
         if (labelText == null || labelText.isEmpty()) {
             labelText = listing.getType().toString();
@@ -176,10 +155,7 @@ public class MainController {
         Label categoryLabel = new Label(labelText);
         categoryLabel.setStyle("-fx-font-size: 12px; -fx-background-color: #f0f0f0; -fx-padding: 2 5; -fx-background-radius: 3;");
 
-        // Aggiungi tutti gli elementi alla card
         card.getChildren().addAll(imageView, titleLabel, priceLabel, categoryLabel);
-
-        // Aggiungi l'evento di click per mostrare i dettagli
         card.setOnMouseClicked(event -> showItemDetails(listing));
 
         return card;

@@ -46,8 +46,8 @@ public class NavigationService {
             setScene(event, root);
 
         } catch (IOException e) {
-            ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore",
-                    "Impossibile aprire la schermata principale.");
+            e.printStackTrace();
+            ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore","Impossibile aprire la schermata principale.");
         }
     }
     public void navigateToOfferHistoryView(ActionEvent event) {

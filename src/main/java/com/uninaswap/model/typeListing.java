@@ -3,9 +3,11 @@ package com.uninaswap.model;
 public enum typeListing {
         BUY("Buy"),
         EXCHANGE("Exchange"),
-        GYFT("Gift"),
+        GIFT("Gift"),
         SELL("Sell"),
+        SALE("Sale"),
         UNDEFINED("Non definito");
+
 
         private final String type;
 

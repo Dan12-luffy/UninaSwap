@@ -69,49 +69,48 @@ public class ListingDaoImpl implements ListingDao {
         List<Listing> listings = new ArrayList<>();
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +
                 "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE l.status = 'ACTIVE' ORDER BY l.publishDate DESC";
+                "ORDER BY l.publishDate DESC";
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = DatabaseUtil.getConnection();
-            stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Listing listing = new Listing();
-                listing.setListingId(rs.getInt("listingId"));
-                listing.setTitle(rs.getString("title"));
-                listing.setImageUrl(rs.getString("imageUrl"));
-                listing.setDescription(rs.getString("description"));
-                listing.setType(typeListing.valueOf(rs.getString("type")));
-                listing.setPrice(rs.getBigDecimal("price"));
-                listing.setStatus(ListingStatus.valueOf(rs.getString("status")));
-                listing.setPublishDate(rs.getDate("publishDate"));
-                listing.setUserId(rs.getInt("userId"));
-                listing.setCategoryId(rs.getInt("category_id"));
+                try {
+                    Listing listing = new Listing();
+                    listing.setListingId(rs.getInt("listingId"));
+                    listing.setTitle(rs.getString("title"));
+                    listing.setImageUrl(rs.getString("imageUrl"));
+                    listing.setDescription(rs.getString("description"));
 
-                // Salviamo il nome della categoria
-                String categoryName = rs.getString("category_name");
-                if (categoryName == null) {
-                    categoryName = "Altro"; // Valore di default
+                    String typeStr = rs.getString("type");
+                    try {
+                        listing.setType(typeListing.valueOf(typeStr));
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Tipo sconosciuto " + typeStr + " - impostato a SALE di default");
+                        listing.setType(typeListing.SALE);
+                    }
+
+                    String statusStr = rs.getString("status");
+                    try {
+                        listing.setStatus(ListingStatus.valueOf(statusStr));
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Stato sconosciuto: " + statusStr + " - impostato a  AVAILABLE di default");
+                        listing.setStatus(ListingStatus.AVAILABLE);
+                    }
+
+                    listing.setPrice(rs.getBigDecimal("price"));
+                    listing.setPublishDate(rs.getDate("publishDate"));
+                    listing.setUserId(rs.getInt("userId"));
+                    String categoryName = rs.getString("category_name");
+                    listing.setCategory(categoryName != null ? categoryName : "Altro");
+
+                    listings.add(listing);
+                } catch (Exception e) {
+                    System.err.println("Errore nel processare la lista " + e.getMessage());
                 }
-                listing.setCategory(categoryName);
-
-                listings.add(listing);
             }
-        } catch (SQLException e) {
-            System.err.println("Errore SQL: " + e.getMessage());
-            throw e;
-        } finally {
-            // Chiusura delle risorse
-            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignora */ }
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { /* ignora */ }
-            if (conn != null) try { conn.close(); } catch (SQLException e) { /* ignora */ }
         }
-
         return listings;
     }
 

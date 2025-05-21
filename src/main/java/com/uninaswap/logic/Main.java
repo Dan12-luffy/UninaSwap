@@ -19,7 +19,7 @@ public class Main extends Application {
             primaryStage.show();
             primaryStage.centerOnScreen();
             primaryStage.setResizable(false);
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/uninaswap/gui/loginInterface.fxml")));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/uninaswap/gui/mainInterface.fxml")));
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("UninaSwap");
