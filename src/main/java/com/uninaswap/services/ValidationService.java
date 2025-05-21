@@ -28,7 +28,6 @@ public class ValidationService {
         return true;
     }
 
-
     public void showLoginSuccess(String username) {
         showAlert(javafx.scene.control.Alert.AlertType.INFORMATION,"Login Effettuato", "Benvenuto, " + username + "!");
     }
@@ -68,6 +67,7 @@ public class ValidationService {
     public void showInvalidPriceError() {
         showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Il prezzo deve essere un numero valido.");
     }
+
 
     public void showAlert(javafx.scene.control.Alert.AlertType alertType, String title, String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(alertType);

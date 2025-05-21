@@ -10,27 +10,6 @@ import java.sql.SQLException;
 
 public class UserDaoImpl implements UserDao {
 
-    /*@Override
-    public User findByUsername(String username) {
-        String sql = "SELECT * FROM users WHERE username = ?";
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             stmt.setString(1, username);
-             try (ResultSet rs = stmt.executeQuery()) {
-                 if (rs.next()) {
-                     User user = new User();
-                     user.setId(rs.getInt("id"));
-                     user.setUsername(rs.getString("username"));
-                     //user.setPassword(rs.getString("password"));
-                     return user;
-                 }
-             }
-         } catch (SQLException e) {
-             e.printStackTrace();
-         }
-         return null;
-     }*/
-
     @Override
     public User authenticate(String username, String hashedPassword) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";

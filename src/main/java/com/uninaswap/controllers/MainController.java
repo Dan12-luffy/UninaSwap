@@ -168,8 +168,7 @@ public class MainController {
 
     @FXML
     private void onSearchButtonClicked() {
-        // TODO: Implement search logic
-        System.out.println("Search button clicked");
+
     }
 
     @FXML
