@@ -13,13 +13,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage){
         try{
-
             Image logo = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/uninaswap/images/uninaswap_logo.png")));
             primaryStage.getIcons().add(logo);
             primaryStage.show();
             primaryStage.centerOnScreen();
             primaryStage.setResizable(false);
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/uninaswap/gui/mainInterface.fxml")));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/uninaswap/gui/loginInterface.fxml")));
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("UninaSwap");

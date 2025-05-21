@@ -1,0 +1,557 @@
+.settings-section .content {
+    -fx-padding: 15px;
+}
+
+.settings-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-font-weight: bold;
+}
+
+.settings-field {
+    -fx-background-color: #F8F8F8;
+    -fx-background-radius: 4px;
+    -fx-border-color: #EEEEEE;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #BDBDBD;
+}
+
+.settings-field:focused {
+    -fx-border-color: -fx-primary;
+}
+
+.bio-field {
+    -fx-min-height: 80px;
+}
+
+.profile-image-upload {
+    -fx-padding: 10px;
+}
+
+.security-item {
+    -fx-spacing: 10px;
+    -fx-padding: 5px 0;
+}
+
+.warning-text {
+    -fx-text-fill: -fx-danger;
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
+    -fx-padding: 0 0 0 10px;
+}
+
+.danger-zone {
+    -fx-padding: 10px;
+    -fx-background-color: #FFEBEE;
+    -fx-background-radius: 4px;
+    -fx-spacing: 10px;
+}
+
+/* ============================
+   RESPONSIVE DESIGN
+   ============================ */
+@media (max-width: 1000px) {
+    .profile-container {
+        -fx-padding: 10px;
+        -fx-spacing: 10px;
+    }
+
+    .profile-sidebar {
+        -fx-min-width: 250px;
+        -fx-max-width: 250px;
+    }
+
+    .profile-content {
+        -fx-padding: 15px;
+    }
+
+    .item-actions, .proposal-actions, .offer-actions, .transaction-actions, .favorite-actions {
+        -fx-min-width: 80px;
+    }
+}
+
+@media (max-width: 800px) {
+    .profile-container {
+        -fx-orientation: vertical;
+    }
+
+    .profile-sidebar {
+        -fx-min-width: 100%;
+        -fx-max-width: 100%;
+    }
+
+    .swap-items, .swap-history-items {
+        -fx-min-width: 150px;
+    }
+}
+
+/* ============================
+   NOTIFICHE
+   ============================ */
+.notification-badge {
+    -fx-background-color: -fx-danger;
+    -fx-background-radius: 50%;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-padding: 2px 5px;
+    -fx-font-weight: bold;
+}
+
+/* ============================
+   PLACEHOLDER PER SEZIONI VUOTE
+   ============================ */
+.empty-placeholder {
+    -fx-padding: 30px;
+    -fx-alignment: center;
+    -fx-spacing: 15px;
+}
+
+.placeholder-icon {
+    -fx-font-size: 48px;
+    -fx-text-fill: #BDBDBD;
+}
+
+.placeholder-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9E9E9E;
+}
+
+.placeholder-message {
+    -fx-font-size: 14px;
+    -fx-text-fill: #BDBDBD;
+    -fx-text-alignment: center;
+}
+
+/* ============================
+   ANIMAZIONI
+   ============================ */
+.fade-in {
+    -fx-opacity: 0;
+    -fx-animation: fadeInAnimation 0.3s ease-in forwards;
+}
+
+@keyframes fadeInAnimation {
+    from { -fx-opacity: 0; }
+    to { -fx-opacity: 1; }
+}
+
+/* ============================
+   TOOLTIP PERSONALIZZATI
+   ============================ */
+.tooltip {
+    -fx-background-color: -fx-neutral-dark;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 4px;
+}
+
+/* ============================
+   VALUTAZIONI E RECENSIONI
+   ============================ */
+.rating-stars {
+    -fx-spacing: 2px;
+}
+
+.star-filled {
+    -fx-text-fill: -fx-accent;
+    -fx-font-size: 14px;
+}
+
+.star-empty {
+    -fx-text-fill: #BDBDBD;
+    -fx-font-size: 14px;
+}
+
+.review-card {
+    -fx-background-color: #F8F8F8;
+    -fx-background-radius: 4px;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
+.review-author {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.review-date {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-muted;
+    -fx-font-style: italic;
+}
+
+.review-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-wrap-text: true;
+}
+
+/* ============================
+   DIALOGHI E POPUP
+   ============================ */
+.dialog-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 20px;
+    -fx-effect: -fx-shadow-medium;
+}
+
+.dialog-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.dialog-content {
+    -fx-padding: 15px 0;
+}
+
+.dialog-actions {
+    -fx-spacing: 10px;
+    -fx-alignment: center-right;
+}
+
+/* ============================
+   PROGRESS INDICATORS
+   ============================ */
+.progress-indicator {
+    -fx-progress-color: -fx-primary;
+}
+
+.progress-bar .bar {
+    -fx-background-color: -fx-primary;
+    -fx-background-radius: 2px;
+}
+
+.progress-bar .track {
+    -fx-background-color: #EEEEEE;
+    -fx-background-radius: 2px;
+}
+
+/* ============================
+   ACCORDI E BADGE SPECIALI
+   ============================ */
+.deal-status {
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 50px;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.status-pending {
+    -fx-background-color: #FFF8E1;
+    -fx-text-fill: #FFA000;
+}
+
+.status-completed {
+    -fx-background-color: #E8F5E9;
+    -fx-text-fill: #43A047;
+}
+
+.status-canceled {
+    -fx-background-color: #FFEBEE;
+    -fx-text-fill: #E53935;
+}
+
+.status-verified {
+    -fx-background-color: #E3F2FD;
+    -fx-text-fill: #1976D2;
+}
+
+/* ============================
+   CRONOLOGIA E FILTRI
+   ============================ */
+.history-filter {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 4px;
+}
+
+.date-range {
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+
+.custom-checkbox .box {
+    -fx-background-color: white;
+    -fx-border-color: #BDBDBD;
+    -fx-border-radius: 3px;
+}
+
+.custom-checkbox:selected .box {
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-primary;
+}
+
+.custom-checkbox:selected .mark {
+    -fx-background-color: white;
+}
+
+/* ============================
+   PAGINAZIONE
+   ============================ */
+.pagination {
+    -fx-page-information-visible: false;
+}
+
+.pagination .pagination-control .button {
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-primary;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.pagination .pagination-control .button:hover {
+    -fx-background-color: -fx-primary-transparent;
+}
+
+.pagination .pagination-control .number-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.pagination .pagination-control .number-button:selected {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+}
+
+/* ============================
+   STATISTICHE E GRAFICI
+   ============================ */
+.chart-container {
+    -fx-background-color: white;
+    -fx-background-radius: 4px;
+    -fx-padding: 15px;
+    -fx-border-color: #EEEEEE;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;
+}
+
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+}
+
+.chart-series-line {
+    -fx-stroke: -fx-primary;
+    -fx-stroke-width: 2px;
+}
+
+.chart-line-symbol {
+    -fx-background-color: -fx-primary;
+}
+
+/* Barra di ricerca all'interno delle sezioni */
+.section-search {
+    -fx-spacing: 10px;
+    -fx-padding: 0 0 10px 0;
+}
+
+.search-input {
+    -fx-background-color: #F8F8F8;
+    -fx-background-radius: 50px;
+    -fx-border-color: #EEEEEE;
+    -fx-border-width: 1;
+    -fx-border-radius: 50px;
+    -fx-padding: 8px 15px;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #BDBDBD;
+}
+
+.search-input:focused {
+    -fx-border-color: -fx-primary;
+}
+
+/* Aggiunte per il supporto di immagini multiple */
+.item-images-container {
+    -fx-spacing: 5px;
+}
+
+.item-thumbnail {
+    -fx-background-color: #F5F5F5;
+    -fx-background-radius: 4px;
+    -fx-border-color: #EEEEEE;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.item-thumbnail:hover {
+    -fx-border-color: -fx-primary;
+}
+
+.item-thumbnail-selected {
+    -fx-border-color: -fx-primary;
+    -fx-border-width: 2;
+}
+
+/* Aggiunte per il completamento dell'interfaccia */
+.settings-tabs .tab-pane {
+    -fx-tab-min-height: 40px;
+}
+
+.settings-tabs .tab {
+    -fx-padding: 10px 15px;
+}
+
+.profile-section {
+    -fx-spacing: 15px;
+}
+
+/* ============================
+   MENU CONTESTUALI
+   ============================ */
+.context-menu {
+    -fx-background-color: white;
+    -fx-background-radius: 4px;
+    -fx-border-color: #EEEEEE;
+    -fx-border-width: 1;
+    -fx-border-radius: 4px;
+    -fx-padding: 5px;
+    -fx-effect: -fx-shadow-low;
+}
+
+.menu-item {
+    -fx-padding: 8px 15px;
+}
+
+.menu-item:hover {
+    -fx-background-color: -fx-primary-transparent;
+}
+
+.menu-item:focused {
+    -fx-background-color: -fx-primary-transparent;
+}
+
+/* ============================
+   MESSAGGISTICA
+   ============================ */
+.chat-bubble {
+    -fx-padding: 10px 15px;
+    -fx-background-radius: 15px;
+    -fx-max-width: 250px;
+}
+
+.chat-bubble-sent {
+    -fx-background-color: -fx-primary-transparent;
+    -fx-text-fill: -fx-primary;
+    -fx-background-radius: 15px 15px 0 15px;
+}
+
+.chat-bubble-received {
+    -fx-background-color: #F0F0F0;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-background-radius: 15px 15px 15px 0;
+}
+
+.chat-timestamp {
+    -fx-font-size: 10px;
+    -fx-text-fill: -fx-muted;
+    -fx-font-style: italic;
+}
+
+/* Sistema di messaggistica integrato */
+.message-composer {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-background-color: #F8F8F8;
+    -fx-background-radius: 4px;
+}
+
+.message-input {
+    -fx-background-color: white;
+    -fx-background-radius: 50px;
+    -fx-border-color: #EEEEEE;
+    -fx-border-width: 1;
+    -fx-border-radius: 50px;
+    -fx-padding: 8px 15px;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #BDBDBD;
+}
+
+.send-button {
+    -fx-background-color: -fx-primary;
+    -fx-background-radius: 50px;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+}
+
+.send-button:hover {
+    -fx-background-color: -fx-primary-light;
+}
+
+/* ============================
+   OTTIMIZZAZIONI FINALI
+   ============================ */
+.scroll-container {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-container .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Miglioramenti per la visualizzazione su schermi ad alta risoluzione */
+.hires {
+    -fx-font-smoothing-type: lcd;
+}
+
+/* Supporto per eventuale tema scuro */
+.dark-mode {
+    -fx-primary: #F44336;              /* Colore principale più vivace sul tema scuro */
+    -fx-primary-light: #FF5252;
+    -fx-primary-dark: #D32F2F;
+    -fx-primary-transparent: rgba(244, 67, 54, 0.15);
+
+    -fx-secondary: #37474F;
+    -fx-accent: #FFB74D;
+    -fx-neutral: #202020;
+    -fx-neutral-dark: #FAFAFA;
+    -fx-muted: #B0BEC5;
+
+    -fx-success: #66BB6A;
+    -fx-warning: #FFA726;
+    -fx-danger: #EF5350;
+
+    -fx-shadow-low: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 4, 0, 0, 1);
+    -fx-shadow-medium: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 8, 0, 0, 2);
+
+    -fx-background-color: #202020;
+}
+
+.dark-mode .profile-content, .dark-mode .profile-card, .dark-mode .profile-nav,
+.dark-mode .contact-section, .dark-mode .badges-section, .dark-mode .settings-section,
+.dark-mode .item-card, .dark-mode .proposal-card, .dark-mode .offer-card,
+.dark-mode .transaction-card, .dark-mode .favorite-card {
+    -fx-background-color: #282828;
+}
+
+.dark-mode .section-header {
+    -fx-border-color: transparent transparent #383838 transparent;
+}
+
+.dark-mode .settings-field {
+    -fx-background-color: #333333;
+    -fx-border-color: #383838;
+}

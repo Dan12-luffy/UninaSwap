@@ -11,15 +11,17 @@ import com.uninaswap.services.ValidationService;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
@@ -82,8 +84,20 @@ public class MainController {
             List<Listing> listings = listingDao.findAll();
             itemsGrid.getChildren().clear();
 
-            itemsGrid.setHgap(100);
+            // Keep your preferred spacing
+            itemsGrid.setHgap(-100);
             itemsGrid.setVgap(20);
+            // Change alignment to CENTER
+            //itemsGrid.setAlignment(Pos.CENTER);
+
+            // Set up column constraints to ensure even distribution
+            itemsGrid.getColumnConstraints().clear();
+            for (int i = 0; i < 4; i++) {
+                ColumnConstraints column = new ColumnConstraints();
+                column.setHalignment(HPos.LEFT);
+                column.setPercentWidth(33.33);
+                itemsGrid.getColumnConstraints().add(column);
+            }
 
             if (listings != null && !listings.isEmpty()) {
                 int column = 0;
@@ -93,7 +107,7 @@ public class MainController {
                     itemsGrid.add(itemCard, column, row);
 
                     column++;
-                    if (column > 2) {  // Massimo 3 colonne
+                    if (column > 3) {  // Massimo 3 colonne
                         column = 0;
                         row++;
                     }
@@ -124,10 +138,12 @@ public class MainController {
         card.setMaxWidth(200);
         card.setMaxHeight(250);
 
+
         // Create and configure image view
         ImageView imageView = new ImageView();
         imageView.setFitWidth(180);
         imageView.setFitHeight(140);
+        imageView.setSmooth(true);
         imageView.setPreserveRatio(false);
 
         // Default image path
@@ -144,8 +160,13 @@ public class MainController {
         Label titleLabel = new Label(listing.getTitle());
         titleLabel.setWrapText(true);
         titleLabel.setStyle("-fx-font-weight: bold;");
-
-        Label priceLabel = new Label("€" + listing.getPrice());
+        Label priceLabel;
+        if(listing.getPrice() == null) {
+            priceLabel = new Label("Disponibile per: " + listing.getType());
+        } else {
+            priceLabel = new Label("€" + listing.getPrice());
+        }
+        //Label priceLabel = new Label("€" + listing.getPrice());
         priceLabel.setStyle("-fx-font-size: 14px;");
 
         String labelText = listing.getCategory();
@@ -203,8 +224,11 @@ public class MainController {
 
     @FXML
     private void onProfileButtonClicked(ActionEvent event) {
-        NavigationService.getInstance().navigateToOfferHistoryView(event);
+        NavigationService.getInstance().navigateToNreInsertionView(event);
+
     }
+
+
 
     // New handler methods
     @FXML
