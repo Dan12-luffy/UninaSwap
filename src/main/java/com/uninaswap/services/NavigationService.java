@@ -59,11 +59,22 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
+    public void navigateToNreInsertionView(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/inserimentoInserzioniDiProva.fxml"));
+            Parent root = loader.load();
+            setScene(event, root);
+        } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }
+    }
 
     private void setScene(ActionEvent event, Parent root) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+        stage.setResizable(true);
         stage.centerOnScreen();
         stage.show();
     }
+
 }

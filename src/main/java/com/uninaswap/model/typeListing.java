@@ -1,10 +1,10 @@
 package com.uninaswap.model;
 
 public enum typeListing {
-        BUY("Buy"),
-        EXCHANGE("Exchange"),
-        GIFT("Gift"),
-        SELL("Sell"),
+        BUY("acquisto"),
+        EXCHANGE("scambio"),
+        GIFT("regalo"),
+        SELL("vendita"),
         SALE("Sale"),
         UNDEFINED("Non definito");
 

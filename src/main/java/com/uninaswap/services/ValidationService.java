@@ -29,13 +29,13 @@ public class ValidationService {
     }
 
     public void showLoginSuccess(String username) {
-        showAlert(javafx.scene.control.Alert.AlertType.INFORMATION,"Login Effettuato", "Benvenuto, " + username + "!");
+        showAlert(Alert.AlertType.INFORMATION,"Login Effettuato", "Benvenuto, " + username + "!");
     }
     public void showLoginError() {
-        showAlert(javafx.scene.control.Alert.AlertType.ERROR,"Login Fallito", "Username o password errati.");
+        showAlert(Alert.AlertType.ERROR,"Login Fallito", "Username o password errati.");
     }
     public void showRegistrationFieldsEmptyError(){
-        showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Compila tutti i campi.");
+        showAlert(Alert.AlertType.ERROR, "Errore", "Compila tutti i campi.");
     }
     public void showRegistrationError() {
         showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Registrazione Fallita", "Impossibile completare la registrazione.");
