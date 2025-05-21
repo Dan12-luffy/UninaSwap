@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane styleClass="insertion-container" stylesheets="@../guiCSS/newInsertion.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.NewInsertionController">
+    <top>
+        <HBox alignment="CENTER_LEFT" styleClass="header-banner">
+            <Label styleClass="header-title" text="Crea nuova inserzione" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="backButton" onAction="#goBack" styleClass="back-button" text="Indietro" />
+            <padding>
+                <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
+            </padding>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="form-scroll-pane">
+            <VBox spacing="20.0" styleClass="content-panel">
+                <padding>
+                    <Insets bottom="30.0" left="30.0" right="30.0" top="20.0" />
+                </padding>
+                <children>
+                    <Label styleClass="section-title" text="Informazioni dell'articolo" />
+
+                    <GridPane hgap="15" styleClass="form-grid" vgap="15">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="120.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="250.0" />
+                        </columnConstraints>
+
+                        <children>
+                            <!-- Titolo -->
+                            <Label styleClass="field-label" text="Titolo:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                            <TextField fx:id="titleField" promptText="Inserisci il titolo" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                            <!-- Categoria -->
+                            <Label styleClass="field-label" text="Categoria:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                            <ComboBox fx:id="categoryComboBox" prefWidth="150.0" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                            <!-- Tipo -->
+                            <Label styleClass="field-label" text="Tipo di annuncio:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                            <ComboBox fx:id="typeComboBox" prefWidth="150.0" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                            <!-- Prezzo -->
+                            <Label styleClass="field-label" text="Prezzo:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                            <TextField fx:id="priceField" promptText="0.00" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                            <!-- Stato -->
+                            <Label styleClass="field-label" text="Condizione:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                            <ComboBox fx:id="statusComboBox" prefWidth="150.0" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                            <!-- Data di pubblicazione -->
+                            <Label styleClass="field-label" text="Data pubblicazione:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                            <DatePicker fx:id="publishDatePicker" styleClass="date-picker" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                            <!-- Immagine -->
+                            <Label styleClass="field-label" text="Immagine:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                            <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                <TextField fx:id="imagePathField" editable="false" promptText="Nessun file selezionato" styleClass="text-field" HBox.hgrow="ALWAYS" />
+                                <Button onAction="#handleSelectImage" styleClass="browse-button" text="Sfoglia" />
+                            </HBox>
+
+                            <!-- Descrizione -->
+                            <Label styleClass="field-label" text="Descrizione:" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.valignment="TOP" />
+                            <TextArea fx:id="descriptionArea" prefHeight="120.0" promptText="Inserisci una descrizione dettagliata dell'articolo..." styleClass="text-area" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        </children>
+                  <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                  </rowConstraints>
+                    </GridPane>
+
+                    <Separator />
+
+                    <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                        <Button fx:id="cancelButton" onAction="#handleCancel" styleClass="cancel-button" text="Annulla" />
+                        <Button defaultButton="true" onAction="#handleSave" styleClass="save-button" text="Salva inserzione" />
+                    </HBox>
+                </children>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

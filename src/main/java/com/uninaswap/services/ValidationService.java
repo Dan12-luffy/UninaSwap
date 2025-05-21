@@ -68,6 +68,10 @@ public class ValidationService {
         showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Il prezzo deve essere un numero valido.");
     }
 
+    public void showNewInsertionError() {
+        showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "L'inserimento della nuova inserzione non è andato a buon fine.");
+    }
+
 
     public void showAlert(javafx.scene.control.Alert.AlertType alertType, String title, String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(alertType);
@@ -76,5 +80,4 @@ public class ValidationService {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 }

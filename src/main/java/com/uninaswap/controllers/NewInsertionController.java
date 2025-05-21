@@ -5,6 +5,7 @@ import com.uninaswap.dao.ListingDao;
 import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.typeListing;
+import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
 
@@ -13,16 +14,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.sql.SQLException;
 import java.util.UUID;
 
 public class NewInsertionController {
@@ -47,6 +49,8 @@ public class NewInsertionController {
 
     @FXML
     private DatePicker publishDatePicker;
+    @FXML
+    private Button cancelButton;
 
     @FXML
     private ComboBox<String> categoryComboBox;
@@ -69,72 +73,83 @@ public class NewInsertionController {
 
     @FXML
     private void handleSelectImage() {
+        selectImage();
+    }
+    private void selectImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleziona un'immagine");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Immagini", "*.png", "*.jpg", "*.jpeg", "*.gif")
-        );
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Immagini", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+        selectedImageFile = fileChooser.showOpenDialog(null);
 
-        selectedImageFile = fileChooser.showOpenDialog(titleField.getScene().getWindow());
         if (selectedImageFile != null) {
-            imagePathField.setText(selectedImageFile.getName());
+            imagePathField.setText(selectedImageFile.getAbsolutePath());
+        }
+        //ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Nessun file selezionato.");
+    }
+    @FXML
+    private void handleSave(ActionEvent event) {
+        try {
+            if (titleField.getText().isEmpty() || descriptionArea.getText().isEmpty() ) {
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore di validazione", "Titolo e descrizione sono campi obbligatori.");
+                return;
+            }
+
+            // Parse price with proper error handling
+            BigDecimal price = BigDecimal.valueOf(0.0);
+            if (!priceField.getText().isEmpty()) {
+                try {
+                    price = BigDecimal.valueOf(Double.parseDouble(priceField.getText().replace(',', '.')));
+                } catch (NumberFormatException e) {
+                    ValidationService.getInstance().showAlert(Alert.AlertType.ERROR,
+                            "Errore di validazione", "Il formato del prezzo non è valido.");
+                    return;
+                }
+            }
+
+            typeListing type = getTypeListing();
+
+            String imagePath;
+            if (selectedImageFile != null) {
+                imagePath = selectedImageFile.getAbsolutePath() ;
+            } else {
+                imagePath = "/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path
+            }
+
+            Listing listing = new Listing(titleField.getText(), imagePath, descriptionArea.getText(), type, price, ListingStatus.AVAILABLE,
+                    Date.valueOf(publishDatePicker.getValue()), UserSession.getInstance().getCurrentUser().getId(), categoryComboBox.getValue());
+
+            ListingDao listingDao = new ListingDaoImpl();
+            listingDao.insert(listing);
+            ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Inserzione salvata", "L'inserzione è stata salvata con successo!");
+            NavigationService.getInstance().navigateToMainView(event);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ValidationService.getInstance().showNewInsertionError();
         }
     }
+
+    @NotNull
+    private typeListing getTypeListing() {
+        typeListing type;
+        String typeValue = typeComboBox.getValue();
+        if ("Vendita".equals(typeValue)) {
+            type = typeListing.SALE;
+        } else if ("Scambio".equals(typeValue)) {
+            type = typeListing.EXCHANGE; // Note: Your enum might use EXCHANGE instead of TRADE
+        } else if ("Regalo".equals(typeValue)) {
+            type = typeListing.GIFT;
+        } else {
+            type = typeListing.SALE; // Default value
+        }
+        return type;
+    }
+
 
     @FXML
-    private void handleSave() {
-
+    private void goBack(ActionEvent event) {
+        NavigationService.getInstance().navigateToMainView(event);
     }
-
-    private String saveImageFile() throws IOException {
-        // Generate a unique filename
-        String extension = selectedImageFile.getName().substring(selectedImageFile.getName().lastIndexOf('.'));
-        String filename = UUID.randomUUID().toString() + extension;
-
-        // Define the path where the image will be saved
-        String targetPath = "/com/uninaswap/images/listings/" + filename;
-
-        // Get the absolute path to the resources directory
-        String resourcesPath = getClass().getResource("/com/uninaswap/images/listings").getPath();
-        Path targetFilePath = Paths.get(resourcesPath, filename);
-
-        // Copy the file
-        Files.copy(selectedImageFile.toPath(), targetFilePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return targetPath;
-    }
-
-    private Listing createListingFromInputs(String imagePath) {
-        return  null;
-    }
-    private byte[] openFileChooser() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleziona un'immagine");
-
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("File immagine", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        File selectedFile = fileChooser.showOpenDialog(null);
-        byte[] imageData = null;
-        if (selectedFile != null) {
-            try {
-                imageData = readFileToByteArray(selectedFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return imageData;
-            }
-        }
-        return imageData;
-    }
-    private byte[] readFileToByteArray(File file) throws IOException {
-        byte[] byteArray = new byte[(int) file.length()];
-
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            fileInputStream.read(byteArray);
-        }
-        return byteArray;
-    }
-
     @FXML
     private void handleCancel() {
         closeWindow();

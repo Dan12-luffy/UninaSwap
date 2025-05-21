@@ -59,9 +59,9 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
-    public void navigateToNreInsertionView(ActionEvent event) {
+    public void navigateToNewInsertionView(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/inserimentoInserzioniDiProva.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/newInsertion.fxml"));
             Parent root = loader.load();
             setScene(event, root);
         } catch (IOException e) {
@@ -72,7 +72,7 @@ public class NavigationService {
     private void setScene(ActionEvent event, Parent root) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
-        stage.setResizable(true);
+        stage.setResizable(false);
         stage.centerOnScreen();
         stage.show();
     }

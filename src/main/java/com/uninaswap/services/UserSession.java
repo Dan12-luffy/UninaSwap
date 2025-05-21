@@ -28,6 +28,9 @@ public class UserSession {
     public User getCurrentUser() {
         return currentUser;
     }
+    public int getCurrentUserId() {
+        return currentUser.getId();
+    }
 
     /*public boolean isLoggedIn() {
         return loggedIn;

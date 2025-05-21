@@ -33,6 +33,20 @@ public class Listing {
         this.userId = userId;
         this.category = category;
     }
+    //Costruttore senza id
+    public Listing(String title, String imageUrl, String description,
+                   typeListing type, BigDecimal price, ListingStatus status,
+                   Date publishDate, Integer userId, String category) {
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.type = type;
+        this.price = price;
+        this.status = status;
+        this.publishDate = publishDate;
+        this.userId = userId;
+        this.category = category;
+    }
 
     // Getter e Setter
     public Integer getListingId() {

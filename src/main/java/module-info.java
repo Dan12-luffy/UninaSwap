@@ -16,6 +16,7 @@ module com.uninaswap.uninaswap {
     requires com.google.common;
     requires annotations;
     requires java.desktop;
+    requires svg.salamander;
 
 
     exports com.uninaswap.controllers;

@@ -4,8 +4,7 @@ public enum typeListing {
         BUY("acquisto"),
         EXCHANGE("scambio"),
         GIFT("regalo"),
-        SELL("vendita"),
-        SALE("Sale"),
+        SALE("vendita"),
         UNDEFINED("Non definito");
 
 

@@ -4,25 +4,18 @@ import com.uninaswap.dao.ListingDao;
 import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.model.Listing;
 import com.uninaswap.model.User;
-import com.uninaswap.model.typeListing;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
@@ -81,25 +74,25 @@ public class MainController {
     private void loadItems() {
         try {
             ListingDao listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findAll();
+            List<Listing> listings = listingDao.findAllOtherInsertions();
             itemsGrid.getChildren().clear();
 
             // Keep your preferred spacing
-            itemsGrid.setHgap(-100);
+            itemsGrid.setHgap(20);
             itemsGrid.setVgap(20);
             // Change alignment to CENTER
             //itemsGrid.setAlignment(Pos.CENTER);
 
             // Set up column constraints to ensure even distribution
             itemsGrid.getColumnConstraints().clear();
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < listings.size(); ++i) {
                 ColumnConstraints column = new ColumnConstraints();
                 column.setHalignment(HPos.LEFT);
                 column.setPercentWidth(33.33);
                 itemsGrid.getColumnConstraints().add(column);
             }
 
-            if (listings != null && !listings.isEmpty()) {
+            if (!listings.isEmpty()) {
                 int column = 0;
                 int row = 0;
                 for (Listing listing : listings) {
@@ -107,7 +100,7 @@ public class MainController {
                     itemsGrid.add(itemCard, column, row);
 
                     column++;
-                    if (column > 3) {  // Massimo 3 colonne
+                    if (column > 3) {  // Massimo 4 colonne
                         column = 0;
                         row++;
                     }
@@ -150,8 +143,8 @@ public class MainController {
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         String imageUrl;
         try {
-            imageUrl = listing.getImageUrl();
-            imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageUrl))));
+            File imageFile = new File(listing.getImageUrl());
+            imageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
             System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
             imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
@@ -223,7 +216,7 @@ public class MainController {
 
     @FXML
     private void onProfileButtonClicked(ActionEvent event) {
-        NavigationService.getInstance().navigateToNreInsertionView(event);
+        NavigationService.getInstance().navigateToNewInsertionView(event);
 
     }
 

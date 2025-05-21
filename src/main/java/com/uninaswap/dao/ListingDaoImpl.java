@@ -3,6 +3,7 @@ package com.uninaswap.dao;
 import com.uninaswap.model.Listing;
 import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.typeListing;
+import com.uninaswap.services.UserSession;
 import com.uninaswap.utility.DatabaseUtil;
 
 import java.sql.*;
@@ -69,7 +70,37 @@ public class ListingDaoImpl implements ListingDao {
                     mapResultSetToListing(rs, listing);
                     listings.add(listing);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     System.err.println("Errore nel processare la lista " + e.getMessage());
+                }
+            }
+        }
+        return listings;
+    }
+    @Override
+    public List<Listing> findAllOtherInsertions() throws SQLException {
+        List<Listing> listings = new ArrayList<>();
+        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
+                "LEFT JOIN category c ON l.category_id = c.category_id " +
+                "WHERE l.status = 'AVAILABLE' AND l.userid != ? " +
+                "ORDER BY l.publishDate DESC";
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set the current user ID parameter
+            stmt.setInt(1, UserSession.getInstance().getCurrentUser().getId());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    try {
+                        Listing listing = new Listing();
+                        mapResultSetToListing(rs, listing);
+                        listings.add(listing);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.err.println("Errore nel processare la lista " + e.getMessage());
+                    }
                 }
             }
         }
@@ -132,7 +163,7 @@ public class ListingDaoImpl implements ListingDao {
                     listing.setStatus(ListingStatus.valueOf(rs.getString("status")));
                     listing.setPublishDate(rs.getDate("publishDate"));
                     listing.setUserId(rs.getInt("userId"));
-                    listing.setCategory(rs.getString("name"));
+                    listing.setCategory(rs.getString("category_name"));
                 }
             }
             return listings;
@@ -212,7 +243,26 @@ public class ListingDaoImpl implements ListingDao {
         stmt.setString(6, listing.getStatus().name());
         stmt.setDate(7, new java.sql.Date(listing.getPublishDate().getTime()));
         stmt.setInt(8, listing.getUserId());
-        stmt.setString(9, listing.getCategory());
+
+        // Convert category name to category ID
+        int categoryId = getCategoryIdByName(listing.getCategory());
+        stmt.setInt(9, categoryId);
+    }
+
+    /**
+     * Converts a category name to its corresponding ID in the database
+     */
+    private int getCategoryIdByName(String categoryName) {
+        // Use a map or database lookup to convert category name to ID
+        switch (categoryName) {
+            case "Libri": return 1;
+            case "Appunti": return 2;
+            case "Elettronica": return 3;
+            case "Arredamento": return 4;
+            case "Abbigliamento": return 5;
+            case "Altro":
+            default: return 6;
+        }
     }
 
     private void mapResultSetToListing(ResultSet rs, Listing listing) throws SQLException {
@@ -225,7 +275,7 @@ public class ListingDaoImpl implements ListingDao {
         listing.setStatus(parseStatus(rs.getString("status")));
         listing.setPublishDate(rs.getDate("publishDate"));
         listing.setUserId(rs.getInt("userId"));
-        listing.setCategory(rs.getString("name"));
+        listing.setCategory(rs.getString("category_name"));
     }
     private typeListing parseType(String typeStr) {
         try {
@@ -246,6 +296,7 @@ public class ListingDaoImpl implements ListingDao {
 
     //TODO spostare questo in validationservice
     private  void logDatabaseError(String operation, Exception e){
+        e.printStackTrace();
         System.err.println("Errore durante l’operazione '%s': %s%n" + operation +  e.getMessage());
     }
 }
