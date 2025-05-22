@@ -1,0 +1,166 @@
+/* ============================
+   PRODUCT DETAILS STYLES
+   ============================ */
+
+/* Breadcrumbs */
+.breadcrumbs {
+    -fx-padding: 0 0 10px 0;
+    -fx-font-size: 13px;
+}
+
+.breadcrumb-item {
+    -fx-text-fill: -fx-primary;
+    -fx-cursor: hand;
+}
+
+.breadcrumb-item:hover {
+    -fx-underline: true;
+}
+
+.breadcrumb-current {
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-font-weight: bold;
+}
+
+/* Titolo prodotto */
+.product-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-wrap-text: true;
+}
+
+/* Container prodotto */
+.product-container {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: -fx-shadow-low;
+    -fx-padding: 20px;
+}
+
+/* Container immagine */
+.product-image-container {
+    -fx-min-width: 380px;
+    -fx-max-width: 380px;
+    -fx-alignment: CENTER;
+}
+
+.image-wrapper {
+    -fx-background-color: #F5F5F5;
+    -fx-background-radius: 4px;
+    -fx-effect: -fx-shadow-low;
+    -fx-padding: 5px;
+}
+
+.product-image {
+    -fx-background-color: transparent;
+}
+
+/* Informazioni prodotto */
+.product-info {
+    -fx-padding: 5px 0 0 0;
+}
+
+.product-price {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary;
+}
+
+.product-type {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-background-color: -fx-primary;
+    -fx-background-radius: 20px;
+    -fx-padding: 3px 10px 3px 10px;
+}
+
+/* Gruppi informativi */
+.info-group {
+    -fx-spacing: 5;
+}
+
+.info-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-muted;
+}
+
+.info-value {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+/* Descrizione */
+.description-container {
+    -fx-spacing: 10;
+    -fx-padding: 5px 0 0 0;
+}
+
+.section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.description-text {
+    -fx-background-color: #F8F8F8;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.description-text .content {
+    -fx-background-color: transparent;
+}
+
+/* Pulsanti azione */
+.action-buttons {
+    -fx-padding: 10px 0 10px 0;
+}
+
+.buy-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 30px 12px 30px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.buy-button:hover {
+    -fx-background-color: -fx-primary-light;
+}
+
+.offer-button {
+    -fx-background-color: -fx-accent;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-font-size: 16px;
+    -fx-padding: 12px 30px 12px 30px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.offer-button:hover {
+    -fx-background-color: derive(-fx-accent, 10%);
+}
+
+.contact-button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-font-size: 16px;
+    -fx-border-color: #BDBDBD;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 12px 30px 12px 30px;
+    -fx-cursor: hand;
+}
+
+.contact-button:hover {
+    -fx-background-color: #F5F5F5;
+}

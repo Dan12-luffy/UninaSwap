@@ -14,7 +14,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
+import javafx.scene.input.MouseEvent;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
@@ -141,7 +143,6 @@ public class MainController {
 
         // Default image path
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
-        String imageUrl;
         try {
             File imageFile = new File(listing.getImageUrl());
             imageView.setImage(new Image(imageFile.toURI().toString()));
@@ -170,14 +171,13 @@ public class MainController {
         categoryLabel.setStyle("-fx-font-size: 12px; -fx-background-color: #f0f0f0; -fx-padding: 2 5; -fx-background-radius: 3;");
 
         card.getChildren().addAll(imageView, titleLabel, priceLabel, categoryLabel);
-        card.setOnMouseClicked(event -> showItemDetails(listing));
+        card.setOnMouseClicked(event -> showItemDetails(event, listing));
 
         return card;
     }
 
-    private void showItemDetails(Listing listing) {
-        // To be implemented: Show detailed view of the item
-        System.out.println("Showing details for: " + listing.getTitle());
+    private void showItemDetails(MouseEvent event, Listing listing) {
+        NavigationService.getInstance().navigateToProductDetailsView(event, listing);
     }
 
     @FXML

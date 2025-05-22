@@ -9,4 +9,6 @@ public interface UserDao {
     User authenticate(String username, String hashedPassword);
     boolean create(String name, String surname, String faculty, String username, String hashedPassword);
     boolean usernameExists(String username);
+    String usernameFromID(int id);
+    String fullNameFromID(int id);
 }

@@ -1,11 +1,15 @@
 package com.uninaswap.services;
 
+import com.uninaswap.controllers.ProductDetailsController;
+import com.uninaswap.model.Listing;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 
 public class NavigationService {
@@ -61,10 +65,26 @@ public class NavigationService {
     }
     public void navigateToNewInsertionView(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/newInsertion.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/newInsertionInterface.fxml"));
             Parent root = loader.load();
             setScene(event, root);
         } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }
+    }
+    public void navigateToProductDetailsView(MouseEvent event, Listing listing) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/productDetailsInterface.fxml"));
+            Parent root = loader.load();
+            ProductDetailsController controller = loader.getController();
+            controller.loadProductDetails(listing);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
@@ -76,5 +96,6 @@ public class NavigationService {
         stage.centerOnScreen();
         stage.show();
     }
+
 
 }

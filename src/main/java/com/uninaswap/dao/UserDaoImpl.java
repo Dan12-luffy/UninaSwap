@@ -1,6 +1,7 @@
 package com.uninaswap.dao;
 
 import com.uninaswap.model.User;
+import com.uninaswap.services.ValidationService;
 import com.uninaswap.utility.DatabaseUtil;
 
 import java.sql.Connection;
@@ -65,4 +66,40 @@ public class UserDaoImpl implements UserDao {
         }
         return false;
     }
+
+    @Override
+    public String usernameFromID(int id) {
+        String sql = "SELECT username FROM users WHERE userId = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("username");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Nessun utente trovato con questo ID.");
+        return null;
+    }
+    @Override
+    public String fullNameFromID(int id) {
+        String sql = "SELECT first_name, last_name FROM users WHERE userId = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("first_name") + " " + rs.getString("last_name");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Nessun utente trovato con questo ID.");
+        return null;
+    }
+
 }
