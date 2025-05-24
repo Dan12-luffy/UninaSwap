@@ -33,7 +33,6 @@
                 <Label styleClass="welcome-text" text="Benvenuto in UninaSwap!" />
                 <Region HBox.hgrow="ALWAYS" />
                 <Button fx:id="notificationButton" styleClass="icon-button" text="Notifiche" />
-                <Button fx:id="profileButton" onAction="#onProfileButtonClicked" styleClass="icon-button" text="Profilo" />
                 <padding>
                     <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                 </padding>
@@ -158,7 +157,7 @@
                 <VBox styleClass="user-section">
                     <Label fx:id="usernameLabel" styleClass="user-greeting" text="Ciao, Mario!" />
                     <HBox spacing="8">
-                        <Button fx:id="userItemsButton" maxWidth="Infinity" styleClass="user-button" text="Miei annunci" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="profileButton" maxWidth="Infinity" onAction="#onProfileButtonClicked" styleClass="user-button" text="Mio Profilo" HBox.hgrow="ALWAYS" />
                         <Button fx:id="logoutButton" maxWidth="Infinity" onAction="#onLogoutButtonClicked" styleClass="logout-button" text="Logout" HBox.hgrow="ALWAYS" />
                     </HBox>
                 </VBox>

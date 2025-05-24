@@ -1,0 +1,791 @@
+/* UninaSwap - My Profile CSS */
+/* Basato sul design system principale di mainInterface.css */
+
+/* ============================
+   VARIABILI COLORE
+   ============================ */
+* {
+    -fx-primary: #9B2000;             /* Colore principale - bordeaux */
+    -fx-primary-light: #C62828;       /* Versione più chiara */
+    -fx-primary-dark: #6D0000;        /* Versione più scura */
+    -fx-primary-transparent: rgba(155, 32, 0, 0.1); /* Versione trasparente */
+
+    -fx-secondary: #E8E1D5;           /* Colore secondario - beige chiaro */
+    -fx-accent: #FFA726;              /* Accento - arancione */
+    -fx-neutral: #F5F5F5;             /* Neutro - quasi bianco */
+    -fx-neutral-dark: #212121;        /* Testo scuro */
+    -fx-muted: #757575;               /* Testo secondario */
+
+    -fx-success: #43A047;             /* Verde */
+    -fx-warning: #FFA000;             /* Arancione */
+    -fx-danger: #E53935;              /* Rosso */
+
+    -fx-shadow-low: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
+    -fx-shadow-medium: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
+    -fx-shadow-high: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 12, 0, 0, 4);
+}
+
+/* ============================
+   CONTAINER PRINCIPALE
+   ============================ */
+.profile-container {
+    -fx-background-color: #F8F8F8;
+}
+
+/* ============================
+   HEADER E NAVIGAZIONE
+   ============================ */
+.top-banner {
+    -fx-background-color: -fx-primary-dark;
+    -fx-padding: 5px 15px;
+}
+
+.welcome-text {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+    -fx-background-radius: 15px;
+    -fx-padding: 5px 10px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 15px;
+}
+
+.icon-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(255, 255, 255, 0.5);
+}
+
+.main-header {
+    -fx-background-color: -fx-primary;
+    -fx-padding: 15px;
+    -fx-spacing: 20px;
+}
+
+/* Logo container - stesso stile delle altre interfacce */
+.logo-container {
+    -fx-padding: 5px 20px 5px 5px;
+    -fx-alignment: center-left;
+}
+
+.logo-badge {
+    -fx-alignment: center;
+}
+
+.logo-background {
+    -fx-fill: white;
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 2);
+}
+
+.logo-image {
+    -fx-effect: null;
+}
+
+.title-container {
+    -fx-alignment: CENTER;
+}
+
+.header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 16px;
+    -fx-cursor: hand;
+    -fx-background-radius: 20px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 20px;
+}
+
+.nav-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(255, 255, 255, 0.5);
+}
+
+.back-button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-primary;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 16px;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-background-color: #F5F5F5;
+}
+
+/* ============================
+   AREA CONTENUTI
+   ============================ */
+.content-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.content-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.content-area {
+    -fx-background-color: transparent;
+}
+
+/* ============================
+   CONTAINER PROFILO PRINCIPALE
+   ============================ */
+.main-profile-container {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-padding: 20px;
+    -fx-effect: -fx-shadow-medium;
+}
+
+/* ============================
+   SIDEBAR PROFILO
+   ============================ */
+.profile-sidebar {
+    -fx-max-width: 280px;
+    -fx-min-width: 280px;
+}
+
+.avatar-section {
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 12px;
+    -fx-padding: 20px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+}
+
+.profile-avatar-container {
+    -fx-background-color: white;
+    -fx-background-radius: 60px;
+    -fx-border-color: -fx-primary;
+    -fx-border-width: 3;
+    -fx-border-radius: 60px;
+    -fx-padding: 5px;
+    -fx-effect: -fx-shadow-low;
+}
+
+.profile-avatar {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 60px;
+}
+
+.avatar-edit-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-background-radius: 15px;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-cursor: hand;
+    -fx-translate-x: 40px;
+    -fx-translate-y: 40px;
+}
+
+.avatar-edit-button:hover {
+    -fx-background-color: -fx-primary-light;
+}
+
+.profile-name {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.profile-email {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-primary;
+    -fx-font-weight: bold;
+}
+
+.member-since {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-muted;
+}
+
+/* ============================
+   SEZIONE RATING
+   ============================ */
+.rating-section {
+    -fx-background-color: rgba(255, 167, 38, 0.1);
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-border-color: rgba(255, 167, 38, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+
+.rating-item {
+    -fx-alignment: CENTER;
+}
+
+.rating-number {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-accent;
+}
+
+.rating-stars {
+    -fx-font-size: 14px;
+}
+
+.rating-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: -fx-muted;
+    -fx-font-weight: bold;
+}
+
+.verified-badge {
+    -fx-font-size: 24px;
+}
+
+/* ============================
+   STATISTICHE
+   ============================ */
+.stats-section {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+    -fx-effect: -fx-shadow-low;
+}
+
+.stats-grid {
+    -fx-padding: 0;
+}
+
+.stat-card {
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px 8px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+    -fx-alignment: CENTER;
+}
+
+.stat-card:hover {
+    -fx-background-color: -fx-primary-transparent;
+    -fx-border-color: -fx-primary;
+}
+
+.stat-number {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary;
+}
+
+.stat-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: -fx-muted;
+    -fx-font-weight: bold;
+}
+
+/* ============================
+   TABS PROFILO
+   ============================ */
+.profile-main-content {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-effect: -fx-shadow-low;
+}
+
+.profile-tabs {
+    -fx-background-color: transparent;
+}
+
+.profile-tabs .tab-header-area {
+    -fx-padding: 10px 15px 0 15px;
+    -fx-background-color: transparent;
+}
+
+.profile-tabs .tab-header-area .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.profile-tab {
+    -fx-background-color: #F5F5F5;
+    -fx-text-fill: -fx-muted;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-padding: 8px 16px;
+}
+
+.profile-tab:selected {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-primary;
+    -fx-border-color: -fx-primary;
+    -fx-border-width: 0 0 2 0;
+}
+
+.profile-tab .tab-label {
+    -fx-text-fill: inherit;
+}
+
+/* ============================
+   SEZIONI INFO
+   ============================ */
+.info-section {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 0;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+
+.info-section > .title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-background-color: #FAFAFA;
+    -fx-padding: 12px 15px;
+    -fx-background-radius: 10px 10px 0 0;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.info-section > .content {
+    -fx-padding: 15px;
+    -fx-background-radius: 0 0 10px 10px;
+}
+
+.info-grid {
+    -fx-padding: 0;
+}
+
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+/* ============================
+   CAMPI FORM
+   ============================ */
+.field-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-muted;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.profile-text-field {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+}
+
+.profile-text-field:focused {
+    -fx-border-color: -fx-primary;
+    -fx-effect: dropshadow(gaussian, rgba(155, 32, 0, 0.3), 3, 0, 0, 0);
+}
+
+.profile-password-field {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+}
+
+.profile-password-field:focused {
+    -fx-border-color: -fx-primary;
+    -fx-effect: dropshadow(gaussian, rgba(155, 32, 0, 0.3), 3, 0, 0, 0);
+}
+
+.profile-text-area {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 12px;
+    -fx-font-size: 13px;
+}
+
+.profile-text-area:focused {
+    -fx-border-color: -fx-primary;
+    -fx-effect: dropshadow(gaussian, rgba(155, 32, 0, 0.3), 3, 0, 0, 0);
+}
+
+.profile-combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 6px 10px;
+    -fx-font-size: 13px;
+}
+
+.profile-combo-box:focused {
+    -fx-border-color: -fx-primary;
+}
+
+.field-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: -fx-muted;
+    -fx-font-style: italic;
+}
+
+/* ============================
+   PULSANTI
+   ============================ */
+.action-buttons {
+    -fx-padding: 15px 0 0 0;
+}
+
+.save-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 16px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-effect: -fx-shadow-low;
+}
+
+.save-button:hover {
+    -fx-background-color: -fx-primary-light;
+    -fx-effect: -fx-shadow-medium;
+}
+
+.cancel-button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-muted;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 16px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #F5F5F5;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+/* ============================
+   SEZIONE ANNUNCI
+   ============================ */
+.ads-header {
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px 15px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+
+.filter-combo {
+    -fx-background-color: white;
+    -fx-font-size: 12px;
+    -fx-padding: 6px 10px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 6px;
+}
+
+.new-ad-button {
+    -fx-background-color: -fx-accent;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 12px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.new-ad-button:hover {
+    -fx-background-color: derive(-fx-accent, 10%);
+}
+
+.ads-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.ads-container {
+    -fx-padding: 10px;
+}
+
+.placeholder-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-muted;
+    -fx-text-alignment: CENTER;
+    -fx-padding: 40px;
+}
+
+/* ============================
+   SEZIONE SICUREZZA
+   ============================ */
+.security-section {
+    -fx-background-color: rgba(229, 57, 53, 0.05);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(229, 57, 53, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+
+.security-section > .title {
+    -fx-background-color: rgba(229, 57, 53, 0.1);
+    -fx-text-fill: -fx-danger;
+    -fx-font-weight: bold;
+}
+
+.security-grid {
+    -fx-padding: 0;
+}
+
+.privacy-option {
+    -fx-background-color: white;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 12px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 6px;
+}
+
+.privacy-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.toggle-button {
+    -fx-background-color: #E0E0E0;
+    -fx-text-fill: -fx-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 4px 8px;
+    -fx-background-radius: 12px;
+    -fx-cursor: hand;
+}
+
+.toggle-button.active {
+    -fx-background-color: -fx-success;
+    -fx-text-fill: white;
+}
+
+.toggle-button:hover {
+    -fx-background-color: derive(-fx-muted, 20%);
+}
+
+.toggle-button.active:hover {
+    -fx-background-color: derive(-fx-success, 10%);
+}
+
+.security-actions {
+    -fx-padding: 15px 0 0 0;
+}
+
+.security-button {
+    -fx-background-color: -fx-warning;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 12px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.security-button:hover {
+    -fx-background-color: derive(-fx-warning, 10%);
+}
+
+/* ============================
+   FOOTER PROFILO
+   ============================ */
+.profile-footer {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-padding: 20px;
+    -fx-effect: -fx-shadow-low;
+}
+
+.footer-actions {
+    -fx-alignment: CENTER;
+}
+
+.footer-button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-primary;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 16px;
+    -fx-background-radius: 6px;
+    -fx-border-color: -fx-primary;
+    -fx-border-width: 1;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.footer-button:hover {
+    -fx-background-color: -fx-primary-transparent;
+}
+
+.danger-button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-danger;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 16px;
+    -fx-background-radius: 6px;
+    -fx-border-color: -fx-danger;
+    -fx-border-width: 1;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.danger-button:hover {
+    -fx-background-color: rgba(229, 57, 53, 0.1);
+}
+
+.logout-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 16px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-effect: -fx-shadow-low;
+}
+
+.logout-button:hover {
+    -fx-background-color: -fx-primary-light;
+    -fx-effect: -fx-shadow-medium;
+}
+
+.main-separator {
+    -fx-background-color: #E0E0E0;
+    -fx-padding: 10px 0;
+}
+
+/* ============================
+   SCROLLBAR PERSONALIZZATE
+   ============================ */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px;
+    -fx-pref-height: 10px;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #D0D0D0;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #B0B0B0;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-shape: "";
+}
+
+/* ============================
+   ANIMAZIONI E TRANSIZIONI
+   ============================ */
+.save-button,
+.cancel-button,
+.security-button,
+.footer-button,
+.danger-button,
+.logout-button {
+    -fx-transition: -fx-background-color 0.2s ease-in-out, -fx-effect 0.2s ease-in-out;
+}
+
+.profile-text-field,
+.profile-password-field,
+.profile-text-area,
+.profile-combo-box {
+    -fx-transition: -fx-border-color 0.2s ease-in-out, -fx-effect 0.2s ease-in-out;
+}
+
+.stat-card {
+    -fx-transition: -fx-background-color 0.2s ease-in-out, -fx-border-color 0.2s ease-in-out;
+}
+
+/* ============================
+   RESPONSIVE DESIGN
+   ============================ */
+@media (max-width: 800px) {
+    .main-profile-container {
+        -fx-orientation: vertical;
+        -fx-spacing: 20px;
+    }
+
+    .profile-sidebar {
+        -fx-max-width: Infinity;
+        -fx-min-width: 0;
+    }
+
+    .stats-grid {
+        -fx-hgap: 8px;
+        -fx-vgap: 8px;
+    }
+
+    .footer-actions {
+        -fx-orientation: vertical;
+        -fx-spacing: 10px;
+    }
+}

@@ -3,149 +3,226 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="1000.0" styleClass="main-container" stylesheets="@../guiCSS/mainInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.ProductDetailsController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" styleClass="product-details-container" stylesheets="@../guiCSS/productDetailsInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.ProductDetailsController">
+
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="main-header" BorderPane.alignment="CENTER">
-            <children>
-                <!-- Logo container come nell'interfaccia principale -->
+        <VBox spacing="0">
+            <!-- Banner superiore -->
+            <HBox alignment="CENTER_LEFT" maxHeight="35.0" styleClass="top-banner">
+                <Label styleClass="welcome-text" text="Dettagli prodotto - UninaSwap" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="favoriteButton" styleClass="icon-button" text="❤ Preferiti" />
+                <padding>
+                    <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                </padding>
+            </HBox>
+
+            <!-- Header principale -->
+            <HBox alignment="CENTER" minHeight="60.0" styleClass="main-header">
+                <!-- Logo container -->
                 <HBox alignment="CENTER_LEFT" minWidth="200.0" styleClass="logo-container">
                     <StackPane styleClass="logo-badge">
                         <Rectangle height="50.0" styleClass="logo-background" width="180.0" />
-                  <ImageView fitHeight="46.0" fitWidth="174.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../images/uninaswap_logo.png" />
-                     </image>
-                  </ImageView>
+                        <ImageView fx:id="logoImage" fitHeight="40.0" preserveRatio="true" styleClass="logo-image">
+                            <Image url="@../images/uninaswap_logo.png" />
+                        </ImageView>
                     </StackPane>
                 </HBox>
 
-                <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
-                    <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackButtonClicked" styleClass="nav-button" text="Indietro" />
+                <!-- Titolo centrale -->
+                <HBox alignment="CENTER" styleClass="title-container" HBox.hgrow="ALWAYS">
+                    <Label fx:id="headerTitleLabel" styleClass="header-title" text="Visualizza Prodotto" />
                 </HBox>
-            </children>
-            <padding>
-                <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
-            </padding>
-        </HBox>
-    </top>
-    <center>
-        <VBox spacing="20.0" styleClass="content-area" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
-            </padding>
-            <children>
-                <!-- Breadcrumbs -->
-                <HBox spacing="5" styleClass="breadcrumbs">
-                    <Label styleClass="breadcrumb-item" text="Home" />
-                    <Label text="›" />
-                    <Label fx:id="categoryBreadcrumb" styleClass="breadcrumb-item" text="Categoria" />
-                    <Label text="›" />
-                    <Label fx:id="productTitleBreadcrumb" styleClass="breadcrumb-current" text="Prodotto" />
-                </HBox>
-
-                <!-- Titolo prodotto -->
-                <Label fx:id="productTitleLabel" styleClass="product-title">
-                    <font>
-                        <Font name="System Bold" size="24.0" />
-                    </font>
-                </Label>
-
-                <!-- Contenitore principale del prodotto -->
-                <HBox spacing="30.0" styleClass="product-container">
-                    <!-- Immagine del prodotto -->
-                    <VBox styleClass="product-image-container">
-                        <StackPane styleClass="image-wrapper">
-                     <VBox fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="380.0" spacing="10.0">
-                        <children>
-                                  <ImageView fx:id="productImageView" fitHeight="330.0" fitWidth="360.0" pickOnBounds="true" preserveRatio="true" styleClass="product-image" translateX="11.0" translateY="10.0" />
-                        </children>
-                     </VBox>
-                        </StackPane>
-                    </VBox>
-
-                    <!-- Informazioni prodotto -->
-                    <VBox spacing="20.0" styleClass="product-info" HBox.hgrow="ALWAYS">
-                        <children>
-                            <!-- Prezzo e tipo di vendita -->
-                            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                                <Label fx:id="priceLabel" styleClass="product-price" text="€0.00">
-                                    <font>
-                                        <Font name="System Bold" size="26.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="typeLabel" styleClass="product-type" text="Vendita" />
-                            </HBox>
-
-                            <!-- Stato e categoria -->
-                            <HBox spacing="20.0">
-                                <VBox styleClass="info-group">
-                                    <Label styleClass="info-label" text="Condizioni:" />
-                                    <Label fx:id="conditionLabel" styleClass="info-value" text="Nuovo" />
-                                </VBox>
-
-                                <VBox styleClass="info-group">
-                                    <Label styleClass="info-label" text="Categoria:" />
-                                    <Label fx:id="categoryLabel" styleClass="info-value" text="Categoria" />
-                                </VBox>
-                            </HBox>
-
-                            <!-- Venditore e data -->
-                            <HBox spacing="20.0">
-                                <VBox styleClass="info-group">
-                                    <Label fx:id="sellerLabel" styleClass="info-value" text="Username" />
-                                </VBox>
-
-                                <VBox styleClass="info-group">
-                                    <Label styleClass="info-label" text="Data pubblicazione:" />
-                                    <Label fx:id="dateLabel" styleClass="info-value" text="01/01/2023" />
-                                </VBox>
-                            </HBox>
-
-                            <!-- Descrizione -->
-                            <VBox styleClass="description-container" VBox.vgrow="ALWAYS">
-                                <Label styleClass="section-title" text="Descrizione">
-                                    <font>
-                                        <Font name="System Bold" size="16.0" />
-                                    </font>
-                                </Label>
-                                <TextArea fx:id="descriptionTextArea" editable="false" styleClass="description-text" wrapText="true" VBox.vgrow="ALWAYS" />
-                            </VBox>
-                        </children>
-                    </VBox>
-                </HBox>
-
-                <Separator />
 
                 <!-- Pulsanti azione -->
-                <HBox alignment="CENTER" spacing="20.0" styleClass="action-buttons">
-                    <Button fx:id="buyButton" defaultButton="true" mnemonicParsing="false" onAction="#onBuyButtonClicked" styleClass="buy-button" text="Acquista ora">
-                        <font>
-                            <Font name="System Bold" size="16.0" />
-                        </font>
-                    </Button>
-                    <Button fx:id="offerButton" mnemonicParsing="false" onAction="#onOfferButtonClicked" styleClass="offer-button" text="Fai una proposta">
-                        <font>
-                            <Font size="16.0" />
-                        </font>
-                    </Button>
-                    <Button fx:id="contactButton" mnemonicParsing="false" onAction="#onContactButtonClicked" styleClass="contact-button" text="Contatta venditore">
-                        <font>
-                            <Font size="16.0" />
-                        </font>
-                    </Button>
+                <HBox alignment="CENTER_RIGHT" spacing="15">
+                    <Button fx:id="backButton" onAction="#onBackButtonClicked" styleClass="back-button" text="← Indietro" />
                 </HBox>
-            </children>
+                <padding>
+                    <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                </padding>
+            </HBox>
+
+            <!-- Breadcrumbs migliorati -->
+            <HBox alignment="CENTER_LEFT" styleClass="breadcrumb-bar">
+                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="breadcrumb-container">
+                    <Button fx:id="homeBreadcrumb" styleClass="breadcrumb-link" text="🏠 Home" />
+                    <Label styleClass="breadcrumb-separator" text="›" />
+                    <Button fx:id="categoryBreadcrumb" styleClass="breadcrumb-link" text="📚 Categoria" />
+                    <Label styleClass="breadcrumb-separator" text="›" />
+                    <Label fx:id="productTitleBreadcrumb" styleClass="breadcrumb-current" text="Prodotto Corrente" />
+                </HBox>
+                <padding>
+                    <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                </padding>
+            </HBox>
         </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="content-scroll-pane">
+            <VBox spacing="20.0" styleClass="content-area">
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
+                </padding>
+                <children>
+                    <!-- Container principale prodotto -->
+                    <HBox spacing="25.0" styleClass="main-product-container">
+                        <!-- Sezione immagine -->
+                        <VBox spacing="10" styleClass="image-section">
+                            <!-- Immagine principale -->
+                            <StackPane styleClass="main-image-container" translateY="-113.0">
+                                <ImageView fx:id="productImageView" fitHeight="280.0" fitWidth="280.0" styleClass="product-main-image" />
+                                <VBox alignment="TOP_RIGHT" styleClass="image-badges">
+                                    <Label fx:id="conditionBadge" styleClass="condition-badge" text="Ottime Condizioni" />
+                                    <Label fx:id="typeBadge" styleClass="type-badge" text="Vendita" />
+                                </VBox>
+                            </StackPane>
+
+                            <!-- Placeholder per immagini secondarie -->
+                            <HBox alignment="CENTER" spacing="8" styleClass="thumbnail-container">
+                                <ImageView fitHeight="45.0" fitWidth="45.0" styleClass="thumbnail-image" />
+                                <ImageView fitHeight="45.0" fitWidth="45.0" styleClass="thumbnail-image" />
+                                <ImageView fitHeight="45.0" fitWidth="45.0" styleClass="thumbnail-image" />
+                            </HBox>
+                        </VBox>
+
+                        <!-- Sezione informazioni -->
+                        <VBox spacing="18.0" styleClass="info-section" HBox.hgrow="ALWAYS">
+                            <!-- Titolo e prezzo -->
+                            <VBox spacing="10" styleClass="title-price-section">
+                                <Label fx:id="productTitleLabel" styleClass="product-title" text="Titolo del Prodotto" />
+                                <HBox alignment="CENTER_LEFT" spacing="15">
+                                    <Label fx:id="priceLabel" styleClass="product-price" text="€0.00" />
+                                </HBox>
+                            </VBox>
+
+                            <!-- Informazioni venditore -->
+                            <VBox spacing="10" styleClass="seller-section">
+                                <Label styleClass="section-title" text="👤 Venditore" />
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="seller-info">
+                                    <StackPane styleClass="seller-avatar">
+                                        <Label styleClass="avatar-placeholder" text="👤" />
+                                    </StackPane>
+                                    <VBox spacing="3">
+                                        <Label fx:id="sellerLabel" styleClass="seller-name" text="Nome Venditore" />
+                                        <Label fx:id="sellerRatingLabel" styleClass="seller-rating" text="⭐⭐⭐⭐⭐ (4.8/5)" />
+                                        <Label fx:id="sellerJoinedLabel" styleClass="seller-joined" text="Membro dal 2022" />
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Dettagli prodotto -->
+                            <VBox spacing="10" styleClass="details-section">
+                                <Label styleClass="section-title" text="📋 Dettagli" />
+                                <GridPane hgap="20" styleClass="details-grid" vgap="10">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="NEVER" maxWidth="120.0" minWidth="100.0" />
+                                        <ColumnConstraints hgrow="ALWAYS" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints />
+                                        <RowConstraints />
+                                        <RowConstraints />
+                                        <RowConstraints />
+                                    </rowConstraints>
+
+                                    <children>
+                                        <Label styleClass="detail-label" text="Categoria:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <Label fx:id="categoryLabel" styleClass="detail-value" text="Libri" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                        <Label styleClass="detail-label" text="Condizioni:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                        <Label fx:id="conditionLabel" styleClass="detail-value" text="Ottime" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                        <Label styleClass="detail-label" text="Disponibilità:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                        <Label fx:id="availabilityLabel" styleClass="detail-value available" text=" Disponibile" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                        <Label styleClass="detail-label" text="Pubblicato:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                        <Label fx:id="dateLabel" styleClass="detail-value" text="3 giorni fa" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    </children>
+                                </GridPane>
+                            </VBox>
+
+                            <!-- Pulsanti azione principali -->
+                            <VBox spacing="10" styleClass="action-section">
+                                <HBox alignment="CENTER" spacing="10" styleClass="primary-actions">
+                                    <Button fx:id="buyButton" defaultButton="true" onAction="#onBuyButtonClicked" styleClass="buy-button" text="🛒 Acquista Ora" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="offerButton" onAction="#onOfferButtonClicked" styleClass="offer-button" text="💰 Fai Offerta" HBox.hgrow="ALWAYS" />
+                                </HBox>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Sezione descrizione -->
+                    <VBox spacing="15" styleClass="description-section">
+                        <Label styleClass="section-title-large" text="Descrizione Dettagliata" />
+                        <VBox styleClass="description-container">
+                            <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="100.0" styleClass="description-text" wrapText="true" />
+                        </VBox>
+                    </VBox>
+
+                    <!-- Sezione informazioni aggiuntive -->
+                    <VBox spacing="15" styleClass="additional-info-section">
+                        <Label styleClass="section-title-large" text="Informazioni Consegna" />
+                        <GridPane hgap="30" styleClass="delivery-grid" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS" />
+                                <ColumnConstraints hgrow="ALWAYS" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints />
+                                <RowConstraints />
+                            </rowConstraints>
+
+                            <children>
+                                <VBox spacing="8" styleClass="delivery-info-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <Label styleClass="card-title" text="Luogo di Ritiro" />
+                                    <Label fx:id="locationLabel" styleClass="card-content" text="Facoltà di Ingegneria" />
+                                </VBox>
+
+                                <VBox spacing="8" styleClass="delivery-info-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <Label styleClass="card-title" text="Modalità Consegna" />
+                                    <Label fx:id="deliveryLabel" styleClass="card-content" text="Consegna a mano, orari flessibili" />
+                                </VBox>
+                            </children>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Footer con informazioni di sicurezza -->
+                    <VBox spacing="15" styleClass="safety-footer">
+                        <Separator styleClass="main-separator" />
+                        <HBox alignment="CENTER" spacing="30" styleClass="safety-info">
+                            <VBox alignment="CENTER" spacing="5" styleClass="safety-item">
+                                <Label styleClass="safety-icon" text="🔒" />
+                                <Label styleClass="safety-text" text="Transazioni Sicure" />
+                            </VBox>
+                            <VBox alignment="CENTER" spacing="5" styleClass="safety-item">
+                                <Label styleClass="safety-icon" text="✅" />
+                                <Label styleClass="safety-text" text="Profili Verificati" />
+                            </VBox>
+                            <VBox alignment="CENTER" spacing="5" styleClass="safety-item">
+                                <Label styleClass="safety-icon" text="🛡️" />
+                                <Label styleClass="safety-text" text="Supporto 24/7" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </children>
+            </VBox>
+        </ScrollPane>
     </center>
 </BorderPane>

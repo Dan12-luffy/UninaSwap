@@ -163,7 +163,7 @@ public class MainController {
             File imageFile = new File(listing.getImageUrl());
             imageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
-            System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
+            //System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
             imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
         }
 
@@ -231,7 +231,7 @@ public class MainController {
 
     @FXML
     private void onProfileButtonClicked(ActionEvent event) {
-        NavigationService.getInstance().navigateToNewInsertionView(event);
+        NavigationService.getInstance().navigateToMyProfileView(event);
 
     }
     @FXML
