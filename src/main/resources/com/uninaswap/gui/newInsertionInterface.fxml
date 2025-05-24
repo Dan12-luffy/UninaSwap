@@ -8,91 +8,255 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
-<BorderPane styleClass="insertion-container" stylesheets="@../guiCSS/newInsertion.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.NewInsertionController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="insertion-container" stylesheets="@../guiCSS/newInsertion.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.NewInsertionController">
+
     <top>
-        <HBox alignment="CENTER_LEFT" styleClass="header-banner">
-            <Label styleClass="header-title" text="Crea nuova inserzione" />
-            <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="backButton" onAction="#goBack" styleClass="back-button" text="Indietro" />
-            <padding>
-                <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
-            </padding>
-        </HBox>
+        <VBox spacing="0">
+            <!-- Banner superiore compatto -->
+            <HBox alignment="CENTER_RIGHT" maxHeight="35.0" styleClass="top-banner">
+                <Label styleClass="welcome-text" text="Pubblica il tuo annuncio su UninaSwap" />
+                <Region HBox.hgrow="ALWAYS" />
+                <padding>
+                    <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                </padding>
+            </HBox>
+
+            <!-- Header principale ottimizzato -->
+            <HBox alignment="CENTER" minHeight="60.0" styleClass="main-header">
+                <!-- Logo container -->
+                <HBox alignment="CENTER_LEFT" minWidth="200.0" styleClass="logo-container">
+                    <StackPane styleClass="logo-badge">
+                        <Rectangle height="50.0" styleClass="logo-background" width="180.0" />
+                        <ImageView fx:id="logoImage" fitHeight="40.0" preserveRatio="true" styleClass="logo-image">
+                            <Image url="@../images/uninaswap_logo.png" />
+                        </ImageView>
+                    </StackPane>
+                </HBox>
+
+                <!-- Titolo centrale -->
+                <HBox alignment="CENTER" styleClass="title-container" HBox.hgrow="ALWAYS">
+                    <Label styleClass="header-title" text="Crea nuova inserzione" />
+                </HBox>
+
+                <!-- Pulsanti azione -->
+                <HBox alignment="CENTER_RIGHT" spacing="15">
+                    <Button fx:id="backButton" onAction="#goBack" styleClass="back-button" text="Indietro" />
+                </HBox>
+                <padding>
+                    <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                </padding>
+            </HBox>
+
+            <!-- Barra di progresso -->
+            <HBox alignment="CENTER" styleClass="progress-bar">
+                <HBox alignment="CENTER" spacing="20" styleClass="progress-steps">
+                    <Label styleClass="progress-step active" text="1. Dettagli" />
+                    <Separator prefWidth="50" />
+                    <Label styleClass="progress-step" text="2. Immagini" />
+                    <Separator prefWidth="50" />
+                    <Label styleClass="progress-step" text="3. Pubblicazione" />
+                </HBox>
+                <padding>
+                    <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                </padding>
+            </HBox>
+        </VBox>
     </top>
 
     <center>
         <ScrollPane fitToWidth="true" styleClass="form-scroll-pane">
-            <VBox spacing="20.0" styleClass="content-panel">
+            <VBox spacing="25.0" styleClass="content-panel">
                 <padding>
                     <Insets bottom="30.0" left="30.0" right="30.0" top="20.0" />
                 </padding>
                 <children>
-                    <Label styleClass="section-title" text="Informazioni dell'articolo" />
+                    <!-- Sezione Informazioni Base -->
+                    <TitledPane expanded="true" styleClass="form-section" text="📝 Informazioni Base">
+                        <VBox spacing="20">
+                            <GridPane hgap="20" styleClass="form-grid" vgap="20">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="150.0" minWidth="120.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="300.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                </rowConstraints>
 
-                    <GridPane hgap="15" styleClass="form-grid" vgap="15">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="120.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="250.0" />
-                        </columnConstraints>
+                                <children>
+                                    <!-- Titolo -->
+                                    <Label styleClass="field-label" text="Titolo dell'annuncio:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                        <TextField fx:id="titleField" promptText="Es: Libro di Analisi Matematica - Perfette condizioni" styleClass="main-text-field" />
+                                        <Label styleClass="field-hint" text="Sii specifico e descrittivo per attirare più interesse" />
+                                    </VBox>
 
-                        <children>
-                            <!-- Titolo -->
-                            <Label styleClass="field-label" text="Titolo:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                            <TextField fx:id="titleField" promptText="Inserisci il titolo" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                    <!-- Categoria -->
+                                    <Label styleClass="field-label" text="Categoria:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                        <ComboBox fx:id="categoryComboBox" maxWidth="250.0" prefWidth="250.0" styleClass="combo-box" />
+                                        <Label styleClass="field-hint" text="Seleziona la categoria più appropriata" />
+                                    </VBox>
 
-                            <!-- Categoria -->
-                            <Label styleClass="field-label" text="Categoria:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                            <ComboBox fx:id="categoryComboBox" prefWidth="150.0" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <!-- Tipo -->
+                                    <Label styleClass="field-label" text="Tipo di annuncio:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                        <ComboBox fx:id="typeComboBox" maxWidth="250.0" prefWidth="250.0" styleClass="combo-box" />
+                                        <Label styleClass="field-hint" text="Vuoi vendere, prestare o regalare?" />
+                                    </VBox>
+                                </children>
+                            </GridPane>
+                        </VBox>
+                    </TitledPane>
 
-                            <!-- Tipo -->
-                            <Label styleClass="field-label" text="Tipo di annuncio:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                            <ComboBox fx:id="typeComboBox" prefWidth="150.0" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <!-- Sezione Prezzo e Condizioni -->
+                    <TitledPane expanded="true" styleClass="form-section" text="💰 Prezzo e Condizioni">
+                        <GridPane hgap="20" styleClass="form-grid" vgap="20">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" maxWidth="150.0" minWidth="120.0" />
+                                <ColumnConstraints hgrow="ALWAYS" minWidth="300.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints />
+                                <RowConstraints />
+                            </rowConstraints>
 
-                            <!-- Prezzo -->
-                            <Label styleClass="field-label" text="Prezzo:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                            <TextField fx:id="priceField" promptText="0.00" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                            <children>
+                                <!-- Prezzo -->
+                                <Label styleClass="field-label" text="Prezzo:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <HBox alignment="CENTER_LEFT" spacing="10">
+                                        <TextField fx:id="priceField" maxWidth="150.0" promptText="0.00" styleClass="price-field" />
+                                        <Label styleClass="currency-label" text="€" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                    </HBox>
+                                    <Label styleClass="field-hint" text="Inserisci un prezzo competitivo per vendere più velocemente" />
+                                </VBox>
 
-                            <!-- Stato -->
-                            <Label styleClass="field-label" text="Condizione:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                            <ComboBox fx:id="statusComboBox" prefWidth="150.0" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <!-- Stato -->
+                                <Label styleClass="field-label" text="Condizioni:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <ComboBox fx:id="statusComboBox" maxWidth="250.0" prefWidth="250.0" styleClass="combo-box" />
+                                    <Label styleClass="field-hint" text="Sii onesto sulle condizioni dell'articolo" />
+                                </VBox>
+                            </children>
+                        </GridPane>
+                    </TitledPane>
 
-                            <!-- Immagine -->
-                            <Label styleClass="field-label" text="Immagine:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                            <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                <TextField fx:id="imagePathField" editable="false" promptText="Nessun file selezionato" styleClass="text-field" HBox.hgrow="ALWAYS" />
-                                <Button onAction="#handleSelectImage" styleClass="browse-button" text="Sfoglia" />
-                            </HBox>
+                    <!-- Sezione Descrizione -->
+                    <TitledPane expanded="true" styleClass="form-section" text="📄 Descrizione">
+                        <VBox spacing="15">
+                            <VBox spacing="5">
+                                <TextArea fx:id="descriptionArea" prefHeight="150.0" promptText="Descrivi l'articolo in dettaglio: condizioni, anno di acquisto, motivo della vendita, eventuali difetti, contenuti inclusi..." styleClass="main-text-area" wrapText="true" />
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label fx:id="characterCountLabel" styleClass="character-count" text="0/500 caratteri" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label styleClass="field-hint" text="Una descrizione dettagliata aumenta le possibilità di vendita" />
+                                </HBox>
+                            </VBox>
 
-                            <!-- Descrizione -->
-                            <Label styleClass="field-label" text="Descrizione:" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.valignment="TOP" />
-                            <TextArea fx:id="descriptionArea" prefHeight="120.0" promptText="Inserisci una descrizione dettagliata dell'articolo..." styleClass="text-area" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        </children>
-                  <rowConstraints>
-                     <RowConstraints />
-                     <RowConstraints />
-                     <RowConstraints />
-                     <RowConstraints />
-                     <RowConstraints />
-                     <RowConstraints />
-                     <RowConstraints />
-                     <RowConstraints />
-                  </rowConstraints>
-                    </GridPane>
+                            <!-- Suggerimenti per la descrizione -->
+                            <VBox spacing="8" styleClass="tips-container">
+                                <Label styleClass="tips-title" text="💡 Suggerimenti per una buona descrizione:" />
+                                <Label styleClass="tip-item" text="• Specifica l'anno di acquisto e la casa editrice (per i libri)" />
+                                <Label styleClass="tip-item" text="• Indica eventuali sottolineature, annotazioni o difetti" />
+                                <Label styleClass="tip-item" text="• Menciona se sono inclusi materiali aggiuntivi (CD, codici, ecc.)" />
+                                <Label styleClass="tip-item" text="• Spiega il motivo della vendita per dare fiducia" />
+                            </VBox>
+                        </VBox>
+                    </TitledPane>
 
-                    <Separator />
+                    <!-- Sezione Immagini -->
+                    <TitledPane expanded="true" styleClass="form-section" text="📸 Immagini dell'Articolo">
+                        <VBox spacing="15">
+                            <!-- Upload principale -->
+                            <VBox spacing="10" styleClass="image-upload-main">
+                                <Label styleClass="field-label" text="Immagine principale:" />
+                                <HBox alignment="CENTER_LEFT" spacing="15">
+                                    <VBox alignment="CENTER" styleClass="image-preview-container">
+                                        <ImageView fx:id="mainImagePreview" fitHeight="100.0" fitWidth="100.0" preserveRatio="true" styleClass="image-preview" />
+                                        <Label styleClass="image-preview-text" text="Anteprima" />
+                                    </VBox>
+                                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                                        <HBox alignment="CENTER_LEFT" spacing="10">
+                                            <TextField fx:id="imagePathField" editable="false" promptText="Nessuna immagine selezionata" styleClass="main-text-field" HBox.hgrow="ALWAYS" />
+                                            <Button onAction="#handleSelectImage" styleClass="browse-button" text="Sfoglia..." />
+                                        </HBox>
+                                        <Label styleClass="field-hint" text="Carica una foto chiara e ben illuminata (max 5MB)" />
+                                    </VBox>
+                                </HBox>
+                            </VBox>
 
-                    <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                            <!-- Suggerimenti per le foto -->
+                            <VBox spacing="8" styleClass="tips-container">
+                                <Label styleClass="tips-title" text="📷 Consigli per foto efficaci:" />
+                                <Label styleClass="tip-item" text="• Usa luce naturale per colori più realistici" />
+                                <Label styleClass="tip-item" text="• Mostra eventuali difetti per trasparenza" />
+                                <Label styleClass="tip-item" text="• Includi copertina e retro (per i libri)" />
+                                <Label styleClass="tip-item" text="• Evita sfondi disordinati" />
+                            </VBox>
+                        </VBox>
+                    </TitledPane>
+
+                    <!-- Sezione Opzioni Avanzate -->
+                    <TitledPane styleClass="form-section" text="Informazioni aggiuntive">
+                        <VBox spacing="15">
+                            <GridPane hgap="20" styleClass="form-grid" vgap="15">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="150.0" minWidth="120.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="300.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                </rowConstraints>
+
+                                <children>
+                                    <Label styleClass="field-label" text="Luogo di ritiro:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                    <ComboBox fx:id="locationComboBox" maxWidth="250.0" prefWidth="250.0" promptText="Seleziona la facoltà" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                    <Label styleClass="field-label" text="Contatto preferito:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                    <ComboBox fx:id="contactComboBox" maxWidth="250.0" prefWidth="250.0" promptText="Come preferisci essere contattato" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                </children>
+                            </GridPane>
+                        </VBox>
+                    </TitledPane>
+
+                    <Separator styleClass="main-separator" />
+
+                    <!-- Pulsanti finali -->
+                    <HBox alignment="CENTER" spacing="20.0" styleClass="action-buttons">
+                        <Button fx:id="previewFinalButton" styleClass="preview-button" text="👁 Anteprima Annuncio" />
+                        <Region HBox.hgrow="ALWAYS" />
                         <Button fx:id="cancelButton" onAction="#handleCancel" styleClass="cancel-button" text="Annulla" />
-                        <Button defaultButton="true" onAction="#handleSave" styleClass="save-button" text="Salva inserzione" />
+                        <Button fx:id="saveDraftButton" styleClass="draft-button" text="Salva Bozza" />
+                        <Button defaultButton="true" onAction="#handleSave" styleClass="publish-button" text="🚀 Pubblica Annuncio" />
                     </HBox>
+
+                    <!-- Footer informativo -->
+                    <VBox spacing="10" styleClass="footer-info">
+                        <Separator />
+                        <HBox alignment="CENTER" spacing="20">
+                            <Label styleClass="footer-text" text="📋 Il tuo annuncio sarà visibile subito dopo la pubblicazione" />
+                            <Separator orientation="VERTICAL" prefHeight="20" />
+                            <Label styleClass="footer-text" text="✉️ Riceverai notifiche per le tue inserzioni" />
+                        </HBox>
+                    </VBox>
                 </children>
             </VBox>
         </ScrollPane>

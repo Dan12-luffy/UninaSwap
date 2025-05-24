@@ -1,5 +1,8 @@
+/* UninaSwap - New Insertion CSS */
+/* Basato sul design system principale di mainInterface.css */
+
 /* ============================
-   VARIABILI DI COLORE
+   VARIABILI COLORE
    ============================ */
 * {
     -fx-primary: #9B2000;             /* Colore principale - bordeaux */
@@ -19,6 +22,7 @@
 
     -fx-shadow-low: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
     -fx-shadow-medium: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
+    -fx-shadow-high: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 12, 0, 0, 3);
 }
 
 /* ============================
@@ -29,36 +33,133 @@
 }
 
 /* ============================
-   HEADER
+   HEADER E NAVIGAZIONE
    ============================ */
-.header-banner {
+.top-banner {
+    -fx-background-color: -fx-primary-dark;
+    -fx-padding: 5px 15px;
+}
+
+.welcome-text {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-background-radius: 15px;
+    -fx-padding: 6px 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 15px;
+}
+
+.icon-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(255, 255, 255, 0.5);
+}
+
+.main-header {
     -fx-background-color: -fx-primary;
     -fx-padding: 15px;
+    -fx-spacing: 20px;
+}
+
+/* Logo container - stesso stile di mainInterface */
+.logo-container {
+    -fx-padding: 5px 20px 5px 5px;
+    -fx-alignment: center-left;
+}
+
+.logo-badge {
+    -fx-alignment: center;
+}
+
+.logo-background {
+    -fx-fill: white;
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 2);
+}
+
+.logo-image {
+    -fx-effect: null;
+}
+
+.title-container {
+    -fx-alignment: CENTER;
 }
 
 .header-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
     -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 16px;
+    -fx-cursor: hand;
+    -fx-background-radius: 20px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 20px;
+}
+
+.nav-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(255, 255, 255, 0.5);
 }
 
 .back-button {
-    -fx-background-color: transparent;
-    -fx-text-fill: white;
-    -fx-border-color: white;
-    -fx-border-width: 1px;
-    -fx-border-radius: 3px;
-    -fx-background-radius: 3px;
+    -fx-background-color: white;
+    -fx-text-fill: -fx-primary;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 16px;
+    -fx-background-radius: 20px;
     -fx-cursor: hand;
-    -fx-padding: 5px 10px;
 }
 
 .back-button:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-color: #F5F5F5;
 }
 
 /* ============================
-   CONTENUTO
+   BARRA DI PROGRESSO
+   ============================ */
+.progress-bar {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 15px;
+}
+
+.progress-steps {
+    -fx-alignment: CENTER;
+}
+
+.progress-step {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-muted;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 20px;
+}
+
+.progress-step.active {
+    -fx-text-fill: -fx-primary;
+    -fx-font-weight: bold;
+    -fx-background-color: -fx-primary-transparent;
+}
+
+/* ============================
+   AREA CONTENUTI
    ============================ */
 .form-scroll-pane {
     -fx-background-color: transparent;
@@ -70,140 +171,343 @@
 }
 
 .content-panel {
-    -fx-background-color: white;
-    -fx-background-radius: 5px;
-    -fx-effect: -fx-shadow-low;
-    -fx-max-width: 700px;
-    -fx-padding: 25px;
+    -fx-background-color: transparent;
 }
 
-.section-title {
-    -fx-font-size: 16px;
+/* ============================
+   SEZIONI FORM
+   ============================ */
+.form-section {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-effect: -fx-shadow-low;
+    -fx-padding: 0;
+}
+
+.form-section > .title {
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-neutral-dark;
+    -fx-background-color: transparent;
+    -fx-padding: 20px 25px 15px 25px;
+    -fx-background-radius: 12px 12px 0 0;
 }
 
+.form-section > .content {
+    -fx-padding: 20px 25px 25px 25px;
+    -fx-background-radius: 0 0 12px 12px;
+}
+
+.form-section:expanded > .title {
+    -fx-border-color: #F0F0F0;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ============================
+   CAMPI FORM
+   ============================ */
 .form-grid {
-    -fx-padding: 10px 0;
+    -fx-padding: 0;
 }
 
 .field-label {
     -fx-font-size: 14px;
+    -fx-font-weight: bold;
     -fx-text-fill: -fx-neutral-dark;
-    -fx-font-weight: normal;
+    -fx-alignment: CENTER_LEFT;
 }
 
-/* ============================
-   FORM CONTROLS
-   ============================ */
-.text-field, .text-area {
+.main-text-field {
     -fx-background-color: white;
     -fx-border-color: #E0E0E0;
-    -fx-border-radius: 3px;
-    -fx-background-radius: 3px;
-    -fx-padding: 8px 10px;
+    -fx-border-width: 2;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px 16px;
     -fx-font-size: 14px;
+    -fx-prompt-text-fill: #9E9E9E;
 }
 
-.text-field:focused, .text-area:focused {
-    -fx-border-color: -fx-primary-light;
+.main-text-field:focused {
+    -fx-border-color: -fx-primary;
+    -fx-effect: dropshadow(gaussian, rgba(155, 32, 0, 0.3), 4, 0, 0, 0);
 }
 
-.text-area {
-    -fx-padding: 8px;
-}
-
-.text-area .content {
-    -fx-padding: 0;
+.price-field {
     -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px 16px;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-prompt-text-fill: #9E9E9E;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.price-field:focused {
+    -fx-border-color: -fx-accent;
+    -fx-effect: dropshadow(gaussian, rgba(255, 167, 38, 0.3), 4, 0, 0, 0);
+}
+
+.main-text-area {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 16px;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #9E9E9E;
+    -fx-font-family: "System";
+}
+
+.main-text-area:focused {
+    -fx-border-color: -fx-primary;
+    -fx-effect: dropshadow(gaussian, rgba(155, 32, 0, 0.3), 4, 0, 0, 0);
 }
 
 .combo-box {
     -fx-background-color: white;
     -fx-border-color: #E0E0E0;
-    -fx-border-radius: 3px;
-    -fx-background-radius: 3px;
-    -fx-padding: 0;
+    -fx-border-width: 2;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 12px;
     -fx-font-size: 14px;
 }
 
 .combo-box:focused {
-    -fx-border-color: -fx-primary-light;
+    -fx-border-color: -fx-primary;
 }
 
 .combo-box .arrow-button {
-    -fx-background-color: transparent;
+    -fx-background-color: -fx-primary;
+    -fx-background-radius: 0 6px 6px 0;
 }
 
 .combo-box .arrow {
-    -fx-background-color: -fx-neutral-dark;
-}
-
-.date-picker {
     -fx-background-color: white;
-    -fx-border-color: #E0E0E0;
-    -fx-border-radius: 3px;
-    -fx-background-radius: 3px;
-    -fx-font-size: 14px;
 }
 
-.date-picker:focused {
-    -fx-border-color: -fx-primary-light;
+/* ============================
+   HINTS E SUGGERIMENTI
+   ============================ */
+.field-hint {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-muted;
+    -fx-font-style: italic;
+}
+
+.currency-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-accent;
+}
+
+.price-suggestion {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-accent;
+    -fx-font-weight: bold;
+    -fx-background-color: rgba(255, 167, 38, 0.1);
+    -fx-background-radius: 15px;
+    -fx-padding: 4px 12px;
+}
+
+.character-count {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-muted;
+    -fx-font-weight: bold;
+}
+
+/* ============================
+   TIPS E CONSIGLI
+   ============================ */
+.tips-container {
+    -fx-background-color: rgba(67, 160, 71, 0.1);
+    -fx-background-radius: 8px;
+    -fx-padding: 16px;
+    -fx-border-color: rgba(67, 160, 71, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+}
+
+.tips-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-success;
+}
+
+.tip-item {
+    -fx-font-size: 13px;
+    -fx-text-fill: #2E7D32;
+    -fx-padding: 2px 0;
+}
+
+/* ============================
+   UPLOAD IMMAGINI
+   ============================ */
+.image-upload-main {
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 8px;
+    -fx-padding: 20px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 8px;
+    -fx-border-style: dashed;
+}
+
+.image-preview-container {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 15px;
+    -fx-spacing: 8px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+    -fx-effect: -fx-shadow-low;
+}
+
+.image-preview {
+    -fx-background-color: #F5F5F5;
+    -fx-background-radius: 4px;
+}
+
+.image-preview-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-muted;
+    -fx-alignment: CENTER;
 }
 
 .browse-button {
-    -fx-background-color: #F5F5F5;
-    -fx-text-fill: -fx-neutral-dark;
-    -fx-background-radius: 3px;
+    -fx-background-color: -fx-accent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 20px;
+    -fx-background-radius: 8px;
     -fx-cursor: hand;
-    -fx-padding: 8px 12px;
 }
 
 .browse-button:hover {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: derive(-fx-accent, 10%);
+    -fx-effect: -fx-shadow-low;
 }
 
 /* ============================
    PULSANTI AZIONE
    ============================ */
+.action-buttons {
+    -fx-padding: 20px 0;
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-effect: -fx-shadow-low;
+}
+
+.preview-button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-primary;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 20px;
+    -fx-background-radius: 8px;
+    -fx-border-color: -fx-primary;
+    -fx-border-width: 2;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.preview-button:hover {
+    -fx-background-color: -fx-primary-transparent;
+    -fx-effect: -fx-shadow-low;
+}
+
 .cancel-button {
     -fx-background-color: white;
-    -fx-text-fill: -fx-neutral-dark;
-    -fx-border-color: #E0E0E0;
-    -fx-border-width: 1px;
-    -fx-border-radius: 3px;
-    -fx-background-radius: 3px;
-    -fx-cursor: hand;
-    -fx-padding: 8px 15px;
+    -fx-text-fill: -fx-muted;
     -fx-font-size: 14px;
+    -fx-padding: 12px 20px;
+    -fx-background-radius: 8px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
 }
 
 .cancel-button:hover {
     -fx-background-color: #F5F5F5;
+    -fx-text-fill: -fx-neutral-dark;
 }
 
-.save-button {
-    -fx-background-color: -fx-primary;
-    -fx-text-fill: white;
-    -fx-background-radius: 3px;
-    -fx-cursor: hand;
-    -fx-padding: 8px 15px;
+.draft-button {
+    -fx-background-color: #F5F5F5;
+    -fx-text-fill: -fx-neutral-dark;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
+    -fx-padding: 12px 20px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
 }
 
-.save-button:hover {
+.draft-button:hover {
+    -fx-background-color: #EEEEEE;
+    -fx-effect: -fx-shadow-low;
+}
+
+.publish-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 14px 30px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: -fx-shadow-medium;
+}
+
+.publish-button:hover {
     -fx-background-color: -fx-primary-light;
+    -fx-effect: -fx-shadow-high;
 }
 
 /* ============================
-   SCROLL BAR STYLING
+   FOOTER INFORMATIVO
    ============================ */
+.footer-info {
+    -fx-background-color: rgba(155, 32, 0, 0.05);
+    -fx-background-radius: 12px;
+    -fx-padding: 20px;
+}
+
+.footer-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-primary;
+    -fx-font-weight: bold;
+}
+
+.main-separator {
+    -fx-background-color: #E0E0E0;
+    -fx-padding: 15px 0;
+}
+
+/* ============================
+   SCROLLBAR PERSONALIZZATE
+   ============================ */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
 .scroll-bar:horizontal,
 .scroll-bar:vertical {
     -fx-background-color: transparent;
-    -fx-pref-width: 10px;
-    -fx-pref-height: 10px;
+    -fx-pref-width: 12px;
+    -fx-pref-height: 12px;
 }
 
 .scroll-bar:horizontal .track,
@@ -215,7 +519,7 @@
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
     -fx-background-color: #D0D0D0;
-    -fx-background-radius: 5px;
+    -fx-background-radius: 6px;
 }
 
 .scroll-bar:horizontal .thumb:hover,
@@ -225,7 +529,7 @@
 
 .scroll-bar .increment-button,
 .scroll-bar .decrement-button {
-    -fx-padding: 0 0 0 0;
+    -fx-padding: 0;
     -fx-background-color: transparent;
 }
 
@@ -233,4 +537,51 @@
 .scroll-bar .decrement-arrow {
     -fx-padding: 0;
     -fx-shape: "";
+}
+
+/* ============================
+   ANIMAZIONI E TRANSIZIONI
+   ============================ */
+.form-section {
+    -fx-transition: -fx-effect 0.2s ease-in-out;
+}
+
+.main-text-field,
+.price-field,
+.main-text-area,
+.combo-box {
+    -fx-transition: -fx-border-color 0.2s ease-in-out, -fx-effect 0.2s ease-in-out;
+}
+
+.publish-button,
+.preview-button,
+.browse-button {
+    -fx-transition: -fx-background-color 0.2s ease-in-out, -fx-effect 0.2s ease-in-out;
+}
+
+/* ============================
+   RESPONSIVE DESIGN
+   ============================ */
+@media (max-width: 800px) {
+    .main-header {
+        -fx-padding: 10px;
+        -fx-spacing: 15px;
+    }
+
+    .header-title {
+        -fx-font-size: 20px;
+    }
+
+    .content-panel {
+        -fx-padding: 20px 15px;
+    }
+
+    .form-section > .title {
+        -fx-font-size: 16px;
+        -fx-padding: 15px 20px 12px 20px;
+    }
+
+    .form-section > .content {
+        -fx-padding: 15px 20px 20px 20px;
+    }
 }

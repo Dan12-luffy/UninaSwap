@@ -12,6 +12,8 @@ import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +28,8 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.UUID;
+
+
 
 public class NewInsertionController {
     // FXML fields
@@ -53,6 +57,40 @@ public class NewInsertionController {
     @FXML
     private ComboBox<String> categoryComboBox;
 
+    @FXML
+    private Label characterCountLabel;
+
+    @FXML
+    private Button previewButton;
+
+    @FXML
+    private Button saveAsDraftButton;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private Button previewFinalButton;
+
+    @FXML
+    private Button saveDraftButton;
+
+    @FXML
+    private ComboBox<String> locationComboBox;
+
+    @FXML
+    private ComboBox<String> deliveryComboBox;
+
+    @FXML
+    private ComboBox<String> contactComboBox;
+
+    @FXML
+    private ImageView logoImage;
+
+    @FXML
+    private ImageView mainImagePreview;
+
+    private final String defaultImagePath = "file:/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path
     private File selectedImageFile;
 
     @FXML
@@ -66,6 +104,9 @@ public class NewInsertionController {
         typeComboBox.setValue("Vendita");
         statusComboBox.setValue("Usato");
         categoryComboBox.setValue("Altro");
+
+        mainImagePreview.setImage(new Image(defaultImagePath));
+
     }
 
     @FXML
@@ -80,8 +121,10 @@ public class NewInsertionController {
 
         if (selectedImageFile != null) {
             imagePathField.setText(selectedImageFile.getAbsolutePath());
+            mainImagePreview.setImage(new Image(selectedImageFile.toURI().toString()));
         }
     }
+
     @FXML
     private void handleSave(ActionEvent event) {
         try {
@@ -107,7 +150,7 @@ public class NewInsertionController {
             if (selectedImageFile != null) {
                 imagePath = selectedImageFile.getAbsolutePath() ;
             } else {
-                imagePath = "/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path
+                imagePath = defaultImagePath;
             }
 
             Listing listing = new Listing(titleField.getText(), imagePath, descriptionArea.getText(), type, price, ListingStatus.AVAILABLE,
