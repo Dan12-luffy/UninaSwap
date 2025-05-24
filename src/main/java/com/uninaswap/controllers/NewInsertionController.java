@@ -99,12 +99,15 @@ public class NewInsertionController {
         typeComboBox.getItems().addAll("Vendita", "Scambio", "Regalo");
         statusComboBox.getItems().addAll("Nuovo", "Come nuovo", "Buone condizioni", "Usato");
         categoryComboBox.getItems().addAll("Libri", "Appunti", "Elettronica", "Arredamento", "Abbigliamento", "Altro");
+        locationComboBox.getItems().addAll("Monte Sant'Angelo", "Fuorigrotta", "Agnano", "Centro Storico");
+
+
 
         // Set default values
         typeComboBox.setValue("Vendita");
         statusComboBox.setValue("Usato");
         categoryComboBox.setValue("Altro");
-
+        locationComboBox.setValue("Monte Sant'Angelo");
         mainImagePreview.setImage(new Image(defaultImagePath));
 
     }
