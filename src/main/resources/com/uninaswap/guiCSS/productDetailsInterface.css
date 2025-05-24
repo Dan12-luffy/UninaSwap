@@ -164,3 +164,6 @@
 .contact-button:hover {
     -fx-background-color: #F5F5F5;
 }
+.product-image-container{
+    -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;
+}

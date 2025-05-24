@@ -66,7 +66,11 @@
                     <!-- Immagine del prodotto -->
                     <VBox styleClass="product-image-container">
                         <StackPane styleClass="image-wrapper">
-                            <ImageView fx:id="productImageView" fitHeight="350.0" fitWidth="380.0" pickOnBounds="true" preserveRatio="true" styleClass="product-image" />
+                     <VBox fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="380.0" spacing="10.0">
+                        <children>
+                                  <ImageView fx:id="productImageView" fitHeight="330.0" fitWidth="360.0" pickOnBounds="true" preserveRatio="true" styleClass="product-image" translateX="11.0" translateY="10.0" />
+                        </children>
+                     </VBox>
                         </StackPane>
                     </VBox>
 

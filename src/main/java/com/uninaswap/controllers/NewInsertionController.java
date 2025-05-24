@@ -84,6 +84,7 @@ public class NewInsertionController {
         if (selectedImageFile != null) {
             imagePathField.setText(selectedImageFile.getAbsolutePath());
         }
+
         //ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Nessun file selezionato.");
     }
     @FXML

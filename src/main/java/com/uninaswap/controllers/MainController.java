@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import javafx.scene.input.MouseEvent;
 import java.io.File;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
@@ -61,6 +62,8 @@ public class MainController {
     @FXML private GridPane itemsGrid;
     @FXML private ScrollPane itemsScrollPane;
     @FXML private Label resultsCountLabel;
+    @FXML private Label maxPriceLabel;
+    @FXML private Label minPriceLabel;
 
     @FXML
     private void initialize() {
@@ -70,7 +73,12 @@ public class MainController {
         }
         sortComboBox.getItems().addAll("Più recenti", "Prezzo crescente", "Prezzo decrescente");
         sortComboBox.setValue("Più recenti");
+        conditionToggleGroupSettings();
+
+        // Select the "all conditions" option by default
+        allConditionsRadio.setSelected(true);
         loadItems();
+        maxPriceLabel.setText(((int)priceSlider.getMax() + "€"));
     }
 
     private void loadItems() {
@@ -80,44 +88,52 @@ public class MainController {
             itemsGrid.getChildren().clear();
 
             // Keep your preferred spacing
-            itemsGrid.setHgap(20);
+            itemsGrid.setHgap(12);
             itemsGrid.setVgap(20);
-            // Change alignment to CENTER
-            //itemsGrid.setAlignment(Pos.CENTER);
-
-            // Set up column constraints to ensure even distribution
             itemsGrid.getColumnConstraints().clear();
-            for (int i = 0; i < listings.size(); ++i) {
+            int colCount = 4;
+            double colWidth = 210;
+
+            for (int i = 0; i < colCount; ++i) {
                 ColumnConstraints column = new ColumnConstraints();
                 column.setHalignment(HPos.LEFT);
-                column.setPercentWidth(33.33);
+                column.setPrefWidth(colWidth);
+                column.setMaxWidth(colWidth);
+                column.setMinWidth(colWidth);
                 itemsGrid.getColumnConstraints().add(column);
             }
 
             if (!listings.isEmpty()) {
                 int column = 0;
                 int row = 0;
+                BigDecimal maxPriceAmongListings = BigDecimal.ZERO;
                 for (Listing listing : listings) {
                     VBox itemCard = createItemCard(listing);
                     itemsGrid.add(itemCard, column, row);
 
                     column++;
+
                     if (column > 3) {  // Massimo 4 colonne
                         column = 0;
                         row++;
                     }
+                    //Cerco il massimo tra i listing
+                    if(listing.getPrice() != null && listing.getPrice().compareTo(maxPriceAmongListings) > 0) {
+                        maxPriceAmongListings = listing.getPrice();
+                    }
                 }
+                // Imposta il numero massimo dello slider
+                priceSlider.setMax(maxPriceAmongListings.doubleValue());
 
-                // Aggiorna l'etichetta con il conteggio
                 if (listings.size() == 1) {
                     resultsCountLabel.setText("Trovato 1 articolo");
                 } else {
                     resultsCountLabel.setText("Trovati " + listings.size() + " articoli");
                 }
             } else {
-                // Nessun annuncio trovato
                 resultsCountLabel.setText("Trovati 0 articoli");
             }
+
         } catch (SQLException e) {
             resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
@@ -160,7 +176,6 @@ public class MainController {
         } else {
             priceLabel = new Label("€" + listing.getPrice());
         }
-        //Label priceLabel = new Label("€" + listing.getPrice());
         priceLabel.setStyle("-fx-font-size: 14px;");
 
         String labelText = listing.getCategory();
@@ -219,8 +234,14 @@ public class MainController {
         NavigationService.getInstance().navigateToNewInsertionView(event);
 
     }
+    @FXML
+    private void sliderPriceSelection() {
+        double minPrice = priceSlider.getValue();
+        double maxPrice = priceSlider.getMax();
 
-
+        minPriceField.setText(String.format("%.2f", minPrice));
+        maxPriceField.setText(String.valueOf((int)(maxPrice)));
+    }
 
     // New handler methods
     @FXML
@@ -274,5 +295,13 @@ public class MainController {
     private void onViewToggled(ActionEvent event) {
         boolean isList = listViewButton.isSelected();
         System.out.println("View changed to: " + (isList ? "List" : "Grid"));
+    }
+    private void conditionToggleGroupSettings(){
+        ToggleGroup conditionToggleGroup = new ToggleGroup();
+        allConditionsRadio.setToggleGroup(conditionToggleGroup);
+        likeNewRadio.setToggleGroup(conditionToggleGroup);
+        excellentRadio.setToggleGroup(conditionToggleGroup);
+        goodRadio.setToggleGroup(conditionToggleGroup);
+        likeNewRadio.setSelected(true);
     }
 }
