@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -65,20 +64,16 @@
                             <Label styleClass="field-label" text="Condizione:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                             <ComboBox fx:id="statusComboBox" prefWidth="150.0" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-                            <!-- Data di pubblicazione -->
-                            <Label styleClass="field-label" text="Data pubblicazione:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                            <DatePicker fx:id="publishDatePicker" styleClass="date-picker" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-
                             <!-- Immagine -->
-                            <Label styleClass="field-label" text="Immagine:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-                            <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                            <Label styleClass="field-label" text="Immagine:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                            <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                 <TextField fx:id="imagePathField" editable="false" promptText="Nessun file selezionato" styleClass="text-field" HBox.hgrow="ALWAYS" />
                                 <Button onAction="#handleSelectImage" styleClass="browse-button" text="Sfoglia" />
                             </HBox>
 
                             <!-- Descrizione -->
-                            <Label styleClass="field-label" text="Descrizione:" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.valignment="TOP" />
-                            <TextArea fx:id="descriptionArea" prefHeight="120.0" promptText="Inserisci una descrizione dettagliata dell'articolo..." styleClass="text-area" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                            <Label styleClass="field-label" text="Descrizione:" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.valignment="TOP" />
+                            <TextArea fx:id="descriptionArea" prefHeight="120.0" promptText="Inserisci una descrizione dettagliata dell'articolo..." styleClass="text-area" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                         </children>
                   <rowConstraints>
                      <RowConstraints />

@@ -48,8 +48,6 @@ public class NewInsertionController {
     private ComboBox<String> statusComboBox;
 
     @FXML
-    private DatePicker publishDatePicker;
-    @FXML
     private Button cancelButton;
 
     @FXML
@@ -65,7 +63,6 @@ public class NewInsertionController {
         categoryComboBox.getItems().addAll("Libri", "Appunti", "Elettronica", "Arredamento", "Abbigliamento", "Altro");
 
         // Set default values
-        publishDatePicker.setValue(LocalDate.now());
         typeComboBox.setValue("Vendita");
         statusComboBox.setValue("Usato");
         categoryComboBox.setValue("Altro");
@@ -84,8 +81,6 @@ public class NewInsertionController {
         if (selectedImageFile != null) {
             imagePathField.setText(selectedImageFile.getAbsolutePath());
         }
-
-        //ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Nessun file selezionato.");
     }
     @FXML
     private void handleSave(ActionEvent event) {
@@ -95,7 +90,6 @@ public class NewInsertionController {
                 return;
             }
 
-            // Parse price with proper error handling
             BigDecimal price = BigDecimal.valueOf(0.0);
             if (!priceField.getText().isEmpty()) {
                 try {
@@ -108,8 +102,8 @@ public class NewInsertionController {
             }
 
             typeListing type = getTypeListing();
-
             String imagePath;
+
             if (selectedImageFile != null) {
                 imagePath = selectedImageFile.getAbsolutePath() ;
             } else {
@@ -117,7 +111,7 @@ public class NewInsertionController {
             }
 
             Listing listing = new Listing(titleField.getText(), imagePath, descriptionArea.getText(), type, price, ListingStatus.AVAILABLE,
-                    Date.valueOf(publishDatePicker.getValue()), UserSession.getInstance().getCurrentUser().getId(), categoryComboBox.getValue());
+                    Date.valueOf(LocalDate.now()), UserSession.getInstance().getCurrentUser().getId(), categoryComboBox.getValue());
 
             ListingDao listingDao = new ListingDaoImpl();
             listingDao.insert(listing);
@@ -137,7 +131,7 @@ public class NewInsertionController {
         if ("Vendita".equals(typeValue)) {
             type = typeListing.SALE;
         } else if ("Scambio".equals(typeValue)) {
-            type = typeListing.EXCHANGE; // Note: Your enum might use EXCHANGE instead of TRADE
+            type = typeListing.EXCHANGE;
         } else if ("Regalo".equals(typeValue)) {
             type = typeListing.GIFT;
         } else {
