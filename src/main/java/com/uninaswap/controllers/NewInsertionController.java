@@ -29,68 +29,29 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.UUID;
 
-
-
 public class NewInsertionController {
-    // FXML fields
-    @FXML
-    private TextField titleField;
+    @FXML private TextField titleField;
+    @FXML private TextField imagePathField;
+    @FXML private TextArea descriptionArea;
+    @FXML private ComboBox<String> typeComboBox;
+    @FXML private TextField priceField;
+    @FXML private ComboBox<String> statusComboBox;
+    @FXML private Button cancelButton;
+    @FXML private ComboBox<String> categoryComboBox;
+    @FXML private Label characterCountLabel;
+    @FXML private Button previewButton;
+    @FXML private Button saveAsDraftButton;
+    @FXML private Button backButton;
+    @FXML private Button previewFinalButton;
+    @FXML private Button saveDraftButton;
+    @FXML private ComboBox<String> locationComboBox;
+    @FXML private ComboBox<String> deliveryComboBox;
+    @FXML private ComboBox<String> contactComboBox;
+    @FXML private ImageView logoImage;
+    @FXML private ImageView mainImagePreview;
 
-    @FXML
-    private TextField imagePathField;
-
-    @FXML
-    private TextArea descriptionArea;
-
-    @FXML
-    private ComboBox<String> typeComboBox;
-
-    @FXML
-    private TextField priceField;
-
-    @FXML
-    private ComboBox<String> statusComboBox;
-
-    @FXML
-    private Button cancelButton;
-
-    @FXML
-    private ComboBox<String> categoryComboBox;
-
-    @FXML
-    private Label characterCountLabel;
-
-    @FXML
-    private Button previewButton;
-
-    @FXML
-    private Button saveAsDraftButton;
-
-    @FXML
-    private Button backButton;
-
-    @FXML
-    private Button previewFinalButton;
-
-    @FXML
-    private Button saveDraftButton;
-
-    @FXML
-    private ComboBox<String> locationComboBox;
-
-    @FXML
-    private ComboBox<String> deliveryComboBox;
-
-    @FXML
-    private ComboBox<String> contactComboBox;
-
-    @FXML
-    private ImageView logoImage;
-
-    @FXML
-    private ImageView mainImagePreview;
-
-    private final String defaultImagePath = "file:/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path
+    private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path portatile danilo
+    //private final String defaultImagePath = "file:/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path fisso danilo
     private File selectedImageFile;
 
     @FXML
@@ -100,8 +61,6 @@ public class NewInsertionController {
         statusComboBox.getItems().addAll("Nuovo", "Come nuovo", "Buone condizioni", "Usato");
         categoryComboBox.getItems().addAll("Libri", "Appunti", "Elettronica", "Arredamento", "Abbigliamento", "Altro");
         locationComboBox.getItems().addAll("Monte Sant'Angelo", "Fuorigrotta", "Agnano", "Centro Storico");
-
-
 
         // Set default values
         typeComboBox.setValue("Vendita");

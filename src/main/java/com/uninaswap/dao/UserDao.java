@@ -11,4 +11,5 @@ public interface UserDao {
     boolean usernameExists(String username);
     String usernameFromID(int id);
     String fullNameFromID(int id);
+    User getUserFromID(int id);
 }

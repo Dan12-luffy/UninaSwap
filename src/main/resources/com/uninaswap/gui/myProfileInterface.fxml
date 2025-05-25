@@ -217,7 +217,7 @@
                                             <Label styleClass="section-title" text="I tuoi annunci attivi" />
                                             <Region HBox.hgrow="ALWAYS" />
                                             <ComboBox fx:id="adsFilterComboBox" promptText="Filtra per stato" styleClass="filter-combo" />
-                                            <Button fx:id="newAdButton" styleClass="new-ad-button" text="➕ Nuovo Annuncio" />
+                                            <Button fx:id="newAdButton" onAction="#makeNewInsertion" styleClass="new-ad-button" text="Nuovo Annuncio" />
                                         </HBox>
 
                                         <ScrollPane fitToWidth="true" prefHeight="300.0" styleClass="ads-scroll-pane">

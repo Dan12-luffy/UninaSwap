@@ -101,5 +101,21 @@ public class UserDaoImpl implements UserDao {
         ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Nessun utente trovato con questo ID.");
         return null;
     }
-
+    @Override
+    public User getUserFromID(int id){
+        String sql = "SELECT first_name, last_name, faculty, username, password FROM users WHERE userId = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new User(id, rs.getString("username"), rs.getString("password"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("faculty"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Nessun utente trovato con questo ID.");
+        return null;
+    }
 }
