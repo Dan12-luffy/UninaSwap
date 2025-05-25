@@ -32,8 +32,7 @@
             <HBox alignment="CENTER_LEFT" maxHeight="35.0" styleClass="top-banner">
                 <Label styleClass="welcome-text" text="Il tuo profilo su UninaSwap" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="notificationsButton" styleClass="icon-button" text="🔔 Notifiche" />
-                <Button fx:id="helpButton" styleClass="icon-button" text="❓ Aiuto" />
+                <Button fx:id="notificationsButton" styleClass="icon-button" text="Notifiche" />
                 <padding>
                     <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                 </padding>
@@ -201,7 +200,7 @@
                                         <!-- Pulsanti azione -->
                                         <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="action-buttons">
                                             <Button fx:id="cancelChangesButton" styleClass="cancel-button" text="Annulla" />
-                                            <Button fx:id="saveChangesButton" styleClass="save-button" text="💾 Salva Modifiche" />
+                                            <Button fx:id="saveChangesButton" styleClass="save-button" text="Salva Modifiche" />
                                         </HBox>
                                     </VBox>
                                 </Tab>
@@ -220,7 +219,7 @@
                                             <Button fx:id="newAdButton" onAction="#makeNewInsertion" styleClass="new-ad-button" text="Nuovo Annuncio" />
                                         </HBox>
 
-                                        <ScrollPane fitToWidth="true" prefHeight="300.0" styleClass="ads-scroll-pane">
+                                        <ScrollPane fitToWidth="true" prefHeight="621.0" prefWidth="631.0" styleClass="ads-scroll-pane">
                                             <VBox fx:id="userAdsContainer" spacing="10" styleClass="ads-container">
                                                 <!-- Gli annunci verranno caricati dinamicamente qui -->
                                                 <Label styleClass="placeholder-text" text="I tuoi annunci appariranno qui" />
@@ -237,7 +236,7 @@
                                         </padding>
 
                                         <!-- Cambio password -->
-                                        <TitledPane expanded="true" styleClass="security-section" text="🔐 Cambia Password">
+                                        <TitledPane expanded="true" styleClass="security-section" text="Cambia Password">
                                             <GridPane hgap="15" styleClass="security-grid" vgap="12">
                                                 <columnConstraints>
                                                     <ColumnConstraints hgrow="NEVER" maxWidth="120.0" minWidth="100.0" />
@@ -250,13 +249,13 @@
                                                 </rowConstraints>
 
                                                 <children>
-                                                    <Label styleClass="field-label" text="Password attuale:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                    <Label styleClass="field-label" text=" Password attuale:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                                                     <PasswordField fx:id="currentPasswordField" styleClass="profile-password-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                                                    <Label styleClass="field-label" text="Nuova password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                    <Label styleClass="field-label" text=" Nuova password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                                                     <PasswordField fx:id="newPasswordField" styleClass="profile-password-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                                    <Label styleClass="field-label" text="Conferma password:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                                    <Label styleClass="field-label" text=" Conferma password:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                                                     <PasswordField fx:id="confirmPasswordField" styleClass="profile-password-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                 </children>
                                             </GridPane>
@@ -272,12 +271,6 @@
                                                 </HBox>
 
                                                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="privacy-option">
-                                                    <Label styleClass="privacy-label" text="Consenti messaggi da sconosciuti" />
-                                                    <Region HBox.hgrow="ALWAYS" />
-                                                    <Button fx:id="messagesFromStrangersButton" styleClass="toggle-button" text="Consentito" />
-                                                </HBox>
-
-                                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="privacy-option">
                                                     <Label styleClass="privacy-label" text="Notifiche push" />
                                                     <Region HBox.hgrow="ALWAYS" />
                                                     <Button fx:id="pushNotificationsButton" styleClass="toggle-button active" text="Attivo" />
@@ -287,8 +280,7 @@
 
                                         <!-- Pulsanti sicurezza -->
                                         <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="security-actions">
-                                            <Button fx:id="changePasswordButton" styleClass="security-button" text="🔑 Cambia Password" />
-                                            <Button fx:id="enable2FAButton" styleClass="security-button" text="🔐 Abilita 2FA" />
+                                            <Button fx:id="changePasswordButton" styleClass="security-button" text="Cambia Password" />
                                         </HBox>
                                     </VBox>
                                 </Tab>
@@ -300,10 +292,10 @@
                     <VBox spacing="15" styleClass="profile-footer">
                         <Separator styleClass="main-separator" />
                         <HBox alignment="CENTER" spacing="20" styleClass="footer-actions">
-                            <Button fx:id="downloadDataButton" styleClass="footer-button" text="📄 Scarica i tuoi dati" />
+                            <Button fx:id="downloadDataButton" styleClass="footer-button" text="Scarica i tuoi dati" />
                             <Button fx:id="deleteAccountButton" styleClass="danger-button" text="🗑️ Elimina Account" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="logout-button" text="🚪 Logout" />
+                            <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="logout-button" text="Logout" />
                         </HBox>
                     </VBox>
                 </children>

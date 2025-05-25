@@ -12,6 +12,7 @@ public interface ListingDao {
     void update(Listing listing) throws SQLException;
     List<Listing> findAll() throws SQLException;
     List<Listing> findAllOtherInsertions() throws SQLException;
+    List<Listing> findMyInsertions() throws SQLException;
     List<Listing> findByCategory(int categoryId) throws SQLException;
     List<Listing> findByPriceRange(double minPrice, double maxPrice) throws SQLException;
     List<Listing> findByText(String text) throws SQLException;

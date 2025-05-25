@@ -1,9 +1,7 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Listing;
-import com.uninaswap.model.User;
 import com.uninaswap.services.NavigationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,45 +10,37 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 
 import java.io.File;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class ProductDetailsController {
 
-    @FXML
-    private Label productTitleLabel;
-    @FXML
-    private ImageView productImageView;
-    @FXML
-    private TextArea descriptionTextArea;
-    @FXML
-    private Label categoryLabel;
-    @FXML
-    private Label conditionLabel;
-    @FXML
-    private Label sellerLabel;
-    @FXML
-    private Label priceLabel;
-    @FXML
-    private Button buyButton;
-    @FXML
-    private Button offerButton;
-    @FXML
-    private Button contactButton;
-    @FXML
-    private Button backButton;
+    @FXML private Label productTitleLabel;
+    @FXML private ImageView productImageView;
+    @FXML private TextArea descriptionTextArea;
+    @FXML private Label categoryLabel;
+    @FXML private Label conditionLabel;
+    @FXML private Label sellerLabel;
+    @FXML private Label priceLabel;
+    @FXML private Button actionButton;
+    @FXML private Button offerButton;
+    @FXML private Button contactButton;
+    @FXML private Button backButton;
+    @FXML private Label conditionBadge;
+    @FXML private Label typeBadge;
+    @FXML private Label availabilityLabel;
+    @FXML private Label dateLabel;
+
     private Listing listing;
+
 
     @FXML
     public void initialize() {
-        productTitleLabel.setText("Caricamento...");
-        descriptionTextArea.setText("");
-        priceLabel.setText("€0.00");
-        conditionLabel.setText("N/A");
-        categoryLabel.setText("N/A");
-        sellerLabel.setText("N/A");
+
+        // TODO aggiungere a listings le condizioni conditionBadge.setText("N/A");
     }
 
     @FXML
@@ -78,7 +68,6 @@ public class ProductDetailsController {
             System.out.println("Contatta venditore: " + listing.getUserId());
         }
     }
-
     public void loadProductDetails(Listing listing) {
         if (listing == null) {
             return;
@@ -88,6 +77,8 @@ public class ProductDetailsController {
         productTitleLabel.setText(listing.getTitle());
         descriptionTextArea.setText(listing.getDescription());
         categoryLabel.setText(listing.getCategory());
+        availabilityLabel.setText(listing.getStatus().toString());
+        dateLabel.setText(listing.getPublishDate().toString());
 
         if (listing.getPrice() != null) {
             priceLabel.setText("€" + listing.getPrice().toString());
@@ -108,18 +99,35 @@ public class ProductDetailsController {
         if (listing.getType() != null) {
             switch (listing.getType()) {
                 case EXCHANGE:
-                    buyButton.setText("Proponi scambio");
+                    actionButton.setText("Proponi scambio");
+                    actionButton.setOnAction(this::onExchangeButtonClicked);
+                    actionButton.setTranslateX(-150);
                     offerButton.setVisible(false);
+
                     break;
                 case GIFT:
-                    buyButton.setText("Richiedi regalo");
+                    actionButton.setText("Richiedi regalo");
+                    actionButton.setOnAction(this::onGiftButtonClicked);
+                    actionButton.setTranslateX(-150);
                     offerButton.setVisible(false);
                     priceLabel.setText("Gratis");
                     break;
                 default:
-                    buyButton.setText("Acquista ora");
+                    actionButton.setText("Acquista ora");
                     offerButton.setVisible(true);
             }
+        }
+    }
+    private void onExchangeButtonClicked(ActionEvent event) {
+        if (listing != null) {
+            System.out.println("Proposta di scambio per: " + listing.getListingId());
+            // Logica per la proposta di scambio
+        }
+    }
+    private void onGiftButtonClicked(ActionEvent event) {
+        if (listing != null) {
+            // Logica per l'acquisto del prodotto
+            System.out.println("Regalo prodotto: " + listing.getListingId());
         }
     }
 }

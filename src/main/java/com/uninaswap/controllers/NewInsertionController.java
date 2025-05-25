@@ -50,8 +50,8 @@ public class NewInsertionController {
     @FXML private ImageView logoImage;
     @FXML private ImageView mainImagePreview;
 
-    private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path portatile danilo
-    //private final String defaultImagePath = "file:/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path fisso danilo
+    //private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path portatile danilo
+    private final String defaultImagePath = "file:/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path fisso danilo
     private File selectedImageFile;
 
     @FXML
@@ -108,7 +108,6 @@ public class NewInsertionController {
 
             typeListing type = getTypeListing();
             String imagePath;
-
             if (selectedImageFile != null) {
                 imagePath = selectedImageFile.getAbsolutePath() ;
             } else {
