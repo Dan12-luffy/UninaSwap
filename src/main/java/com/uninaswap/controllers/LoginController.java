@@ -15,14 +15,10 @@ import javafx.stage.Stage;
 
 public class LoginController {
 
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private Button loginButton;
-    @FXML
-    private Hyperlink registerButton;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private Button loginButton;
+    @FXML private Hyperlink registerButton;
 
     private final LoginService loginService = new LoginService();
 

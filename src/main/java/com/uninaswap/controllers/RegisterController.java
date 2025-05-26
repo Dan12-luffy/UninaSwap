@@ -16,47 +16,21 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
 public class RegisterController {
 
-    @FXML
-    private TextField nameField;
-
-    @FXML
-    private TextField surnameField;
-
-    @FXML
-    private ComboBox<String> facultyComboBox;
-
-    @FXML
-    private TextField usernameField;
-
-    @FXML
-    private PasswordField passwordField;
-
-    @FXML
-    private PasswordField confirmPasswordField;
-
-    @FXML
-    private Hyperlink loginButton;
-
-    @FXML
-    private Button registerButton;
-
-    @FXML
-    private VBox passwordRequirements;
-
-    @FXML
-    private Label uppercaseCheck;
-
-    @FXML
-    private Label specialCharCheck;
-
-    @FXML
-    private Label numberCheck;
-
-    @FXML
-    private Label lengthCheck;
+    @FXML private TextField nameField;
+    @FXML private TextField surnameField;
+    @FXML private ComboBox<String> facultyComboBox;
+    @FXML    private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private PasswordField confirmPasswordField;
+    @FXML private Hyperlink loginButton;
+    @FXML private Button registerButton;
+    @FXML private VBox passwordRequirements;
+    @FXML private Label uppercaseCheck;
+    @FXML private Label specialCharCheck;
+    @FXML private Label numberCheck;
+    @FXML private Label lengthCheck;
 
     private final RegisterService registerService = new RegisterService();
 
