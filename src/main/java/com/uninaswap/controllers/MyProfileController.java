@@ -86,14 +86,13 @@ public class MyProfileController {
     private void loadUserListings() {
         try {
             ListingDaoImpl listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findAll();
+            List<Listing> listings = listingDao.findMyInsertions();
 
             // Clear existing content
             userAdsContainer.getChildren().clear();
 
             if (listings.isEmpty()) {
                 Label emptyLabel = new Label("Nessun annuncio trovato");
-                emptyLabel.getStyleClass().add("placeholder-text");
                 userAdsContainer.getChildren().add(emptyLabel);
             } else {
                 for (Listing listing : listings) {
@@ -103,65 +102,76 @@ public class MyProfileController {
         } catch (SQLException e) {
             e.printStackTrace();
             Label errorLabel = new Label("Errore nel caricamento degli annunci");
-            errorLabel.getStyleClass().add("error-text");
             userAdsContainer.getChildren().add(errorLabel);
         }
     }
 
     private HBox createListingCard(Listing listing) {
         HBox card = new HBox(15);
-        card.getStyleClass().add("listing-card");
         card.setPrefWidth(userAdsContainer.getPrefWidth() - 20);
+        card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
+        card.setPrefHeight(100);
+
+        // Add hover effect
+        card.setOnMouseEntered(e -> card.setStyle("-fx-padding: 10; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f8f8f8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);"));
+        card.setOnMouseExited(e -> card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;"));
 
         ImageView imageView = new ImageView();
         imageView.setFitWidth(80);
         imageView.setFitHeight(80);
         imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        imageView.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 0); -fx-background-radius: 3;");
 
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
             File imageFile = new File(listing.getImageUrl());
             imageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
-            //System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
             imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
         }
-
 
         VBox textContent = new VBox(5);
         textContent.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         HBox.setHgrow(textContent, javafx.scene.layout.Priority.ALWAYS);
 
         Label titleLabel = new Label(listing.getTitle());
-        titleLabel.getStyleClass().add("listing-title");
-
-        HBox infoBox = new HBox(10);
-        Label statusLabel = new Label(listing.getStatus().toString());
-        statusLabel.getStyleClass().addAll("status-label", "status-" + listing.getStatus().toString().toLowerCase());
-
-        Label dateLabel = new Label(listing.getPublishDate() != null ?
-                new SimpleDateFormat("dd/MM/yyyy").format(listing.getPublishDate()) : "");
-        dateLabel.getStyleClass().add("date-label");
-
-        infoBox.getChildren().addAll(statusLabel, dateLabel);
+        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        titleLabel.setWrapText(true);
 
         // Price and type
         String priceText = listing.getPrice() != null ? String.format("€%.2f", listing.getPrice()) : listing.getType().toString();
         Label priceLabel = new Label(priceText);
-        priceLabel.getStyleClass().add("price-label");
+        priceLabel.setStyle("-fx-font-size: 14px;");
 
-        textContent.getChildren().addAll(titleLabel, infoBox, priceLabel);
+        HBox infoBox = new HBox(10);
+        Label statusLabel = new Label(listing.getStatus().toString());
+        statusLabel.setStyle("-fx-font-size: 12px; -fx-background-color: #f0f0f0; -fx-padding: 2 5; -fx-background-radius: 3;");
 
-        VBox actionButtons = new VBox(5);
+        Label dateLabel = new Label(listing.getPublishDate() != null ? listing.getPublishDate().toString() : "");
+        dateLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #888;");
+
+        infoBox.getChildren().addAll(statusLabel, dateLabel);
+        textContent.getChildren().addAll(titleLabel, priceLabel, infoBox);
+
+        VBox actionButtons = new VBox(8);
         actionButtons.setAlignment(javafx.geometry.Pos.CENTER);
+        actionButtons.setPrefWidth(80);
 
         Button editButton = new Button("Modifica");
-        editButton.getStyleClass().add("edit-button");
-        editButton.setOnAction(event -> editListing(listing));
+        editButton.setStyle("-fx-background-color: #f0f0f0; -fx-text-fill: #444; -fx-background-radius: 3;");
+        editButton.setPrefWidth(75);
+        editButton.setOnAction(event -> {
+            event.consume(); editListing(listing);
+        });
 
         Button deleteButton = new Button("Elimina");
-        deleteButton.getStyleClass().add("delete-button");
-        deleteButton.setOnAction(event -> deleteListing(listing));
+        deleteButton.setStyle("-fx-background-color: #ffecec; -fx-text-fill: #d32f2f; -fx-background-radius: 3;");
+        deleteButton.setPrefWidth(75);
+        deleteButton.setOnAction(event -> {
+            event.consume();
+            deleteListing(listing);
+        });
 
         actionButtons.getChildren().addAll(editButton, deleteButton);
 
@@ -170,6 +180,7 @@ public class MyProfileController {
 
         return card;
     }
+
     private void showItemDetails(MouseEvent event, Listing listing) {
         NavigationService.getInstance().navigateToProductDetailsView(event, listing);
     }
@@ -191,7 +202,7 @@ public class MyProfileController {
             try {
                 ListingDaoImpl listingDao = new ListingDaoImpl();
                 listingDao.delete(listing.getListingId());
-                loadUserListings(); // Reload the listings
+                loadUserListings();
             } catch (Exception e) {
                 e.printStackTrace();
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -202,6 +213,7 @@ public class MyProfileController {
             }
         }
     }
+
     @FXML
     private void makeNewInsertion(ActionEvent event) {
         NavigationService.getInstance().navigateToNewInsertionView(event);

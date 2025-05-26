@@ -90,7 +90,7 @@
                                 <ImageView fx:id="productImageView" fitHeight="280.0" fitWidth="280.0" styleClass="product-main-image" />
                                 <VBox alignment="TOP_RIGHT" styleClass="image-badges">
                                     <Label fx:id="conditionBadge" styleClass="condition-badge" text="Ottime Condizioni" />
-                                    <Label fx:id="typeBadge" styleClass="type-badge" text="Vendita" />
+                                    <Label fx:id="typeBadge" styleClass="type-badge" text="N/A" />
                                 </VBox>
                             </StackPane>
 
@@ -106,7 +106,7 @@
                         <VBox spacing="18.0" styleClass="info-section" HBox.hgrow="ALWAYS">
                             <!-- Titolo e prezzo -->
                             <VBox spacing="10" styleClass="title-price-section">
-                                <Label fx:id="productTitleLabel" styleClass="product-title" text="Titolo del Prodotto" />
+                                <Label fx:id="productTitleLabel" styleClass="product-title" text="N/A" />
                                 <HBox alignment="CENTER_LEFT" spacing="15">
                                     <Label fx:id="priceLabel" styleClass="product-price" text="€0.00" />
                                 </HBox>
@@ -144,16 +144,16 @@
 
                                     <children>
                                         <Label styleClass="detail-label" text="Categoria:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                        <Label fx:id="categoryLabel" styleClass="detail-value" text="Libri" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                        <Label fx:id="categoryLabel" styleClass="detail-value" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                                         <Label styleClass="detail-label" text="Condizioni:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                        <Label fx:id="conditionLabel" styleClass="detail-value" text="Ottime" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <Label fx:id="conditionLabel" styleClass="detail-value" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                                         <Label styleClass="detail-label" text="Disponibilità:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                        <Label fx:id="availabilityLabel" styleClass="detail-value available" text=" Disponibile" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <Label fx:id="availabilityLabel" styleClass="detail-value available" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                                         <Label styleClass="detail-label" text="Pubblicato:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                                        <Label fx:id="dateLabel" styleClass="detail-value" text="3 giorni fa" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                        <Label fx:id="dateLabel" styleClass="detail-value" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     </children>
                                 </GridPane>
                             </VBox>
@@ -161,7 +161,7 @@
                             <!-- Pulsanti azione principali -->
                             <VBox spacing="10" styleClass="action-section">
                                 <HBox alignment="CENTER" spacing="10" styleClass="primary-actions">
-                                    <Button fx:id="buyButton" defaultButton="true" onAction="#onBuyButtonClicked" styleClass="buy-button" text="🛒 Acquista Ora" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="actionButton" defaultButton="true" onAction="#onBuyButtonClicked" styleClass="buy-button" text="Acquista Ora" HBox.hgrow="ALWAYS" />
                                     <Button fx:id="offerButton" onAction="#onOfferButtonClicked" styleClass="offer-button" text="💰 Fai Offerta" HBox.hgrow="ALWAYS" />
                                 </HBox>
                             </VBox>

@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 
 import javafx.scene.input.MouseEvent;
 import java.io.File;
@@ -85,23 +84,7 @@ public class MainController {
         try {
             ListingDao listingDao = new ListingDaoImpl();
             List<Listing> listings = listingDao.findAllOtherInsertions();
-            itemsGrid.getChildren().clear();
-
-            // Keep your preferred spacing
-            itemsGrid.setHgap(12);
-            itemsGrid.setVgap(20);
-            itemsGrid.getColumnConstraints().clear();
-            int colCount = 4;
-            double colWidth = 210;
-
-            for (int i = 0; i < colCount; ++i) {
-                ColumnConstraints column = new ColumnConstraints();
-                column.setHalignment(HPos.LEFT);
-                column.setPrefWidth(colWidth);
-                column.setMaxWidth(colWidth);
-                column.setMinWidth(colWidth);
-                itemsGrid.getColumnConstraints().add(column);
-            }
+            setupItemGrid();
 
             if (!listings.isEmpty()) {
                 int column = 0;
@@ -139,6 +122,65 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void onApplyPriceButtonClicked() {
+        try {
+            double min = Double.parseDouble(minPriceField.getText());
+            double max = Double.parseDouble(maxPriceField.getText());
+            ListingDao listingDao = new ListingDaoImpl();
+            List<Listing> listings = listingDao.findByPriceRange(min, max);
+            setupItemGrid();
+
+            if (!listings.isEmpty()) {
+                int column = 0;
+                int row = 0;
+                //BigDecimal maxPriceAmongListings = BigDecimal.ZERO;
+                for (Listing listing : listings) {
+                    VBox itemCard = createItemCard(listing);
+                    itemsGrid.add(itemCard, column, row);
+
+                    column++;
+
+                    if (column > 3) {  // Massimo 4 colonne
+                        column = 0;
+                        row++;
+                    }
+                }
+
+                if (listings.size() == 1) {
+                    resultsCountLabel.setText("Trovato 1 articolo");
+                } else {
+                    resultsCountLabel.setText("Trovati " + listings.size() + " articoli");
+                }
+            } else {
+                resultsCountLabel.setText("Trovati 0 articoli");
+            }
+
+        } catch (NumberFormatException e) {
+            ValidationService.getInstance().showInvalidPriceError();
+        } catch (Exception e) {
+            resultsCountLabel.setText("Errore durante il caricamento");
+            e.printStackTrace();
+        }
+    }
+    private void setupItemGrid() {
+        itemsGrid.getChildren().clear();
+
+        itemsGrid.setHgap(12);
+        itemsGrid.setVgap(20);
+        itemsGrid.getColumnConstraints().clear();
+        int colCount = 4;
+        double colWidth = 210;
+
+        for (int i = 0; i < colCount; ++i) {
+            ColumnConstraints column = new ColumnConstraints();
+            column.setHalignment(HPos.LEFT);
+            column.setPrefWidth(colWidth);
+            column.setMaxWidth(colWidth);
+            column.setMinWidth(colWidth);
+            itemsGrid.getColumnConstraints().add(column);
+        }
+    }
 
     private VBox createItemCard(Listing listing) {
         // Create card layout
@@ -148,7 +190,6 @@ public class MainController {
         card.setPrefHeight(250);
         card.setMaxWidth(200);
         card.setMaxHeight(250);
-
 
         // Create and configure image view
         ImageView imageView = new ImageView();
@@ -259,16 +300,8 @@ public class MainController {
         System.out.println("Messages button clicked");
     }
 
-    @FXML
-    private void onApplyPriceButtonClicked() {
-        try {
-            double min = Double.parseDouble(minPriceField.getText());
-            double max = Double.parseDouble(maxPriceField.getText());
-            System.out.println("Applica il filtro del prezzo: " + min + " - " + max);
-        } catch (NumberFormatException e) {
-            ValidationService.getInstance().showInvalidPriceError();
-        }
-    }
+
+
 
     @FXML
     private void onLoadMoreButtonClicked() {

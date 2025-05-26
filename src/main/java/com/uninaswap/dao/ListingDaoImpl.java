@@ -5,13 +5,11 @@ import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.typeListing;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.utility.DatabaseUtil;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListingDaoImpl implements ListingDao {
-
 
     private static final String DEFAULT_CATEGORY = "Altro";
 
@@ -87,22 +85,24 @@ public class ListingDaoImpl implements ListingDao {
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            // Set the current user ID parameter
             stmt.setInt(1, UserSession.getInstance().getCurrentUser().getId());
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    try {
-                        Listing listing = new Listing();
-                        mapResultSetToListing(rs, listing);
-                        listings.add(listing);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.err.println("Errore nel processare la lista " + e.getMessage());
-                    }
-                }
-            }
+            executeQueryAndCreateTheList(listings, stmt);
+        }
+        return listings;
+    }
+    @Override
+    public List<Listing> findMyInsertions() throws SQLException {
+        List<Listing> listings = new ArrayList<>();
+        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
+                "LEFT JOIN category c ON l.category_id = c.category_id " +
+                "WHERE l.status = 'AVAILABLE' AND l.userid = ? " +
+                "ORDER BY l.publishDate DESC";
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, UserSession.getInstance().getCurrentUser().getId());
+            executeQueryAndCreateTheList(listings, stmt);
         }
         return listings;
     }
@@ -144,33 +144,19 @@ public class ListingDaoImpl implements ListingDao {
     }
 
     //TODO implementare la ricerca per prezzo
-    public List<Listing> findByPriceRange(double minPrice, double maxPrice) {
+    public List<Listing> findByPriceRange(double minPrice, double maxPrice) throws SQLException {
         List<Listing> listings = new ArrayList<>();
-        String sql = "SELECT * FROM listings WHERE price BETWEEN ? AND ? AND status = 'Available' ORDER BY publishDate DESC";
+        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
+                "LEFT JOIN category c ON l.category_id = c.category_id " +
+                "WHERE price BETWEEN ? AND ? AND l.userid = ? ORDER BY publishDate DESC";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setDouble(1, minPrice);
             stmt.setDouble(2, maxPrice);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Listing listing = new Listing();
-                    listing.setListingId(rs.getInt("listingId"));
-                    listing.setTitle(rs.getString("title"));
-                    listing.setImageUrl(rs.getString("imageUrl"));
-                    listing.setDescription(rs.getString("description"));
-                    listing.setType(typeListing.valueOf(rs.getString("type")));
-                    listing.setPrice(rs.getBigDecimal("price"));
-                    listing.setStatus(ListingStatus.valueOf(rs.getString("status")));
-                    listing.setPublishDate(rs.getDate("publishDate"));
-                    listing.setUserId(rs.getInt("userId"));
-                    listing.setCategory(rs.getString("category_name"));
-                }
-            }
-            return listings;
-        } catch (SQLException e) {
-            e.printStackTrace();
+            stmt.setInt(3, UserSession.getInstance().getCurrentUser().getId());
+            executeQueryAndCreateTheList(listings, stmt);
         }
-        return null;
+        return listings;
     }
 
     //TODO implementare la ricerca per testo
@@ -276,6 +262,20 @@ public class ListingDaoImpl implements ListingDao {
         listing.setPublishDate(rs.getDate("publishDate"));
         listing.setUserId(rs.getInt("userId"));
         listing.setCategory(rs.getString("category_name"));
+    }
+    private void executeQueryAndCreateTheList(List<Listing> listings, PreparedStatement stmt) throws SQLException {
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                try {
+                    Listing listing = new Listing();
+                    mapResultSetToListing(rs, listing);
+                    listings.add(listing);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println("Errore nel processare la lista " + e.getMessage());
+                }
+            }
+        }
     }
     private typeListing parseType(String typeStr) {
         try {
