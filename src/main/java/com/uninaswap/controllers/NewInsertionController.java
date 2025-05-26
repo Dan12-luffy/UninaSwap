@@ -68,7 +68,6 @@ public class NewInsertionController {
         categoryComboBox.setValue("Altro");
         locationComboBox.setValue("Monte Sant'Angelo");
         mainImagePreview.setImage(new Image(defaultImagePath));
-
     }
 
     @FXML
