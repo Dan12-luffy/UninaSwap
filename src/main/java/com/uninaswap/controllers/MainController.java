@@ -38,6 +38,7 @@ public class MainController {
     @FXML private Button notificationButton;
     @FXML private Button wishlistButton;
     @FXML private Button messagesButton;
+    @FXML private ToggleGroup categoryTogglegroup;
     @FXML private ToggleButton allCategoryButton;
     @FXML private ToggleButton booksCategoryButton;
     @FXML private ToggleButton electronicsCategoryButton;
@@ -64,6 +65,14 @@ public class MainController {
     @FXML private Label maxPriceLabel;
     @FXML private Label minPriceLabel;
 
+    private static final int ALL_CATEGORIES_ID = -1;
+    private static final int BOOKS_CATEGORY_ID = 1;
+    private static final int ELECTRONICS_CATEGORY_ID = 2;
+    private static final int CLOTHING_CATEGORY_ID = 3;
+    private static final int NOTES_CATEGORY_ID = 4;
+    private static final int TOOLS_CATEGORY_ID = 5;
+    private static final int OTHER_CATEGORY_ID = 6;
+
     @FXML
     private void initialize() {
         User currentUser = UserSession.getInstance().getCurrentUser();
@@ -73,7 +82,8 @@ public class MainController {
         sortComboBox.getItems().addAll("Più recenti", "Prezzo crescente", "Prezzo decrescente");
         sortComboBox.setValue("Più recenti");
         conditionToggleGroupSettings();
-
+        //set up category buttons
+        setUpCategoryButtons();
         // Select the "all conditions" option by default
         allConditionsRadio.setSelected(true);
         loadItems();
@@ -284,6 +294,82 @@ public class MainController {
         maxPriceField.setText(String.valueOf((int)(maxPrice)));
     }
 
+    private void setUpCategoryButtons(){
+
+        categoryTogglegroup = new ToggleGroup();
+
+        allCategoryButton.setToggleGroup(categoryTogglegroup);
+        booksCategoryButton.setToggleGroup(categoryTogglegroup);
+        electronicsCategoryButton.setToggleGroup(categoryTogglegroup);
+        clothingCategoryButton.setToggleGroup(categoryTogglegroup);
+        notesCategoryButton.setToggleGroup(categoryTogglegroup);
+        toolsCategoryButton.setToggleGroup(categoryTogglegroup);
+        otherCategoryButton.setToggleGroup(categoryTogglegroup);
+
+        allCategoryButton.setUserData(ALL_CATEGORIES_ID);
+        booksCategoryButton.setUserData(BOOKS_CATEGORY_ID);
+        electronicsCategoryButton.setUserData(ELECTRONICS_CATEGORY_ID);
+        clothingCategoryButton.setUserData(CLOTHING_CATEGORY_ID);
+        notesCategoryButton.setUserData(NOTES_CATEGORY_ID);
+        toolsCategoryButton.setUserData(TOOLS_CATEGORY_ID);
+        otherCategoryButton.setUserData(OTHER_CATEGORY_ID);
+
+        allCategoryButton.setSelected(true);
+
+        categoryTogglegroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue == null) {
+                allCategoryButton.setSelected(true);
+            }else{
+                filterItemsByCategory((Integer) newValue.getUserData());
+            }
+        });
+    }
+    private void filterItemsByCategory(int categoryId){
+        try{
+            ListingDao listingDao = new ListingDaoImpl();
+            List <Listing> listings;
+
+
+            if(categoryId == ALL_CATEGORIES_ID) {
+                listings = listingDao.findAllOtherInsertions();
+            } else {
+                listings = listingDao.findByCategory(categoryId);
+            }
+            setupItemGrid();
+            displayFilteredListings(listings);
+
+        }catch(SQLException e){
+            resultsCountLabel.setText("Errore durante il caricamento");
+            e.printStackTrace();
+        }
+    }
+
+    private void displayFilteredListings(List<Listing> listings) {
+        if (!listings.isEmpty()) {
+            int column = 0;
+            int row = 0;
+            for (Listing listing : listings) {
+                VBox itemCard = createItemCard(listing);
+                itemsGrid.add(itemCard, column, row);
+
+                column++;
+
+                if (column > 3) {  // Max 4 columns
+                    column = 0;
+                    row++;
+                }
+            }
+
+            if (listings.size() == 1) {
+                resultsCountLabel.setText("Trovato 1 articolo");
+            } else {
+                resultsCountLabel.setText("Trovati " + listings.size() + " articoli");
+            }
+        } else {
+            resultsCountLabel.setText("Trovati 0 articoli");
+        }
+    }
+
     // New handler methods
     @FXML
     private void onNotificationButtonClicked() {
@@ -315,8 +401,7 @@ public class MainController {
 
     @FXML
     private void onCategoryButtonClicked(ActionEvent event) {
-        ToggleButton source = (ToggleButton) event.getSource();
-        System.out.println("Selected category: " + source.getText());
+
     }
 
     @FXML

@@ -32,7 +32,5 @@ public class UserSession {
         return currentUser.getId();
     }
 
-    /*public boolean isLoggedIn() {
-        return loggedIn;
-    }*/
+
 }
