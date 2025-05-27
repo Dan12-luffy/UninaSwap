@@ -377,6 +377,15 @@ public class MainController {
     }
 
     @FXML
+    private void onSellButtonClicked(ActionEvent event) {
+        try {
+            NavigationService.getInstance().navigateToCreateListingView(event);
+        }catch(Exception e){
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }
+    }
+
+    @FXML
     private void onWishlistButtonClicked() {
         System.out.println("Wishlist button clicked");
     }
@@ -385,9 +394,6 @@ public class MainController {
     private void onMessagesButtonClicked() {
         System.out.println("Messages button clicked");
     }
-
-
-
 
     @FXML
     private void onLoadMoreButtonClicked() {
