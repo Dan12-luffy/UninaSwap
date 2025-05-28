@@ -1,11 +1,14 @@
 package com.uninaswap.dao;
 
+import com.uninaswap.databaseUtils.FilterCriteria;
 import com.uninaswap.model.Category;
 import com.uninaswap.model.Listing;
 import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.typeListing;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.utility.DatabaseUtil;
+
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +74,138 @@ public class ListingDaoImpl implements ListingDao {
                 }
             }
         }
+        return listings;
+    }
+    @Override
+    public List<Listing> findWithFilters(FilterCriteria criteria) throws SQLException {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT l.*, c.name as category_name FROM listings l ");
+        sql.append("LEFT JOIN category c ON l.category_id = c.category_id ");
+        sql.append("WHERE 1=1 ");
+
+        List<Object> parameters = new ArrayList<>();
+
+        // Filtro per stato (sempre AVAILABLE se non specificato)
+        if (criteria.getStatus() != null) {
+            sql.append("AND l.status = ? ");
+            parameters.add(criteria.getStatus());
+        } else {
+            sql.append("AND l.status = 'AVAILABLE' ");
+        }
+
+        // Esclude l'utente corrente se specificato
+        if (criteria.getExcludeUserId() != null) {
+            sql.append("AND l.userid != ? ");
+            parameters.add(criteria.getExcludeUserId());
+        }
+
+        // Filtro per testo (titolo e descrizione)
+        if (criteria.hasTextSearch()) {
+            sql.append("AND (l.title LIKE ? OR l.description LIKE ?) ");
+            String searchPattern = "%" + criteria.getSearchText() + "%";
+            parameters.add(searchPattern);
+            parameters.add(searchPattern);
+        }
+
+        // Filtro per categorie multiple
+        if (criteria.hasCategoryFilter() && !criteria.getCategoryIds().contains(-1)) {
+            sql.append("AND l.category_id IN (");
+            for (int i = 0; i < criteria.getCategoryIds().size(); i++) {
+                sql.append("?");
+                if (i < criteria.getCategoryIds().size() - 1) {
+                    sql.append(",");
+                }
+            }
+            sql.append(") ");
+            parameters.addAll(criteria.getCategoryIds());
+        }
+
+        // Filtro per prezzo
+        if (criteria.hasPriceFilter()) {
+            if (criteria.getMinPrice() != null) {
+                sql.append("AND l.price >= ? ");
+                parameters.add(criteria.getMinPrice());
+            }
+            if (criteria.getMaxPrice() != null) {
+                sql.append("AND l.price <= ? ");
+                parameters.add(criteria.getMaxPrice());
+            }
+        }
+
+        // Filtro per tipo
+        if (criteria.getType() != null) {
+            sql.append("AND l.type = ? ");
+            parameters.add(criteria.getType().name());
+        }
+
+        // Filtro per facoltà
+        if (criteria.getFacultyId() != null) {
+            sql.append("AND l.faculty_id = ? ");
+            parameters.add(criteria.getFacultyId());
+        }
+
+        // Ordinamento
+        sql.append("ORDER BY ");
+        if ("price_asc".equals(criteria.getSortBy())) {
+            sql.append("l.price ASC ");
+        } else if ("price_desc".equals(criteria.getSortBy())) {
+            sql.append("l.price DESC ");
+        } else {
+            sql.append("l.publishDate DESC "); // Default: più recenti
+        }
+
+        return executeFilterQuery(sql.toString(), parameters);
+    }
+    @Override
+    public BigDecimal getMaxPrice() throws SQLException {
+        String sql = "SELECT MAX(price) as max_price FROM listings WHERE status = 'AVAILABLE' AND price IS NOT NULL";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                BigDecimal maxPrice = rs.getBigDecimal("max_price");
+                return maxPrice != null ? maxPrice : BigDecimal.ZERO;
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
+    @Override
+    public BigDecimal getMinPrice() throws SQLException {
+        String sql = "SELECT MIN(price) as min_price FROM listings WHERE status = 'AVAILABLE' AND price IS NOT NULL AND price > 0";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                BigDecimal minPrice = rs.getBigDecimal("min_price");
+                return minPrice != null ? minPrice : BigDecimal.ZERO;
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
+    private List<Listing> executeFilterQuery(String sql, List<Object> parameters) throws SQLException {
+        List<Listing> listings = new ArrayList<>();
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Imposta i parametri
+            for (int i = 0; i < parameters.size(); i++) {
+                stmt.setObject(i + 1, parameters.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Listing listing = new Listing();
+                    mapResultSetToListing(rs, listing);
+                    listings.add(listing);
+                }
+            }
+        }
+
         return listings;
     }
     @Override

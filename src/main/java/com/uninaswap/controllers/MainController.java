@@ -1,9 +1,12 @@
 package com.uninaswap.controllers;
 
+import com.uninaswap.dao.CategoryDaoImpl;
 import com.uninaswap.dao.ListingDao;
 import com.uninaswap.dao.ListingDaoImpl;
+import com.uninaswap.databaseUtils.FilterCriteria;
 import com.uninaswap.model.Listing;
 import com.uninaswap.model.User;
+import com.uninaswap.services.FilterService;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
@@ -66,13 +69,9 @@ public class MainController {
     @FXML private Label maxPriceLabel;
     @FXML private Label minPriceLabel;
 
-    private static final int ALL_CATEGORIES_ID = -1;
-    private static final int BOOKS_CATEGORY_ID = 1;
-    private static final int NOTES_CATEGORY_ID = 2;
-    private static final int ELECTRONICS_CATEGORY_ID = 3;
-    private static final int FURNITURE_CATEGORY_ID = 4;
-    private static final int CLOTHING_CATEGORY_ID = 5;
-    private static final int OTHER_CATEGORY_ID = 6;
+    private final int ALL_CATEGORIES_ID = -1; //Used to represent "All filter Categories", needed to clear the arraylist and filters
+    private FilterService filterService = FilterService.getInstance();
+    private FilterCriteria currentFilter = new FilterCriteria();
     private List<Integer> selectedCategories = new ArrayList<>();
 
     @FXML
@@ -88,91 +87,65 @@ public class MainController {
         setUpCategoryButtons();
         // Select the "all conditions" option by default
         allConditionsRadio.setSelected(true);
+        initializePriceRange();
         loadAllItems();
         maxPriceLabel.setText(((int)priceSlider.getMax() + "€"));
     }
 
     private void loadAllItems() {
         try {
-            ListingDao listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findAllOtherInsertions();
-            setupItemGrid();
+            // Reset filtri
+            currentFilter = new FilterCriteria();
+            currentFilter.setSortBy("date_desc"); // Più recenti per default
 
-            if (!listings.isEmpty()) {
-                int column = 0;
-                int row = 0;
-                BigDecimal maxPriceAmongListings = BigDecimal.ZERO;
-                for (Listing listing : listings) {
-                    VBox itemCard = createItemCard(listing);
-                    itemsGrid.add(itemCard, column, row);
-
-                    column++;
-
-                    if (column > 3) {  // Massimo 4 colonne
-                        column = 0;
-                        row++;
-                    }
-                    //Cerco il massimo tra i listing
-                    if(listing.getPrice() != null && listing.getPrice().compareTo(maxPriceAmongListings) > 0) {
-                        maxPriceAmongListings = listing.getPrice();
-                    }
-                }
-                // Imposta il numero massimo dello slider
-                priceSlider.setMax(maxPriceAmongListings.doubleValue());
-
-                if (listings.size() == 1) {
-                    resultsCountLabel.setText("Trovato 1 articolo");
-                } else {
-                    resultsCountLabel.setText("Trovati " + listings.size() + " articoli");
-                }
-            } else {
-                resultsCountLabel.setText("Trovati 0 articoli");
-            }
+            List<Listing> listings = filterService.searchListings(currentFilter);
+            displayListings(listings);
 
         } catch (SQLException e) {
             resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
         }
     }
+    private void initializePriceRange() {
+        try {
+            BigDecimal maxPrice = filterService.getMaxAvailablePrice();
+            BigDecimal minPrice = filterService.getMinAvailablePrice();
+
+            priceSlider.setMax(maxPrice.doubleValue());
+            priceSlider.setMin(minPrice.doubleValue());
+            priceSlider.setValue(minPrice.doubleValue());
+
+            minPriceField.setText(minPrice.toString());
+            maxPriceField.setText(maxPrice.toString());
+            maxPriceLabel.setText(maxPrice + "€");
+            minPriceLabel.setText(minPrice + "€");
+
+        } catch (Exception e) {
+            System.err.println("Errore nell'inizializzazione del range prezzi: " + e.getMessage());
+            // Fallback ai valori di default
+            priceSlider.setMax(1000.0);
+            priceSlider.setMin(0.0);
+        }
+    }
+
     @FXML
     private void onApplyPriceButtonClicked() {
         try {
-            double min = Double.parseDouble(minPriceField.getText());
-            double max = Double.parseDouble(maxPriceField.getText());
-            ListingDao listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findByPriceRange(min, max);
-            setupItemGrid();
+            double min = Double.parseDouble(minPriceField.getText().replace(',', '.'));
+            double max = Double.parseDouble(maxPriceField.getText().replace(',', '.'));
 
-            if (!listings.isEmpty()) {
-                int column = 0;
-                int row = 0;
-                //BigDecimal maxPriceAmongListings = BigDecimal.ZERO;
-                for (Listing listing : listings) {
-                    VBox itemCard = createItemCard(listing);
-                    itemsGrid.add(itemCard, column, row);
-
-                    column++;
-
-                    if (column > 3) {  // Massimo 4 colonne
-                        column = 0;
-                        row++;
-                    }
-                }
-
-                if (listings.size() == 1) {
-                    resultsCountLabel.setText("Trovato 1 articolo");
-                } else {
-                    resultsCountLabel.setText("Trovati " + listings.size() + " articoli");
-                }
-            } else {
-                resultsCountLabel.setText("Trovati 0 articoli");
+            if (min > max) {
+                ValidationService.getInstance().showAlert(Alert.AlertType.WARNING,
+                        "Errore", "Il prezzo minimo non può essere maggiore del massimo");
+                return;
             }
+
+            currentFilter.setMinPrice(BigDecimal.valueOf(min));
+            currentFilter.setMaxPrice(BigDecimal.valueOf(max));
+            applyCurrentFilters();
 
         } catch (NumberFormatException e) {
             ValidationService.getInstance().showInvalidPriceError();
-        } catch (Exception e) {
-            resultsCountLabel.setText("Errore durante il caricamento");
-            e.printStackTrace();
         }
     }
 
@@ -219,7 +192,44 @@ public class MainController {
             itemsGrid.getColumnConstraints().add(column);
         }
     }
+    private void applyCurrentFilters() {
+        try {
+            List<Listing> listings = filterService.searchListings(currentFilter);
+            displayListings(listings);
 
+        } catch (SQLException e) {
+            resultsCountLabel.setText("Errore durante il caricamento");
+            e.printStackTrace();
+        }
+    }
+    private void displayListings(List<Listing> listings) {
+        setupItemGrid();
+
+        if (!listings.isEmpty()) {
+            int column = 0;
+            int row = 0;
+
+            for (Listing listing : listings) {
+                VBox itemCard = createItemCard(listing);
+                itemsGrid.add(itemCard, column, row);
+
+                column++;
+                if (column > 3) {
+                    column = 0;
+                    row++;
+                }
+            }
+
+            // Aggiorna contatore risultati
+            if (listings.size() == 1) {
+                resultsCountLabel.setText("Trovato 1 articolo");
+            } else {
+                resultsCountLabel.setText("Trovati " + listings.size() + " articoli");
+            }
+        } else {
+            resultsCountLabel.setText("Trovati 0 articoli");
+        }
+    }
     private VBox createItemCard(Listing listing) {
         // Create card layout
         VBox card = new VBox(10);
@@ -276,7 +286,11 @@ public class MainController {
 
     @FXML
     private void onSearchButtonClicked() {
-
+        String searchText = searchField.getText().trim();
+        if (!searchText.isEmpty()) {
+            currentFilter.setSearchText(searchText);
+            applyCurrentFilters();
+        }
     }
 
     @FXML
@@ -304,8 +318,30 @@ public class MainController {
 
     @FXML
     private void onResetFiltersClicked() {
-        // TODO: Implement reset filters logic
-        System.out.println("Reset filters button clicked");
+        // Reset UI
+        searchField.clear();
+        allCategoryButton.setSelected(true);
+        allConditionsRadio.setSelected(true);
+
+        // Reset altri toggle buttons
+        booksCategoryButton.setSelected(false);
+        electronicCategoryButton.setSelected(false);
+        clothingCategoryButton.setSelected(false);
+        notesCategoryButton.setSelected(false);
+        furnitureCategoryButton.setSelected(false);
+        otherCategoryButton.setSelected(false);
+
+        selectedCategories.clear();
+        selectedCategories.add(ALL_CATEGORIES_ID);
+
+        // Reset filtri
+        currentFilter = new FilterCriteria();
+        currentFilter.setSortBy("date_desc");
+
+        // Reset price fields
+        initializePriceRange();
+
+        applyCurrentFilters();
     }
 
     @FXML
@@ -324,6 +360,8 @@ public class MainController {
     }
 
     private void toggleButtonsSettings() {
+        CategoryDaoImpl categoryDao = new CategoryDaoImpl();
+
         allCategoryButton.setToggleGroup(null);
         booksCategoryButton.setToggleGroup(null);
         electronicCategoryButton.setToggleGroup(null);
@@ -333,12 +371,13 @@ public class MainController {
         otherCategoryButton.setToggleGroup(null);
 
         allCategoryButton.setUserData(ALL_CATEGORIES_ID);
-        booksCategoryButton.setUserData(BOOKS_CATEGORY_ID);
-        electronicCategoryButton.setUserData(ELECTRONICS_CATEGORY_ID);
-        clothingCategoryButton.setUserData(CLOTHING_CATEGORY_ID);
-        notesCategoryButton.setUserData(NOTES_CATEGORY_ID);
-        furnitureCategoryButton.setUserData(FURNITURE_CATEGORY_ID);
-        otherCategoryButton.setUserData(OTHER_CATEGORY_ID);
+        booksCategoryButton.setUserData(categoryDao.getCategoryIdByName("Libri"));
+        electronicCategoryButton.setUserData(categoryDao.getCategoryIdByName("Elettronica"));
+        clothingCategoryButton.setUserData(categoryDao.getCategoryIdByName("Abbigliamento"));
+        notesCategoryButton.setUserData(categoryDao.getCategoryIdByName("Appunti"));
+        furnitureCategoryButton.setUserData(categoryDao.getCategoryIdByName("Arredamento"));
+        otherCategoryButton.setUserData(categoryDao.getCategoryIdByName("Altro"));
+
     }
 
     private void setUpCategoryButtons() {
@@ -362,17 +401,17 @@ public class MainController {
 
     @FXML
     private void onCategoryButtonClicked(ToggleButton button) {
-        Integer categoryId = (Integer) button.getUserData();
+        CategoryDaoImpl categoryDao = new CategoryDaoImpl();
 
-        if (categoryId == ALL_CATEGORIES_ID) {
-            // se "tutti" è selezionato, deseleziona gli altri
+        String categoryName = button.getText();
+        if (categoryName.equals("Tutto")) {
+            // se "tuttO" è selezionato, deseleziona gli altri
             booksCategoryButton.setSelected(false);
             electronicCategoryButton.setSelected(false);
             clothingCategoryButton.setSelected(false);
             notesCategoryButton.setSelected(false);
             furnitureCategoryButton.setSelected(false);
             otherCategoryButton.setSelected(false);
-
             selectedCategories.clear();
             selectedCategories.add(ALL_CATEGORIES_ID);
             allCategoryButton.setSelected(true);
@@ -383,9 +422,9 @@ public class MainController {
                     selectedCategories.remove(Integer.valueOf(ALL_CATEGORIES_ID));
                     allCategoryButton.setSelected(false);
                 }
-                selectedCategories.add(categoryId);
+                selectedCategories.add(categoryDao.getCategoryIdByName(categoryName));
             } else {
-                selectedCategories.remove(categoryId);
+                selectedCategories.remove(categoryDao.getCategoryIdByName(categoryName));
 
                 // se tutte le categorie sono deselezionate, aggiungi "tutti" e selezionalo
                 if (selectedCategories.isEmpty()) {
@@ -400,22 +439,12 @@ public class MainController {
 
     // Add new filter method for multiple categories
     private void filterItemsByMultipleCategories() {
-        try {
-            ListingDao listingDao = new ListingDaoImpl();
-            List<Listing> listings;
-
-            if (!selectedCategories.contains(ALL_CATEGORIES_ID)) {
-                listings = findByMultipleCategories(selectedCategories);
-            }
-            else
-                listings = listingDao.findAllOtherInsertions();
-
-            setupItemGrid();
-            displayFilteredListings(listings);
-        } catch (SQLException e) {
-            resultsCountLabel.setText("Errore durante il caricamento");
-            e.printStackTrace();
+        if (selectedCategories.contains(ALL_CATEGORIES_ID)) {
+            currentFilter.setCategoryIds(null);
+        } else {
+            currentFilter.setCategoryIds(new ArrayList<>(selectedCategories));
         }
+        applyCurrentFilters();
     }
 
     //meetodo per il database che cerca per più categorie
@@ -467,7 +496,15 @@ public class MainController {
 
     @FXML
     private void onSortChanged() {
-        System.out.println("Ordine cambiato a: " + sortComboBox.getValue());
+        String selectedSort = sortComboBox.getValue();
+        String sortBy = switch (selectedSort) {
+            case "Prezzo crescente" -> "price_asc";
+            case "Prezzo decrescente" -> "price_desc";
+            default -> "date_desc";
+        };
+
+        currentFilter.setSortBy(sortBy);
+        applyCurrentFilters();
     }
 
     @FXML
