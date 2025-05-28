@@ -112,13 +112,14 @@ public class ListingDaoImpl implements ListingDao {
         List<Listing> listings = new ArrayList<>();
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +
                 "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE l.category_id = ? AND l.status = 'AVAILABLE' " +
+                "WHERE l.category_id = ? AND l.status = 'AVAILABLE' AND l.userid != ? " +
                 "ORDER BY l.publishDate DESC";
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, categoryId);
+            stmt.setInt(2, UserSession.getInstance().getCurrentUser().getId());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {

@@ -72,10 +72,10 @@
             <HBox spacing="5" styleClass="category-nav">
                 <ToggleButton fx:id="allCategoryButton" selected="true" styleClass="category-button" text="Tutto" />
                 <ToggleButton fx:id="booksCategoryButton" styleClass="category-button" text="Libri" />
-                <ToggleButton fx:id="electronicsCategoryButton" styleClass="category-button" text="Elettronica" />
-                <ToggleButton fx:id="clothingCategoryButton" styleClass="category-button" text="Abbigliamento" />
                 <ToggleButton fx:id="notesCategoryButton" styleClass="category-button" text="Appunti" />
-                <ToggleButton fx:id="toolsCategoryButton" styleClass="category-button" text="Strumenti" />
+                <ToggleButton fx:id="electronicCategoryButton" styleClass="category-button" text="Elettronica" />
+                <ToggleButton fx:id="furnitureCategoryButton" styleClass="category-button" text="Arredamento" />
+                <ToggleButton fx:id="clothingCategoryButton" styleClass="category-button" text="Abbigliamento" />
                 <ToggleButton fx:id="otherCategoryButton" styleClass="category-button" text="Altro" />
                 <padding>
                     <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />

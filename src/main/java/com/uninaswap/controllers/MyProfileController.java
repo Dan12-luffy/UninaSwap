@@ -1,13 +1,14 @@
 package com.uninaswap.controllers;
 
 import com.uninaswap.dao.ListingDaoImpl;
-import com.uninaswap.dao.UserDao;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Faculty;
 import com.uninaswap.model.Listing;
+import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.User;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
+import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,7 +20,6 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -78,7 +78,7 @@ public class MyProfileController {
             facultyComboBox.getItems().add(faculty.getFacultyName());
         }
         facultyComboBox.setValue(currentUser.getFaculty());
-
+        setTotalAdsLabel();
         // Load all listings into the userAdsContainer
         loadUserListings();
     }
@@ -181,6 +181,23 @@ public class MyProfileController {
         return card;
     }
 
+    private void setTotalAdsLabel(){
+        try {
+            List<Listing> listingDao = new ListingDaoImpl().findMyInsertions();
+            int totalInsertions = listingDao.size();
+            int temp = 0;
+            for(Listing l : listingDao){
+                if(l.getStatus().equals(ListingStatus.AVAILABLE))
+                    temp++;
+            }
+            this.totalAdsLabel.setText(String.valueOf(totalInsertions));
+            this.activeSalesLabel.setText(String.valueOf(temp));
+        }catch (Exception e){
+            this.totalAdsLabel.setText("0");
+            this.activeSalesLabel.setText("0");
+        }
+    }
+
     private void showItemDetails(MouseEvent event, Listing listing) {
         NavigationService.getInstance().navigateToProductDetailsView(event, listing);
     }
@@ -226,6 +243,7 @@ public class MyProfileController {
 
     @FXML
     public void handleLogout(ActionEvent event) {
+        ValidationService.getInstance().showLogoutSuccess();
         UserSession.getInstance().logout();
         NavigationService.getInstance().navigateToLoginView(event);
     }
