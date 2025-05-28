@@ -17,6 +17,7 @@ public class NavigationService {
 
     private NavigationService(){
     }
+
     public static NavigationService getInstance() {
         return instance;
     }
