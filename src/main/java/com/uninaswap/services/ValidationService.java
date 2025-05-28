@@ -34,9 +34,11 @@ public class ValidationService {
     public void showLoginError() {
         showAlert(Alert.AlertType.ERROR,"Login Fallito", "Username o password errati.");
     }
+
     public void showRegistrationFieldsEmptyError(){
         showAlert(Alert.AlertType.ERROR, "Errore", "Compila tutti i campi.");
     }
+
     public void showRegistrationError() {
         showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Registrazione Fallita", "Impossibile completare la registrazione.");
     }
@@ -67,7 +69,6 @@ public class ValidationService {
     public void showInvalidPriceError() {
         showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Il prezzo deve essere un numero valido.");
     }
-
     public void showNewInsertionError() {
         showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "L'inserimento della nuova inserzione non è andato a buon fine.");
     }

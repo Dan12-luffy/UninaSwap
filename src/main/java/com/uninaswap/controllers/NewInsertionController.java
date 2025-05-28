@@ -50,9 +50,9 @@ public class NewInsertionController {
     @FXML private ImageView logoImage;
     @FXML private ImageView mainImagePreview;
 
-    private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path portatile danilo
+    //private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path portatile danilo
     //private final String defaultImagePath = "file:/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png";
-    //private final String defaultImagePath = "file:/home/drc/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path fisso danilo// Default image path fisso danilo
+    private final String defaultImagePath = "file:/home/drc/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path fisso danilo// Default image path fisso danilo
     private File selectedImageFile;
 
     @FXML

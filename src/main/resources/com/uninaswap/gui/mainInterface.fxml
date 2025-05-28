@@ -132,22 +132,6 @@
                     </VBox>
                 </TitledPane>
 
-                <TitledPane expanded="false" styleClass="filter-section" text="Autore">
-                    <VBox spacing="8">
-                        <CheckBox fx:id="studentsCheck" text="Studenti" />
-                        <CheckBox fx:id="professorsCheck" text="Professori" />
-                        <CheckBox fx:id="exStudentsCheck" text="Ex studenti" />
-                    </VBox>
-                </TitledPane>
-
-                <TitledPane expanded="false" styleClass="filter-section" text="Disponibilità">
-                    <VBox spacing="8">
-                        <CheckBox fx:id="availableNowCheck" text="Disponibile subito" />
-                        <CheckBox fx:id="reservableCheck" text="Prenotabile" />
-                        <CheckBox fx:id="deliveryCheck" text="Consegna inclusa" />
-                    </VBox>
-                </TitledPane>
-
                 <!-- Pulsante Applica -->
                 <Button fx:id="applyFilters" styleClass="apply-button" text="Applica Filtri" />
 
@@ -200,5 +184,4 @@
             </ScrollPane>
         </VBox>
     </center>
-
 </BorderPane>

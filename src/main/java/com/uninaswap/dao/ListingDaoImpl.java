@@ -143,8 +143,36 @@ public class ListingDaoImpl implements ListingDao {
         }
         return listings;
     }
+    public List<Listing> findByStatus(String status) throws SQLException {
+        List<Listing> listings = new ArrayList<>();
+        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
+                "LEFT JOIN category c ON l.category_id = c.category_id " +
+                "WHERE l.status = ? AND l.userid != ? " +
+                "ORDER BY l.publishDate DESC";
 
-    //TODO implementare la ricerca per prezzo
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, UserSession.getInstance().getCurrentUser().getId());
+            executeQueryAndCreateTheList(listings, stmt);
+        }
+        return listings;
+    }
+    public List<Listing> findByFaculty(int facultyId) throws SQLException {
+        List<Listing> listings = new ArrayList<>();
+        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
+                "LEFT JOIN category c ON l.category_id = c.category_id " +
+                "WHERE l.faculty_id = ? AND l.status = 'AVAILABLE' AND l.userid != ? " +
+                "ORDER BY l.publishDate DESC";
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, facultyId);
+            stmt.setInt(2, UserSession.getInstance().getCurrentUser().getId());
+            executeQueryAndCreateTheList(listings, stmt);
+        }
+        return listings;
+    }
     public List<Listing> findByPriceRange(double minPrice, double maxPrice) throws SQLException {
         List<Listing> listings = new ArrayList<>();
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +

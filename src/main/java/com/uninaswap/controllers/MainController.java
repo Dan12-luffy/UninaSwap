@@ -175,6 +175,7 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
     private void displayFilteredListings(List<Listing> listings) {
         if (!listings.isEmpty()) {
             int column = 0;
@@ -463,11 +464,6 @@ public class MainController {
     @FXML
     private void onUserItemsButtonClicked() {
         System.out.println("My items button clicked");
-    }
-
-    @FXML
-    private void onCategoryButtonClicked(ActionEvent event) {
-
     }
 
     @FXML
