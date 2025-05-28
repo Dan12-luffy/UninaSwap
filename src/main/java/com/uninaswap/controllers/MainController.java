@@ -203,7 +203,6 @@ public class MainController {
 
     private void setupItemGrid() {
         itemsGrid.getChildren().clear();
-
         itemsGrid.setHgap(12);
         itemsGrid.setVgap(20);
         itemsGrid.getColumnConstraints().clear();
