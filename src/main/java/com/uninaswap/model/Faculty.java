@@ -10,7 +10,7 @@ public enum Faculty {
     BIOLOGIA("Biologia"),
     FILOSOFIA("Filosofia"),
     GEOGRAFIA("Geografia"),
-    PSICOLOGIA("Psychologia"),
+    PSICOLOGIA("Psicologia"),
     CHIMICA("Chimica"),
     ASTRONOMIA("Astronomia"),
     TURISMO("Turismo"),

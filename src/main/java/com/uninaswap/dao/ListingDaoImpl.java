@@ -81,6 +81,7 @@ public class ListingDaoImpl implements ListingDao {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT l.*, c.name as category_name FROM listings l ");
         sql.append("LEFT JOIN category c ON l.category_id = c.category_id ");
+        sql.append("LEFT JOIN users u ON l.userId = u.userId ");
         sql.append("WHERE 1=1 ");
 
         List<Object> parameters = new ArrayList<>();
@@ -138,10 +139,16 @@ public class ListingDaoImpl implements ListingDao {
             parameters.add(criteria.getType().name());
         }
 
-        // Filtro per facoltà
-        if (criteria.getFacultyId() != null) {
-            sql.append("AND l.faculty_id = ? ");
-            parameters.add(criteria.getFacultyId());
+        if (criteria.hasFacultyFilter()) {
+            sql.append("AND u.faculty IN (");
+            for (int i = 0; i < criteria.getFacultyNames().size(); i++) {
+                sql.append("?");
+                if (i < criteria.getFacultyNames().size() - 1) {
+                    sql.append(",");
+                }
+            }
+            sql.append(") ");
+            parameters.addAll(criteria.getFacultyNames());
         }
 
         // Ordinamento

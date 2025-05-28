@@ -123,17 +123,26 @@
 
                 <TitledPane expanded="false" styleClass="filter-section" text="Facoltà">
                     <VBox spacing="8">
-                        <CheckBox fx:id="engineeringCheck" text="Ingegneria" />
-                        <CheckBox fx:id="economicsCheck" text="Economia" />
+                        <CheckBox fx:id="computerScienceCheck" text="Informatica" />
                         <CheckBox fx:id="scienceCheck" text="Scienze" />
+                        <CheckBox fx:id="mathCheck" text="Matematica" />
+                        <CheckBox fx:id="economyCheck" text="Economia" />
+                        <CheckBox fx:id="artCheck" text="Arte" />
                         <CheckBox fx:id="medicineCheck" text="Medicina" />
-                        <CheckBox fx:id="literatureCheck" text="Lettere" />
-                        <CheckBox fx:id="lawCheck" text="Giurisprudenza" />
+                  <CheckBox fx:id="biologyCheck" text="Biologia" />
+                  <CheckBox fx:id="philosophyCheck" text="Filosofia" />
+                  <CheckBox fx:id="geographyCheck" text="Geografia" />
+                  <CheckBox fx:id="psicologyCheck" text="Psicologia" />
+                  <CheckBox fx:id="chemistryCheck" text="Chimica" />
+                  <CheckBox fx:id="astronomyCheck" text="Astronomia" />
+                  <CheckBox fx:id="tourismCheck" text="Turismo" />
+                  <CheckBox fx:id="linguisticsCheck" text="Linguistica" />
+                  <CheckBox fx:id="musicCheck" text="Musica" />
                     </VBox>
                 </TitledPane>
 
                 <!-- Pulsante Applica -->
-                <Button fx:id="applyFilters" styleClass="apply-button" text="Applica Filtri" />
+                <Button fx:id="applyFilters" onAction="#onApplyFiltersClicked" styleClass="apply-button" text="Applica Filtri" />
 
                 <Separator />
 

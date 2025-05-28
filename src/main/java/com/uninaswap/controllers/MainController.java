@@ -59,7 +59,6 @@ public class MainController {
     @FXML private TextField maxPriceField;
     @FXML private Button applyPriceButton;
     @FXML private Button loadMoreButton;
-    @FXML private Button userItemsButton;
     @FXML private ComboBox<String> sortComboBox;
     @FXML private ToggleButton listViewButton;
     @FXML private ToggleButton gridViewButton;
@@ -68,6 +67,23 @@ public class MainController {
     @FXML private Label resultsCountLabel;
     @FXML private Label maxPriceLabel;
     @FXML private Label minPriceLabel;
+    @FXML private CheckBox computerScienceCheck;
+    @FXML private CheckBox mathCheck;
+    @FXML private CheckBox economyCheck;
+    @FXML private CheckBox artCheck;
+    @FXML private CheckBox medicineCheck;
+    @FXML private CheckBox biologyCheck;
+    @FXML private CheckBox philosophyCheck;
+    @FXML private CheckBox geographyCheck;
+    @FXML private CheckBox psicologyCheck;
+    @FXML private CheckBox chemistryCheck;
+    @FXML private CheckBox astronomyCheck;
+    @FXML private CheckBox tourismCheck;
+    @FXML private CheckBox linguisticsCheck;
+    @FXML private CheckBox musicCheck;
+
+
+
 
     private final int ALL_CATEGORIES_ID = -1; //Used to represent "All filter Categories", needed to clear the arraylist and filters
     private FilterService filterService = FilterService.getInstance();
@@ -312,8 +328,50 @@ public class MainController {
 
     @FXML
     private void onApplyFiltersClicked() {
-        // TODO: Implement apply filters logic
-        System.out.println("Apply filters button clicked");
+        // Get selected condition
+        /*if (likeNewRadio.isSelected()) {
+            currentFilter.setStatus("LIKE_NEW");
+        } else if (excellentRadio.isSelected()) {
+            currentFilter.setStatus("EXCELLENT");
+        } else if (goodRadio.isSelected()) {
+            currentFilter.setStatus("GOOD");
+        } else {
+            // All conditions
+            currentFilter.setStatus(null);
+            }
+            }
+        */
+
+        // Get faculty filter values
+        List<String> selectedFaculties = new ArrayList<>();
+        if (computerScienceCheck.isSelected()) selectedFaculties.add("Informatica");
+        if (mathCheck.isSelected()) selectedFaculties.add("Matematica");
+        if (economyCheck.isSelected()) selectedFaculties.add("Economia");
+        if (artCheck.isSelected()) selectedFaculties.add("Arte");
+        if (medicineCheck.isSelected()) selectedFaculties.add("Medicina");
+        if (biologyCheck.isSelected()) selectedFaculties.add("Biologia");
+        if (philosophyCheck.isSelected()) selectedFaculties.add("Filosofia");
+        if (geographyCheck.isSelected()) selectedFaculties.add("Geografia");
+        if (psicologyCheck.isSelected()) selectedFaculties.add("Psicologia");
+        if (chemistryCheck.isSelected()) selectedFaculties.add("Chimica");
+        if (astronomyCheck.isSelected()) selectedFaculties.add("Astronomia");
+        if (tourismCheck.isSelected()) selectedFaculties.add("Turismo");
+        if (linguisticsCheck.isSelected()) selectedFaculties.add("Linguistica");
+        if (musicCheck.isSelected()) selectedFaculties.add("Musica");
+
+        // Set faculty filter if any selected
+        if (!selectedFaculties.isEmpty()) {
+            currentFilter.setFacultyNames(selectedFaculties);
+        } else {
+            currentFilter.setFacultyNames(null);
+        }
+
+
+        // Add current user ID to exclude their listings
+        currentFilter.setExcludeUserId(UserSession.getInstance().getCurrentUser().getId());
+
+        // Apply the filters
+        applyCurrentFilters();
     }
 
     @FXML
