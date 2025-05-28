@@ -1,5 +1,6 @@
 package com.uninaswap.dao;
 
+import com.uninaswap.model.Category;
 import com.uninaswap.model.Listing;
 import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.typeListing;
@@ -11,14 +12,11 @@ import java.util.List;
 
 public class ListingDaoImpl implements ListingDao {
 
-    private static final String DEFAULT_CATEGORY = "Altro";
-
     @Override
     public void insert(Listing listing) {
         String sql = "INSERT INTO listings (title, imageUrl, description, type, price, status, publishDate, userId, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             populateListingStatement(stmt, listing);
             stmt.executeUpdate();
 
@@ -126,10 +124,8 @@ public class ListingDaoImpl implements ListingDao {
                     try {
                         Listing listing = new Listing();
                         mapResultSetToListing(rs, listing);
-
-                        // Override the category from mapResultSetToListing with the joined category name
                         String categoryName = rs.getString("category_name");
-                        listing.setCategory(categoryName != null ? categoryName : DEFAULT_CATEGORY);
+                        listing.setCategory(categoryName != null ? categoryName : "Altro");
 
                         listings.add(listing);
                     } catch (Exception e) {
@@ -259,25 +255,9 @@ public class ListingDaoImpl implements ListingDao {
         stmt.setDate(7, new java.sql.Date(listing.getPublishDate().getTime()));
         stmt.setInt(8, listing.getUserId());
 
-        // Convert category name to category ID
-        int categoryId = getCategoryIdByName(listing.getCategory());
+        CategoryDaoImpl category = new CategoryDaoImpl();
+        int categoryId = category.getCategoryIdByName(listing.getCategory());
         stmt.setInt(9, categoryId);
-    }
-
-    /**
-     * Converts a category name to its corresponding ID in the database
-     */
-    private int getCategoryIdByName(String categoryName) {
-        // Use a map or database lookup to convert category name to ID
-        switch (categoryName) {
-            case "Libri": return 1;
-            case "Appunti": return 2;
-            case "Elettronica": return 3;
-            case "Arredamento": return 4;
-            case "Abbigliamento": return 5;
-            case "Altro":
-            default: return 6;
-        }
     }
 
     private void mapResultSetToListing(ResultSet rs, Listing listing) throws SQLException {
