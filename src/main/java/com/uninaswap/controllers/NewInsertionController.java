@@ -50,9 +50,9 @@ public class NewInsertionController {
     @FXML private ImageView logoImage;
     @FXML private ImageView mainImagePreview;
 
-    //private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path portatile danilo
+    private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path portatile danilo
     //private final String defaultImagePath = "file:/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png";
-    private final String defaultImagePath = "file:/home/drc/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path fisso danilo// Default image path fisso danilo
+    //private final String defaultImagePath = "file:/home/drc/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path fisso danilo// Default image path fisso danilo
     private File selectedImageFile;
 
     @FXML
@@ -91,7 +91,7 @@ public class NewInsertionController {
     private void handleSave(ActionEvent event) {
         try {
             if (titleField.getText().isEmpty() || descriptionArea.getText().isEmpty() ) {
-                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore di validazione", "Titolo e descrizione sono campi obbligatori.");
+                ValidationService.getInstance().showNewInsertionMissingCampsError();
                 return;
             }
 
@@ -100,8 +100,7 @@ public class NewInsertionController {
                 try {
                     price = BigDecimal.valueOf(Double.parseDouble(priceField.getText().replace(',', '.')));
                 } catch (NumberFormatException e) {
-                    ValidationService.getInstance().showAlert(Alert.AlertType.ERROR,
-                            "Errore di validazione", "Il formato del prezzo non è valido.");
+                    ValidationService.getInstance().showPriceFormatError();
                     return;
                 }
             }
@@ -119,7 +118,7 @@ public class NewInsertionController {
 
             ListingDao listingDao = new ListingDaoImpl();
             listingDao.insert(listing);
-            ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Inserzione salvata", "L'inserzione è stata salvata con successo!");
+            ValidationService.getInstance().showNewInsertionSuccess();
             NavigationService.getInstance().navigateToMainView(event);
 
         } catch (Exception e) {

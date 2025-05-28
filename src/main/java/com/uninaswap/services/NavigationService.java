@@ -117,4 +117,5 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
+
 }

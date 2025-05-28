@@ -196,8 +196,8 @@ public class MyProfileController {
         alert.setTitle("Conferma eliminazione");
         alert.setHeaderText("Eliminare l'annuncio?");
         alert.setContentText("Stai per eliminare l'annuncio: " + listing.getTitle() + "\nL'operazione non può essere annullata.");
-
         Optional<ButtonType> result = alert.showAndWait();
+
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 ListingDaoImpl listingDao = new ListingDaoImpl();

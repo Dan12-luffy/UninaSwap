@@ -71,6 +71,12 @@ public class ValidationService {
     public void showNewInsertionError() {
         showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "L'inserimento della nuova inserzione non è andato a buon fine.");
     }
+    public void showNewInsertionMissingCampsError() {
+        showAlert(Alert.AlertType.ERROR, "Errore di validazione", "Titolo e descrizione sono campi obbligatori.");
+    }
+    public void showPriceFormatError() {
+        showAlert(Alert.AlertType.ERROR,"Errore di validazione", "Il formato del prezzo non è valido.");
+    }
 
 
     public void showAlert(javafx.scene.control.Alert.AlertType alertType, String title, String message) {
@@ -79,5 +85,9 @@ public class ValidationService {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void showNewInsertionSuccess() {
+        showAlert(Alert.AlertType.INFORMATION, "Inserzione salvata", "L'inserzione è stata salvata con successo!");
     }
 }
