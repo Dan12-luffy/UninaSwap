@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import java.io.File;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,6 +73,7 @@ public class MainController {
     private static final int NOTES_CATEGORY_ID = 4;
     private static final int TOOLS_CATEGORY_ID = 5;
     private static final int OTHER_CATEGORY_ID = 6;
+    private List<Integer> selectedCategories = new ArrayList<>();
 
     @FXML
     private void initialize() {
@@ -173,6 +175,7 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
     private void setupItemGrid() {
         itemsGrid.getChildren().clear();
 
@@ -285,6 +288,7 @@ public class MainController {
         NavigationService.getInstance().navigateToMyProfileView(event);
 
     }
+
     @FXML
     private void sliderPriceSelection() {
         double minPrice = priceSlider.getValue();
@@ -294,17 +298,14 @@ public class MainController {
         maxPriceField.setText(String.valueOf((int)(maxPrice)));
     }
 
-    private void setUpCategoryButtons(){
-
-        categoryTogglegroup = new ToggleGroup();
-
-        allCategoryButton.setToggleGroup(categoryTogglegroup);
-        booksCategoryButton.setToggleGroup(categoryTogglegroup);
-        electronicsCategoryButton.setToggleGroup(categoryTogglegroup);
-        clothingCategoryButton.setToggleGroup(categoryTogglegroup);
-        notesCategoryButton.setToggleGroup(categoryTogglegroup);
-        toolsCategoryButton.setToggleGroup(categoryTogglegroup);
-        otherCategoryButton.setToggleGroup(categoryTogglegroup);
+    private void toggleButtonsSettings() {
+        allCategoryButton.setToggleGroup(null);
+        booksCategoryButton.setToggleGroup(null);
+        electronicsCategoryButton.setToggleGroup(null);
+        clothingCategoryButton.setToggleGroup(null);
+        notesCategoryButton.setToggleGroup(null);
+        toolsCategoryButton.setToggleGroup(null);
+        otherCategoryButton.setToggleGroup(null);
 
         allCategoryButton.setUserData(ALL_CATEGORIES_ID);
         booksCategoryButton.setUserData(BOOKS_CATEGORY_ID);
@@ -313,37 +314,96 @@ public class MainController {
         notesCategoryButton.setUserData(NOTES_CATEGORY_ID);
         toolsCategoryButton.setUserData(TOOLS_CATEGORY_ID);
         otherCategoryButton.setUserData(OTHER_CATEGORY_ID);
-
-        allCategoryButton.setSelected(true);
-
-        categoryTogglegroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue == null) {
-                allCategoryButton.setSelected(true);
-            }else{
-                filterItemsByCategory((Integer) newValue.getUserData());
-            }
-        });
     }
-    private void filterItemsByCategory(int categoryId){
-        try{
+
+    private void setUpCategoryButtons() {
+
+        toggleButtonsSettings();
+
+        // "tutti" è selezionato di default
+        allCategoryButton.setSelected(true);
+        selectedCategories.add(ALL_CATEGORIES_ID);
+
+        // do un azione a ciascun bottone
+        allCategoryButton.setOnAction(e -> onCategoryButtonClicked(allCategoryButton));
+        booksCategoryButton.setOnAction(e -> onCategoryButtonClicked(booksCategoryButton));
+        electronicsCategoryButton.setOnAction(e -> onCategoryButtonClicked(electronicsCategoryButton));
+        clothingCategoryButton.setOnAction(e -> onCategoryButtonClicked(clothingCategoryButton));
+        notesCategoryButton.setOnAction(e -> onCategoryButtonClicked(notesCategoryButton));
+        toolsCategoryButton.setOnAction(e -> onCategoryButtonClicked(toolsCategoryButton));
+        otherCategoryButton.setOnAction(e -> onCategoryButtonClicked(otherCategoryButton));
+    }
+
+
+    @FXML
+    private void onCategoryButtonClicked(ToggleButton button) {
+        Integer categoryId = (Integer) button.getUserData();
+
+        if (categoryId == ALL_CATEGORIES_ID) {
+            // se "tutti" è selezionato, deseleziona gli altri
+            booksCategoryButton.setSelected(false);
+            electronicsCategoryButton.setSelected(false);
+            clothingCategoryButton.setSelected(false);
+            notesCategoryButton.setSelected(false);
+            toolsCategoryButton.setSelected(false);
+            otherCategoryButton.setSelected(false);
+
+            selectedCategories.clear();
+            selectedCategories.add(ALL_CATEGORIES_ID);
+            allCategoryButton.setSelected(true);
+        } else {
+            if (button.isSelected()) {
+                //se una specifica categoria è selezionata, rimuovi "tutti" se è selezionato
+                if (selectedCategories.contains(ALL_CATEGORIES_ID)) {
+                    selectedCategories.remove(Integer.valueOf(ALL_CATEGORIES_ID));
+                    allCategoryButton.setSelected(false);
+                }
+                selectedCategories.add(categoryId);
+            } else {
+                selectedCategories.remove(categoryId);
+
+                // se tutte le categorie sono deselezionate, aggiungi "tutti" e selezionalo
+                if (selectedCategories.isEmpty()) {
+                    selectedCategories.add(ALL_CATEGORIES_ID);
+                    allCategoryButton.setSelected(true);
+                }
+            }
+        }
+
+        filterItemsByMultipleCategories();
+    }
+
+    // Add new filter method for multiple categories
+    private void filterItemsByMultipleCategories() {
+        try {
             ListingDao listingDao = new ListingDaoImpl();
-            List <Listing> listings;
+            List<Listing> listings;
 
-
-            if(categoryId == ALL_CATEGORIES_ID) {
+            if (selectedCategories.contains(ALL_CATEGORIES_ID)) {
                 listings = listingDao.findAllOtherInsertions();
             } else {
-                listings = listingDao.findByCategory(categoryId);
+                listings = findByMultipleCategories(selectedCategories);
             }
+
             setupItemGrid();
             displayFilteredListings(listings);
-
-        }catch(SQLException e){
+        } catch (SQLException e) {
             resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
         }
     }
 
+    //meetodo per il database che cerca per più categorie
+    private List<Listing> findByMultipleCategories(List<Integer> categoryIds) throws SQLException {
+        List<Listing> allListings = new ArrayList<>();
+        ListingDao listingDao = new ListingDaoImpl();
+
+        for (Integer categoryId : categoryIds) {
+            allListings.addAll(listingDao.findByCategory(categoryId));
+        }
+
+        return allListings;
+    }
     private void displayFilteredListings(List<Listing> listings) {
         if (!listings.isEmpty()) {
             int column = 0;
@@ -420,6 +480,7 @@ public class MainController {
         boolean isList = listViewButton.isSelected();
         System.out.println("View changed to: " + (isList ? "List" : "Grid"));
     }
+
     private void conditionToggleGroupSettings(){
         ToggleGroup conditionToggleGroup = new ToggleGroup();
         allConditionsRadio.setToggleGroup(conditionToggleGroup);
