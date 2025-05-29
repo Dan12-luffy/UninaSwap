@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -24,7 +28,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" styleClass="profile-container" stylesheets="@../guiCSS/myProfileInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.MyProfileController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" styleClass="profile-container" stylesheets="@../guiCSS/myProfileInterface2.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.MyProfileController">
 
     <top>
         <VBox spacing="0">
@@ -147,7 +151,7 @@
 
                         <!-- Colonna destra - Tabs con informazioni dettagliate -->
                         <VBox styleClass="profile-main-content" HBox.hgrow="ALWAYS">
-                            <TabPane fx:id="profileTabPane" styleClass="profile-tabs" tabClosingPolicy="UNAVAILABLE">
+                            <TabPane fx:id="profileTabPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="602.0" prefWidth="633.0" styleClass="profile-tabs" tabClosingPolicy="UNAVAILABLE">
                                 <!-- Tab Informazioni Personali -->
                                 <Tab styleClass="profile-tab" text="👤 Informazioni">
                                     <VBox spacing="20">
@@ -219,12 +223,97 @@
                                             <Button fx:id="newAdButton" onAction="#makeNewInsertion" styleClass="new-ad-button" text="Nuovo Annuncio" />
                                         </HBox>
 
-                                        <ScrollPane fitToWidth="true" prefHeight="621.0" prefWidth="631.0" styleClass="ads-scroll-pane">
+                                        <ScrollPane fitToWidth="true" prefHeight="400.0" styleClass="ads-scroll-pane">
                                             <VBox fx:id="userAdsContainer" spacing="10" styleClass="ads-container">
                                                 <!-- Gli annunci verranno caricati dinamicamente qui -->
                                                 <Label styleClass="placeholder-text" text="I tuoi annunci appariranno qui" />
                                             </VBox>
                                         </ScrollPane>
+                                    </VBox>
+                                </Tab>
+
+                                <!-- Tab Statistiche Offerte -->
+                                <Tab styleClass="profile-tab" text="📊 Statistiche">
+                                    <VBox spacing="15">
+                                        <padding>
+                                            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                        </padding>
+
+                                        <!-- Statistiche numeriche -->
+                                        <HBox spacing="15" styleClass="profile-stats-box">
+                                            <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
+                                                <Label styleClass="profile-stat-title" text="Offerte Totali" />
+                                                <Label fx:id="totalOffersStat" styleClass="profile-stat-number" text="0" />
+                                            </VBox>
+
+                                            <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
+                                                <Label styleClass="profile-stat-title" text="Offerte Accettate" />
+                                                <Label fx:id="acceptedOffersStat" styleClass="profile-stat-number" text="0" />
+                                            </VBox>
+
+                                            <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
+                                                <Label styleClass="profile-stat-title" text="Offerte in Attesa" />
+                                                <Label fx:id="pendingOffersStat" styleClass="profile-stat-number" text="0" />
+                                            </VBox>
+
+                                            <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
+                                                <Label styleClass="profile-stat-title" text="Offerte Rifiutate" />
+                                                <Label fx:id="rejectedOffersStat" styleClass="profile-stat-number" text="0" />
+                                            </VBox>
+                                        </HBox>
+
+                                        <Separator styleClass="profile-separator" />
+
+                                        <!-- Grafici -->
+                                        <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="216.0" prefWidth="603.0" spacing="15" VBox.vgrow="ALWAYS">
+                                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                                <Label styleClass="chart-section-title" text="Distribuzione Offerte per Tipologia" />
+                                                <StackPane maxHeight="180" minHeight="180" styleClass="profile-chart-container" VBox.vgrow="ALWAYS">
+                                                    <PieChart fx:id="offerTypesPieChart" legendVisible="true" styleClass="profile-pie-chart" />
+                                                </StackPane>
+                                            </VBox>
+
+                                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                                <Label styleClass="chart-section-title" text="Offerte Accettate per Tipologia" />
+                                                <StackPane maxHeight="180" minHeight="180" styleClass="profile-chart-container" VBox.vgrow="ALWAYS">
+                                                    <BarChart fx:id="acceptedOffersBarChart" styleClass="profile-bar-chart">
+                                                        <xAxis>
+                                                            <CategoryAxis side="BOTTOM" styleClass="profile-chart-axis" />
+                                                        </xAxis>
+                                                        <yAxis>
+                                                            <NumberAxis side="LEFT" styleClass="profile-chart-axis" />
+                                                        </yAxis>
+                                                    </BarChart>
+                                                </StackPane>
+                                            </VBox>
+                                        </HBox>
+
+                                        <Separator styleClass="profile-separator" />
+
+                                        <!-- Statistiche prezzi -->
+                                        <VBox spacing="12" styleClass="profile-price-stats">
+                                            <Label styleClass="chart-section-title" text="💰 Statistiche di Prezzo - Offerte Accettate" />
+
+                                            <HBox spacing="15">
+                                                <VBox spacing="5" styleClass="profile-price-card" HBox.hgrow="ALWAYS">
+                                                    <Label styleClass="profile-price-title" text="Prezzo Medio" />
+                                                    <Label fx:id="avgPriceLabel" styleClass="profile-price-value" text="€0.00" />
+                                                </VBox>
+
+                                                <VBox spacing="5" styleClass="profile-price-card" HBox.hgrow="ALWAYS">
+                                                    <Label styleClass="profile-price-title" text="Prezzo Minimo" />
+                                                    <Label fx:id="minPriceLabel" styleClass="profile-price-value" text="€0.00" />
+                                                </VBox>
+
+                                                <VBox spacing="5" styleClass="profile-price-card" HBox.hgrow="ALWAYS">
+                                                    <Label styleClass="profile-price-title" text="Prezzo Massimo" />
+                                                    <Label fx:id="maxPriceLabel" styleClass="profile-price-value" text="€0.00" />
+                                                </VBox>
+                                            </HBox>
+                                        </VBox>
+
+                                        <!-- Pulsanti statistiche -->
+                                        <HBox alignment="CENTER_RIGHT" spacing="10" />
                                     </VBox>
                                 </Tab>
 

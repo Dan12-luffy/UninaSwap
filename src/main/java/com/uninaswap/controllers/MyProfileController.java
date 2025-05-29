@@ -11,6 +11,8 @@ import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -65,7 +67,15 @@ public class MyProfileController {
     @FXML private Button downloadDataButton;
     @FXML private Button deleteAccountButton;
     @FXML private Button logoutButton;
-    //private User user;
+    @FXML private Label totalOffersStat;
+    @FXML private Label acceptedOffersStat;
+    @FXML private Label pendingOffersStat;
+    @FXML private Label rejectedOffersStat;
+    @FXML private PieChart offerTypesPieChart;
+    @FXML private BarChart<String, Number> acceptedOffersBarChart;
+    @FXML private Label avgPriceLabel;
+    @FXML private Label minPriceLabel;
+    @FXML private Label maxPriceLabel;
 
 
     @FXML
