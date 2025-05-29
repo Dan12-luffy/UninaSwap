@@ -95,9 +95,9 @@ public class MyProfileController {
     private void loadUserListings() {
         try {
             ListingDaoImpl listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findMyInsertions();
+            List<Listing> listings = listingDao.findMyAviableInsertions();
 
-            setPieChartAndBarChart(listings);
+            setPieChartAndBarChart(listingDao.findMyInsertions());
 
             // Clear existing content
             this.userAdsContainer.getChildren().clear();
@@ -119,7 +119,7 @@ public class MyProfileController {
     private void setStatisticsSection(){
         try{
             ListingDaoImpl listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findMyInsertions();
+            List<Listing> listings = listingDao.findMyAviableInsertions();
 
             double minPrice = listings.getFirst().getType() == typeListing.SALE ? listings.getFirst().getPrice().doubleValue() : Integer.MAX_VALUE;
             double maxPrice = listings.getFirst().getType() == typeListing.SALE ? listings.getFirst().getPrice().doubleValue() : 0;

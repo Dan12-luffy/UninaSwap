@@ -3,7 +3,6 @@ package com.uninaswap.dao;
 import com.uninaswap.databaseUtils.FilterCriteria;
 import com.uninaswap.model.Listing;
 
-import java.awt.*;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
@@ -16,7 +15,10 @@ public interface ListingDao {
     void update(Listing listing) throws SQLException;
     List<Listing> findAll() throws SQLException;
     List<Listing> findAllOtherInsertions() throws SQLException;
+    List<Listing> findMyAviableInsertions() throws SQLException;
+
     List<Listing> findMyInsertions() throws SQLException;
+
     List<Listing> findByCategory(int categoryId) throws SQLException;
     List<Listing> findByPriceRange(double minPrice, double maxPrice) throws SQLException;
     List<Listing> findWithFilters(FilterCriteria criteria) throws SQLException;

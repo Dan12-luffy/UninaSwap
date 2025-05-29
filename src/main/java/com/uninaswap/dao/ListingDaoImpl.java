@@ -1,7 +1,6 @@
 package com.uninaswap.dao;
 
 import com.uninaswap.databaseUtils.FilterCriteria;
-import com.uninaswap.model.Category;
 import com.uninaswap.model.Listing;
 import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.typeListing;
@@ -241,11 +240,26 @@ public class ListingDaoImpl implements ListingDao {
         return listings;
     }
     @Override
-    public List<Listing> findMyInsertions() throws SQLException {
+    public List<Listing> findMyAviableInsertions() throws SQLException {
         List<Listing> listings = new ArrayList<>();
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +
                 "LEFT JOIN category c ON l.category_id = c.category_id " +
                 "WHERE l.status = 'AVAILABLE' AND l.userid = ? " +
+                "ORDER BY l.publishDate DESC";
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, UserSession.getInstance().getCurrentUser().getId());
+            executeQueryAndCreateTheList(listings, stmt);
+        }
+        return listings;
+    }
+    @Override
+    public List<Listing> findMyInsertions() throws SQLException {
+        List<Listing> listings = new ArrayList<>();
+        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
+                "LEFT JOIN category c ON l.category_id = c.category_id " +
+                "WHERE l.userid = ? " +
                 "ORDER BY l.publishDate DESC";
 
         try (Connection conn = DatabaseUtil.getConnection();
