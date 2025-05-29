@@ -153,7 +153,7 @@ public class ListingDaoImpl implements ListingDao {
                 }
             }
             sql.append(") ");
-            //A quanto pare java non gli enum come paramentri per le query, quindi li devo convertire in stringhe
+            //A quanto pare java non prende gli enum come paramentri per le query, quindi li devo convertire in stringhe
             for (typeListing type : criteria.getTypes()) {
                 parameters.add(type.name());
             }

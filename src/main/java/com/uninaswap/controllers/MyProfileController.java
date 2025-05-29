@@ -370,10 +370,7 @@ public class MyProfileController {
 
         Optional<ButtonType> result = confirmAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            // Use the user directly from the session
-            User currentUser = UserSession.getInstance().getCurrentUser();
-            boolean success = ProfileSecurityService.getInstance().changeUsername(
-                    currentUser.getId(), newUsername);
+            boolean success = ProfileSecurityService.getInstance().changeUsername(newUsername);
 
             if (success) {
                 // Aggiorna i campi nell'interfaccia
@@ -417,13 +414,9 @@ public class MyProfileController {
 
         Optional<ButtonType> result = confirmAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            // Use the user directly from the session
-            User currentUser = UserSession.getInstance().getCurrentUser();
-            boolean success = ProfileSecurityService.getInstance().changePassword(
-                    currentUser.getId(), currentPassword, newPassword);
+            boolean success = ProfileSecurityService.getInstance().changePassword(currentPassword, newPassword);
 
             if (success) {
-                // Pulisci i campi password
                 currentPasswordField.clear();
                 newPasswordField.clear();
                 confirmPasswordField.clear();

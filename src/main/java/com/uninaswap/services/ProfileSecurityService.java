@@ -15,7 +15,6 @@ public class ProfileSecurityService {
     private static final ProfileSecurityService instance = new ProfileSecurityService();
     private final UserDao userDao;
 
-
     private ProfileSecurityService() {
         this.userDao = new  UserDaoImpl();
     }
@@ -24,15 +23,10 @@ public class ProfileSecurityService {
         return instance;
     }
 
-    public boolean changePassword(int userId, String currentPassword, String newPassword){
+    public boolean changePassword(String currentPassword, String newPassword){
         try{
-            User user = UserSession.getInstance().getCurrentUser();
-            if(user == null){
-                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "utente non trovato");
-                return false;
-            }
             String hashedCurrentPassword = Sha256.hashPassword(currentPassword);
-            if(!user.getPassword().equals(hashedCurrentPassword)){
+            if(UserSession.getInstance().getCurrentUser().getPassword().equals(hashedCurrentPassword)){
                 ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "La password attuale non è corretta");
                 return false;
             }
@@ -41,7 +35,7 @@ public class ProfileSecurityService {
                 return false;
             }
             String hashedNewPassword = Sha256.hashPassword(newPassword);
-            boolean success = userDao.updatePassword(userId, hashedNewPassword);
+            boolean success = userDao.updatePassword(UserSession.getInstance().getCurrentUserId(), hashedNewPassword);
 
             if(success){
                 ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Successo", "Password cambiata con successo");
@@ -57,13 +51,8 @@ public class ProfileSecurityService {
         }
 
     }
-    public boolean changeUsername(int userId, String newUsername){
+    public boolean changeUsername(String newUsername){
         try{
-            User user = UserSession.getInstance().getCurrentUser();
-            if(user == null){
-                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Utente non trovato");
-                return false;
-            }
             if(!isValidUsername(newUsername)){
                 ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Il nuovo username non è valido");
                 return false;
@@ -72,13 +61,12 @@ public class ProfileSecurityService {
                 ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Username già in uso");
                 return false;
             }
-            User currentUser = userDao.getUserFromID(userId);
-            if(currentUser != null && currentUser.getUsername().equals(newUsername)){
+            if(UserSession.getInstance().getCurrentUser().getUsername().equals(newUsername)){
                 ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Informazione", "Il nuovo username è lo stesso del precedente");
                 return false;
             }
 
-            boolean success = userDao.updateUsername(userId, newUsername);
+            boolean success = userDao.updateUsername(UserSession.getInstance().getCurrentUserId(), newUsername);
             if(success) {
                 ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Successo", "Username cambiato con successo");
             }else{
@@ -90,7 +78,6 @@ public class ProfileSecurityService {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante il cambio dello username");
             return false;
         }
-
     }
 
     public boolean isValidUsername(String username){
