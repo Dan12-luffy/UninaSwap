@@ -4,6 +4,7 @@ import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.NavigationService;
+import com.uninaswap.services.ProfileSecurityService;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
 import javafx.collections.FXCollections;
@@ -55,9 +56,12 @@ public class MyProfileController {
     @FXML private ComboBox<String> adsFilterComboBox;
     @FXML private Button newAdButton;
     @FXML private VBox userAdsContainer;
+    @FXML private TextField currentUsernameField;
+    @FXML private TextField newUsernameField;
     @FXML private PasswordField currentPasswordField;
     @FXML private PasswordField newPasswordField;
     @FXML private PasswordField confirmPasswordField;
+    @FXML private Button changeUsernameButton;
     @FXML private Button emailVisibilityButton;
     @FXML private Button messagesFromStrangersButton;
     @FXML private Button pushNotificationsButton;
@@ -338,4 +342,81 @@ public class MyProfileController {
         UserSession.getInstance().logout();
         NavigationService.getInstance().navigateToLoginView(event);
     }
+
+    @FXML
+    private void handleChangeUsername(ActionEvent event) {
+        String newUsername = newUsernameField.getText().trim();
+
+        if (newUsername.isEmpty()) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.WARNING,
+                    "Attenzione", "Inserisci il nuovo username.");
+            return;
+        }
+
+        // Conferma dell'operazione
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Conferma cambio username");
+        confirmAlert.setHeaderText("Cambiare username?");
+        confirmAlert.setContentText("Stai per cambiare il tuo username da '" +
+                currentUsernameField.getText() + "' a '" + newUsername + "'.\n" +
+                "Sei sicuro di voler continuare?");
+
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            int userId = UserSession.getInstance().getCurrentUserId();
+            boolean success = ProfileSecurityService.getInstance().changeUsername(userId, newUsername);
+
+            if (success) {
+                // Aggiorna i campi nell'interfaccia
+                currentUsernameField.setText(newUsername);
+                userNameLabel.setText(newUsername);
+                newUsernameField.clear();
+            }
+        }
+    }
+    @FXML
+    private void handleChangePassword(ActionEvent event) {
+        String currentPassword = currentPasswordField.getText();
+        String newPassword = newPasswordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+
+        // Validazione input
+        if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.WARNING,
+                    "Attenzione", "Compila tutti i campi password.");
+            return;
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR,
+                    "Errore", "La nuova password e la conferma non coincidono.");
+            return;
+        }
+
+        if (currentPassword.equals(newPassword)) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.WARNING,
+                    "Attenzione", "La nuova password deve essere diversa da quella attuale.");
+            return;
+        }
+
+        // Conferma dell'operazione
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Conferma cambio password");
+        confirmAlert.setHeaderText("Cambiare password?");
+        confirmAlert.setContentText("Stai per cambiare la tua password.\nSei sicuro di voler continuare?");
+
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            int userId = UserSession.getInstance().getCurrentUserId();
+            boolean success = ProfileSecurityService.getInstance().changePassword(userId, currentPassword, newPassword);
+
+            if (success) {
+                // Pulisci i campi password
+                currentPasswordField.clear();
+                newPasswordField.clear();
+                confirmPasswordField.clear();
+            }
+        }
+    }
+
 }

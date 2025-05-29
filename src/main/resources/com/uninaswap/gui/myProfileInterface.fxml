@@ -28,11 +28,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" styleClass="profile-container" stylesheets="@../guiCSS/myProfileInterface2.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.MyProfileController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0"
+            styleClass="profile-container" stylesheets="@../guiCSS/myProfileInterface2.css"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.uninaswap.controllers.MyProfileController">
 
     <top>
         <VBox spacing="0">
-            <!-- Banner superiore -->
+            <!-- Top Banner -->
             <HBox alignment="CENTER_LEFT" maxHeight="35.0" styleClass="top-banner">
                 <Label styleClass="welcome-text" text="Il tuo profilo su UninaSwap" />
                 <Region HBox.hgrow="ALWAYS" />
@@ -42,9 +45,9 @@
                 </padding>
             </HBox>
 
-            <!-- Header principale -->
+            <!-- Main Header -->
             <HBox alignment="CENTER" minHeight="60.0" styleClass="main-header">
-                <!-- Logo container -->
+                <!-- Logo Container -->
                 <HBox alignment="CENTER_LEFT" minWidth="200.0" styleClass="logo-container">
                     <StackPane styleClass="logo-badge">
                         <Rectangle height="50.0" styleClass="logo-background" width="180.0" />
@@ -54,12 +57,12 @@
                     </StackPane>
                 </HBox>
 
-                <!-- Titolo centrale -->
+                <!-- Central Title -->
                 <HBox alignment="CENTER" styleClass="title-container" HBox.hgrow="ALWAYS">
                     <Label styleClass="header-title" text="Il Mio Profilo" />
                 </HBox>
 
-                <!-- Pulsanti azione -->
+                <!-- Action Buttons -->
                 <HBox alignment="CENTER_RIGHT" spacing="15">
                     <Button fx:id="editProfileButton" styleClass="nav-button" text="✏️ Modifica" />
                     <Button fx:id="backButton" onAction="#goBack" styleClass="back-button" text="← Indietro" />
@@ -77,313 +80,374 @@
                 <padding>
                     <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
                 </padding>
-                <children>
-                    <!-- Sezione profilo principale -->
-                    <HBox spacing="25.0" styleClass="main-profile-container">
-                        <!-- Colonna sinistra - Foto e info base -->
-                        <VBox spacing="15" styleClass="profile-sidebar">
-                            <!-- Avatar e info base -->
-                            <VBox alignment="CENTER" spacing="15" styleClass="avatar-section">
-                                <StackPane styleClass="profile-avatar-container">
-                                    <ImageView fx:id="profileAvatarView" fitHeight="120.0" fitWidth="120.0" preserveRatio="true" styleClass="profile-avatar" />
-                                    <Button fx:id="changeAvatarButton" styleClass="avatar-edit-button" text="📷" />
-                                </StackPane>
 
-                                <VBox alignment="CENTER" spacing="5">
-                                    <Label fx:id="userNameLabel" styleClass="profile-name" text="Nome Utente" />
-                                    <Label fx:id="userEmailLabel" styleClass="profile-email" text="email@studenti.unina.it" />
-                                    <Label fx:id="memberSinceLabel" styleClass="member-since" text="Membro dal Gennaio 2023" />
+                <!-- Main Profile Section -->
+                <HBox spacing="25.0" styleClass="main-profile-container">
+                    <!-- Left Column - Photo and Basic Info -->
+                    <VBox spacing="15" styleClass="profile-sidebar">
+                        <!-- Avatar and Basic Info -->
+                        <VBox alignment="CENTER" spacing="15" styleClass="avatar-section">
+                            <StackPane styleClass="profile-avatar-container">
+                                <ImageView fx:id="profileAvatarView" fitHeight="120.0" fitWidth="120.0"
+                                           preserveRatio="true" styleClass="profile-avatar" />
+                                <Button fx:id="changeAvatarButton" styleClass="avatar-edit-button" text="📷" />
+                            </StackPane>
+
+                            <VBox alignment="CENTER" spacing="5">
+                                <Label fx:id="userNameLabel" styleClass="profile-name" text="Nome Utente" />
+                                <Label fx:id="userEmailLabel" styleClass="profile-email" text="email@studenti.unina.it" />
+                                <Label fx:id="memberSinceLabel" styleClass="member-since" text="Membro dal Gennaio 2023" />
+                            </VBox>
+
+                            <!-- Rating and Badges -->
+                            <HBox alignment="CENTER" spacing="10" styleClass="rating-section">
+                                <VBox alignment="CENTER" spacing="3" styleClass="rating-item">
+                                    <Label fx:id="userRatingLabel" styleClass="rating-number" text="4.8" />
+                                    <Label styleClass="rating-stars" text="⭐⭐⭐⭐⭐" />
+                                    <Label styleClass="rating-label" text="Valutazione" />
+                                </VBox>
+                                <Separator orientation="VERTICAL" prefHeight="50" />
+                                <VBox alignment="CENTER" spacing="3" styleClass="rating-item">
+                                    <Label fx:id="verifiedBadge" styleClass="verified-badge" text="✅" />
+                                    <Label styleClass="rating-label" text="Verificato" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Quick Statistics -->
+                        <VBox spacing="12" styleClass="stats-section">
+                            <Label styleClass="section-title" text="📊 Le tue statistiche" />
+                            <GridPane hgap="15" styleClass="stats-grid" vgap="8">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="ALWAYS" />
+                                    <ColumnConstraints hgrow="ALWAYS" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                </rowConstraints>
+
+                                <VBox alignment="CENTER" styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <Label fx:id="totalAdsLabel" styleClass="stat-number" text="12" />
+                                    <Label styleClass="stat-label" text="Annunci" />
                                 </VBox>
 
-                                <!-- Rating e badge -->
-                                <HBox alignment="CENTER" spacing="10" styleClass="rating-section">
-                                    <VBox alignment="CENTER" spacing="3" styleClass="rating-item">
-                                        <Label fx:id="userRatingLabel" styleClass="rating-number" text="4.8" />
-                                        <Label styleClass="rating-stars" text="⭐⭐⭐⭐⭐" />
-                                        <Label styleClass="rating-label" text="Valutazione" />
-                                    </VBox>
-                                    <Separator orientation="VERTICAL" prefHeight="50" />
-                                    <VBox alignment="CENTER" spacing="3" styleClass="rating-item">
-                                        <Label fx:id="verifiedBadge" styleClass="verified-badge" text="✅" />
-                                        <Label styleClass="rating-label" text="Verificato" />
-                                    </VBox>
-                                </HBox>
-                            </VBox>
+                                <VBox alignment="CENTER" styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <Label fx:id="activeSalesLabel" styleClass="stat-number" text="8" />
+                                    <Label styleClass="stat-label" text="Attivi" />
+                                </VBox>
 
-                            <!-- Statistiche rapide -->
-                            <VBox spacing="12" styleClass="stats-section">
-                                <Label styleClass="section-title" text="📊 Le tue statistiche" />
-                                <GridPane hgap="15" styleClass="stats-grid" vgap="8">
-                                    <columnConstraints>
-                                        <ColumnConstraints hgrow="ALWAYS" />
-                                        <ColumnConstraints hgrow="ALWAYS" />
-                                    </columnConstraints>
-                                    <rowConstraints>
-                                        <RowConstraints />
-                                        <RowConstraints />
-                                        <RowConstraints />
-                                    </rowConstraints>
+                                <VBox alignment="CENTER" styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <Label fx:id="completedSalesLabel" styleClass="stat-number" text="15" />
+                                    <Label styleClass="stat-label" text="Vendite" />
+                                </VBox>
 
-                                    <children>
-                                        <VBox alignment="CENTER" styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                                            <Label fx:id="totalAdsLabel" styleClass="stat-number" text="12" />
-                                            <Label styleClass="stat-label" text="Annunci" />
-                                        </VBox>
-
-                                        <VBox alignment="CENTER" styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                                            <Label fx:id="activeSalesLabel" styleClass="stat-number" text="8" />
-                                            <Label styleClass="stat-label" text="Attivi" />
-                                        </VBox>
-
-                                        <VBox alignment="CENTER" styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                                            <Label fx:id="completedSalesLabel" styleClass="stat-number" text="15" />
-                                            <Label styleClass="stat-label" text="Vendite" />
-                                        </VBox>
-
-                                        <VBox alignment="CENTER" styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                            <Label fx:id="totalEarningsLabel" styleClass="stat-number" text="€450" />
-                                            <Label styleClass="stat-label" text="Guadagni" />
-                                        </VBox>
-                                    </children>
-                                </GridPane>
-                            </VBox>
+                                <VBox alignment="CENTER" styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <Label fx:id="totalEarningsLabel" styleClass="stat-number" text="€450" />
+                                    <Label styleClass="stat-label" text="Guadagni" />
+                                </VBox>
+                            </GridPane>
                         </VBox>
+                    </VBox>
 
-                        <!-- Colonna destra - Tabs con informazioni dettagliate -->
-                        <VBox styleClass="profile-main-content" HBox.hgrow="ALWAYS">
-                            <TabPane fx:id="profileTabPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="602.0" prefWidth="633.0" styleClass="profile-tabs" tabClosingPolicy="UNAVAILABLE">
-                                <!-- Tab Informazioni Personali -->
-                                <Tab styleClass="profile-tab" text="👤 Informazioni">
-                                    <VBox spacing="20">
-                                        <padding>
-                                            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                        </padding>
+                    <!-- Right Column - Tabs with Detailed Information -->
+                    <VBox styleClass="profile-main-content" HBox.hgrow="ALWAYS">
+                        <TabPane fx:id="profileTabPane" maxHeight="-Infinity" maxWidth="-Infinity"
+                                 prefHeight="602.0" prefWidth="633.0" styleClass="profile-tabs"
+                                 tabClosingPolicy="UNAVAILABLE">
 
-                                        <!-- Informazioni personali -->
-                                        <TitledPane expanded="true" styleClass="info-section" text="📝 Dati Personali">
-                                            <GridPane hgap="15" styleClass="info-grid" vgap="12">
-                                                <columnConstraints>
-                                                    <ColumnConstraints hgrow="NEVER" maxWidth="120.0" minWidth="100.0" />
-                                                    <ColumnConstraints hgrow="ALWAYS" />
-                                                </columnConstraints>
-                                                <rowConstraints>
-                                                    <RowConstraints />
-                                                    <RowConstraints />
-                                                    <RowConstraints />
-                                                    <RowConstraints />
-                                                    <RowConstraints />
-                                                </rowConstraints>
+                            <!-- Personal Information Tab -->
+                            <Tab styleClass="profile-tab" text="👤 Informazioni">
+                                <VBox spacing="20">
+                                    <padding>
+                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                    </padding>
 
-                                                <children>
-                                                    <Label styleClass="field-label" text="Nome:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                                    <TextField fx:id="firstNameField" styleClass="profile-text-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                    <!-- Personal Information -->
+                                    <TitledPane expanded="true" styleClass="info-section" text="📝 Dati Personali">
+                                        <GridPane hgap="15" styleClass="info-grid" vgap="12">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="NEVER" maxWidth="120.0" minWidth="100.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                            </rowConstraints>
 
-                                                    <Label styleClass="field-label" text="Cognome:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                                    <TextField fx:id="lastNameField" styleClass="profile-text-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                            <Label styleClass="field-label" text="Nome:"
+                                                   GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                            <TextField fx:id="firstNameField" styleClass="profile-text-field"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                                                    <Label styleClass="field-label" text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                                    <TextField fx:id="emailField" styleClass="profile-text-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                            <Label styleClass="field-label" text="Cognome:"
+                                                   GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                            <TextField fx:id="lastNameField" styleClass="profile-text-field"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                                    <Label styleClass="field-label" text="Telefono:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                                                    <TextField fx:id="phoneField" styleClass="profile-text-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                            <Label styleClass="field-label" text="Email:"
+                                                   GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                            <TextField fx:id="emailField" styleClass="profile-text-field"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                                                    <Label styleClass="field-label" text="Facoltà:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                                                    <ComboBox fx:id="facultyComboBox" maxWidth="200.0" styleClass="profile-combo-box" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                                </children>
-                                            </GridPane>
-                                        </TitledPane>
+                                            <Label styleClass="field-label" text="Telefono:"
+                                                   GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                            <TextField fx:id="phoneField" styleClass="profile-text-field"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                                        <!-- Bio e descrizione -->
-                                        <TitledPane expanded="true" styleClass="info-section" text="💭 Biografia">
-                                            <VBox spacing="10">
-                                                <TextArea fx:id="bioTextArea" prefHeight="80.0" promptText="Racconta qualcosa di te..." styleClass="profile-text-area" wrapText="true" />
-                                                <Label styleClass="field-hint" text="Presenta te stesso agli altri utenti (max 300 caratteri)" />
+                                            <Label styleClass="field-label" text="Facoltà:"
+                                                   GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                            <ComboBox fx:id="facultyComboBox" maxWidth="200.0"
+                                                      styleClass="profile-combo-box"
+                                                      GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                        </GridPane>
+                                    </TitledPane>
+
+                                    <!-- Bio and Description -->
+                                    <TitledPane expanded="true" styleClass="info-section" text="💭 Biografia">
+                                        <VBox spacing="10">
+                                            <TextArea fx:id="bioTextArea" prefHeight="80.0"
+                                                      promptText="Racconta qualcosa di te..."
+                                                      styleClass="profile-text-area" wrapText="true" />
+                                            <Label styleClass="field-hint"
+                                                   text="Presenta te stesso agli altri utenti (max 300 caratteri)" />
+                                        </VBox>
+                                    </TitledPane>
+
+                                    <!-- Action Buttons -->
+                                    <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="action-buttons">
+                                        <Button fx:id="cancelChangesButton" styleClass="cancel-button" text="Annulla" />
+                                        <Button fx:id="saveChangesButton" styleClass="save-button" text="Salva Modifiche" />
+                                    </HBox>
+                                </VBox>
+                            </Tab>
+
+                            <!-- My Ads Tab -->
+                            <Tab styleClass="profile-tab" text="📋 I Miei Annunci">
+                                <VBox spacing="15">
+                                    <padding>
+                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                    </padding>
+
+                                    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="ads-header">
+                                        <Label styleClass="section-title" text="I tuoi annunci attivi" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <ComboBox fx:id="adsFilterComboBox" promptText="Filtra per stato"
+                                                  styleClass="filter-combo" />
+                                        <Button fx:id="newAdButton" onAction="#makeNewInsertion"
+                                                styleClass="new-ad-button" text="Nuovo Annuncio" />
+                                    </HBox>
+
+                                    <ScrollPane fitToWidth="true" prefHeight="400.0" styleClass="ads-scroll-pane">
+                                        <VBox fx:id="userAdsContainer" spacing="10" styleClass="ads-container">
+                                            <Label styleClass="placeholder-text" text="I tuoi annunci appariranno qui" />
+                                        </VBox>
+                                    </ScrollPane>
+                                </VBox>
+                            </Tab>
+
+                            <!-- Statistics Tab -->
+                            <Tab styleClass="profile-tab" text="📊 Statistiche">
+                                <VBox spacing="15">
+                                    <padding>
+                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                    </padding>
+
+                                    <!-- Numerical Statistics -->
+                                    <HBox spacing="15" styleClass="profile-stats-box">
+                                        <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
+                                            <Label styleClass="profile-stat-title" text="Offerte Accettate" />
+                                            <Label fx:id="acceptedOffersStat" styleClass="profile-stat-number" text="0" />
+                                        </VBox>
+
+                                        <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
+                                            <Label styleClass="profile-stat-title" text="Offerte in Attesa" />
+                                            <Label fx:id="pendingOffersStat" styleClass="profile-stat-number" text="0" />
+                                        </VBox>
+
+                                        <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
+                                            <Label styleClass="profile-stat-title" text="Offerte Rifiutate" />
+                                            <Label fx:id="rejectedOffersStat" styleClass="profile-stat-number" text="0" />
+                                        </VBox>
+                                    </HBox>
+
+                                    <Separator styleClass="profile-separator" />
+
+                                    <!-- Charts -->
+                                    <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                          minWidth="-Infinity" prefHeight="216.0" prefWidth="603.0"
+                                          spacing="15" VBox.vgrow="ALWAYS">
+
+                                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                            <Label styleClass="chart-section-title"
+                                                   text="Distribuzione Offerte per Tipologia" />
+                                            <StackPane maxHeight="180" minHeight="180"
+                                                       styleClass="profile-chart-container" VBox.vgrow="ALWAYS">
+                                                <PieChart fx:id="offerTypesPieChart" legendVisible="true"
+                                                          styleClass="profile-pie-chart" />
+                                            </StackPane>
+                                        </VBox>
+
+                                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                            <Label styleClass="chart-section-title"
+                                                   text="Offerte Accettate per Tipologia" />
+                                            <StackPane maxHeight="180" minHeight="180"
+                                                       styleClass="profile-chart-container" VBox.vgrow="ALWAYS">
+                                                <BarChart fx:id="acceptedOffersBarChart" styleClass="profile-bar-chart">
+                                                    <xAxis>
+                                                        <CategoryAxis side="BOTTOM" styleClass="profile-chart-axis" />
+                                                    </xAxis>
+                                                    <yAxis>
+                                                        <NumberAxis side="LEFT" styleClass="profile-chart-axis" />
+                                                    </yAxis>
+                                                </BarChart>
+                                            </StackPane>
+                                        </VBox>
+                                    </HBox>
+
+                                    <Separator styleClass="profile-separator" />
+
+                                    <!-- Price Statistics -->
+                                    <VBox spacing="12" styleClass="profile-price-stats">
+                                        <Label styleClass="chart-section-title"
+                                               text="💰 Statistiche di Prezzo - Offerte Accettate" />
+
+                                        <HBox spacing="15">
+                                            <VBox spacing="5" styleClass="profile-price-card" HBox.hgrow="ALWAYS">
+                                                <Label styleClass="profile-price-title" text="Prezzo Medio" />
+                                                <Label fx:id="avgPriceLabel" styleClass="profile-price-value" text="€0.00" />
                                             </VBox>
-                                        </TitledPane>
 
-                                        <!-- Pulsanti azione -->
-                                        <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="action-buttons">
-                                            <Button fx:id="cancelChangesButton" styleClass="cancel-button" text="Annulla" />
-                                            <Button fx:id="saveChangesButton" styleClass="save-button" text="Salva Modifiche" />
+                                            <VBox spacing="5" styleClass="profile-price-card" HBox.hgrow="ALWAYS">
+                                                <Label styleClass="profile-price-title" text="Prezzo Minimo" />
+                                                <Label fx:id="minPriceLabel" styleClass="profile-price-value" text="€0.00" />
+                                            </VBox>
+
+                                            <VBox spacing="5" styleClass="profile-price-card" HBox.hgrow="ALWAYS">
+                                                <Label styleClass="profile-price-title" text="Prezzo Massimo" />
+                                                <Label fx:id="maxPriceLabel" styleClass="profile-price-value" text="€0.00" />
+                                            </VBox>
                                         </HBox>
                                     </VBox>
-                                </Tab>
+                                </VBox>
+                            </Tab>
 
-                                <!-- Tab I Miei Annunci -->
-                                <Tab styleClass="profile-tab" text="📋 I Miei Annunci">
-                                    <VBox spacing="15">
-                                        <padding>
-                                            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                        </padding>
+                            <!-- Security Tab -->
+                            <Tab styleClass="profile-tab" text="🔒 Sicurezza">
+                                <VBox spacing="20">
+                                    <padding>
+                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                    </padding>
 
-                                        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="ads-header">
-                                            <Label styleClass="section-title" text="I tuoi annunci attivi" />
-                                            <Region HBox.hgrow="ALWAYS" />
-                                            <ComboBox fx:id="adsFilterComboBox" promptText="Filtra per stato" styleClass="filter-combo" />
-                                            <Button fx:id="newAdButton" onAction="#makeNewInsertion" styleClass="new-ad-button" text="Nuovo Annuncio" />
-                                        </HBox>
+                                    <!-- Change Username -->
+                                    <TitledPane expanded="true" styleClass="security-section" text="👤 Cambia Username">
+                                        <GridPane hgap="15" styleClass="security-grid" vgap="12">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="NEVER" maxWidth="120.0" minWidth="100.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                            </rowConstraints>
 
-                                        <ScrollPane fitToWidth="true" prefHeight="400.0" styleClass="ads-scroll-pane">
-                                            <VBox fx:id="userAdsContainer" spacing="10" styleClass="ads-container">
-                                                <!-- Gli annunci verranno caricati dinamicamente qui -->
-                                                <Label styleClass="placeholder-text" text="I tuoi annunci appariranno qui" />
-                                            </VBox>
-                                        </ScrollPane>
-                                    </VBox>
-                                </Tab>
+                                            <Label styleClass="field-label" text="Username attuale:"
+                                                   GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                            <TextField fx:id="currentUsernameField" editable="false"
+                                                       styleClass="profile-text-field disabled"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                                <!-- Tab Statistiche Offerte -->
-                                <Tab styleClass="profile-tab" text="📊 Statistiche">
-                                    <VBox spacing="15">
-                                        <padding>
-                                            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                        </padding>
+                                            <Label styleClass="field-label" text="Nuovo username:"
+                                                   GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                            <TextField fx:id="newUsernameField"
+                                                       promptText="Inserisci il nuovo username"
+                                                       styleClass="profile-text-field"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        </GridPane>
+                                    </TitledPane>
 
-                                        <!-- Statistiche numeriche -->
-                                        <HBox spacing="15" styleClass="profile-stats-box">
+                                    <!-- Change Password -->
+                                    <TitledPane expanded="true" styleClass="security-section" text="🔑 Cambia Password">
+                                        <GridPane hgap="15" styleClass="security-grid" vgap="12">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="NEVER" maxWidth="120.0" minWidth="100.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                                <RowConstraints />
+                                            </rowConstraints>
 
-                                            <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
-                                                <Label styleClass="profile-stat-title" text="Offerte Accettate" />
-                                                <Label fx:id="acceptedOffersStat" styleClass="profile-stat-number" text="0" />
-                                            </VBox>
+                                            <Label styleClass="field-label" text="Password attuale:"
+                                                   GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                            <PasswordField fx:id="currentPasswordField"
+                                                           styleClass="profile-password-field"
+                                                           GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                                            <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
-                                                <Label styleClass="profile-stat-title" text="Offerte in Attesa" />
-                                                <Label fx:id="pendingOffersStat" styleClass="profile-stat-number" text="0" />
-                                            </VBox>
+                                            <Label styleClass="field-label" text="Nuova password:"
+                                                   GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                            <PasswordField fx:id="newPasswordField"
+                                                           styleClass="profile-password-field"
+                                                           GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                            <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
-                                                <Label styleClass="profile-stat-title" text="Offerte Rifiutate" />
-                                                <Label fx:id="rejectedOffersStat" styleClass="profile-stat-number" text="0" />
-                                            </VBox>
-                                        </HBox>
+                                            <Label styleClass="field-label" text="Conferma password:"
+                                                   GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                            <PasswordField fx:id="confirmPasswordField"
+                                                           styleClass="profile-password-field"
+                                                           GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        </GridPane>
+                                    </TitledPane>
 
-                                        <Separator styleClass="profile-separator" />
+                                    <!-- Privacy Options -->
+                                    <TitledPane expanded="true" styleClass="security-section"
+                                                text="🛡️ Privacy e Sicurezza">
+                                        <VBox spacing="12">
+                                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="privacy-option">
+                                                <Label styleClass="privacy-label" text="Mostra email pubblicamente" />
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Button fx:id="emailVisibilityButton" styleClass="toggle-button"
+                                                        text="Nascosto" />
+                                            </HBox>
 
-                                        <!-- Grafici -->
-                                        <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="216.0" prefWidth="603.0" spacing="15" VBox.vgrow="ALWAYS">
-                                            <VBox spacing="8" HBox.hgrow="ALWAYS">
-                                                <Label styleClass="chart-section-title" text="Distribuzione Offerte per Tipologia" />
-                                                <StackPane maxHeight="180" minHeight="180" styleClass="profile-chart-container" VBox.vgrow="ALWAYS">
-                                                    <PieChart fx:id="offerTypesPieChart" legendVisible="true" styleClass="profile-pie-chart" />
-                                                </StackPane>
-                                            </VBox>
-
-                                            <VBox spacing="8" HBox.hgrow="ALWAYS">
-                                                <Label styleClass="chart-section-title" text="Offerte Accettate per Tipologia" />
-                                                <StackPane maxHeight="180" minHeight="180" styleClass="profile-chart-container" VBox.vgrow="ALWAYS">
-                                                    <BarChart fx:id="acceptedOffersBarChart" styleClass="profile-bar-chart">
-                                                        <xAxis>
-                                                            <CategoryAxis side="BOTTOM" styleClass="profile-chart-axis" />
-                                                        </xAxis>
-                                                        <yAxis>
-                                                            <NumberAxis side="LEFT" styleClass="profile-chart-axis" />
-                                                        </yAxis>
-                                                    </BarChart>
-                                                </StackPane>
-                                            </VBox>
-                                        </HBox>
-
-                                        <Separator styleClass="profile-separator" />
-
-                                        <!-- Statistiche prezzi -->
-                                        <VBox spacing="12" styleClass="profile-price-stats">
-                                            <Label styleClass="chart-section-title" text="💰 Statistiche di Prezzo - Offerte Accettate" />
-
-                                            <HBox spacing="15">
-                                                <VBox spacing="5" styleClass="profile-price-card" HBox.hgrow="ALWAYS">
-                                                    <Label styleClass="profile-price-title" text="Prezzo Medio" />
-                                                    <Label fx:id="avgPriceLabel" styleClass="profile-price-value" text="€0.00" />
-                                                </VBox>
-
-                                                <VBox spacing="5" styleClass="profile-price-card" HBox.hgrow="ALWAYS">
-                                                    <Label styleClass="profile-price-title" text="Prezzo Minimo" />
-                                                    <Label fx:id="minPriceLabel" styleClass="profile-price-value" text="€0.00" />
-                                                </VBox>
-
-                                                <VBox spacing="5" styleClass="profile-price-card" HBox.hgrow="ALWAYS">
-                                                    <Label styleClass="profile-price-title" text="Prezzo Massimo" />
-                                                    <Label fx:id="maxPriceLabel" styleClass="profile-price-value" text="€0.00" />
-                                                </VBox>
+                                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="privacy-option">
+                                                <Label styleClass="privacy-label" text="Notifiche push" />
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Button fx:id="pushNotificationsButton"
+                                                        styleClass="toggle-button active" text="Attivo" />
                                             </HBox>
                                         </VBox>
+                                    </TitledPane>
 
-                                        <!-- Pulsanti statistiche -->
-                                        <HBox alignment="CENTER_RIGHT" spacing="10" />
-                                    </VBox>
-                                </Tab>
-
-                                <!-- Tab Sicurezza -->
-                                <Tab styleClass="profile-tab" text="🔒 Sicurezza">
-                                    <VBox spacing="20">
-                                        <padding>
-                                            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                        </padding>
-
-                                        <!-- Cambio password -->
-                                        <TitledPane expanded="true" styleClass="security-section" text="Cambia Password">
-                                            <GridPane hgap="15" styleClass="security-grid" vgap="12">
-                                                <columnConstraints>
-                                                    <ColumnConstraints hgrow="NEVER" maxWidth="120.0" minWidth="100.0" />
-                                                    <ColumnConstraints hgrow="ALWAYS" />
-                                                </columnConstraints>
-                                                <rowConstraints>
-                                                    <RowConstraints />
-                                                    <RowConstraints />
-                                                    <RowConstraints />
-                                                </rowConstraints>
-
-                                                <children>
-                                                    <Label styleClass="field-label" text=" Password attuale:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                                    <PasswordField fx:id="currentPasswordField" styleClass="profile-password-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-                                                    <Label styleClass="field-label" text=" Nuova password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                                    <PasswordField fx:id="newPasswordField" styleClass="profile-password-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-                                                    <Label styleClass="field-label" text=" Conferma password:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                                    <PasswordField fx:id="confirmPasswordField" styleClass="profile-password-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                </children>
-                                            </GridPane>
-                                        </TitledPane>
-
-                                        <!-- Opzioni privacy -->
-                                        <TitledPane expanded="true" styleClass="security-section" text="🛡️ Privacy e Sicurezza">
-                                            <VBox spacing="12">
-                                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="privacy-option">
-                                                    <Label styleClass="privacy-label" text="Mostra email pubblicamente" />
-                                                    <Region HBox.hgrow="ALWAYS" />
-                                                    <Button fx:id="emailVisibilityButton" styleClass="toggle-button" text="Nascosto" />
-                                                </HBox>
-
-                                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="privacy-option">
-                                                    <Label styleClass="privacy-label" text="Notifiche push" />
-                                                    <Region HBox.hgrow="ALWAYS" />
-                                                    <Button fx:id="pushNotificationsButton" styleClass="toggle-button active" text="Attivo" />
-                                                </HBox>
-                                            </VBox>
-                                        </TitledPane>
-
-                                        <!-- Pulsanti sicurezza -->
-                                        <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="security-actions">
-                                            <Button fx:id="changePasswordButton" styleClass="security-button" text="Cambia Password" />
-                                        </HBox>
-                                    </VBox>
-                                </Tab>
-                            </TabPane>
-                        </VBox>
-                    </HBox>
-
-                    <!-- Footer azioni -->
-                    <VBox spacing="15" styleClass="profile-footer">
-                        <Separator styleClass="main-separator" />
-                        <HBox alignment="CENTER" spacing="20" styleClass="footer-actions">
-                            <Button fx:id="downloadDataButton" styleClass="footer-button" text="Scarica i tuoi dati" />
-                            <Button fx:id="deleteAccountButton" styleClass="danger-button" text="🗑️ Elimina Account" />
-                            <Region HBox.hgrow="ALWAYS" />
-                            <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="logout-button" text="Logout" />
-                        </HBox>
+                                    <!-- Security Buttons -->
+                                    <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="security-actions">
+                                        <Button fx:id="changeUsernameButton" onAction ="#handleChangeUsername" styleClass="security-button"
+                                                text="Cambia Username" />
+                                        <Button fx:id="changePasswordButton" onAction ="#handleChangePassword" styleClass="security-button"
+                                                text="Cambia Password" />
+                                    </HBox>
+                                </VBox>
+                            </Tab>
+                        </TabPane>
                     </VBox>
-                </children>
+                </HBox>
+
+                <!-- Footer Actions -->
+                <VBox spacing="15" styleClass="profile-footer">
+                    <Separator styleClass="main-separator" />
+                    <HBox alignment="CENTER" spacing="20" styleClass="footer-actions">
+                        <Button fx:id="downloadDataButton" styleClass="footer-button"
+                                text="Scarica i tuoi dati" />
+                        <Button fx:id="deleteAccountButton" styleClass="danger-button"
+                                text="🗑️ Elimina Account" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="logout-button"
+                                text="Logout" />
+                    </HBox>
+                </VBox>
             </VBox>
         </ScrollPane>
     </center>
