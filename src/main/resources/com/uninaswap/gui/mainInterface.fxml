@@ -55,7 +55,7 @@
 
                 <HBox alignment="CENTER" styleClass="search-container" HBox.hgrow="ALWAYS">
                     <TextField fx:id="searchField" promptText="Cosa stai cercando oggi?" styleClass="search-field" HBox.hgrow="ALWAYS" />
-                    <Button fx:id="searchButton" styleClass="search-button" text="Cerca" />
+                    <Button fx:id="searchButton" onAction="#onSearchButtonClicked" styleClass="search-button" text="Cerca" />
                 </HBox>
 
                 <HBox alignment="CENTER_RIGHT" spacing="15">

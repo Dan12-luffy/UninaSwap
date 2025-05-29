@@ -11,6 +11,7 @@ import com.uninaswap.services.FilterService;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -69,6 +70,7 @@ public class MainController {
     @FXML private Label maxPriceLabel;
     @FXML private Label minPriceLabel;
     @FXML private CheckBox computerScienceCeck;
+    @FXML private CheckBox scienceCeck;
     @FXML private CheckBox mathCeck;
     @FXML private CheckBox economyCeck;
     @FXML private CheckBox artCeck;
@@ -108,6 +110,10 @@ public class MainController {
         initializePriceRange();
         loadAllItems();
         this.maxPriceLabel.setText(((int)this.priceSlider.getMax() + "€"));
+
+        searchField.focusedProperty().addListener((_, _, _) -> {
+            searchButton.setDefaultButton(true);
+        });
     }
 
     private void loadAllItems() {
@@ -303,6 +309,16 @@ public class MainController {
         String searchText = this.searchField.getText().trim();
         if (!searchText.isEmpty()) {
             this.currentFilter.setSearchText(searchText);
+            try {
+                List<Listing> listings = FilterService.getInstance().searchByText(searchText);
+                displayListings(listings);
+            } catch (SQLException e) {
+                this.resultsCountLabel.setText("Errore durante il caricamento");
+                e.printStackTrace();
+            }
+        }
+        else{
+            this.currentFilter.setSearchText(null);
             applyCurrentFilters();
         }
     }
@@ -326,22 +342,11 @@ public class MainController {
 
     @FXML
     private void onApplyFiltersClicked() {
-        // Get selected condition
-        /*if (likeNewRadio.isSelected()) {
-            currentFilter.setStatus("LIKE_NEW");
-        } else if (excellentRadio.isSelected()) {
-            currentFilter.setStatus("EXCELLENT");
-        } else if (goodRadio.isSelected()) {
-            currentFilter.setStatus("GOOD");
-        } else {
-            // All conditions
-            currentFilter.setStatus(null);
-        }*/
-
 
         // Get faculty filter values
         List<String> selectedFaculties = new ArrayList<>();
         if (this.computerScienceCeck.isSelected()) selectedFaculties.add("Informatica");
+        if(this.scienceCeck.isSelected()) selectedFaculties.add("Scienze");
         if (this.mathCeck.isSelected()) selectedFaculties.add("Matematica");
         if (this.economyCeck.isSelected()) selectedFaculties.add("Economia");
         if (this.artCeck.isSelected()) selectedFaculties.add("Arte");
