@@ -94,14 +94,13 @@ public class MyProfileController {
         setTotalAdsLabel();
         setStatisticsSection();
         loadUserListings();
+        setPieChartAndBarChart();
     }
 
     private void loadUserListings() {
         try {
             ListingDaoImpl listingDao = new ListingDaoImpl();
             List<Listing> listings = listingDao.findMyAviableInsertions();
-
-            setPieChartAndBarChart(listingDao.findMyInsertions());
 
             // Clear existing content
             this.userAdsContainer.getChildren().clear();
@@ -304,26 +303,32 @@ public class MyProfileController {
             }
         }
     }
-    private void setPieChartAndBarChart(List<Listing> listings) {
-        ObservableList<Listing> listingObservableList = FXCollections.observableArrayList(listings);
+    private void setPieChartAndBarChart(){
+       try {
+           ListingDaoImpl listingDao = new ListingDaoImpl();
+           List<Listing> listings = listingDao.findMyInsertions();
+           ObservableList<Listing> listingObservableList = FXCollections.observableArrayList(listings);
 
-        this.offerTypesPieChart.getData().clear();
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Disponibili", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.AVAILABLE).count()),
-                new PieChart.Data("In attesa", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.PENDING).count()),
-                new PieChart.Data("Venduti", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.SOLD).count()),
-                new PieChart.Data("Rifiutati", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.REJECTED).count())
-        );
-        this.offerTypesPieChart.setData(pieChartData);
+           this.offerTypesPieChart.getData().clear();
+           ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                   new PieChart.Data("Disponibili", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.AVAILABLE).count()),
+                   new PieChart.Data("In attesa", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.PENDING).count()),
+                   new PieChart.Data("Venduti", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.SOLD).count()),
+                   new PieChart.Data("Rifiutati", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.REJECTED).count())
+           );
+           this.offerTypesPieChart.setData(pieChartData);
 
-        this.acceptedOffersBarChart.getData().clear();
-        BarChart.Series<String, Number> series = new BarChart.Series<>();
-        series.setName("Stato");
-        series.getData().add(new BarChart.Data<>("Disponibili", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.AVAILABLE).count()));
-        series.getData().add(new BarChart.Data<>("In attesa", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.PENDING).count()));
-        series.getData().add(new BarChart.Data<>("Venduti", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.SOLD).count()));
-        series.getData().add(new BarChart.Data<>("Rifiutati", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.REJECTED).count()));
-        this.acceptedOffersBarChart.getData().add(series);
+           this.acceptedOffersBarChart.getData().clear();
+           BarChart.Series<String, Number> series = new BarChart.Series<>();
+           series.setName("Stato");
+           series.getData().add(new BarChart.Data<>("Disponibili", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.AVAILABLE).count()));
+           series.getData().add(new BarChart.Data<>("In attesa", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.PENDING).count()));
+           series.getData().add(new BarChart.Data<>("Venduti", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.SOLD).count()));
+           series.getData().add(new BarChart.Data<>("Rifiutati", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.REJECTED).count()));
+           this.acceptedOffersBarChart.getData().add(series);
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
     }
 
     @FXML

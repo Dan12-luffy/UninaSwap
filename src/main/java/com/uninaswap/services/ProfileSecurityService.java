@@ -25,7 +25,6 @@ public class ProfileSecurityService {
     }
 
     public boolean changePassword(int userId, String currentPassword, String newPassword){
-
         try{
             User user = userDao.getUserFromID(userId);
             if(user == null){
@@ -124,6 +123,4 @@ public class ProfileSecurityService {
         }
         return true;
     }
-
-
 }
