@@ -241,10 +241,6 @@
 
                                         <!-- Statistiche numeriche -->
                                         <HBox spacing="15" styleClass="profile-stats-box">
-                                            <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
-                                                <Label styleClass="profile-stat-title" text="Offerte Totali" />
-                                                <Label fx:id="totalOffersStat" styleClass="profile-stat-number" text="0" />
-                                            </VBox>
 
                                             <VBox spacing="5" styleClass="profile-stat-card" HBox.hgrow="ALWAYS">
                                                 <Label styleClass="profile-stat-title" text="Offerte Accettate" />

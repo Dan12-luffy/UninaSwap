@@ -2,10 +2,7 @@ package com.uninaswap.controllers;
 
 import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.dao.UserDaoImpl;
-import com.uninaswap.model.Faculty;
-import com.uninaswap.model.Listing;
-import com.uninaswap.model.ListingStatus;
-import com.uninaswap.model.User;
+import com.uninaswap.model.*;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
@@ -91,7 +88,7 @@ public class MyProfileController {
         }
         this.facultyComboBox.setValue(currentUser.getFaculty());
         setTotalAdsLabel();
-        // Load all listings into the userAdsContainer
+        setStatisticsSection();
         loadUserListings();
     }
 
@@ -119,7 +116,48 @@ public class MyProfileController {
             userAdsContainer.getChildren().add(errorLabel);
         }
     }
+    private void setStatisticsSection(){
+        try{
+            ListingDaoImpl listingDao = new ListingDaoImpl();
+            List<Listing> listings = listingDao.findMyInsertions();
 
+            double minPrice = listings.getFirst().getType() == typeListing.SALE ? listings.getFirst().getPrice().doubleValue() : Integer.MAX_VALUE;
+            double maxPrice = listings.getFirst().getType() == typeListing.SALE ? listings.getFirst().getPrice().doubleValue() : 0;
+            double sumPrice = 0.0;
+            for(Listing listing : listings){
+                if(listing.getStatus() == ListingStatus.SOLD){
+                    this.acceptedOffersStat.setText(String.valueOf(Integer.parseInt(this.acceptedOffersStat.getText()) + 1));
+                }
+                if(listing.getStatus() == ListingStatus.PENDING){
+                    this.pendingOffersStat.setText(String.valueOf(Integer.parseInt(this.pendingOffersStat.getText()) + 1));
+                }
+                if(listing.getStatus() == ListingStatus.REJECTED){
+                    this.rejectedOffersStat.setText(String.valueOf(Integer.parseInt(this.rejectedOffersStat.getText()) + 1));
+                }
+                if(listing.getPrice().doubleValue() < minPrice) {
+                    minPrice = listing.getPrice().doubleValue();
+                }
+                if(listing.getPrice().doubleValue() > maxPrice) {
+                    maxPrice = listing.getPrice().doubleValue();
+                }
+                sumPrice += listing.getPrice() != null ? listing.getPrice().doubleValue() : 0.0;
+            }
+            double avgPrice = sumPrice / listings.size();
+
+            this.avgPriceLabel.setText(String.format("€%.2f", avgPrice));
+            this.minPriceLabel.setText(String.format("€%.2f", minPrice));
+            this.maxPriceLabel.setText(String.format("€%.2f", maxPrice));
+        }catch (Exception e){
+            e.printStackTrace();
+            this.totalOffersStat.setText("0");
+            this.acceptedOffersStat.setText("0");
+            this.pendingOffersStat.setText("0");
+            this.rejectedOffersStat.setText("0");
+            this.avgPriceLabel.setText("€0.00");
+            this.minPriceLabel.setText("€0.00");
+            this.maxPriceLabel.setText("€0.00");
+        }
+    }
     private HBox createListingCard(Listing listing) {
         HBox card = new HBox(15);
         card.setPrefWidth(this.userAdsContainer.getPrefWidth() - 20);
@@ -154,7 +192,17 @@ public class MyProfileController {
         titleLabel.setWrapText(true);
 
         // Price and type
-        String priceText = listing.getPrice() != null ? String.format("€%.2f", listing.getPrice()) : listing.getType().toString();
+        //String priceText = listing.getType().equals(typeListing.GIFT) ? String.format("€%.2f", listing.getPrice()) : listing.getType().toString();
+        String priceText;
+        if (listing.getType().equals(typeListing.GIFT)) {
+            priceText = typeListing.GIFT.toString();
+        }
+        else if (listing.getType().equals(typeListing.EXCHANGE)) {
+            priceText = typeListing.EXCHANGE.toString();
+        } else {
+            priceText = String.format("€%.2f", listing.getPrice());
+        }
+
         Label priceLabel = new Label(priceText);
         priceLabel.setStyle("-fx-font-size: 14px;");
 
