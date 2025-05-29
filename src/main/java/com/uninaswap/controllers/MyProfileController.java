@@ -9,6 +9,8 @@ import com.uninaswap.model.User;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
@@ -97,6 +99,8 @@ public class MyProfileController {
         try {
             ListingDaoImpl listingDao = new ListingDaoImpl();
             List<Listing> listings = listingDao.findMyInsertions();
+
+            setPieChartAndBarChart(listings);
 
             // Clear existing content
             this.userAdsContainer.getChildren().clear();
@@ -247,6 +251,27 @@ public class MyProfileController {
                 errorAlert.showAndWait();
             }
         }
+    }
+    private void setPieChartAndBarChart(List<Listing> listings) {
+        ObservableList<Listing> listingObservableList = FXCollections.observableArrayList(listings);
+
+        this.offerTypesPieChart.getData().clear();
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Disponibili", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.AVAILABLE).count()),
+                new PieChart.Data("In attesa", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.PENDING).count()),
+                new PieChart.Data("Venduti", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.SOLD).count()),
+                new PieChart.Data("Rifiutati", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.REJECTED).count())
+        );
+        this.offerTypesPieChart.setData(pieChartData);
+
+        this.acceptedOffersBarChart.getData().clear();
+        BarChart.Series<String, Number> series = new BarChart.Series<>();
+        series.setName("Stato");
+        series.getData().add(new BarChart.Data<>("Disponibili", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.AVAILABLE).count()));
+        series.getData().add(new BarChart.Data<>("In attesa", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.PENDING).count()));
+        series.getData().add(new BarChart.Data<>("Venduti", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.SOLD).count()));
+        series.getData().add(new BarChart.Data<>("Rifiutati", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.REJECTED).count()));
+        this.acceptedOffersBarChart.getData().add(series);
     }
 
     @FXML
