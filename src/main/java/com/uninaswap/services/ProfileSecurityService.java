@@ -5,7 +5,7 @@ import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.User;
 import com.uninaswap.utility.Sha256;
 import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
+
 
 import java.sql.SQLException;
 
@@ -26,7 +26,7 @@ public class ProfileSecurityService {
 
     public boolean changePassword(int userId, String currentPassword, String newPassword){
         try{
-            User user = userDao.getUserFromID(userId);
+            User user = UserSession.getInstance().getCurrentUser();
             if(user == null){
                 ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "utente non trovato");
                 return false;
@@ -59,6 +59,11 @@ public class ProfileSecurityService {
     }
     public boolean changeUsername(int userId, String newUsername){
         try{
+            User user = UserSession.getInstance().getCurrentUser();
+            if(user == null){
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Utente non trovato");
+                return false;
+            }
             if(!isValidUsername(newUsername)){
                 ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Il nuovo username non è valido");
                 return false;

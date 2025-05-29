@@ -87,6 +87,8 @@ public class MyProfileController {
         this.userNameLabel.setText(currentUser.getUsername());
         this.firstNameField.setText(currentUser.getFirst_name());
         this.lastNameField.setText(currentUser.getLast_name());
+        this.currentUsernameField.setText(currentUser.getUsername());
+
         for (Faculty faculty : Faculty.values()) {
             this.facultyComboBox.getItems().add(faculty.getFacultyName());
         }
@@ -368,8 +370,10 @@ public class MyProfileController {
 
         Optional<ButtonType> result = confirmAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            int userId = UserSession.getInstance().getCurrentUserId();
-            boolean success = ProfileSecurityService.getInstance().changeUsername(userId, newUsername);
+            // Use the user directly from the session
+            User currentUser = UserSession.getInstance().getCurrentUser();
+            boolean success = ProfileSecurityService.getInstance().changeUsername(
+                    currentUser.getId(), newUsername);
 
             if (success) {
                 // Aggiorna i campi nell'interfaccia
@@ -379,6 +383,7 @@ public class MyProfileController {
             }
         }
     }
+
     @FXML
     private void handleChangePassword(ActionEvent event) {
         String currentPassword = currentPasswordField.getText();
@@ -412,8 +417,10 @@ public class MyProfileController {
 
         Optional<ButtonType> result = confirmAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            int userId = UserSession.getInstance().getCurrentUserId();
-            boolean success = ProfileSecurityService.getInstance().changePassword(userId, currentPassword, newPassword);
+            // Use the user directly from the session
+            User currentUser = UserSession.getInstance().getCurrentUser();
+            boolean success = ProfileSecurityService.getInstance().changePassword(
+                    currentUser.getId(), currentPassword, newPassword);
 
             if (success) {
                 // Pulisci i campi password
@@ -423,5 +430,7 @@ public class MyProfileController {
             }
         }
     }
+
+
 
 }
