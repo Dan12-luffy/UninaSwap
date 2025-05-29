@@ -18,6 +18,7 @@ public enum ListingStatus {
         return status;
     }
 
+
     @Override
     public String toString() {
         return status;

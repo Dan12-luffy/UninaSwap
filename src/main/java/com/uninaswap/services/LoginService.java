@@ -14,7 +14,6 @@ public class LoginService {
         this.userDao = new UserDaoImpl();
     }
 
-
     public boolean authenticateUser(String username, String password) {
         User user = userDao.authenticate(username, hashPassword(password));
         if(user != null) {

@@ -133,9 +133,8 @@ public class ProductDetailsController {
         dateLabel.setText("Pubblicato " + timeText);
     }
     private void onExchangeButtonClicked(ActionEvent event) {
-        if (listing != null) {
-            System.out.println("Proposta di scambio per: " + listing.getListingId());
-            // Logica per la proposta di scambio
+        if (this.listing != null) {
+            NavigationService.getInstance().navigateToExchangeView(event, this.listing);
         }
     }
     private void onGiftButtonClicked(ActionEvent event) {

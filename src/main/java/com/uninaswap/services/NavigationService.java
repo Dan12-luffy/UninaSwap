@@ -1,5 +1,6 @@
 package com.uninaswap.services;
 
+import com.uninaswap.controllers.ExchangeController;
 import com.uninaswap.controllers.ProductDetailsController;
 import com.uninaswap.model.Listing;
 import javafx.event.ActionEvent;
@@ -53,15 +54,6 @@ public class NavigationService {
         } catch (IOException e) {
             e.printStackTrace();
             ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore","Impossibile aprire la schermata principale.");
-        }
-    }
-    public void navigateToOfferHistoryView(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/offerHistoryInterface.fxml"));
-            Parent root = loader.load();
-            setScene(event, root);
-        } catch (IOException e) {
-            ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
     public void navigateToNewInsertionView(ActionEvent event) {
@@ -119,4 +111,16 @@ public class NavigationService {
         }
     }
 
+    public void navigateToExchangeView(ActionEvent event, Listing listing) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/exchangeInterface.fxml"));
+            Parent root = loader.load();
+            // Assuming you have a controller for the exchange view
+            ExchangeController controller = loader.getController();
+            controller.setListing(listing);
+            setScene(event, root);
+        } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }
+    }
 }
