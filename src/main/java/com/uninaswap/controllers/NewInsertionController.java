@@ -45,6 +45,7 @@ public class NewInsertionController {
     @FXML private Button previewFinalButton;
     @FXML private Button saveDraftButton;
     @FXML private ComboBox<String> locationComboBox;
+    @FXML private Label priceLabel;
     @FXML private ComboBox<String> deliveryComboBox;
     @FXML private ComboBox<String> contactComboBox;
     @FXML private ImageView logoImage;
@@ -69,6 +70,19 @@ public class NewInsertionController {
         categoryComboBox.setValue("Altro");
         locationComboBox.setValue("Monte Sant'Angelo");
         mainImagePreview.setImage(new Image(defaultImagePath));
+
+        typeComboBox.valueProperty().addListener((_, _, _) -> {
+            if(typeComboBox.getValue().equals("Regalo")){
+                priceField.setDisable(true);
+            } else if (typeComboBox.getValue().equals("Scambio")) {
+                priceLabel.setText("Valore dell'oggetto: ");
+            }
+            else{
+                priceField.setDisable(false);
+                priceLabel.setText("Prezzo: ");
+            }
+
+        });
     }
 
     @FXML
@@ -94,6 +108,7 @@ public class NewInsertionController {
                 ValidationService.getInstance().showNewInsertionMissingCampsError();
                 return;
             }
+            typeListing type = getTypeListing();
 
             BigDecimal price = BigDecimal.valueOf(0.0);
             if (!priceField.getText().isEmpty()) {
@@ -105,7 +120,6 @@ public class NewInsertionController {
                 }
             }
 
-            typeListing type = getTypeListing();
             String imagePath;
             if (selectedImageFile != null) {
                 imagePath = selectedImageFile.getAbsolutePath() ;
@@ -114,12 +128,12 @@ public class NewInsertionController {
             }
 
             Listing listing = new Listing(titleField.getText(), imagePath, descriptionArea.getText(), type, price, ListingStatus.AVAILABLE,
-                    Date.valueOf(LocalDate.now()), UserSession.getInstance().getCurrentUser().getId(), categoryComboBox.getValue());
+                    LocalDate.now(), UserSession.getInstance().getCurrentUser().getId(), categoryComboBox.getValue());
 
             ListingDao listingDao = new ListingDaoImpl();
             listingDao.insert(listing);
             ValidationService.getInstance().showNewInsertionSuccess();
-            NavigationService.getInstance().navigateToMainView(event);
+            NavigationService.getInstance().navigateToMyProfileView(event);
 
         } catch (Exception e) {
             e.printStackTrace();

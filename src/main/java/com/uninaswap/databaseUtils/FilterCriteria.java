@@ -12,7 +12,7 @@ public class FilterCriteria {
     private BigDecimal maxPrice;
     private String sortBy; // "date_desc", "price_asc", "price_desc"
     private String status;
-    private typeListing type;
+    private List<typeListing> type;
     private List<String> facultyNames;
     private Integer excludeUserId; // Per escludere gli annunci dell'utente corrente
 
@@ -45,8 +45,8 @@ public class FilterCriteria {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    public typeListing getType() { return type; }
-    public void setType(typeListing type) { this.type = type; }
+    public List<typeListing> getTypes() { return type; }
+    public void setTypes(List<typeListing> type) { this.type = type; }
 
     public List<String> getFacultyNames() { return facultyNames; }
     public void setFacultyNames(List<String> facultyNames) { this.facultyNames = facultyNames; }
@@ -68,5 +68,7 @@ public class FilterCriteria {
     public boolean hasFacultyFilter() {
         return facultyNames != null && !facultyNames.isEmpty();
     }
-
+    public boolean hasTypeListingFilter() {
+        return type != null && !type.isEmpty();
+    }
 }

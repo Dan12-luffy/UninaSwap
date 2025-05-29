@@ -5,7 +5,8 @@ public enum ListingStatus {
     AVAILABLE("Available"),
     PENDING("Pending"),
     APPROVED("Approved"),
-    REJECTED("Rejected");
+    REJECTED("Rejected"),
+    SOLD("Venduto");
 
     private final String status;
 

@@ -1,6 +1,7 @@
 package com.uninaswap.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Listing {
@@ -11,7 +12,7 @@ public class Listing {
     private typeListing type; //ENUM
     private BigDecimal price;
     private ListingStatus status; //ENUM
-    private Date publishDate;
+    private LocalDate publishDate;
     private int userId;
     private String category;
     private Integer categoryId;
@@ -21,7 +22,7 @@ public class Listing {
     // Costruttore completo
     public Listing(Integer listingId, String title, String imageUrl, String description,
                    typeListing type, BigDecimal price, ListingStatus status,
-                   Date publishDate, Integer userId, String category) {
+                   LocalDate publishDate, Integer userId, String category) {
         this.listingId = listingId;
         this.title = title;
         this.imageUrl = imageUrl;
@@ -36,7 +37,7 @@ public class Listing {
     //Costruttore senza id
     public Listing(String title, String imageUrl, String description,
                    typeListing type, BigDecimal price, ListingStatus status,
-                   Date publishDate, Integer userId, String category) {
+                   LocalDate publishDate, Integer userId, String category) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -113,11 +114,11 @@ public class Listing {
         this.status = status;
     }
 
-    public Date getPublishDate() {
+    public LocalDate getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(Date publishDate) {
+    public void setPublishDate(LocalDate publishDate) {
         this.publishDate = publishDate;
     }
 

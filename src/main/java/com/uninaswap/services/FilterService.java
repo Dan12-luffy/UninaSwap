@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class FilterService {
-    private static FilterService instance = new FilterService();
+    private final static FilterService instance = new FilterService();
     private final ListingDao listingDao;
 
     private FilterService() {

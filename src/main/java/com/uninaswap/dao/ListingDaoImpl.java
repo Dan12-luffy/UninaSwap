@@ -133,12 +133,6 @@ public class ListingDaoImpl implements ListingDao {
             }
         }
 
-        // Filtro per tipo
-        if (criteria.getType() != null) {
-            sql.append("AND l.type = ? ");
-            parameters.add(criteria.getType().name());
-        }
-
         if (criteria.hasFacultyFilter()) {
             sql.append("AND u.faculty IN (");
             for (int i = 0; i < criteria.getFacultyNames().size(); i++) {
@@ -149,6 +143,21 @@ public class ListingDaoImpl implements ListingDao {
             }
             sql.append(") ");
             parameters.addAll(criteria.getFacultyNames());
+        }
+
+        if(criteria.hasTypeListingFilter()) {
+            sql.append("AND l.type IN (");
+            for (int i = 0; i < criteria.getTypes().size(); i++) {
+                sql.append("?");
+                if (i < criteria.getTypes().size() - 1) {
+                    sql.append(",");
+                }
+            }
+            sql.append(") ");
+            //A quanto pare java non gli enum come paramentri per le query, quindi li devo convertire in stringhe
+            for (typeListing type : criteria.getTypes()) {
+                parameters.add(type.name());
+            }
         }
 
         // Ordinamento
@@ -368,7 +377,7 @@ public class ListingDaoImpl implements ListingDao {
                         }
 
                         listing.setPrice(rs.getBigDecimal("price"));
-                        listing.setPublishDate(rs.getDate("publishDate"));
+                        listing.setPublishDate(rs.getDate("publishDate").toLocalDate());
                         listing.setUserId(rs.getInt("userId"));
                         String categoryName = rs.getString("category_name");
                         listing.setCategory(categoryName != null ? categoryName : "Altro");
@@ -394,7 +403,7 @@ public class ListingDaoImpl implements ListingDao {
         stmt.setString(4, listing.getType().name());
         stmt.setBigDecimal(5, listing.getPrice());
         stmt.setString(6, listing.getStatus().name());
-        stmt.setDate(7, new java.sql.Date(listing.getPublishDate().getTime()));
+        stmt.setDate(7, new java.sql.Date(listing.getPublishDate().toEpochDay() * 24 * 60 * 60 * 1000)); // Convert LocalDate to java.sql.Date
         stmt.setInt(8, listing.getUserId());
 
         CategoryDaoImpl category = new CategoryDaoImpl();
@@ -410,7 +419,7 @@ public class ListingDaoImpl implements ListingDao {
         listing.setType(parseType(rs.getString("type")));
         listing.setPrice(rs.getBigDecimal("price"));
         listing.setStatus(parseStatus(rs.getString("status")));
-        listing.setPublishDate(rs.getDate("publishDate"));
+        listing.setPublishDate(rs.getDate("publishDate").toLocalDate());
         listing.setUserId(rs.getInt("userId"));
         listing.setCategory(rs.getString("category_name"));
     }

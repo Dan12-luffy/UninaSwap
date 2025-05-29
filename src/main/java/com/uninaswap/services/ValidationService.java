@@ -78,7 +78,9 @@ public class ValidationService {
     public void showPriceFormatError() {
         showAlert(Alert.AlertType.ERROR,"Errore di validazione", "Il formato del prezzo non è valido.");
     }
-
+    public void showInvalidPriceRangeError() {
+        showAlert(Alert.AlertType.ERROR, "Errore", "Il prezzo minimo non deve essere maggiore del prezzo massimo");
+    }
 
     public void showAlert(javafx.scene.control.Alert.AlertType alertType, String title, String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(alertType);
@@ -91,4 +93,6 @@ public class ValidationService {
     public void showNewInsertionSuccess() {
         showAlert(Alert.AlertType.INFORMATION, "Inserzione salvata", "L'inserzione è stata salvata con successo!");
     }
+
+
 }

@@ -6,6 +6,7 @@ import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.databaseUtils.FilterCriteria;
 import com.uninaswap.model.Listing;
 import com.uninaswap.model.User;
+import com.uninaswap.model.typeListing;
 import com.uninaswap.services.FilterService;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
@@ -67,28 +68,29 @@ public class MainController {
     @FXML private Label resultsCountLabel;
     @FXML private Label maxPriceLabel;
     @FXML private Label minPriceLabel;
-    @FXML private CheckBox computerScienceCheck;
-    @FXML private CheckBox mathCheck;
-    @FXML private CheckBox economyCheck;
-    @FXML private CheckBox artCheck;
-    @FXML private CheckBox medicineCheck;
-    @FXML private CheckBox biologyCheck;
-    @FXML private CheckBox philosophyCheck;
-    @FXML private CheckBox geographyCheck;
-    @FXML private CheckBox psicologyCheck;
-    @FXML private CheckBox chemistryCheck;
-    @FXML private CheckBox astronomyCheck;
-    @FXML private CheckBox tourismCheck;
-    @FXML private CheckBox linguisticsCheck;
-    @FXML private CheckBox musicCheck;
-
+    @FXML private CheckBox computerScienceCeck;
+    @FXML private CheckBox mathCeck;
+    @FXML private CheckBox economyCeck;
+    @FXML private CheckBox artCeck;
+    @FXML private CheckBox medicineCeck;
+    @FXML private CheckBox biologyCeck;
+    @FXML private CheckBox philosophyCeck;
+    @FXML private CheckBox geographyCeck;
+    @FXML private CheckBox psicologyCeck;
+    @FXML private CheckBox chemistryCeck;
+    @FXML private CheckBox astronomyCeck;
+    @FXML private CheckBox tourismCeck;
+    @FXML private CheckBox linguisticsCeck;
+    @FXML private CheckBox musicCeck;
+    @FXML private CheckBox saleCeck;
+    @FXML private CheckBox swapCeck;
+    @FXML private CheckBox giftCeck;
 
 
 
     private final int ALL_CATEGORIES_ID = -1; //Used to represent "All filter Categories", needed to clear the arraylist and filters
-    private FilterService filterService = FilterService.getInstance();
     private FilterCriteria currentFilter = new FilterCriteria();
-    private List<Integer> selectedCategories = new ArrayList<>();
+    private final List<Integer> selectedCategories = new ArrayList<>();
 
     @FXML
     private void initialize() {
@@ -114,7 +116,7 @@ public class MainController {
             currentFilter = new FilterCriteria();
             currentFilter.setSortBy("date_desc"); // Più recenti per default
 
-            List<Listing> listings = filterService.searchListings(currentFilter);
+            List<Listing> listings = FilterService.getInstance().searchListings(currentFilter);
             displayListings(listings);
 
         } catch (SQLException e) {
@@ -124,8 +126,8 @@ public class MainController {
     }
     private void initializePriceRange() {
         try {
-            BigDecimal maxPrice = filterService.getMaxAvailablePrice();
-            BigDecimal minPrice = filterService.getMinAvailablePrice();
+            BigDecimal maxPrice = FilterService.getInstance().getMaxAvailablePrice();
+            BigDecimal minPrice = FilterService.getInstance().getMinAvailablePrice();
 
             priceSlider.setMax(maxPrice.doubleValue());
             priceSlider.setMin(minPrice.doubleValue());
@@ -151,11 +153,9 @@ public class MainController {
             double max = Double.parseDouble(maxPriceField.getText().replace(',', '.'));
 
             if (min > max) {
-                ValidationService.getInstance().showAlert(Alert.AlertType.WARNING,
-                        "Errore", "Il prezzo minimo non può essere maggiore del massimo");
+                ValidationService.getInstance().showInvalidPriceRangeError();
                 return;
             }
-
             currentFilter.setMinPrice(BigDecimal.valueOf(min));
             currentFilter.setMaxPrice(BigDecimal.valueOf(max));
             applyCurrentFilters();
@@ -165,7 +165,7 @@ public class MainController {
         }
     }
 
-    private void displayFilteredListings(List<Listing> listings) {
+    /*private void displayFilteredListings(List<Listing> listings) {
         if (!listings.isEmpty()) {
             int column = 0;
             int row = 0;
@@ -189,7 +189,7 @@ public class MainController {
         } else {
             resultsCountLabel.setText("Trovati 0 articoli");
         }
-    }
+    }*/
 
     private void setupItemGrid() {
         itemsGrid.getChildren().clear();
@@ -210,9 +210,8 @@ public class MainController {
     }
     private void applyCurrentFilters() {
         try {
-            List<Listing> listings = filterService.searchListings(currentFilter);
+            List<Listing> listings = FilterService.getInstance().searchListings(currentFilter);
             displayListings(listings);
-
         } catch (SQLException e) {
             resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
@@ -276,7 +275,7 @@ public class MainController {
         titleLabel.setWrapText(true);
         titleLabel.setStyle("-fx-font-weight: bold;");
         Label priceLabel;
-        if(listing.getPrice() == null) {
+        if(listing.getType().equals(typeListing.GIFT) || listing.getType().equals(typeListing.EXCHANGE)) {
             priceLabel = new Label("Disponibile per: " + listing.getType());
         } else {
             priceLabel = new Label("€" + listing.getPrice());
@@ -338,26 +337,25 @@ public class MainController {
         } else {
             // All conditions
             currentFilter.setStatus(null);
-            }
-            }
-        */
+        }*/
+
 
         // Get faculty filter values
         List<String> selectedFaculties = new ArrayList<>();
-        if (computerScienceCheck.isSelected()) selectedFaculties.add("Informatica");
-        if (mathCheck.isSelected()) selectedFaculties.add("Matematica");
-        if (economyCheck.isSelected()) selectedFaculties.add("Economia");
-        if (artCheck.isSelected()) selectedFaculties.add("Arte");
-        if (medicineCheck.isSelected()) selectedFaculties.add("Medicina");
-        if (biologyCheck.isSelected()) selectedFaculties.add("Biologia");
-        if (philosophyCheck.isSelected()) selectedFaculties.add("Filosofia");
-        if (geographyCheck.isSelected()) selectedFaculties.add("Geografia");
-        if (psicologyCheck.isSelected()) selectedFaculties.add("Psicologia");
-        if (chemistryCheck.isSelected()) selectedFaculties.add("Chimica");
-        if (astronomyCheck.isSelected()) selectedFaculties.add("Astronomia");
-        if (tourismCheck.isSelected()) selectedFaculties.add("Turismo");
-        if (linguisticsCheck.isSelected()) selectedFaculties.add("Linguistica");
-        if (musicCheck.isSelected()) selectedFaculties.add("Musica");
+        if (computerScienceCeck.isSelected()) selectedFaculties.add("Informatica");
+        if (mathCeck.isSelected()) selectedFaculties.add("Matematica");
+        if (economyCeck.isSelected()) selectedFaculties.add("Economia");
+        if (artCeck.isSelected()) selectedFaculties.add("Arte");
+        if (medicineCeck.isSelected()) selectedFaculties.add("Medicina");
+        if (biologyCeck.isSelected()) selectedFaculties.add("Biologia");
+        if (philosophyCeck.isSelected()) selectedFaculties.add("Filosofia");
+        if (geographyCeck.isSelected()) selectedFaculties.add("Geografia");
+        if (psicologyCeck.isSelected()) selectedFaculties.add("Psicologia");
+        if (chemistryCeck.isSelected()) selectedFaculties.add("Chimica");
+        if (astronomyCeck.isSelected()) selectedFaculties.add("Astronomia");
+        if (tourismCeck.isSelected()) selectedFaculties.add("Turismo");
+        if (linguisticsCeck.isSelected()) selectedFaculties.add("Linguistica");
+        if (musicCeck.isSelected()) selectedFaculties.add("Musica");
 
         // Set faculty filter if any selected
         if (!selectedFaculties.isEmpty()) {
@@ -365,12 +363,20 @@ public class MainController {
         } else {
             currentFilter.setFacultyNames(null);
         }
+        //Get type filter values
+        List<typeListing> selectedTypes = new ArrayList<>();
+        if (saleCeck.isSelected()) selectedTypes.add(typeListing.SALE);
+        if (swapCeck.isSelected()) selectedTypes.add(typeListing.EXCHANGE);
+        if (giftCeck.isSelected()) selectedTypes.add(typeListing.GIFT);
 
+        if(!selectedTypes.isEmpty()) {
+            currentFilter.setTypes(selectedTypes);
+        }
+        else
+            currentFilter.setTypes(null);
 
-        // Add current user ID to exclude their listings
+        //Esclude l'user loggato dai filtri
         currentFilter.setExcludeUserId(UserSession.getInstance().getCurrentUser().getId());
-
-        // Apply the filters
         applyCurrentFilters();
     }
 
@@ -395,8 +401,6 @@ public class MainController {
         // Reset filtri
         currentFilter = new FilterCriteria();
         currentFilter.setSortBy("date_desc");
-
-        // Reset price fields
         initializePriceRange();
 
         applyCurrentFilters();

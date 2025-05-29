@@ -85,7 +85,7 @@ public class ProductDetailsController {
         } else {
             priceLabel.setText("Prezzo non disponibile");
         }
-
+        calculateDaysDifferenceAndSetDateLabel(listing, dateLabel);
         sellerLabel.setText("Utente: " + new UserDaoImpl().fullNameFromID(listing.getUserId()));
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
@@ -95,6 +95,7 @@ public class ProductDetailsController {
             System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
             productImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
         }
+
 
         if (listing.getType() != null) {
             switch (listing.getType()) {
@@ -117,6 +118,19 @@ public class ProductDetailsController {
                     offerButton.setVisible(true);
             }
         }
+    }
+    private void calculateDaysDifferenceAndSetDateLabel(Listing listing, Label dateLabel) {
+        long daysDifference = Math.abs(Date.valueOf(LocalDate.now()).toLocalDate().toEpochDay() -
+                listing.getPublishDate().toEpochDay());
+        String timeText;
+        if (daysDifference == 0) {
+            timeText = "oggi";
+        } else if (daysDifference == 1) {
+            timeText = "1 giorno fa";
+        } else {
+            timeText = daysDifference + " giorni fa";
+        }
+        dateLabel.setText("Pubblicato " + timeText);
     }
     private void onExchangeButtonClicked(ActionEvent event) {
         if (listing != null) {

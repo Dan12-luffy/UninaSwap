@@ -140,13 +140,12 @@
 
                             <children>
                                 <!-- Prezzo -->
-                                <Label styleClass="field-label" text="Prezzo:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <Label fx:id="priceLabel" prefHeight="20.0" prefWidth="162.0" styleClass="field-label" text="Prezzo:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                                 <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
                                     <HBox alignment="CENTER_LEFT" spacing="10">
                                         <TextField fx:id="priceField" maxWidth="150.0" promptText="0.00" styleClass="price-field" />
                                         <Label styleClass="currency-label" text="€" />
                                         <Region HBox.hgrow="ALWAYS" />
-                                        <Label fx:id="priceSuggestionLabel" styleClass="price-suggestion" text="💡 Prezzo suggerito: 25-30€" />
                                     </HBox>
                                     <Label styleClass="field-hint" text="Inserisci un prezzo competitivo per vendere più velocemente" />
                                 </VBox>
