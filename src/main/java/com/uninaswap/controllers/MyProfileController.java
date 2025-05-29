@@ -71,13 +71,13 @@ public class MyProfileController {
     @FXML
     public void initialize() {
         User currentUser = new UserDaoImpl().getUserFromID(UserSession.getInstance().getCurrentUserId());
-        userNameLabel.setText(currentUser.getUsername());
-        firstNameField.setText(currentUser.getFirst_name());
-        lastNameField.setText(currentUser.getLast_name());
+        this.userNameLabel.setText(currentUser.getUsername());
+        this.firstNameField.setText(currentUser.getFirst_name());
+        this.lastNameField.setText(currentUser.getLast_name());
         for (Faculty faculty : Faculty.values()) {
-            facultyComboBox.getItems().add(faculty.getFacultyName());
+            this.facultyComboBox.getItems().add(faculty.getFacultyName());
         }
-        facultyComboBox.setValue(currentUser.getFaculty());
+        this.facultyComboBox.setValue(currentUser.getFaculty());
         setTotalAdsLabel();
         // Load all listings into the userAdsContainer
         loadUserListings();
@@ -89,14 +89,14 @@ public class MyProfileController {
             List<Listing> listings = listingDao.findMyInsertions();
 
             // Clear existing content
-            userAdsContainer.getChildren().clear();
+            this.userAdsContainer.getChildren().clear();
 
             if (listings.isEmpty()) {
                 Label emptyLabel = new Label("Nessun annuncio trovato");
-                userAdsContainer.getChildren().add(emptyLabel);
+                this.userAdsContainer.getChildren().add(emptyLabel);
             } else {
                 for (Listing listing : listings) {
-                    userAdsContainer.getChildren().add(createListingCard(listing));
+                    this.userAdsContainer.getChildren().add(createListingCard(listing));
                 }
             }
         } catch (SQLException e) {
@@ -108,7 +108,7 @@ public class MyProfileController {
 
     private HBox createListingCard(Listing listing) {
         HBox card = new HBox(15);
-        card.setPrefWidth(userAdsContainer.getPrefWidth() - 20);
+        card.setPrefWidth(this.userAdsContainer.getPrefWidth() - 20);
         card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
         card.setPrefHeight(100);
 
@@ -185,13 +185,21 @@ public class MyProfileController {
         try {
             List<Listing> listingDao = new ListingDaoImpl().findMyInsertions();
             int totalInsertions = listingDao.size();
-            int temp = 0;
+            int availableListings = 0;
+            int completedSales = 0;
+            double totalEarnings = 0;
             for(Listing l : listingDao){
                 if(l.getStatus().equals(ListingStatus.AVAILABLE))
-                    temp++;
+                    availableListings++;
+                if(l.getStatus().equals(ListingStatus.SOLD)) {
+                    completedSales++;
+                    totalEarnings += l.getPrice() != null ? l.getPrice().doubleValue() : 0.0;
+                }
             }
             this.totalAdsLabel.setText(String.valueOf(totalInsertions));
-            this.activeSalesLabel.setText(String.valueOf(temp));
+            this.activeSalesLabel.setText(String.valueOf(availableListings));
+            this.completedSalesLabel.setText(String.valueOf(completedSales));
+            this.totalEarningsLabel.setText(String.format("€%.2f", totalEarnings));
         }catch (Exception e){
             this.totalAdsLabel.setText("0");
             this.activeSalesLabel.setText("0");

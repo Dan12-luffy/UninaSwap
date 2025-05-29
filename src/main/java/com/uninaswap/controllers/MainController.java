@@ -96,31 +96,31 @@ public class MainController {
     private void initialize() {
         User currentUser = UserSession.getInstance().getCurrentUser();
         if (currentUser != null) {
-            usernameLabel.setText("Ciao " + currentUser.getUsername());
+            this.usernameLabel.setText("Ciao " + currentUser.getUsername());
         }
-        sortComboBox.getItems().addAll("Più recenti", "Prezzo crescente", "Prezzo decrescente");
-        sortComboBox.setValue("Più recenti");
+        this.sortComboBox.getItems().addAll("Più recenti", "Prezzo crescente", "Prezzo decrescente");
+        this.sortComboBox.setValue("Più recenti");
         conditionToggleGroupSettings();
         //set up category buttons
         setUpCategoryButtons();
         // Select the "all conditions" option by default
-        allConditionsRadio.setSelected(true);
+        this.allConditionsRadio.setSelected(true);
         initializePriceRange();
         loadAllItems();
-        maxPriceLabel.setText(((int)priceSlider.getMax() + "€"));
+        this.maxPriceLabel.setText(((int)this.priceSlider.getMax() + "€"));
     }
 
     private void loadAllItems() {
         try {
             // Reset filtri
-            currentFilter = new FilterCriteria();
-            currentFilter.setSortBy("date_desc"); // Più recenti per default
+            this.currentFilter = new FilterCriteria();
+            this.currentFilter.setSortBy("date_desc"); // Più recenti per default
 
-            List<Listing> listings = FilterService.getInstance().searchListings(currentFilter);
+            List<Listing> listings = FilterService.getInstance().searchListings(this.currentFilter);
             displayListings(listings);
 
         } catch (SQLException e) {
-            resultsCountLabel.setText("Errore durante il caricamento");
+            this.resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
         }
     }
@@ -129,35 +129,34 @@ public class MainController {
             BigDecimal maxPrice = FilterService.getInstance().getMaxAvailablePrice();
             BigDecimal minPrice = FilterService.getInstance().getMinAvailablePrice();
 
-            priceSlider.setMax(maxPrice.doubleValue());
-            priceSlider.setMin(minPrice.doubleValue());
-            priceSlider.setValue(minPrice.doubleValue());
+            this.priceSlider.setMax(maxPrice.doubleValue());
+            this.priceSlider.setMin(minPrice.doubleValue());
+            this.priceSlider.setValue(minPrice.doubleValue());
 
-            minPriceField.setText(minPrice.toString());
-            maxPriceField.setText(maxPrice.toString());
-            maxPriceLabel.setText(maxPrice + "€");
-            minPriceLabel.setText(minPrice + "€");
+            this.minPriceField.setText(minPrice.toString());
+            this.maxPriceField.setText(maxPrice.toString());
+            this.minPriceLabel.setText(minPrice + "€");
 
         } catch (Exception e) {
             System.err.println("Errore nell'inizializzazione del range prezzi: " + e.getMessage());
             // Fallback ai valori di default
-            priceSlider.setMax(1000.0);
-            priceSlider.setMin(0.0);
+            this.priceSlider.setMax(1000.0);
+            this.priceSlider.setMin(0.0);
         }
     }
 
     @FXML
     private void onApplyPriceButtonClicked() {
         try {
-            double min = Double.parseDouble(minPriceField.getText().replace(',', '.'));
-            double max = Double.parseDouble(maxPriceField.getText().replace(',', '.'));
+            double min = Double.parseDouble(this.minPriceField.getText().replace(',', '.'));
+            double max = Double.parseDouble(this.maxPriceField.getText().replace(',', '.'));
 
             if (min > max) {
                 ValidationService.getInstance().showInvalidPriceRangeError();
                 return;
             }
-            currentFilter.setMinPrice(BigDecimal.valueOf(min));
-            currentFilter.setMaxPrice(BigDecimal.valueOf(max));
+            this.currentFilter.setMinPrice(BigDecimal.valueOf(min));
+            this.currentFilter.setMaxPrice(BigDecimal.valueOf(max));
             applyCurrentFilters();
 
         } catch (NumberFormatException e) {
@@ -192,10 +191,10 @@ public class MainController {
     }*/
 
     private void setupItemGrid() {
-        itemsGrid.getChildren().clear();
-        itemsGrid.setHgap(12);
-        itemsGrid.setVgap(20);
-        itemsGrid.getColumnConstraints().clear();
+        this.itemsGrid.getChildren().clear();
+        this.itemsGrid.setHgap(12);
+        this.itemsGrid.setVgap(20);
+        this.itemsGrid.getColumnConstraints().clear();
         int colCount = 4;
         double colWidth = 210;
 
@@ -205,7 +204,7 @@ public class MainController {
             column.setPrefWidth(colWidth);
             column.setMaxWidth(colWidth);
             column.setMinWidth(colWidth);
-            itemsGrid.getColumnConstraints().add(column);
+            this.itemsGrid.getColumnConstraints().add(column);
         }
     }
     private void applyCurrentFilters() {
@@ -213,7 +212,7 @@ public class MainController {
             List<Listing> listings = FilterService.getInstance().searchListings(currentFilter);
             displayListings(listings);
         } catch (SQLException e) {
-            resultsCountLabel.setText("Errore durante il caricamento");
+            this.resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
         }
     }
@@ -226,7 +225,7 @@ public class MainController {
 
             for (Listing listing : listings) {
                 VBox itemCard = createItemCard(listing);
-                itemsGrid.add(itemCard, column, row);
+                this.itemsGrid.add(itemCard, column, row);
 
                 column++;
                 if (column > 3) {
@@ -237,12 +236,12 @@ public class MainController {
 
             // Aggiorna contatore risultati
             if (listings.size() == 1) {
-                resultsCountLabel.setText("Trovato 1 articolo");
+                this.resultsCountLabel.setText("Trovato 1 articolo");
             } else {
-                resultsCountLabel.setText("Trovati " + listings.size() + " articoli");
+                this.resultsCountLabel.setText("Trovati " + listings.size() + " articoli");
             }
         } else {
-            resultsCountLabel.setText("Trovati 0 articoli");
+            this.resultsCountLabel.setText("Trovati 0 articoli");
         }
     }
     private VBox createItemCard(Listing listing) {
@@ -301,9 +300,9 @@ public class MainController {
 
     @FXML
     private void onSearchButtonClicked() {
-        String searchText = searchField.getText().trim();
+        String searchText = this.searchField.getText().trim();
         if (!searchText.isEmpty()) {
-            currentFilter.setSearchText(searchText);
+            this.currentFilter.setSearchText(searchText);
             applyCurrentFilters();
         }
     }
@@ -342,65 +341,65 @@ public class MainController {
 
         // Get faculty filter values
         List<String> selectedFaculties = new ArrayList<>();
-        if (computerScienceCeck.isSelected()) selectedFaculties.add("Informatica");
-        if (mathCeck.isSelected()) selectedFaculties.add("Matematica");
-        if (economyCeck.isSelected()) selectedFaculties.add("Economia");
-        if (artCeck.isSelected()) selectedFaculties.add("Arte");
-        if (medicineCeck.isSelected()) selectedFaculties.add("Medicina");
-        if (biologyCeck.isSelected()) selectedFaculties.add("Biologia");
-        if (philosophyCeck.isSelected()) selectedFaculties.add("Filosofia");
-        if (geographyCeck.isSelected()) selectedFaculties.add("Geografia");
-        if (psicologyCeck.isSelected()) selectedFaculties.add("Psicologia");
-        if (chemistryCeck.isSelected()) selectedFaculties.add("Chimica");
-        if (astronomyCeck.isSelected()) selectedFaculties.add("Astronomia");
-        if (tourismCeck.isSelected()) selectedFaculties.add("Turismo");
-        if (linguisticsCeck.isSelected()) selectedFaculties.add("Linguistica");
-        if (musicCeck.isSelected()) selectedFaculties.add("Musica");
+        if (this.computerScienceCeck.isSelected()) selectedFaculties.add("Informatica");
+        if (this.mathCeck.isSelected()) selectedFaculties.add("Matematica");
+        if (this.economyCeck.isSelected()) selectedFaculties.add("Economia");
+        if (this.artCeck.isSelected()) selectedFaculties.add("Arte");
+        if (this.medicineCeck.isSelected()) selectedFaculties.add("Medicina");
+        if (this.biologyCeck.isSelected()) selectedFaculties.add("Biologia");
+        if (this.philosophyCeck.isSelected()) selectedFaculties.add("Filosofia");
+        if (this.geographyCeck.isSelected()) selectedFaculties.add("Geografia");
+        if (this.psicologyCeck.isSelected()) selectedFaculties.add("Psicologia");
+        if (this.chemistryCeck.isSelected()) selectedFaculties.add("Chimica");
+        if (this.astronomyCeck.isSelected()) selectedFaculties.add("Astronomia");
+        if (this.tourismCeck.isSelected()) selectedFaculties.add("Turismo");
+        if (this.linguisticsCeck.isSelected()) selectedFaculties.add("Linguistica");
+        if (this.musicCeck.isSelected()) selectedFaculties.add("Musica");
 
         // Set faculty filter if any selected
         if (!selectedFaculties.isEmpty()) {
-            currentFilter.setFacultyNames(selectedFaculties);
+            this.currentFilter.setFacultyNames(selectedFaculties);
         } else {
-            currentFilter.setFacultyNames(null);
+            this.currentFilter.setFacultyNames(null);
         }
         //Get type filter values
         List<typeListing> selectedTypes = new ArrayList<>();
-        if (saleCeck.isSelected()) selectedTypes.add(typeListing.SALE);
-        if (swapCeck.isSelected()) selectedTypes.add(typeListing.EXCHANGE);
-        if (giftCeck.isSelected()) selectedTypes.add(typeListing.GIFT);
+        if (this.saleCeck.isSelected()) selectedTypes.add(typeListing.SALE);
+        if (this.swapCeck.isSelected()) selectedTypes.add(typeListing.EXCHANGE);
+        if (this.giftCeck.isSelected()) selectedTypes.add(typeListing.GIFT);
 
         if(!selectedTypes.isEmpty()) {
-            currentFilter.setTypes(selectedTypes);
+            this.currentFilter.setTypes(selectedTypes);
         }
         else
-            currentFilter.setTypes(null);
+            this.currentFilter.setTypes(null);
 
         //Esclude l'user loggato dai filtri
-        currentFilter.setExcludeUserId(UserSession.getInstance().getCurrentUser().getId());
+        this.currentFilter.setExcludeUserId(UserSession.getInstance().getCurrentUser().getId());
         applyCurrentFilters();
     }
 
     @FXML
     private void onResetFiltersClicked() {
         // Reset UI
-        searchField.clear();
-        allCategoryButton.setSelected(true);
-        allConditionsRadio.setSelected(true);
+        this.searchField.clear();
+        this.allCategoryButton.setSelected(true);
+        this.allConditionsRadio.setSelected(true);
 
         // Reset altri toggle buttons
-        booksCategoryButton.setSelected(false);
-        electronicCategoryButton.setSelected(false);
-        clothingCategoryButton.setSelected(false);
-        notesCategoryButton.setSelected(false);
-        furnitureCategoryButton.setSelected(false);
-        otherCategoryButton.setSelected(false);
+        this.booksCategoryButton.setSelected(false);
+        this.electronicCategoryButton.setSelected(false);
+        this.clothingCategoryButton.setSelected(false);
+        this.notesCategoryButton.setSelected(false);
+        this.furnitureCategoryButton.setSelected(false);
+        this.otherCategoryButton.setSelected(false);
 
-        selectedCategories.clear();
-        selectedCategories.add(ALL_CATEGORIES_ID);
+        this.selectedCategories.clear();
+        this.selectedCategories.add(ALL_CATEGORIES_ID);
 
         // Reset filtri
-        currentFilter = new FilterCriteria();
-        currentFilter.setSortBy("date_desc");
+        this.currentFilter = new FilterCriteria();
+        this.currentFilter.setSortBy("date_desc");
         initializePriceRange();
 
         applyCurrentFilters();
@@ -414,32 +413,31 @@ public class MainController {
 
     @FXML
     private void sliderPriceSelection() {
-        double minPrice = priceSlider.getValue();
-        double maxPrice = priceSlider.getMax();
+        double minPrice = this.priceSlider.getValue();
+        double maxPrice = this.priceSlider.getMax();
 
-        minPriceField.setText(String.format("%.2f", minPrice));
-        maxPriceField.setText(String.valueOf((int)(maxPrice)));
+        this.minPriceField.setText(String.format("%.2f", minPrice));
+        this.maxPriceField.setText(String.valueOf((int)(maxPrice)));
     }
 
     private void toggleButtonsSettings() {
         CategoryDaoImpl categoryDao = new CategoryDaoImpl();
 
-        allCategoryButton.setToggleGroup(null);
-        booksCategoryButton.setToggleGroup(null);
-        electronicCategoryButton.setToggleGroup(null);
-        clothingCategoryButton.setToggleGroup(null);
-        notesCategoryButton.setToggleGroup(null);
-        furnitureCategoryButton.setToggleGroup(null);
-        otherCategoryButton.setToggleGroup(null);
+        this.allCategoryButton.setToggleGroup(null);
+        this.booksCategoryButton.setToggleGroup(null);
+        this.electronicCategoryButton.setToggleGroup(null);
+        this.clothingCategoryButton.setToggleGroup(null);
+        this.notesCategoryButton.setToggleGroup(null);
+        this.furnitureCategoryButton.setToggleGroup(null);
+        this.otherCategoryButton.setToggleGroup(null);
 
-        allCategoryButton.setUserData(ALL_CATEGORIES_ID);
-        booksCategoryButton.setUserData(categoryDao.getCategoryIdByName("Libri"));
-        electronicCategoryButton.setUserData(categoryDao.getCategoryIdByName("Elettronica"));
-        clothingCategoryButton.setUserData(categoryDao.getCategoryIdByName("Abbigliamento"));
-        notesCategoryButton.setUserData(categoryDao.getCategoryIdByName("Appunti"));
-        furnitureCategoryButton.setUserData(categoryDao.getCategoryIdByName("Arredamento"));
-        otherCategoryButton.setUserData(categoryDao.getCategoryIdByName("Altro"));
-
+        this.allCategoryButton.setUserData(ALL_CATEGORIES_ID);
+        this.booksCategoryButton.setUserData(categoryDao.getCategoryIdByName("Libri"));
+        this.electronicCategoryButton.setUserData(categoryDao.getCategoryIdByName("Elettronica"));
+        this.clothingCategoryButton.setUserData(categoryDao.getCategoryIdByName("Abbigliamento"));
+        this.notesCategoryButton.setUserData(categoryDao.getCategoryIdByName("Appunti"));
+        this.furnitureCategoryButton.setUserData(categoryDao.getCategoryIdByName("Arredamento"));
+        this.otherCategoryButton.setUserData(categoryDao.getCategoryIdByName("Altro"));
     }
 
     private void setUpCategoryButtons() {
@@ -447,17 +445,17 @@ public class MainController {
         toggleButtonsSettings();
 
         // "tutti" è selezionato di default
-        allCategoryButton.setSelected(true);
-        selectedCategories.add(ALL_CATEGORIES_ID);
+        this.allCategoryButton.setSelected(true);
+        this.selectedCategories.add(ALL_CATEGORIES_ID);
 
         // do un azione a ciascun bottone
-        allCategoryButton.setOnAction(e -> onCategoryButtonClicked(allCategoryButton));
-        booksCategoryButton.setOnAction(e -> onCategoryButtonClicked(booksCategoryButton));
-        electronicCategoryButton.setOnAction(e -> onCategoryButtonClicked(electronicCategoryButton));
-        clothingCategoryButton.setOnAction(e -> onCategoryButtonClicked(clothingCategoryButton));
-        notesCategoryButton.setOnAction(e -> onCategoryButtonClicked(notesCategoryButton));
-        furnitureCategoryButton.setOnAction(e -> onCategoryButtonClicked(furnitureCategoryButton));
-        otherCategoryButton.setOnAction(e -> onCategoryButtonClicked(otherCategoryButton));
+        this.allCategoryButton.setOnAction(e -> onCategoryButtonClicked(allCategoryButton));
+        this.booksCategoryButton.setOnAction(e -> onCategoryButtonClicked(booksCategoryButton));
+        this.electronicCategoryButton.setOnAction(e -> onCategoryButtonClicked(electronicCategoryButton));
+        this.clothingCategoryButton.setOnAction(e -> onCategoryButtonClicked(clothingCategoryButton));
+        this.notesCategoryButton.setOnAction(e -> onCategoryButtonClicked(notesCategoryButton));
+        this.furnitureCategoryButton.setOnAction(e -> onCategoryButtonClicked(furnitureCategoryButton));
+        this.otherCategoryButton.setOnAction(e -> onCategoryButtonClicked(otherCategoryButton));
     }
 
 
@@ -468,30 +466,30 @@ public class MainController {
         String categoryName = button.getText();
         if (categoryName.equals("Tutto")) {
             // se "tuttO" è selezionato, deseleziona gli altri
-            booksCategoryButton.setSelected(false);
-            electronicCategoryButton.setSelected(false);
-            clothingCategoryButton.setSelected(false);
-            notesCategoryButton.setSelected(false);
-            furnitureCategoryButton.setSelected(false);
-            otherCategoryButton.setSelected(false);
-            selectedCategories.clear();
-            selectedCategories.add(ALL_CATEGORIES_ID);
-            allCategoryButton.setSelected(true);
+            this.booksCategoryButton.setSelected(false);
+            this.electronicCategoryButton.setSelected(false);
+            this.clothingCategoryButton.setSelected(false);
+            this.notesCategoryButton.setSelected(false);
+            this.furnitureCategoryButton.setSelected(false);
+            this.otherCategoryButton.setSelected(false);
+            this.selectedCategories.clear();
+            this.selectedCategories.add(ALL_CATEGORIES_ID);
+            this.allCategoryButton.setSelected(true);
         } else {
             if (button.isSelected()) {
                 //se una specifica categoria è selezionata, rimuovi "tutti" se è selezionato
-                if (selectedCategories.contains(ALL_CATEGORIES_ID)) {
-                    selectedCategories.remove(Integer.valueOf(ALL_CATEGORIES_ID));
-                    allCategoryButton.setSelected(false);
+                if (this.selectedCategories.contains(ALL_CATEGORIES_ID)) {
+                    this.selectedCategories.remove(Integer.valueOf(ALL_CATEGORIES_ID));
+                    this.allCategoryButton.setSelected(false);
                 }
-                selectedCategories.add(categoryDao.getCategoryIdByName(categoryName));
+                this.selectedCategories.add(categoryDao.getCategoryIdByName(categoryName));
             } else {
-                selectedCategories.remove(categoryDao.getCategoryIdByName(categoryName));
+                this.selectedCategories.remove(categoryDao.getCategoryIdByName(categoryName));
 
                 // se tutte le categorie sono deselezionate, aggiungi "tutti" e selezionalo
-                if (selectedCategories.isEmpty()) {
-                    selectedCategories.add(ALL_CATEGORIES_ID);
-                    allCategoryButton.setSelected(true);
+                if (this.selectedCategories.isEmpty()) {
+                    this.selectedCategories.add(ALL_CATEGORIES_ID);
+                    this.allCategoryButton.setSelected(true);
                 }
             }
         }
@@ -501,10 +499,10 @@ public class MainController {
 
     // Add new filter method for multiple categories
     private void filterItemsByMultipleCategories() {
-        if (selectedCategories.contains(ALL_CATEGORIES_ID)) {
-            currentFilter.setCategoryIds(null);
+        if (this.selectedCategories.contains(ALL_CATEGORIES_ID)) {
+            this.currentFilter.setCategoryIds(null);
         } else {
-            currentFilter.setCategoryIds(new ArrayList<>(selectedCategories));
+            this.currentFilter.setCategoryIds(new ArrayList<>(selectedCategories));
         }
         applyCurrentFilters();
     }
@@ -558,14 +556,14 @@ public class MainController {
 
     @FXML
     private void onSortChanged() {
-        String selectedSort = sortComboBox.getValue();
+        String selectedSort = this.sortComboBox.getValue();
         String sortBy = switch (selectedSort) {
             case "Prezzo crescente" -> "price_asc";
             case "Prezzo decrescente" -> "price_desc";
             default -> "date_desc";
         };
 
-        currentFilter.setSortBy(sortBy);
+        this.currentFilter.setSortBy(sortBy);
         applyCurrentFilters();
     }
 
@@ -577,10 +575,10 @@ public class MainController {
 
     private void conditionToggleGroupSettings(){
         ToggleGroup conditionToggleGroup = new ToggleGroup();
-        allConditionsRadio.setToggleGroup(conditionToggleGroup);
-        likeNewRadio.setToggleGroup(conditionToggleGroup);
-        excellentRadio.setToggleGroup(conditionToggleGroup);
-        goodRadio.setToggleGroup(conditionToggleGroup);
-        likeNewRadio.setSelected(true);
+        this.allConditionsRadio.setToggleGroup(conditionToggleGroup);
+        this.likeNewRadio.setToggleGroup(conditionToggleGroup);
+        this.excellentRadio.setToggleGroup(conditionToggleGroup);
+        this.goodRadio.setToggleGroup(conditionToggleGroup);
+        this.likeNewRadio.setSelected(true);
     }
 }

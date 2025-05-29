@@ -38,7 +38,7 @@ public class RegisterController {
     @FXML
     public void initialize(){
         for (Faculty faculty : Faculty.values()) {
-            facultyComboBox.getItems().add(faculty.getFacultyName());
+            this.facultyComboBox.getItems().add(faculty.getFacultyName());
         }
     }
 

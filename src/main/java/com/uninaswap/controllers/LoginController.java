@@ -29,8 +29,8 @@ public class LoginController {
 
     @FXML
     private void onLoginButtonClicked(ActionEvent event) {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+        String username = this.usernameField.getText();
+        String password = this.passwordField.getText();
         if (!ValidationService.getInstance().areCredentialsValid(username, password)) {
             return;
         }

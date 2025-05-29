@@ -74,48 +74,48 @@ public class ProductDetailsController {
         }
         this.listing = listing;
 
-        productTitleLabel.setText(listing.getTitle());
-        descriptionTextArea.setText(listing.getDescription());
-        categoryLabel.setText(listing.getCategory());
-        availabilityLabel.setText(listing.getStatus().toString());
-        dateLabel.setText(listing.getPublishDate().toString());
+        this.productTitleLabel.setText(listing.getTitle());
+        this.descriptionTextArea.setText(listing.getDescription());
+        this.categoryLabel.setText(listing.getCategory());
+        this.availabilityLabel.setText(listing.getStatus().toString());
+        this.dateLabel.setText(listing.getPublishDate().toString());
 
         if (listing.getPrice() != null) {
-            priceLabel.setText("€" + listing.getPrice().toString());
+            this.priceLabel.setText("€" + listing.getPrice().toString());
         } else {
-            priceLabel.setText("Prezzo non disponibile");
+            this.priceLabel.setText("Prezzo non disponibile");
         }
-        calculateDaysDifferenceAndSetDateLabel(listing, dateLabel);
-        sellerLabel.setText("Utente: " + new UserDaoImpl().fullNameFromID(listing.getUserId()));
+        calculateDaysDifferenceAndSetDateLabel(listing, this.dateLabel);
+        this.sellerLabel.setText("Utente: " + new UserDaoImpl().fullNameFromID(listing.getUserId()));
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
             File imageFile = new File(listing.getImageUrl());
-            productImageView.setImage(new Image(imageFile.toURI().toString()));
+            this.productImageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
             System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
-            productImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
+            this.productImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
         }
 
 
         if (listing.getType() != null) {
             switch (listing.getType()) {
                 case EXCHANGE:
-                    actionButton.setText("Proponi scambio");
-                    actionButton.setOnAction(this::onExchangeButtonClicked);
-                    actionButton.setTranslateX(-150);
-                    offerButton.setVisible(false);
+                    this.actionButton.setText("Proponi scambio");
+                    this.actionButton.setOnAction(this::onExchangeButtonClicked);
+                    this.actionButton.setTranslateX(-150);
+                    this.offerButton.setVisible(false);
 
                     break;
                 case GIFT:
-                    actionButton.setText("Richiedi regalo");
-                    actionButton.setOnAction(this::onGiftButtonClicked);
-                    actionButton.setTranslateX(-150);
-                    offerButton.setVisible(false);
-                    priceLabel.setText("Gratis");
+                    this.actionButton.setText("Richiedi regalo");
+                    this.actionButton.setOnAction(this::onGiftButtonClicked);
+                    this.actionButton.setTranslateX(-150);
+                    this.offerButton.setVisible(false);
+                    this.priceLabel.setText("Gratis");
                     break;
                 default:
-                    actionButton.setText("Acquista ora");
-                    offerButton.setVisible(true);
+                    this.actionButton.setText("Acquista ora");
+                    this.offerButton.setVisible(true);
             }
         }
     }

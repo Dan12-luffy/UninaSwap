@@ -19,15 +19,8 @@ import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.UUID;
 
 public class NewInsertionController {
     @FXML private TextField titleField;
@@ -46,8 +39,6 @@ public class NewInsertionController {
     @FXML private Button saveDraftButton;
     @FXML private ComboBox<String> locationComboBox;
     @FXML private Label priceLabel;
-    @FXML private ComboBox<String> deliveryComboBox;
-    @FXML private ComboBox<String> contactComboBox;
     @FXML private ImageView logoImage;
     @FXML private ImageView mainImagePreview;
 
@@ -59,27 +50,27 @@ public class NewInsertionController {
     @FXML
     private void initialize() {
         // Initialize comboboxes with values
-        typeComboBox.getItems().addAll("Vendita", "Scambio", "Regalo");
-        statusComboBox.getItems().addAll("Nuovo", "Come nuovo", "Buone condizioni", "Usato");
-        categoryComboBox.getItems().addAll("Libri", "Appunti", "Elettronica", "Arredamento", "Abbigliamento", "Altro");
-        locationComboBox.getItems().addAll("Monte Sant'Angelo", "Fuorigrotta", "Agnano", "Centro Storico");
+        this.typeComboBox.getItems().addAll("Vendita", "Scambio", "Regalo");
+        this.statusComboBox.getItems().addAll("Nuovo", "Come nuovo", "Buone condizioni", "Usato");
+        this.categoryComboBox.getItems().addAll("Libri", "Appunti", "Elettronica", "Arredamento", "Abbigliamento", "Altro");
+        this.locationComboBox.getItems().addAll("Monte Sant'Angelo", "Fuorigrotta", "Agnano", "Centro Storico");
 
         // Set default values
-        typeComboBox.setValue("Vendita");
-        statusComboBox.setValue("Usato");
-        categoryComboBox.setValue("Altro");
-        locationComboBox.setValue("Monte Sant'Angelo");
-        mainImagePreview.setImage(new Image(defaultImagePath));
+        this.typeComboBox.setValue("Vendita");
+        this.statusComboBox.setValue("Usato");
+        this.categoryComboBox.setValue("Altro");
+        this.locationComboBox.setValue("Monte Sant'Angelo");
+        this.mainImagePreview.setImage(new Image(this.defaultImagePath));
 
-        typeComboBox.valueProperty().addListener((_, _, _) -> {
-            if(typeComboBox.getValue().equals("Regalo")){
-                priceField.setDisable(true);
-            } else if (typeComboBox.getValue().equals("Scambio")) {
-                priceLabel.setText("Valore dell'oggetto: ");
+        this.typeComboBox.valueProperty().addListener((_, _, _) -> {
+            if(this.typeComboBox.getValue().equals("Regalo")){
+                this.priceField.setDisable(true);
+            } else if (this.typeComboBox.getValue().equals("Scambio")) {
+                this.priceLabel.setText("Valore dell'oggetto: ");
             }
             else{
-                priceField.setDisable(false);
-                priceLabel.setText("Prezzo: ");
+                this.priceField.setDisable(false);
+                this.priceLabel.setText("Prezzo: ");
             }
 
         });
@@ -93,27 +84,27 @@ public class NewInsertionController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleziona un'immagine");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Immagini", "*.png", "*.jpg", "*.jpeg", "*.gif"));
-        selectedImageFile = fileChooser.showOpenDialog(null);
+        this.selectedImageFile = fileChooser.showOpenDialog(null);
 
-        if (selectedImageFile != null) {
-            imagePathField.setText(selectedImageFile.getAbsolutePath());
-            mainImagePreview.setImage(new Image(selectedImageFile.toURI().toString()));
+        if (this.selectedImageFile != null) {
+            this.imagePathField.setText(this.selectedImageFile.getAbsolutePath());
+            this.mainImagePreview.setImage(new Image(this.selectedImageFile.toURI().toString()));
         }
     }
 
     @FXML
     private void handleSave(ActionEvent event) {
         try {
-            if (titleField.getText().isEmpty() || descriptionArea.getText().isEmpty() ) {
+            if (this.titleField.getText().isEmpty() || this.descriptionArea.getText().isEmpty() ) {
                 ValidationService.getInstance().showNewInsertionMissingCampsError();
                 return;
             }
             typeListing type = getTypeListing();
 
             BigDecimal price = BigDecimal.valueOf(0.0);
-            if (!priceField.getText().isEmpty()) {
+            if (!this.priceField.getText().isEmpty()) {
                 try {
-                    price = BigDecimal.valueOf(Double.parseDouble(priceField.getText().replace(',', '.')));
+                    price = BigDecimal.valueOf(Double.parseDouble(this.priceField.getText().replace(',', '.')));
                 } catch (NumberFormatException e) {
                     ValidationService.getInstance().showPriceFormatError();
                     return;
@@ -121,14 +112,14 @@ public class NewInsertionController {
             }
 
             String imagePath;
-            if (selectedImageFile != null) {
-                imagePath = selectedImageFile.getAbsolutePath() ;
+            if (this.selectedImageFile != null) {
+                imagePath = this.selectedImageFile.getAbsolutePath() ;
             } else {
-                imagePath = defaultImagePath;
+                imagePath = this.defaultImagePath;
             }
 
-            Listing listing = new Listing(titleField.getText(), imagePath, descriptionArea.getText(), type, price, ListingStatus.AVAILABLE,
-                    LocalDate.now(), UserSession.getInstance().getCurrentUser().getId(), categoryComboBox.getValue());
+            Listing listing = new Listing(this.titleField.getText(), imagePath, this.descriptionArea.getText(), type, price, ListingStatus.AVAILABLE,
+                    LocalDate.now(), UserSession.getInstance().getCurrentUser().getId(), this.categoryComboBox.getValue());
 
             ListingDao listingDao = new ListingDaoImpl();
             listingDao.insert(listing);
@@ -144,7 +135,7 @@ public class NewInsertionController {
     @NotNull
     private typeListing getTypeListing() {
         typeListing type;
-        String typeValue = typeComboBox.getValue();
+        String typeValue = this.typeComboBox.getValue();
         if ("Vendita".equals(typeValue)) {
             type = typeListing.SALE;
         } else if ("Scambio".equals(typeValue)) {
@@ -169,7 +160,7 @@ public class NewInsertionController {
     }
 
     private void closeWindow() {
-        Stage stage = (Stage) titleField.getScene().getWindow();
+        Stage stage = (Stage) this.titleField.getScene().getWindow();
         stage.close();
     }
 }
