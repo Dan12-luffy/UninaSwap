@@ -153,11 +153,11 @@
                             </rowConstraints>
 
                             <children>
-                                <Label styleClass="calc-label" text="Valore dei tuoi prodotti:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                <Label fx:id="yourTotalValueLabel" styleClass="calc-value" text="€0.00" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                <Label styleClass="calc-label" text="Valore del prodotto desiderato:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <Label fx:id="desiredValueLabel" styleClass="calc-value" text="€0.00" GridPane.columnIndex="2" GridPane.rowIndex="0" />
 
-                                <Label styleClass="calc-label" text="Valore prodotto desiderato:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                <Label fx:id="desiredValueLabel" styleClass="calc-value" text="€0.00" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                      <Label styleClass="calc-label" text="Valore dei tuoi prodotti:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <Label fx:id="yourTotalValueLabel" styleClass="calc-value" text="€0.00" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 
                                 <Separator styleClass="calc-separator" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="2" />
 

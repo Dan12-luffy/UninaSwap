@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -67,10 +68,31 @@ public class ExchangeController implements Initializable {
     }
 
 
-    private void updateCalculations() {
-        // Update the exchange calculations based on selected products
-    }
+    private void updateCalculations(Listing listing, boolean isSelected) {
+        String valueText = this.totalValueLabel.getText().replace("€", "");
+        double totalValue = Double.parseDouble(valueText);
 
+        String countText = this.selectedCountLabel.getText().replaceAll("[^0-9]", "");
+        int count = Integer.parseInt(countText);
+
+        if(isSelected) {
+            totalValue += listing.getPrice().doubleValue();
+            count += 1;
+        } else {
+            totalValue -= listing.getPrice().doubleValue();
+            count -= 1;
+        }
+
+        selectedCountLabel.setText(String.valueOf(count));
+        totalValueLabel.setText("€" + String.format("%.2f", totalValue));
+        yourTotalValueLabel.setText("Il tuo valore totale: €" + String.format("%.2f", totalValue));
+
+        double difference = this.desiredProduct.getPrice().doubleValue() - totalValue;
+        differenceLabel.setText("Differenza: €" + String.format("%.2f", difference));
+
+        updateDifferenceMessage();
+        toggleConfirmButton();
+    }
     private void updateDifferenceMessage() {
         // Update the message explaining the exchange difference
     }
@@ -88,12 +110,12 @@ public class ExchangeController implements Initializable {
         card.setUserData(false);
 
         card.setOnMouseEntered(e -> {
-            if ((boolean)card.getUserData() == false) {
+            if (!((boolean) card.getUserData())) {
                 card.setStyle("-fx-padding: 10; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f8f8f8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);");
             }
         });
         card.setOnMouseExited(e -> {
-            if ((boolean)card.getUserData() == false) {
+            if (!((boolean) card.getUserData())) {
                 card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
             }
         });
@@ -122,7 +144,6 @@ public class ExchangeController implements Initializable {
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         titleLabel.setWrapText(true);
 
-        // Price display
         String priceText;
         if (listing.getType() == typeListing.GIFT) {
             priceText = "Gratis";
@@ -137,37 +158,21 @@ public class ExchangeController implements Initializable {
 
         textContent.getChildren().addAll(titleLabel, priceLabel);
 
-        Button selectButton = new Button("Seleziona");
-        selectButton.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #444; -fx-background-radius: 3;");
-        selectButton.setPrefWidth(80);
-
-        selectButton.setOnAction(event -> {
+        card.setOnMouseClicked(event -> {
             boolean currentState = (boolean)card.getUserData();
             boolean newState = !currentState;
             card.setUserData(newState);
 
             if (newState) {
-                // Selected state
-                selectButton.setText("Selezionato");
-                selectButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 3;");
                 card.setStyle("-fx-padding: 10; -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f1f8e9;");
-
-
             } else {
-                // Unselected state
-                selectButton.setText("Seleziona");
-                selectButton.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #444; -fx-background-radius: 3;");
                 card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
-
             }
-
-
-            updateCalculations();
+            updateCalculations(listing,newState);
         });
 
         VBox actionBox = new VBox(5);
         actionBox.setAlignment(javafx.geometry.Pos.CENTER);
-        actionBox.getChildren().add(selectButton);
 
         card.getChildren().addAll(imageView, textContent, actionBox);
         return card;
