@@ -117,7 +117,7 @@ public class NavigationService {
             Parent root = loader.load();
             // Assuming you have a controller for the exchange view
             ExchangeController controller = loader.getController();
-            controller.setListing(listing);
+            controller.loadDesiredProduct(listing);
             setScene(event, root);
         } catch (IOException e) {
             ValidationService.getInstance().showFailedToOpenPageError();

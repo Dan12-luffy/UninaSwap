@@ -61,7 +61,7 @@
 
     <center>
         <ScrollPane fitToWidth="true" styleClass="content-scroll-pane">
-            <VBox spacing="25.0" styleClass="content-area">
+            <VBox prefHeight="1328.0" prefWidth="1188.0" spacing="25.0" styleClass="content-area">
                 <padding>
                     <Insets bottom="25.0" left="25.0" right="25.0" top="20.0" />
                 </padding>
@@ -105,13 +105,13 @@
                         </VBox>
 
                         <!-- Colonna destra - Prodotto desiderato -->
-                        <VBox spacing="15" styleClass="desired-product-section" HBox.hgrow="ALWAYS">
+                        <VBox prefHeight="663.0" prefWidth="433.0" spacing="15" styleClass="desired-product-section" HBox.hgrow="ALWAYS">
                             <Label styleClass="section-title" text="🎯 Prodotto Desiderato" />
                             <Label styleClass="section-subtitle" text="Il prodotto che vuoi ottenere in cambio" />
 
-                            <VBox spacing="15" styleClass="desired-product-card">
-                                <StackPane styleClass="desired-image-container">
-                                    <ImageView fx:id="desiredProductImageView" fitHeight="200.0" fitWidth="280.0" preserveRatio="true" styleClass="desired-product-image" />
+                            <VBox prefHeight="444.0" prefWidth="444.0" spacing="15" styleClass="desired-product-card">
+                                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="292.0" prefWidth="320.0" styleClass="desired-image-container" translateX="75.0">
+                                    <ImageView fx:id="desiredProductImageView" fitHeight="272.0" fitWidth="280.0" preserveRatio="true" styleClass="desired-product-image" />
                                 </StackPane>
 
                                 <VBox spacing="8" styleClass="desired-product-info">
