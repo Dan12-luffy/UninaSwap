@@ -8,17 +8,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavoriteService {
+public class FavouriteService {
 
-    private static final FavoriteService instance = new FavoriteService();
+    private static final FavouriteService instance = new FavouriteService();
     private final FavoriteDao favoriteDao;
 
 
-    private FavoriteService() {
+    private FavouriteService() {
         this.favoriteDao = new FavoriteDaoImpl();
     }
 
-    public static FavoriteService getInstance() {
+    public static FavouriteService getInstance() {
         return instance;
     }
     public void addToFavorites(int listingId){

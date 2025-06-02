@@ -4,6 +4,7 @@ import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Listing;
 import com.uninaswap.model.typeListing;
+import com.uninaswap.services.ListingService;
 import com.uninaswap.services.NavigationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -45,6 +46,7 @@ public class ExchangeController implements Initializable {
     @FXML private Button confirmExchangeButton;
 
     private Listing desiredProduct;
+    private final ListingService listingService = ListingService.getInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -179,8 +181,7 @@ public class ExchangeController implements Initializable {
 
     private void loadUserListings() {
         try {
-            ListingDaoImpl listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findCurrentUserAvailableInsertions();
+            List<Listing> listings = listingService.getCurrentUserAvailableInsertions();
 
             // Clear existing content
             this.yourProductsContainer.getChildren().clear();

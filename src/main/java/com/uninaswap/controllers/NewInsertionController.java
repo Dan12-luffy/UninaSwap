@@ -5,6 +5,7 @@ import com.uninaswap.dao.ListingDao;
 import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.typeListing;
+import com.uninaswap.services.ListingService;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
@@ -46,6 +47,7 @@ public class NewInsertionController {
     //private final String defaultImagePath = "file:/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png";
     private final String defaultImagePath = "file:/home/drc/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path fisso danilo// Default image path fisso danilo
     private File selectedImageFile;
+    private final ListingService listingService = ListingService.getInstance();
 
     @FXML
     private void initialize() {
@@ -121,8 +123,7 @@ public class NewInsertionController {
             Listing listing = new Listing(this.titleField.getText(), imagePath, this.descriptionArea.getText(), type, price, ListingStatus.AVAILABLE,
                     LocalDate.now(), UserSession.getInstance().getCurrentUser().getId(), this.categoryComboBox.getValue());
 
-            ListingDao listingDao = new ListingDaoImpl();
-            listingDao.insert(listing);
+            listingService.createListing(listing);
             ValidationService.getInstance().showNewInsertionSuccess();
             NavigationService.getInstance().navigateToMyProfileView(event);
 

@@ -1,7 +1,6 @@
 package com.uninaswap.controllers;
 
 import com.uninaswap.dao.ListingDaoImpl;
-import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.*;
 import javafx.collections.FXCollections;
@@ -79,11 +78,14 @@ public class MyProfileController {
     @FXML private Tab favoritesTab;
     @FXML private VBox favoritesContainer;
 
+    private final UserService userService = UserService.getInstance();
+    private final ListingService listingService = ListingService.getInstance();
+    private final ValidationService validationService = ValidationService.getInstance();
 
     @FXML
     public void initialize() {
 
-        User currentUser = new UserDaoImpl().findUserFromID(UserSession.getInstance().getCurrentUserId());
+        User currentUser = userService.getUserById(UserSession.getInstance().getCurrentUserId());
         this.userNameLabel.setText(currentUser.getUsername());
         this.firstNameField.setText(currentUser.getFirst_name());
         this.lastNameField.setText(currentUser.getLast_name());
@@ -102,8 +104,7 @@ public class MyProfileController {
 
     private void loadUserListings() {
         try {
-            ListingDaoImpl listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findCurrentUserAvailableInsertions();
+            List<Listing> listings = listingService.getCurrentUserAvailableInsertions();
 
             // Clear existing content
             this.userAdsContainer.getChildren().clear();
@@ -124,7 +125,7 @@ public class MyProfileController {
     }
     private void loadUserFavorites() {
         try {
-            List<Listing> favorites = FavoriteService.getInstance().getUserFavorites();
+            List<Listing> favorites = FavouriteService.getInstance().getUserFavorites();
 
             // Clear existing content
             this.favoritesContainer.getChildren().clear();
@@ -230,14 +231,13 @@ public class MyProfileController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK){
-            FavoriteService.getInstance().removeFromFavorites(listing.getListingId());
+            FavouriteService.getInstance().removeFromFavorites(listing.getListingId());
             loadUserFavorites();
         }
     }
     private void setStatisticsSection(){
         try{
-            ListingDaoImpl listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findCurrentUserAvailableInsertions();
+            List<Listing> listings = listingService.getCurrentUserAvailableInsertions();
 
             double minPrice = Integer.MAX_VALUE;
             double maxPrice = 0;
@@ -368,7 +368,7 @@ public class MyProfileController {
 
     private void setTotalAdsLabel(){
         try {
-            List<Listing> listingDao = new ListingDaoImpl().findCurrentUserInsertions();
+            List<Listing> listingDao = listingService.getCurrentUserAvailableInsertions();
             int totalInsertions = listingDao.size();
             int availableListings = 0;
             int completedSales = 0;
@@ -425,8 +425,7 @@ public class MyProfileController {
     }
     private void setPieChartAndBarChart(){
        try {
-           ListingDaoImpl listingDao = new ListingDaoImpl();
-           List<Listing> listings = listingDao.findCurrentUserInsertions();
+           List<Listing> listings = listingService.getCurrentUserInsertions();
            ObservableList<Listing> listingObservableList = FXCollections.observableArrayList(listings);
 
            this.offerTypesPieChart.getData().clear();
@@ -463,7 +462,7 @@ public class MyProfileController {
 
     @FXML
     public void handleLogout(ActionEvent event) {
-        ValidationService.getInstance().showLogoutSuccess();
+        validationService.showLogoutSuccess();
         UserSession.getInstance().logout();
         NavigationService.getInstance().navigateToLoginView(event);
     }
@@ -473,7 +472,7 @@ public class MyProfileController {
         String newUsername = newUsernameField.getText().trim();
 
         if (newUsername.isEmpty()) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.WARNING,
+            validationService.showAlert(Alert.AlertType.WARNING,
                     "Attenzione", "Inserisci il nuovo username.");
             return;
         }
@@ -507,19 +506,19 @@ public class MyProfileController {
 
         // Validazione input
         if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.WARNING,
+            validationService.showAlert(Alert.AlertType.WARNING,
                     "Attenzione", "Compila tutti i campi password.");
             return;
         }
 
         if (!newPassword.equals(confirmPassword)) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR,
+            validationService.showAlert(Alert.AlertType.ERROR,
                     "Errore", "La nuova password e la conferma non coincidono.");
             return;
         }
 
         if (currentPassword.equals(newPassword)) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.WARNING,
+            validationService.showAlert(Alert.AlertType.WARNING,
                     "Attenzione", "La nuova password deve essere diversa da quella attuale.");
             return;
         }

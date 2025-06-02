@@ -2,7 +2,7 @@ package com.uninaswap.controllers;
 
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Listing;
-import com.uninaswap.services.FavoriteService;
+import com.uninaswap.services.FavouriteService;
 import com.uninaswap.services.NavigationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -149,7 +149,7 @@ public class ProductDetailsController {
     @FXML
     private void toggleFavorite() {
         try {
-            FavoriteService.getInstance().toggleFavorite(listing.getListingId());
+            FavouriteService.getInstance().toggleFavorite(listing.getListingId());
             updateFavoriteButton();
         } catch(Exception e) {
             e.printStackTrace();
@@ -157,7 +157,7 @@ public class ProductDetailsController {
     }
 
     private void updateFavoriteButton() {
-        boolean isFavorite = FavoriteService.getInstance().isFavorite(listing.getListingId());
+        boolean isFavorite = FavouriteService.getInstance().isFavorite(listing.getListingId());
         if(isFavorite){
             favoriteButton.getStyleClass().add("favorite");
             favoriteButton.setText("♥ Nei preferiti");

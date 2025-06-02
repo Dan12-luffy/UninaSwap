@@ -1,7 +1,7 @@
 package com.uninaswap.controllers;
 
 import com.uninaswap.model.Listing;
-import com.uninaswap.services.FavoriteService;
+import com.uninaswap.services.FavouriteService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,6 +18,8 @@ public class FavoritesViewController {
     @FXML private VBox favoritesContainer;
     @FXML private Label emptyLabel;
 
+    private final FavouriteService favouriteService = FavouriteService.getInstance();
+
     @FXML
     public void initialize() {
         loadFavorites();
@@ -29,7 +31,7 @@ public class FavoritesViewController {
             favoritesContainer.getChildren().clear();
 
             // Get favorites for current user
-            List<Listing> favorites = FavoriteService.getInstance().getUserFavorites();
+            List<Listing> favorites = favouriteService.getUserFavorites();
 
             if (favorites == null || favorites.isEmpty()) {
                 emptyLabel.setVisible(true);
@@ -73,7 +75,7 @@ public class FavoritesViewController {
         Button removeButton = new Button("Rimuovi");
         removeButton.getStyleClass().add("delete-button");
         removeButton.setOnAction(e -> {
-            FavoriteService.getInstance().removeFromFavorites(listing.getListingId());
+            FavouriteService.getInstance().removeFromFavorites(listing.getListingId());
             loadFavorites(); // Refresh after removing
         });
 

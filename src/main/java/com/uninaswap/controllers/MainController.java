@@ -7,10 +7,7 @@ import com.uninaswap.databaseUtils.FilterCriteria;
 import com.uninaswap.model.Listing;
 import com.uninaswap.model.User;
 import com.uninaswap.model.typeListing;
-import com.uninaswap.services.FilterService;
-import com.uninaswap.services.NavigationService;
-import com.uninaswap.services.UserSession;
-import com.uninaswap.services.ValidationService;
+import com.uninaswap.services.*;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -99,10 +96,15 @@ public class MainController {
     private final int ALL_CATEGORIES_ID = -1; //Used to represent "All filter Categories", needed to clear the arraylist and filters
     private FilterCriteria currentFilter = new FilterCriteria();
     private final List<Integer> selectedCategories = new ArrayList<>();
+    private final ListingService listingService = ListingService.getInstance();
+    private final CategoryService categoryService = CategoryService.getInstance();
+    private final UserSession userSession = UserSession.getInstance();
+    private final FilterService filterService = FilterService.getInstance();
+    private final ValidationService validationService = ValidationService.getInstance();
 
     @FXML
     private void initialize() {
-        User currentUser = UserSession.getInstance().getCurrentUser();
+        User currentUser = userSession.getCurrentUser();
         if (currentUser != null) {
             this.usernameLabel.setText("Ciao " + currentUser.getUsername());
         }
@@ -128,7 +130,7 @@ public class MainController {
             this.currentFilter = new FilterCriteria();
             this.currentFilter.setSortBy("date_desc"); // Più recenti per default
 
-            List<Listing> listings = FilterService.getInstance().searchListings(this.currentFilter);
+            List<Listing> listings = filterService.searchListings(this.currentFilter);
             displayListings(listings);
 
         } catch (SQLException e) {
@@ -151,8 +153,8 @@ public class MainController {
     }
     private void initializePriceRange() {
         try {
-            BigDecimal maxPrice = FilterService.getInstance().getMaxAvailablePrice();
-            BigDecimal minPrice = FilterService.getInstance().getMinAvailablePrice();
+            BigDecimal maxPrice = filterService.getMaxAvailablePrice();
+            BigDecimal minPrice = filterService.getMinAvailablePrice();
 
             this.priceSlider.setMax(maxPrice.doubleValue());
             this.priceSlider.setMin(minPrice.doubleValue());
@@ -177,7 +179,7 @@ public class MainController {
             double max = Double.parseDouble(this.maxPriceField.getText().replace(',', '.'));
 
             if (min > max) {
-                ValidationService.getInstance().showInvalidPriceRangeError();
+                this.validationService.showInvalidPriceRangeError();
                 return;
             }
             this.currentFilter.setMinPrice(BigDecimal.valueOf(min));
@@ -185,7 +187,7 @@ public class MainController {
             applyCurrentFilters();
 
         } catch (NumberFormatException e) {
-            ValidationService.getInstance().showInvalidPriceError();
+            validationService.showInvalidPriceError();
         }
     }
 
@@ -235,7 +237,7 @@ public class MainController {
     }
     private void applyCurrentFilters() {
         try {
-            List<Listing> listings = FilterService.getInstance().searchListings(currentFilter);
+            List<Listing> listings = filterService.searchListings(currentFilter);
             displayListings(listings);
         } catch (SQLException e) {
             this.resultsCountLabel.setText("Errore durante il caricamento");
@@ -330,7 +332,7 @@ public class MainController {
         if (!searchText.isEmpty()) {
             this.currentFilter.setSearchText(searchText);
             try {
-                List<Listing> listings = FilterService.getInstance().searchByText(searchText);
+                List<Listing> listings = this.filterService.searchByText(searchText);
                 displayListings(listings);
             } catch (SQLException e) {
                 this.resultsCountLabel.setText("Errore durante il caricamento");
@@ -346,11 +348,11 @@ public class MainController {
     @FXML
     private void onLogoutButtonClicked(ActionEvent event) {
         UserSession.getInstance().logout();
-        ValidationService.getInstance().showLogoutSuccess();
+        validationService.showLogoutSuccess();
         try {
             NavigationService.getInstance().navigateToLoginView(event);
         } catch (Exception e) {
-            ValidationService.getInstance().showFailedToOpenLoginPageError();
+            validationService.showFailedToOpenLoginPageError();
         }
     }
 
@@ -474,7 +476,13 @@ public class MainController {
         this.selectedCategories.add(ALL_CATEGORIES_ID);
 
         // do un azione a ciascun bottone
-        this.allCategoryButton.setOnAction(e -> onCategoryButtonClicked(allCategoryButton));
+        this.allCategoryButton.setOnAction(e -> {
+            try {
+                onCategoryButtonClicked(allCategoryButton);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         this.booksCategoryButton.setOnAction(e -> onCategoryButtonClicked(booksCategoryButton));
         this.electronicCategoryButton.setOnAction(e -> onCategoryButtonClicked(electronicCategoryButton));
         this.clothingCategoryButton.setOnAction(e -> onCategoryButtonClicked(clothingCategoryButton));
@@ -486,47 +494,42 @@ public class MainController {
 
     @FXML
     private void onCategoryButtonClicked(ToggleButton button) {
-        CategoryDaoImpl categoryDao = new CategoryDaoImpl();
-
-        String categoryName = button.getText();
-        if (categoryName.equals("Tutto")) {
-            // se "tutto" è selezionato, deseleziona gli altri
-            this.booksCategoryButton.setSelected(false);
-            this.electronicCategoryButton.setSelected(false);
-            this.clothingCategoryButton.setSelected(false);
-            this.notesCategoryButton.setSelected(false);
-            this.furnitureCategoryButton.setSelected(false);
-            this.otherCategoryButton.setSelected(false);
-            this.selectedCategories.clear();
-            this.selectedCategories.add(ALL_CATEGORIES_ID);
-            this.allCategoryButton.setSelected(true);
-        } else {
-            int categoryId = categoryDao.getCategoryIdByName(categoryName);
-
-            if (button.isSelected()) {
-                // se una specifica categoria è selezionata, rimuovi "tutti" se è selezionato
-                if (this.selectedCategories.contains(ALL_CATEGORIES_ID)) {
-                    this.selectedCategories.remove(Integer.valueOf(ALL_CATEGORIES_ID));
-                    this.allCategoryButton.setSelected(false);
-                }
-
-                if (categoryId != -1) { // Controlla se l'ID è valido
-                    this.selectedCategories.add(categoryId);
-                }
+        try {
+            String categoryName = button.getText();
+            if (categoryName.equals("Tutto")) {
+                this.booksCategoryButton.setSelected(false);
+                this.electronicCategoryButton.setSelected(false);
+                this.clothingCategoryButton.setSelected(false);
+                this.notesCategoryButton.setSelected(false);
+                this.furnitureCategoryButton.setSelected(false);
+                this.otherCategoryButton.setSelected(false);
+                this.selectedCategories.clear();
+                this.selectedCategories.add(ALL_CATEGORIES_ID);
+                this.allCategoryButton.setSelected(true);
             } else {
-                if (categoryId != -1) { // Controlla se l'ID è valido prima di rimuovere
-                    this.selectedCategories.remove(Integer.valueOf(categoryId));
-                }
-
-                // se tutte le categorie sono deselezionate, aggiungi "tutti" e selezionalo
-                if (this.selectedCategories.isEmpty()) {
-                    this.selectedCategories.add(ALL_CATEGORIES_ID);
-                    this.allCategoryButton.setSelected(true);
+                int categoryId = categoryService.getCategoryIdByName(categoryName);
+                if (button.isSelected()) {
+                    if (this.selectedCategories.contains(ALL_CATEGORIES_ID)) {
+                        this.selectedCategories.remove(Integer.valueOf(ALL_CATEGORIES_ID));
+                        this.allCategoryButton.setSelected(false);
+                    }
+                    if (categoryId != -1) {
+                        this.selectedCategories.add(categoryId);
+                    }
+                } else {
+                    if (categoryId != -1) {
+                        this.selectedCategories.remove(Integer.valueOf(categoryId));
+                    }
+                    if (this.selectedCategories.isEmpty()) {
+                        this.selectedCategories.add(ALL_CATEGORIES_ID);
+                        this.allCategoryButton.setSelected(true);
+                    }
                 }
             }
+            filterItemsByMultipleCategories();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        filterItemsByMultipleCategories();
     }
 
     // Add new filter method for multiple categories
@@ -539,17 +542,6 @@ public class MainController {
         applyCurrentFilters();
     }
 
-    //meetodo per il database che cerca per più categorie
-    private List<Listing> findByMultipleCategories(List<Integer> categoryIds) throws SQLException {
-        List<Listing> allListings = new ArrayList<>();
-        ListingDao listingDao = new ListingDaoImpl();
-
-        for (Integer categoryId : categoryIds) {
-            allListings.addAll(listingDao.findByCategory(categoryId));
-        }
-
-        return allListings;
-    }
 
     // New handler methods
     @FXML
@@ -562,7 +554,7 @@ public class MainController {
         try {
             NavigationService.getInstance().navigateToCreateListingView(event);
         }catch(Exception e){
-            ValidationService.getInstance().showFailedToOpenPageError();
+            validationService.showFailedToOpenPageError();
         }
     }
 
