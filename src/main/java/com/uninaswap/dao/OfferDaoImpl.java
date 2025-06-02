@@ -1,38 +1,42 @@
 package com.uninaswap.dao;
 
 import com.uninaswap.model.ListingStatus;
-import com.uninaswap.model.typeListing;
+import com.uninaswap.model.Offer;
+import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
 import com.uninaswap.utility.DatabaseUtil;
 import javafx.scene.control.Alert;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-public class OfferDaoImpl implements OfferDao{
+public class OfferDaoImpl implements OfferDao {
     @Override
-    public void createOffer(int listingId, int userId, double amount, String message, ListingStatus status, LocalDate offerDate) throws Exception {
+    public void createOffer(Offer o) {
         String sql = "INSERT INTO offer (listingid, userid, amount, status, message, offer_date) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, listingId);
-            stmt.setInt(2, userId);
-            stmt.setDouble(3, amount);
-            stmt.setString(4, message);
-            stmt.setString(5, status.toString());
-            stmt.setObject(6, offerDate.toEpochDay() * 24 * 60 * 60 * 1000);
+            stmt.setInt(1, o.getListingID());
+            stmt.setInt(2, o.getUserID());
+            stmt.setDouble(3, o.getAmount());
+            stmt.setString(4, o.getMessage());
+            stmt.setString(5, o.getListingStatus().toString());
+            stmt.setObject(6, o.getOfferDate().toEpochDay() * 24 * 60 * 60 * 1000); //Converte Localdate a Date per il db
             stmt.executeUpdate();
 
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'offerta: " + e.getMessage());
         }
-
     }
 
     @Override
-    public void deleteOffer(int offerId) throws Exception {
+    public void deleteOffer(int offerId) {
         String Sql = "DELETE FROM offer WHERE offerid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(Sql)) {
@@ -60,7 +64,7 @@ public class OfferDaoImpl implements OfferDao{
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile accettare l'offerta: " + e.getMessage());
         }
-        return false; // Placeholder return value
+        return false;
     }
 
     @Override
@@ -76,5 +80,82 @@ public class OfferDaoImpl implements OfferDao{
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile rifiutare l'offerta: " + e.getMessage());
         }
         return false;
+    }
+
+    @Override
+    public Offer findOfferById(int offerId) throws Exception {
+        String sql = "SELECT * FROM offer WHERE offerid = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, offerId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToOffer(rs);
+                }
+            }
+        } catch (SQLException e) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare l'offerta: " + e.getMessage());
+        }
+        return null;
+    }
+    @Override
+    public List<Offer> findOffersForListing(int listingId) throws Exception {
+        String sql = "SELECT * FROM offer WHERE listingid = ?";
+        try(Connection conn = DatabaseUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, listingId);
+            return getListingOffers(stmt);
+        } catch (SQLException e) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte per l'inserzione: " + e.getMessage());
+        }
+        return null;
+    }
+    @Override
+    public List<Offer> findOfferForCurrentUserID() throws SQLException {
+        String sql = "SELECT * FROM offer WHERE userid = ?";
+        try(Connection conn = DatabaseUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
+            return getListingOffers(stmt);
+        } catch (SQLException e) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte per l'utente corrente: " + e.getMessage());
+        }
+        return null;
+    }
+    @Override
+    public void updateOfferStatus(int offerId, ListingStatus status) throws Exception {
+        String sql = "UPDATE offer SET status = ? WHERE offerid = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status.getStatus());
+            stmt.setInt(2, offerId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aggiornare lo stato dell'offerta: " + e.getMessage());
+        }
+    }
+
+    @NotNull
+    private List<Offer> getListingOffers(PreparedStatement stmt) throws SQLException {
+        try (ResultSet rs = stmt.executeQuery()) {
+            List<Offer> offers = new ArrayList<>();
+            while(rs.next()) {
+                Offer o = mapResultSetToOffer(rs);
+                offers.add(o);
+            }
+            return offers;
+        }
+    }
+    @NotNull
+    private Offer mapResultSetToOffer(ResultSet rs) throws SQLException {
+        Offer offer = new Offer();
+        offer.setOfferID(rs.getInt("offerid"));
+        offer.setListingID(rs.getInt("listingid"));
+        offer.setUserID(rs.getInt("userid"));
+        offer.setAmount(rs.getDouble("amount"));
+        offer.setMessage(rs.getString("message"));
+        offer.setListingStatus(ListingStatus.valueOf(rs.getString("status")));
+        offer.setOfferDate(LocalDate.ofEpochDay(rs.getLong("offer_date")));
+        return offer;
     }
 }

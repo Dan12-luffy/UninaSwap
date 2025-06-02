@@ -2,16 +2,16 @@ package com.uninaswap.dao;
 
 import com.uninaswap.model.User;
 
-import java.util.List;
-
 public interface UserDao {
     // User findByUsername(String username);
-    User authenticate(String username, String hashedPassword);
-    boolean create(String name, String surname, String faculty, String username, String hashedPassword);
+    User authenticateUser(String username, String hashedPassword);
+    boolean insertUser(User u);
     boolean updatePassword(int userId, String hashedPassword);
     boolean updateUsername(int userId, String username);
-    boolean usernameExists(String username);
-    String usernameFromID(int id);
-    String fullNameFromID(int id);
-    User getUserFromID(int id);
+    boolean usernameAlreadyExists(String username);
+    String findUsernameFromID(int id);
+    String findFullNameFromID(int id);
+    User findUserFromID(int id);
+
+    User findUserByUsername(String username);
 }

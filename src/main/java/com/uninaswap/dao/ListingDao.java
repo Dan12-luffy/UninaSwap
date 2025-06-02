@@ -14,19 +14,19 @@ public interface ListingDao {
     void delete(int listingId) throws SQLException;
     void update(Listing listing) throws SQLException;
     List<Listing> findAll() throws SQLException;
-    List<Listing> findAllOtherInsertions() throws SQLException;
-    List<Listing> findMyAviableInsertions() throws SQLException;
+    List<Listing> findInsertionsExcludingCurrentUser() throws SQLException;
+    List<Listing> findCurrentUserAvailableInsertions() throws SQLException;
+    Listing findListingById(int listingId) throws SQLException;
 
-    List<Listing> findMyInsertions() throws SQLException;
+    List<Listing> findCurrentUserInsertions() throws SQLException;
 
     List<Listing> findByCategory(int categoryId) throws SQLException;
     List<Listing> findByPriceRange(double minPrice, double maxPrice) throws SQLException;
-    List<Listing> findWithFilters(FilterCriteria criteria) throws SQLException;
+    List<Listing> findByFilters(FilterCriteria criteria) throws SQLException;
 
-    // Metodi di supporto
+
     BigDecimal getMaxPrice() throws SQLException;
     BigDecimal getMinPrice() throws SQLException;
     List<Listing> findByStatus(String status) throws SQLException;
-    List<Listing> findByText(String text) throws SQLException;
     List<Listing> findByFaculty(int facultyId) throws SQLException;
 }

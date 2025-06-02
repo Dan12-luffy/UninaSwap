@@ -1,17 +1,12 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.services.LoginService;
+import com.uninaswap.model.User;
 import com.uninaswap.services.NavigationService;
+import com.uninaswap.services.UserService;
 import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-
 
 public class LoginController {
 
@@ -20,7 +15,7 @@ public class LoginController {
     @FXML private Button loginButton;
     @FXML private Hyperlink registerButton;
 
-    private final LoginService loginService = new LoginService();
+    private final UserService userService = UserService.getInstance();
 
     @FXML
     public void initialize() {
@@ -31,19 +26,17 @@ public class LoginController {
     private void onLoginButtonClicked(ActionEvent event) {
         String username = this.usernameField.getText();
         String password = this.passwordField.getText();
+
         if (!ValidationService.getInstance().areCredentialsValid(username, password)) {
             return;
         }
-        if (loginService.authenticateUser(username, password)) {
-            ValidationService.getInstance().showLoginSuccess(username);
-            NavigationService.getInstance().navigateToMainView(event);
-        } else {
-            ValidationService.getInstance().showLoginError();
-        }
+        userService.authenticateUser(username, password);
+        NavigationService.getInstance().navigateToMainView(event);
     }
 
     @FXML
     private void navigateToRegister(ActionEvent event){
-            NavigationService.getInstance().navigateToRegisterView(event);
+        NavigationService.getInstance().navigateToRegisterView(event);
     }
 }
+

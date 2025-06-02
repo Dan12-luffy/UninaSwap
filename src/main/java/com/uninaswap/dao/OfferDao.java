@@ -1,14 +1,21 @@
 package com.uninaswap.dao;
 
 import com.uninaswap.model.ListingStatus;
+import com.uninaswap.model.Offer;
 import com.uninaswap.model.typeListing;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 public interface OfferDao {
-    void createOffer(int listingId, int userId, double amount, String message, ListingStatus status, LocalDate offerDate) throws Exception;
+    void createOffer(Offer o) throws Exception;
     void deleteOffer(int offerId) throws Exception;
     void updateOffer(int offerId, String title, String description, int categoryId, double price) throws Exception;
     boolean acceptOffer(int offerId, int userId) throws Exception;
     boolean rejectOffer(int offerId, int userId) throws Exception;
+    Offer findOfferById(int offerId) throws Exception;
+    List<Offer> findOffersForListing(int listingId) throws Exception;
+    List<Offer> findOfferForCurrentUserID() throws SQLException;
+    void updateOfferStatus(int offerId, ListingStatus status) throws Exception;
 }

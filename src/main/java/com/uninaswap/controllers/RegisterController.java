@@ -1,27 +1,21 @@
 package com.uninaswap.controllers;
 
 import com.uninaswap.model.Faculty;
+import com.uninaswap.model.User;
 import com.uninaswap.services.NavigationService;
+import com.uninaswap.services.UserService;
 import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import com.uninaswap.services.RegisterService;
-import com.uninaswap.utility.DatabaseUtil;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 public class RegisterController {
 
     @FXML private TextField nameField;
     @FXML private TextField surnameField;
     @FXML private ComboBox<String> facultyComboBox;
-    @FXML    private TextField usernameField;
+    @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private Hyperlink loginButton;
@@ -32,8 +26,8 @@ public class RegisterController {
     @FXML private Label numberCheck;
     @FXML private Label lengthCheck;
 
-    private final RegisterService registerService = new RegisterService();
-
+    private final UserService userService = UserService.getInstance();
+    private final ValidationService validationService = ValidationService.getInstance();
 
     @FXML
     public void initialize(){
@@ -44,12 +38,10 @@ public class RegisterController {
 
     @FXML
     public void onRegisterButtonClicked(ActionEvent actionEvent) {
-        boolean registrationSuccessful = registerService.processRegistrationForm(nameField, surnameField, facultyComboBox, usernameField, passwordField, confirmPasswordField);
-
-        if (registrationSuccessful) {
-            NavigationService.getInstance().navigateToLoginView(actionEvent);
-        }
+        if(userService.processRegistrationForm(nameField, surnameField, facultyComboBox, usernameField, passwordField, confirmPasswordField))
+            navigateToLogin(actionEvent);
     }
+
     @FXML
     private void navigateToLogin(ActionEvent event) {
         NavigationService.getInstance().navigateToLoginView(event);

@@ -2,12 +2,8 @@ package com.uninaswap.services;
 
 import com.uninaswap.dao.UserDao;
 import com.uninaswap.dao.UserDaoImpl;
-import com.uninaswap.model.User;
 import com.uninaswap.utility.Sha256;
 import javafx.scene.control.Alert;
-
-
-import java.sql.SQLException;
 
 
 public class ProfileSecurityService {
@@ -57,7 +53,7 @@ public class ProfileSecurityService {
                 ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Il nuovo username non è valido");
                 return false;
             }
-            if(userDao.usernameExists(newUsername)){
+            if(userDao.usernameAlreadyExists(newUsername)){
                 ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Username già in uso");
                 return false;
             }

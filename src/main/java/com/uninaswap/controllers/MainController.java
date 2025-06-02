@@ -1,17 +1,10 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.dao.CategoryDaoImpl;
-import com.uninaswap.dao.ListingDao;
-import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.databaseUtils.FilterCriteria;
 import com.uninaswap.model.Listing;
 import com.uninaswap.model.User;
 import com.uninaswap.model.typeListing;
-import com.uninaswap.services.FilterService;
-import com.uninaswap.services.NavigationService;
-import com.uninaswap.services.UserSession;
-import com.uninaswap.services.ValidationService;
-import javafx.beans.Observable;
+import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -19,8 +12,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-
 import javafx.scene.input.MouseEvent;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -94,8 +87,14 @@ public class MainController {
     private FilterCriteria currentFilter = new FilterCriteria();
     private final List<Integer> selectedCategories = new ArrayList<>();
 
+    // Service references
+    private final FilterService filterService = FilterService.getInstance();
+    private final ListingService listingService = ListingService.getInstance();
+    private final CategoryService categoryService = CategoryService.getInstance();
+    private final ValidationService validationService = ValidationService.getInstance();
+
     @FXML
-    private void initialize() {
+    private void initialize() throws Exception {
         User currentUser = UserSession.getInstance().getCurrentUser();
         if (currentUser != null) {
             this.usernameLabel.setText("Ciao " + currentUser.getUsername());
@@ -122,7 +121,7 @@ public class MainController {
             this.currentFilter = new FilterCriteria();
             this.currentFilter.setSortBy("date_desc"); // Più recenti per default
 
-            List<Listing> listings = FilterService.getInstance().searchListings(this.currentFilter);
+            List<Listing> listings = filterService.searchListings(this.currentFilter);
             displayListings(listings);
 
         } catch (SQLException e) {
@@ -132,8 +131,8 @@ public class MainController {
     }
     private void initializePriceRange() {
         try {
-            BigDecimal maxPrice = FilterService.getInstance().getMaxAvailablePrice();
-            BigDecimal minPrice = FilterService.getInstance().getMinAvailablePrice();
+            BigDecimal maxPrice = filterService.getMaxAvailablePrice();
+            BigDecimal minPrice = filterService.getMinAvailablePrice();
 
             this.priceSlider.setMax(maxPrice.doubleValue());
             this.priceSlider.setMin(minPrice.doubleValue());
@@ -145,7 +144,6 @@ public class MainController {
 
         } catch (Exception e) {
             System.err.println("Errore nell'inizializzazione del range prezzi: " + e.getMessage());
-            // Fallback ai valori di default
             this.priceSlider.setMax(1000.0);
             this.priceSlider.setMin(0.0);
         }
@@ -215,7 +213,7 @@ public class MainController {
     }
     private void applyCurrentFilters() {
         try {
-            List<Listing> listings = FilterService.getInstance().searchListings(currentFilter);
+            List<Listing> listings = filterService.searchListings(currentFilter);
             displayListings(listings);
         } catch (SQLException e) {
             this.resultsCountLabel.setText("Errore durante il caricamento");
@@ -310,7 +308,7 @@ public class MainController {
         if (!searchText.isEmpty()) {
             this.currentFilter.setSearchText(searchText);
             try {
-                List<Listing> listings = FilterService.getInstance().searchByText(searchText);
+                List<Listing> listings = filterService.searchByText(searchText);
                 displayListings(listings);
             } catch (SQLException e) {
                 this.resultsCountLabel.setText("Errore durante il caricamento");
@@ -425,9 +423,7 @@ public class MainController {
         this.maxPriceField.setText(String.valueOf((int)(maxPrice)));
     }
 
-    private void toggleButtonsSettings() {
-        CategoryDaoImpl categoryDao = new CategoryDaoImpl();
-
+    private void toggleButtonsSettings() throws Exception {
         this.allCategoryButton.setToggleGroup(null);
         this.booksCategoryButton.setToggleGroup(null);
         this.electronicCategoryButton.setToggleGroup(null);
@@ -437,15 +433,15 @@ public class MainController {
         this.otherCategoryButton.setToggleGroup(null);
 
         this.allCategoryButton.setUserData(ALL_CATEGORIES_ID);
-        this.booksCategoryButton.setUserData(categoryDao.getCategoryIdByName("Libri"));
-        this.electronicCategoryButton.setUserData(categoryDao.getCategoryIdByName("Elettronica"));
-        this.clothingCategoryButton.setUserData(categoryDao.getCategoryIdByName("Abbigliamento"));
-        this.notesCategoryButton.setUserData(categoryDao.getCategoryIdByName("Appunti"));
-        this.furnitureCategoryButton.setUserData(categoryDao.getCategoryIdByName("Arredamento"));
-        this.otherCategoryButton.setUserData(categoryDao.getCategoryIdByName("Altro"));
+        this.booksCategoryButton.setUserData(categoryService.getCategoryIdByName("Libri"));
+        this.electronicCategoryButton.setUserData(categoryService.getCategoryIdByName("Elettronica"));
+        this.clothingCategoryButton.setUserData(categoryService.getCategoryIdByName("Abbigliamento"));
+        this.notesCategoryButton.setUserData(categoryService.getCategoryIdByName("Appunti"));
+        this.furnitureCategoryButton.setUserData(categoryService.getCategoryIdByName("Arredamento"));
+        this.otherCategoryButton.setUserData(categoryService.getCategoryIdByName("Altro"));
     }
 
-    private void setUpCategoryButtons() {
+    private void setUpCategoryButtons() throws Exception {
 
         toggleButtonsSettings();
 
@@ -453,21 +449,61 @@ public class MainController {
         this.allCategoryButton.setSelected(true);
         this.selectedCategories.add(ALL_CATEGORIES_ID);
 
-        // do un azione a ciascun bottone
-        this.allCategoryButton.setOnAction(e -> onCategoryButtonClicked(allCategoryButton));
-        this.booksCategoryButton.setOnAction(e -> onCategoryButtonClicked(booksCategoryButton));
-        this.electronicCategoryButton.setOnAction(e -> onCategoryButtonClicked(electronicCategoryButton));
-        this.clothingCategoryButton.setOnAction(e -> onCategoryButtonClicked(clothingCategoryButton));
-        this.notesCategoryButton.setOnAction(e -> onCategoryButtonClicked(notesCategoryButton));
-        this.furnitureCategoryButton.setOnAction(e -> onCategoryButtonClicked(furnitureCategoryButton));
-        this.otherCategoryButton.setOnAction(e -> onCategoryButtonClicked(otherCategoryButton));
+
+        this.allCategoryButton.setOnAction(e -> {
+            try {
+                onCategoryButtonClicked(allCategoryButton);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        this.booksCategoryButton.setOnAction(e -> {
+            try {
+                onCategoryButtonClicked(booksCategoryButton);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        this.electronicCategoryButton.setOnAction(e -> {
+            try {
+                onCategoryButtonClicked(electronicCategoryButton);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        this.clothingCategoryButton.setOnAction(e -> {
+            try {
+                onCategoryButtonClicked(clothingCategoryButton);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        this.notesCategoryButton.setOnAction(e -> {
+            try {
+                onCategoryButtonClicked(notesCategoryButton);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        this.furnitureCategoryButton.setOnAction(e -> {
+            try {
+                onCategoryButtonClicked(furnitureCategoryButton);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        this.otherCategoryButton.setOnAction(e -> {
+            try {
+                onCategoryButtonClicked(otherCategoryButton);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
 
     @FXML
-    private void onCategoryButtonClicked(ToggleButton button) {
-        CategoryDaoImpl categoryDao = new CategoryDaoImpl();
-
+    private void onCategoryButtonClicked(ToggleButton button) throws Exception {
         String categoryName = button.getText();
         if (categoryName.equals("Tutto")) {
             // se "tuttO" è selezionato, deseleziona gli altri
@@ -487,9 +523,9 @@ public class MainController {
                     this.selectedCategories.remove(Integer.valueOf(ALL_CATEGORIES_ID));
                     this.allCategoryButton.setSelected(false);
                 }
-                this.selectedCategories.add(categoryDao.getCategoryIdByName(categoryName));
+                this.selectedCategories.add(categoryService.getCategoryIdByName(categoryName));
             } else {
-                this.selectedCategories.remove(categoryDao.getCategoryIdByName(categoryName));
+                this.selectedCategories.remove(categoryService.getCategoryIdByName(categoryName));
 
                 // se tutte le categorie sono deselezionate, aggiungi "tutti" e selezionalo
                 if (this.selectedCategories.isEmpty()) {
@@ -510,18 +546,6 @@ public class MainController {
             this.currentFilter.setCategoryIds(new ArrayList<>(selectedCategories));
         }
         applyCurrentFilters();
-    }
-
-    //meetodo per il database che cerca per più categorie
-    private List<Listing> findByMultipleCategories(List<Integer> categoryIds) throws SQLException {
-        List<Listing> allListings = new ArrayList<>();
-        ListingDao listingDao = new ListingDaoImpl();
-
-        for (Integer categoryId : categoryIds) {
-            allListings.addAll(listingDao.findByCategory(categoryId));
-        }
-
-        return allListings;
     }
 
     // New handler methods

@@ -16,7 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -181,7 +180,7 @@ public class ExchangeController implements Initializable {
     private void loadUserListings() {
         try {
             ListingDaoImpl listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findMyAviableInsertions();
+            List<Listing> listings = listingDao.findCurrentUserAvailableInsertions();
 
             // Clear existing content
             this.yourProductsContainer.getChildren().clear();
@@ -210,7 +209,7 @@ public class ExchangeController implements Initializable {
         this.desiredProductDescriptionLabel.setText(listing.getDescription());
         this.desiredProductPriceLabel.setText("€" + listing.getPrice().toString());
         this.desiredValueLabel.setText("€" + listing.getPrice().toString());
-        this.desiredProductOwnerLabel.setText("Utente: " + new UserDaoImpl().fullNameFromID(listing.getUserId()));
+        this.desiredProductOwnerLabel.setText("Utente: " + new UserDaoImpl().findFullNameFromID(listing.getUserId()));
 
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {

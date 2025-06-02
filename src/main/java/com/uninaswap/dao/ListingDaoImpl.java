@@ -76,7 +76,7 @@ public class ListingDaoImpl implements ListingDao {
         return listings;
     }
     @Override
-    public List<Listing> findWithFilters(FilterCriteria criteria) throws SQLException {
+    public List<Listing> findByFilters(FilterCriteria criteria) throws SQLException {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT l.*, c.name as category_name FROM listings l ");
         sql.append("LEFT JOIN category c ON l.category_id = c.category_id ");
@@ -98,7 +98,7 @@ public class ListingDaoImpl implements ListingDao {
             sql.append("AND l.userid != ? ");
             parameters.add(criteria.getExcludeUserId());
         }
-
+        //Filtro per testo
         if (criteria.hasTextSearch()) {
             sql.append("AND (LOWER(l.title) LIKE LOWER(?) OR LOWER(l.description) LIKE LOWER(?)) ");
             String searchPattern = "%" + criteria.getSearchText() + "%";
@@ -130,7 +130,7 @@ public class ListingDaoImpl implements ListingDao {
                 parameters.add(criteria.getMaxPrice());
             }
         }
-
+        //Filtro per facoltà
         if (criteria.hasFacultyFilter()) {
             sql.append("AND u.faculty IN (");
             for (int i = 0; i < criteria.getFacultyNames().size(); i++) {
@@ -142,7 +142,7 @@ public class ListingDaoImpl implements ListingDao {
             sql.append(") ");
             parameters.addAll(criteria.getFacultyNames());
         }
-
+        // Filtro per tipo
         if(criteria.hasTypeListingFilter()) {
             sql.append("AND l.type IN (");
             for (int i = 0; i < criteria.getTypes().size(); i++) {
@@ -200,30 +200,9 @@ public class ListingDaoImpl implements ListingDao {
         return BigDecimal.ZERO;
     }
 
-    private List<Listing> executeFilterQuery(String sql, List<Object> parameters) throws SQLException {
-        List<Listing> listings = new ArrayList<>();
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            // Imposta i parametri
-            for (int i = 0; i < parameters.size(); i++) {
-                stmt.setObject(i + 1, parameters.get(i));
-            }
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Listing listing = new Listing();
-                    mapResultSetToListing(rs, listing);
-                    listings.add(listing);
-                }
-            }
-        }
-
-        return listings;
-    }
     @Override
-    public List<Listing> findAllOtherInsertions() throws SQLException {
+    public List<Listing> findInsertionsExcludingCurrentUser() throws SQLException {
         List<Listing> listings = new ArrayList<>();
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +
                 "LEFT JOIN category c ON l.category_id = c.category_id " +
@@ -239,7 +218,7 @@ public class ListingDaoImpl implements ListingDao {
         return listings;
     }
     @Override
-    public List<Listing> findMyAviableInsertions() throws SQLException {
+    public List<Listing> findCurrentUserAvailableInsertions() throws SQLException {
         List<Listing> listings = new ArrayList<>();
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +
                 "LEFT JOIN category c ON l.category_id = c.category_id " +
@@ -254,7 +233,7 @@ public class ListingDaoImpl implements ListingDao {
         return listings;
     }
     @Override
-    public List<Listing> findMyInsertions() throws SQLException {
+    public List<Listing> findCurrentUserInsertions() throws SQLException {
         List<Listing> listings = new ArrayList<>();
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +
                 "LEFT JOIN category c ON l.category_id = c.category_id " +
@@ -303,6 +282,7 @@ public class ListingDaoImpl implements ListingDao {
         }
         return listings;
     }
+    @Override
     public List<Listing> findByStatus(String status) throws SQLException {
         List<Listing> listings = new ArrayList<>();
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +
@@ -318,6 +298,8 @@ public class ListingDaoImpl implements ListingDao {
         }
         return listings;
     }
+
+    @Override
     public List<Listing> findByFaculty(int facultyId) throws SQLException {
         List<Listing> listings = new ArrayList<>();
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +
@@ -333,6 +315,8 @@ public class ListingDaoImpl implements ListingDao {
         }
         return listings;
     }
+
+    @Override
     public List<Listing> findByPriceRange(double minPrice, double maxPrice) throws SQLException {
         List<Listing> listings = new ArrayList<>();
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +
@@ -347,31 +331,28 @@ public class ListingDaoImpl implements ListingDao {
         }
         return listings;
     }
-
-    //TODO implementare la ricerca per testo
     @Override
-    public List<Listing> findByText(String text) throws SQLException {
-        List<Listing> listings = new ArrayList<>();
+    public Listing findListingById(int listingId) throws SQLException {
         String sql = "SELECT l.*, c.name as category_name FROM listings l " +
                 "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE (LOWER(l.title) LIKE LOWER(?) OR LOWER(l.description) LIKE LOWER(?)) " +
-                "AND l.status = 'AVAILABLE' AND l.userid != ? " +
-                "ORDER BY l.publishDate DESC";
-
+                "WHERE l.listingId = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            String searchText = "%" + text + "%";
-            stmt.setString(1, searchText);
-            stmt.setString(2, searchText);
-            stmt.setInt(3, UserSession.getInstance().getCurrentUser().getId());
-
-            executeQueryAndCreateTheList(listings, stmt);
+            stmt.setInt(1, listingId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Listing listing = new Listing();
+                    mapResultSetToListing(rs, listing);
+                    return listing;
+                }
+            }
         } catch (SQLException e) {
-            System.err.println("Errore durante la ricerca per testo: " + e.getMessage());
-            throw e;
+            System.err.println("Errore durante il recupero dell'annuncio con ID " + listingId + ": " + e.getMessage());
+            e.printStackTrace();
         }
-        return listings;
+        return null;
     }
+
 
 
     private void populateListingStatement(PreparedStatement stmt, Listing listing) throws SQLException {
@@ -430,6 +411,28 @@ public class ListingDaoImpl implements ListingDao {
             System.err.println("Stato sconosciuto " + statusStr + " - default a AVAILABLE");
             return ListingStatus.AVAILABLE;
         }
+    }
+    private List<Listing> executeFilterQuery(String sql, List<Object> parameters) throws SQLException {
+        List<Listing> listings = new ArrayList<>();
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Imposta i parametri
+            for (int i = 0; i < parameters.size(); i++) {
+                stmt.setObject(i + 1, parameters.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Listing listing = new Listing();
+                    mapResultSetToListing(rs, listing);
+                    listings.add(listing);
+                }
+            }
+        }
+
+        return listings;
     }
 
     //TODO spostare questo in validationservice

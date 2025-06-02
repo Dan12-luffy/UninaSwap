@@ -27,6 +27,45 @@ public class ValidationService {
         }
         return true;
     }
+    public boolean validateInputFromRegistration(@NotNull TextField nameField, TextField surnameField, TextField usernameField, PasswordField passwordField, PasswordField confirmPasswordField){ //TODO forse si potrebbero implementare delle eccezioni
+        if(nameField.getText().trim().isEmpty() ||
+                surnameField.getText().trim().isEmpty() ||
+                usernameField.getText().trim().isEmpty()||
+                passwordField.getText().isEmpty() ||
+                confirmPasswordField.getText().isEmpty()){
+            ValidationService.getInstance().showRegistrationFieldsEmptyError();
+            return false;
+        }
+        if(!isValidUsername(usernameField.getText())){
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Attenzione si accettano solo lettere,numeri e underscore");
+            return false;
+        }
+
+        if(!isStrongPassword(passwordField.getText())){
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "La password deve contenere almeno 8 caratteri, una lettera maiuscola e un numero ");
+            return false;
+        }
+        return isValidPassword(passwordField, confirmPasswordField);
+    }
+
+    private boolean isStrongPassword(String password){
+        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+        return password.matches(passwordRegex);
+
+    }
+
+    private boolean isValidUsername(String username){
+        String usernameRegex = "^[a-zA-Z0-9_-]{3,16}$";
+        return username.matches(usernameRegex);
+    }
+
+    private  boolean isValidPassword(PasswordField passwordField, PasswordField confirmPasswordField) {
+        if(!passwordField.getText().equals(confirmPasswordField.getText())){
+            ValidationService.getInstance().showPasswordMismatchError();
+            return false;
+        }
+        return true;
+    }
 
     public void showLoginSuccess(String username) {
         showAlert(Alert.AlertType.INFORMATION,"Login Effettuato", "Benvenuto, " + username + "!");
@@ -95,4 +134,7 @@ public class ValidationService {
     }
 
 
+    public void showWrongOfferError() {
+        showAlert(Alert.AlertType.ERROR, "Errore", "Non puoi fare un'offerta su una tua inserzione.");
+    }
 }

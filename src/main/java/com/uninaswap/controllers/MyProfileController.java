@@ -83,7 +83,7 @@ public class MyProfileController {
 
     @FXML
     public void initialize() {
-        User currentUser = new UserDaoImpl().getUserFromID(UserSession.getInstance().getCurrentUserId());
+        User currentUser = new UserDaoImpl().findUserFromID(UserSession.getInstance().getCurrentUserId());
         this.userNameLabel.setText(currentUser.getUsername());
         this.firstNameField.setText(currentUser.getFirst_name());
         this.lastNameField.setText(currentUser.getLast_name());
@@ -102,7 +102,7 @@ public class MyProfileController {
     private void loadUserListings() {
         try {
             ListingDaoImpl listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findMyAviableInsertions();
+            List<Listing> listings = listingDao.findCurrentUserAvailableInsertions();
 
             // Clear existing content
             this.userAdsContainer.getChildren().clear();
@@ -124,7 +124,7 @@ public class MyProfileController {
     private void setStatisticsSection(){
         try{
             ListingDaoImpl listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findMyAviableInsertions();
+            List<Listing> listings = listingDao.findCurrentUserAvailableInsertions();
 
             double minPrice = listings.getFirst().getType() == typeListing.SALE ? listings.getFirst().getPrice().doubleValue() : Integer.MAX_VALUE;
             double maxPrice = listings.getFirst().getType() == typeListing.SALE ? listings.getFirst().getPrice().doubleValue() : 0;
@@ -250,7 +250,7 @@ public class MyProfileController {
 
     private void setTotalAdsLabel(){
         try {
-            List<Listing> listingDao = new ListingDaoImpl().findMyInsertions();
+            List<Listing> listingDao = new ListingDaoImpl().findCurrentUserInsertions();
             int totalInsertions = listingDao.size();
             int availableListings = 0;
             int completedSales = 0;
@@ -308,7 +308,7 @@ public class MyProfileController {
     private void setPieChartAndBarChart(){
        try {
            ListingDaoImpl listingDao = new ListingDaoImpl();
-           List<Listing> listings = listingDao.findMyInsertions();
+           List<Listing> listings = listingDao.findCurrentUserInsertions();
            ObservableList<Listing> listingObservableList = FXCollections.observableArrayList(listings);
 
            this.offerTypesPieChart.getData().clear();

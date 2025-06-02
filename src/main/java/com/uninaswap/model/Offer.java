@@ -3,7 +3,7 @@ package com.uninaswap.model;
 import java.time.LocalDate;
 
 public class Offer {
-    private int offerID;
+    private Integer offerID;
     private int listingID;
     private int userID;
     private double amount;
@@ -14,8 +14,7 @@ public class Offer {
     public Offer() {
     }
 
-    public Offer(int offerID, int listingID, int userID, double amount, String message, ListingStatus listingStatus, LocalDate offerDate) {
-        this.offerID = offerID;
+    public Offer(int listingID, int userID, double amount, String message, ListingStatus listingStatus, LocalDate offerDate) {
         this.listingID = listingID;
         this.userID = userID;
         this.amount = amount;
@@ -24,11 +23,11 @@ public class Offer {
         this.offerDate = offerDate;
     }
 
-    public int getOfferID() {
+    public Integer getOfferID() {
         return offerID;
     }
 
-    public void setOfferID(int offerID) {
+    public void setOfferID(Integer offerID) {
         this.offerID = offerID;
     }
 

@@ -25,7 +25,7 @@ public class FilterService {
         if (criteria.getExcludeUserId() == null && UserSession.getInstance().getCurrentUser() != null) {
             criteria.setExcludeUserId(UserSession.getInstance().getCurrentUser().getId());
         }
-        return listingDao.findWithFilters(criteria);
+        return listingDao.findByFilters(criteria);
     }
 
     public BigDecimal getMaxAvailablePrice() throws SQLException {
