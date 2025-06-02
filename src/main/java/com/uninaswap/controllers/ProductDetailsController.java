@@ -1,9 +1,8 @@
 package com.uninaswap.controllers;
 
+import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Listing;
-import com.uninaswap.services.ListingService;
 import com.uninaswap.services.NavigationService;
-import com.uninaswap.services.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -36,8 +35,7 @@ public class ProductDetailsController {
     @FXML private Label dateLabel;
 
     private Listing listing;
-    private final UserService userService = UserService.getInstance();
-    private final ListingService listingService = ListingService.getInstance();
+
 
     @FXML
     public void initialize() {
@@ -88,7 +86,7 @@ public class ProductDetailsController {
             this.priceLabel.setText("Prezzo non disponibile");
         }
         calculateDaysDifferenceAndSetDateLabel(listing, this.dateLabel);
-        this.sellerLabel.setText("Utente: " + userService.getUserFullName(listing.getUserId()));
+        this.sellerLabel.setText("Utente: " + new UserDaoImpl().fullNameFromID(listing.getUserId()));
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
             File imageFile = new File(listing.getImageUrl());
@@ -146,4 +144,3 @@ public class ProductDetailsController {
         }
     }
 }
-
