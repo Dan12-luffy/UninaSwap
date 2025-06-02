@@ -86,7 +86,7 @@ public class ProductDetailsController {
             this.priceLabel.setText("Prezzo non disponibile");
         }
         calculateDaysDifferenceAndSetDateLabel(listing, this.dateLabel);
-        this.sellerLabel.setText("Utente: " + new UserDaoImpl().fullNameFromID(listing.getUserId()));
+        this.sellerLabel.setText("Utente: " + new UserDaoImpl().findFullNameFromID(listing.getUserId()));
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
             File imageFile = new File(listing.getImageUrl());
