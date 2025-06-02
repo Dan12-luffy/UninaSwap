@@ -2,6 +2,7 @@ package com.uninaswap.controllers;
 
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Listing;
+import com.uninaswap.services.FavoriteService;
 import com.uninaswap.services.NavigationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,6 +32,7 @@ public class ProductDetailsController {
     @FXML private Button backButton;
     @FXML private Label conditionBadge;
     @FXML private Label typeBadge;
+    @FXML private Button favoriteButton;
     @FXML private Label availabilityLabel;
     @FXML private Label dateLabel;
 
@@ -118,6 +120,7 @@ public class ProductDetailsController {
                     this.offerButton.setVisible(true);
             }
         }
+        updateFavoriteButton();
     }
     private void calculateDaysDifferenceAndSetDateLabel(Listing listing, Label dateLabel) {
         long daysDifference = Math.abs(Date.valueOf(LocalDate.now()).toLocalDate().toEpochDay() -
@@ -141,6 +144,26 @@ public class ProductDetailsController {
         if (listing != null) {
             // Logica per l'acquisto del prodotto
             System.out.println("Regalo prodotto: " + listing.getListingId());
+        }
+    }
+    @FXML
+    private void toggleFavorite() {
+        try {
+            FavoriteService.getInstance().toggleFavorite(listing.getListingId());
+            updateFavoriteButton();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateFavoriteButton() {
+        boolean isFavorite = FavoriteService.getInstance().isFavorite(listing.getListingId());
+        if(isFavorite){
+            favoriteButton.getStyleClass().add("favorite");
+            favoriteButton.setText("♥ Nei preferiti");
+        }else{
+            favoriteButton.getStyleClass().remove("favorite"); // Here's the error
+            favoriteButton.setText("Aggiungi ai preferiti");
         }
     }
 }

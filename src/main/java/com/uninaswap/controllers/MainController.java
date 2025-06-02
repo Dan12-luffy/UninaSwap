@@ -12,6 +12,11 @@ import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
 import javafx.beans.Observable;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -29,7 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainController {
-    private String username;
+
 
     @FXML private TextField searchField;
     @FXML private Button searchButton;
@@ -110,6 +115,7 @@ public class MainController {
         initializePriceRange();
         loadAllItems();
         this.maxPriceLabel.setText(((int)this.priceSlider.getMax() + "€"));
+        wishlistButton.setOnAction(event -> showFavorites());
 
         searchField.focusedProperty().addListener((_, _, _) -> {
             searchButton.setDefaultButton(true);
@@ -128,6 +134,19 @@ public class MainController {
         } catch (SQLException e) {
             this.resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
+        }
+    }
+    private void showFavorites() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/favoritesView.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("I miei preferiti");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading favorites view: " + e.getMessage());
         }
     }
     private void initializePriceRange() {
@@ -470,7 +489,7 @@ public class MainController {
 
         String categoryName = button.getText();
         if (categoryName.equals("Tutto")) {
-            // se "tuttO" è selezionato, deseleziona gli altri
+            // se "tutto" è selezionato, deseleziona gli altri
             this.booksCategoryButton.setSelected(false);
             this.electronicCategoryButton.setSelected(false);
             this.clothingCategoryButton.setSelected(false);
@@ -481,15 +500,22 @@ public class MainController {
             this.selectedCategories.add(ALL_CATEGORIES_ID);
             this.allCategoryButton.setSelected(true);
         } else {
+            int categoryId = categoryDao.getCategoryIdByName(categoryName);
+
             if (button.isSelected()) {
-                //se una specifica categoria è selezionata, rimuovi "tutti" se è selezionato
+                // se una specifica categoria è selezionata, rimuovi "tutti" se è selezionato
                 if (this.selectedCategories.contains(ALL_CATEGORIES_ID)) {
                     this.selectedCategories.remove(Integer.valueOf(ALL_CATEGORIES_ID));
                     this.allCategoryButton.setSelected(false);
                 }
-                this.selectedCategories.add(categoryDao.getCategoryIdByName(categoryName));
+
+                if (categoryId != -1) { // Controlla se l'ID è valido
+                    this.selectedCategories.add(categoryId);
+                }
             } else {
-                this.selectedCategories.remove(categoryDao.getCategoryIdByName(categoryName));
+                if (categoryId != -1) { // Controlla se l'ID è valido prima di rimuovere
+                    this.selectedCategories.remove(Integer.valueOf(categoryId));
+                }
 
                 // se tutte le categorie sono deselezionate, aggiungi "tutti" e selezionalo
                 if (this.selectedCategories.isEmpty()) {

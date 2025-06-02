@@ -1,12 +1,10 @@
 package com.uninaswap.controllers;
 
+import com.uninaswap.dao.FavoriteDaoImpl;
 import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.*;
-import com.uninaswap.services.NavigationService;
-import com.uninaswap.services.ProfileSecurityService;
-import com.uninaswap.services.UserSession;
-import com.uninaswap.services.ValidationService;
+import com.uninaswap.services.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -71,6 +69,8 @@ public class MyProfileController {
     @FXML private Button deleteAccountButton;
     @FXML private Button logoutButton;
     @FXML private Label totalOffersStat;
+    @FXML private Tab favoritesTab;
+    @FXML private VBox favoritesContainer;
     @FXML private Label acceptedOffersStat;
     @FXML private Label pendingOffersStat;
     @FXML private Label rejectedOffersStat;
@@ -96,6 +96,7 @@ public class MyProfileController {
         setTotalAdsLabel();
         setStatisticsSection();
         loadUserListings();
+        loadUserFavorites();
         setPieChartAndBarChart();
     }
 
@@ -121,64 +122,42 @@ public class MyProfileController {
             userAdsContainer.getChildren().add(errorLabel);
         }
     }
-    private void setStatisticsSection(){
-        try{
-            ListingDaoImpl listingDao = new ListingDaoImpl();
-            List<Listing> listings = listingDao.findMyAviableInsertions();
+    private void loadUserFavorites() {
+        try {
+            List<Listing> favorites = FavoriteService.getInstance().getUserFavorites();
 
-            double minPrice = listings.getFirst().getType() == typeListing.SALE ? listings.getFirst().getPrice().doubleValue() : Integer.MAX_VALUE;
-            double maxPrice = listings.getFirst().getType() == typeListing.SALE ? listings.getFirst().getPrice().doubleValue() : 0;
-            double sumPrice = 0.0;
-            for(Listing listing : listings){
-                if(listing.getStatus() == ListingStatus.SOLD){
-                    this.acceptedOffersStat.setText(String.valueOf(Integer.parseInt(this.acceptedOffersStat.getText()) + 1));
+            // Clear existing content
+            this.favoritesContainer.getChildren().clear();
+
+            if (favorites.isEmpty()) {
+                Label emptyLabel = new Label("Nessun elemento nei preferiti");
+                emptyLabel.getStyleClass().add("empty-message");
+                this.favoritesContainer.getChildren().add(emptyLabel);
+            } else {
+                for (Listing listing : favorites) {
+                    this.favoritesContainer.getChildren().add(createFavoriteCard(listing));
                 }
-                if(listing.getStatus() == ListingStatus.PENDING){
-                    this.pendingOffersStat.setText(String.valueOf(Integer.parseInt(this.pendingOffersStat.getText()) + 1));
-                }
-                if(listing.getStatus() == ListingStatus.REJECTED){
-                    this.rejectedOffersStat.setText(String.valueOf(Integer.parseInt(this.rejectedOffersStat.getText()) + 1));
-                }
-                if(listing.getPrice().doubleValue() < minPrice) {
-                    minPrice = listing.getPrice().doubleValue();
-                }
-                if(listing.getPrice().doubleValue() > maxPrice) {
-                    maxPrice = listing.getPrice().doubleValue();
-                }
-                sumPrice += listing.getPrice() != null ? listing.getPrice().doubleValue() : 0.0;
             }
-            double avgPrice = sumPrice / listings.size();
-
-            this.avgPriceLabel.setText(String.format("€%.2f", avgPrice));
-            this.minPriceLabel.setText(String.format("€%.2f", minPrice));
-            this.maxPriceLabel.setText(String.format("€%.2f", maxPrice));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            this.totalOffersStat.setText("0");
-            this.acceptedOffersStat.setText("0");
-            this.pendingOffersStat.setText("0");
-            this.rejectedOffersStat.setText("0");
-            this.avgPriceLabel.setText("€0.00");
-            this.minPriceLabel.setText("€0.00");
-            this.maxPriceLabel.setText("€0.00");
+            Label errorLabel = new Label("Errore nel caricamento dei preferiti");
+            errorLabel.getStyleClass().add("error-message");
+            favoritesContainer.getChildren().add(errorLabel);
         }
     }
-    private HBox createListingCard(Listing listing) {
-        HBox card = new HBox(15);
-        card.setPrefWidth(this.userAdsContainer.getPrefWidth() - 20);
-        card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
-        card.setPrefHeight(100);
 
-        // Add hover effect
-        card.setOnMouseEntered(e -> card.setStyle("-fx-padding: 10; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f8f8f8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);"));
-        card.setOnMouseExited(e -> card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;"));
+    private HBox createFavoriteCard(Listing listing) {
+        HBox card = new HBox(15);
+        card.setPrefWidth(this.favoritesContainer.getPrefWidth() - 20);
+        card.getStyleClass().add("listing-card");
+        card.setPrefHeight(100);
 
         ImageView imageView = new ImageView();
         imageView.setFitWidth(80);
         imageView.setFitHeight(80);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
-        imageView.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 0); -fx-background-radius: 3;");
+        imageView.getStyleClass().add("listing-image");
 
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
@@ -193,11 +172,9 @@ public class MyProfileController {
         HBox.setHgrow(textContent, javafx.scene.layout.Priority.ALWAYS);
 
         Label titleLabel = new Label(listing.getTitle());
-        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        titleLabel.getStyleClass().add("listing-title");
         titleLabel.setWrapText(true);
 
-        // Price and type
-        //String priceText = listing.getType().equals(typeListing.GIFT) ? String.format("€%.2f", listing.getPrice()) : listing.getType().toString();
         String priceText;
         if (listing.getType().equals(typeListing.GIFT)) {
             priceText = typeListing.GIFT.toString();
@@ -209,14 +186,161 @@ public class MyProfileController {
         }
 
         Label priceLabel = new Label(priceText);
-        priceLabel.setStyle("-fx-font-size: 14px;");
+        priceLabel.getStyleClass().add("listing-price");
 
         HBox infoBox = new HBox(10);
         Label statusLabel = new Label(listing.getStatus().toString());
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-background-color: #f0f0f0; -fx-padding: 2 5; -fx-background-radius: 3;");
+        statusLabel.getStyleClass().add("listing-status");
 
         Label dateLabel = new Label(listing.getPublishDate() != null ? listing.getPublishDate().toString() : "");
-        dateLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #888;");
+        dateLabel.getStyleClass().add("listing-date");
+
+        infoBox.getChildren().addAll(statusLabel, dateLabel);
+        textContent.getChildren().addAll(titleLabel, priceLabel, infoBox);
+
+        VBox actionButtons = new VBox(8);
+        actionButtons.setAlignment(javafx.geometry.Pos.CENTER);
+        actionButtons.setPrefWidth(80);
+
+        Button viewButton = new Button("Visualizza");
+        viewButton.getStyleClass().add("edit-button");
+        viewButton.setOnAction(event -> {
+            event.consume();
+            showItemDetails(null, listing);
+        });
+
+        Button removeButton = new Button("Rimuovi");
+        removeButton.getStyleClass().add("delete-button");
+        removeButton.setOnAction(event -> {
+            event.consume();
+            removeFavorite(listing);
+        });
+
+        actionButtons.getChildren().addAll(viewButton, removeButton);
+        card.getChildren().addAll(imageView, textContent, actionButtons);
+
+        return card;
+    }
+
+    private void removeFavorite(Listing listing ){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Rimuovi dai preferiti");
+        alert.setHeaderText("Rimuovere questo articolo dai preferiti?");
+        alert.setContentText("Stai per rimuovere ' " + listing.getTitle() + " ' dai tuoi preferiti.\nL'operazione non può essere annullata.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            FavoriteService.getInstance().removeFromFavorites(listing.getListingId());
+            loadUserFavorites();
+        }
+    }
+    private void setStatisticsSection(){
+        try{
+            ListingDaoImpl listingDao = new ListingDaoImpl();
+            List<Listing> listings = listingDao.findMyAviableInsertions();
+
+            double minPrice = Integer.MAX_VALUE;
+            double maxPrice = 0;
+            double sumPrice = 0.0;
+
+            // Only access list elements if the list is not empty
+            if (!listings.isEmpty()) {
+                if (listings.getFirst().getType() == typeListing.SALE) {
+                    minPrice = listings.getFirst().getPrice().doubleValue();
+                    maxPrice = listings.getFirst().getPrice().doubleValue();
+                }
+
+                for(Listing listing : listings){
+                    if(listing.getStatus() == ListingStatus.SOLD){
+                        this.acceptedOffersStat.setText(String.valueOf(Integer.parseInt(this.acceptedOffersStat.getText()) + 1));
+                    }
+                    if(listing.getStatus() == ListingStatus.PENDING){
+                        this.pendingOffersStat.setText(String.valueOf(Integer.parseInt(this.pendingOffersStat.getText()) + 1));
+                    }
+                    if(listing.getStatus() == ListingStatus.REJECTED){
+                        this.rejectedOffersStat.setText(String.valueOf(Integer.parseInt(this.rejectedOffersStat.getText()) + 1));
+                    }
+                    if(listing.getPrice().doubleValue() < minPrice) {
+                        minPrice = listing.getPrice().doubleValue();
+                    }
+                    if(listing.getPrice().doubleValue() > maxPrice) {
+                        maxPrice = listing.getPrice().doubleValue();
+                    }
+                    sumPrice += listing.getPrice() != null ? listing.getPrice().doubleValue() : 0.0;
+                }
+
+                // Only calculate average if there are items
+                double avgPrice = sumPrice / listings.size();
+                this.avgPriceLabel.setText(String.format("€%.2f", avgPrice));
+            } else {
+                // Set default values when no listings exist
+                this.avgPriceLabel.setText("€0.00");
+            }
+
+            // These run regardless of whether listings is empty
+            this.minPriceLabel.setText(minPrice == Integer.MAX_VALUE ? "€0.00" : String.format("€%.2f", minPrice));
+            this.maxPriceLabel.setText(String.format("€%.2f", maxPrice));
+
+        }catch (Exception e){
+            e.printStackTrace();
+            this.totalOffersStat.setText("0");
+            this.acceptedOffersStat.setText("0");
+            this.pendingOffersStat.setText("0");
+            this.rejectedOffersStat.setText("0");
+            this.avgPriceLabel.setText("€0.00");
+            this.minPriceLabel.setText("€0.00");
+            this.maxPriceLabel.setText("€0.00");
+        }
+    }
+
+    private HBox createListingCard(Listing listing) {
+        HBox card = new HBox(15);
+        card.setPrefWidth(this.userAdsContainer.getPrefWidth() - 20);
+        card.getStyleClass().add("listing-card");
+        card.setPrefHeight(100);
+
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(80);
+        imageView.setFitHeight(80);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        imageView.getStyleClass().add("listing-image");
+
+        String defaultImagePath = "/com/uninaswap/images/default_image.png";
+        try {
+            File imageFile = new File(listing.getImageUrl());
+            imageView.setImage(new Image(imageFile.toURI().toString()));
+        } catch (Exception e) {
+            imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
+        }
+
+        VBox textContent = new VBox(5);
+        textContent.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        HBox.setHgrow(textContent, javafx.scene.layout.Priority.ALWAYS);
+
+        Label titleLabel = new Label(listing.getTitle());
+        titleLabel.getStyleClass().add("listing-title");
+        titleLabel.setWrapText(true);
+
+        String priceText;
+        if (listing.getType().equals(typeListing.GIFT)) {
+            priceText = typeListing.GIFT.toString();
+        }
+        else if (listing.getType().equals(typeListing.EXCHANGE)) {
+            priceText = typeListing.EXCHANGE.toString();
+        } else {
+            priceText = String.format("€%.2f", listing.getPrice());
+        }
+
+        Label priceLabel = new Label(priceText);
+        priceLabel.getStyleClass().add("listing-price");
+
+        HBox infoBox = new HBox(10);
+        Label statusLabel = new Label(listing.getStatus().toString());
+        statusLabel.getStyleClass().add("listing-status");
+
+        Label dateLabel = new Label(listing.getPublishDate() != null ? listing.getPublishDate().toString() : "");
+        dateLabel.getStyleClass().add("listing-date");
 
         infoBox.getChildren().addAll(statusLabel, dateLabel);
         textContent.getChildren().addAll(titleLabel, priceLabel, infoBox);
@@ -226,22 +350,19 @@ public class MyProfileController {
         actionButtons.setPrefWidth(80);
 
         Button editButton = new Button("Modifica");
-        editButton.setStyle("-fx-background-color: #f0f0f0; -fx-text-fill: #444; -fx-background-radius: 3;");
-        editButton.setPrefWidth(75);
+        editButton.getStyleClass().add("edit-button");
         editButton.setOnAction(event -> {
             event.consume(); editListing(listing);
         });
 
         Button deleteButton = new Button("Elimina");
-        deleteButton.setStyle("-fx-background-color: #ffecec; -fx-text-fill: #d32f2f; -fx-background-radius: 3;");
-        deleteButton.setPrefWidth(75);
+        deleteButton.getStyleClass().add("delete-button");
         deleteButton.setOnAction(event -> {
             event.consume();
             deleteListing(listing);
         });
 
         actionButtons.getChildren().addAll(editButton, deleteButton);
-
         card.getChildren().addAll(imageView, textContent, actionButtons);
         card.setOnMouseClicked(event -> showItemDetails(event, listing));
 
