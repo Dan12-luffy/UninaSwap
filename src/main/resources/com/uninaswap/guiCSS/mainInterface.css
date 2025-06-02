@@ -556,6 +556,10 @@
 .button:hover {
     -fx-cursor: hand;
 }
+.notification-badge-text {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
 
 /* ============================
    RESPONSIVE

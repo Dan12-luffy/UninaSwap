@@ -25,11 +25,10 @@ public class OfferDaoImpl implements OfferDao {
             stmt.setInt(1, o.getListingID());
             stmt.setInt(2, o.getUserID());
             stmt.setDouble(3, o.getAmount());
-            stmt.setString(4, o.getMessage());
-            stmt.setString(5, o.getListingStatus().toString());
-            stmt.setObject(6, o.getOfferDate().toEpochDay() * 24 * 60 * 60 * 1000); //Converte Localdate a Date per il db
-            stmt.executeUpdate();
-
+            stmt.setString(4, o.getListingStatus().toString().toUpperCase());
+            stmt.setString(5, o.getMessage());
+            stmt.setDate(6, java.sql.Date.valueOf(o.getOfferDate()));
+            stmt.executeUpdate(); //Converte Localdate a Date per il db
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'offerta: " + e.getMessage());
         }
@@ -111,7 +110,7 @@ public class OfferDaoImpl implements OfferDao {
         return null;
     }
     @Override
-    public List<Offer> findOfferForCurrentUserID() throws SQLException {
+    public List<Offer> findOfferMadeByCurrentUserID() throws SQLException {
         String sql = "SELECT * FROM offer WHERE userid = ?";
         try(Connection conn = DatabaseUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -122,6 +121,20 @@ public class OfferDaoImpl implements OfferDao {
         }
         return null;
     }
+    @Override
+    public List<Offer> findOffersToCurrentUser() throws SQLException {
+        String sql = "SELECT o.* FROM offer o JOIN listings l ON o.listingid = l.listingid WHERE l.userid = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
+            return getListingOffers(stmt);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     @Override
     public void updateOfferStatus(int offerId, ListingStatus status) throws Exception {
         String sql = "UPDATE offer SET status = ? WHERE offerid = ?";
@@ -155,7 +168,7 @@ public class OfferDaoImpl implements OfferDao {
         offer.setAmount(rs.getDouble("amount"));
         offer.setMessage(rs.getString("message"));
         offer.setListingStatus(ListingStatus.valueOf(rs.getString("status")));
-        offer.setOfferDate(LocalDate.ofEpochDay(rs.getLong("offer_date")));
+        offer.setOfferDate(rs.getDate("offer_date").toLocalDate());
         return offer;
     }
 }

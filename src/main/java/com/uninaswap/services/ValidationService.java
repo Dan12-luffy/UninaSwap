@@ -137,4 +137,12 @@ public class ValidationService {
     public void showWrongOfferError() {
         showAlert(Alert.AlertType.ERROR, "Errore", "Non puoi fare un'offerta su una tua inserzione.");
     }
+
+    public void showOfferProposalSuccess() {
+        showAlert(Alert.AlertType.INFORMATION, "Offerta Inviata", "La tua offerta è stata inviata con successo!");
+    }
+
+    public void showCancelExchangeMessage() {
+        showAlert(Alert.AlertType.INFORMATION, "Scambio Annullato", "Lo scambio è stato annullato con successo, tornerai alla pagina principale.");
+    }
 }

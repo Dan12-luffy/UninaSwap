@@ -2,7 +2,6 @@ package com.uninaswap.services;
 
 import com.uninaswap.dao.OfferDao;
 import com.uninaswap.dao.OfferDaoImpl;
-import com.uninaswap.model.Listing;
 import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.Offer;
 import com.uninaswap.model.User;
@@ -45,8 +44,11 @@ public class OfferService {
         return offerDao.findOffersForListing(listingId);
     }
 
-    public List<Offer> getOffersForCurrentUser() throws SQLException {
-        return offerDao.findOfferForCurrentUserID();
+    public List<Offer> getOffersMadeByCurrentUser() throws SQLException {
+        return offerDao.findOfferMadeByCurrentUserID();
+    }
+    public List<Offer> getOffersReceivedByCurrentUser() throws SQLException {
+        return offerDao.findOffersToCurrentUser();
     }
 
     public boolean acceptOffer(int offerId) {
@@ -55,7 +57,7 @@ public class OfferService {
             if (offer == null) {
                 return false;
             }
-            offerDao.updateOfferStatus(offerId, ListingStatus.APPROVED);
+            offerDao.updateOfferStatus(offerId, ListingStatus.ACCEPTED);
 
             return true;
         } catch (SQLException e) {

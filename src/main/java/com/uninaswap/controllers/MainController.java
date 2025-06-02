@@ -93,10 +93,10 @@ public class MainController {
 
 
 
+
     private final int ALL_CATEGORIES_ID = -1; //Used to represent "All filter Categories", needed to clear the arraylist and filters
     private FilterCriteria currentFilter = new FilterCriteria();
     private final List<Integer> selectedCategories = new ArrayList<>();
-    private final ListingService listingService = ListingService.getInstance();
     private final CategoryService categoryService = CategoryService.getInstance();
     private final UserSession userSession = UserSession.getInstance();
     private final FilterService filterService = FilterService.getInstance();

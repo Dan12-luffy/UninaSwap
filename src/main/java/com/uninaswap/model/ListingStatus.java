@@ -4,7 +4,7 @@ public enum ListingStatus {
 
     AVAILABLE("Available"),
     PENDING("Pending"),
-    APPROVED("Approved"),
+    ACCEPTED("AccePted"),
     REJECTED("Rejected"),
     SOLD("Venduto");
 

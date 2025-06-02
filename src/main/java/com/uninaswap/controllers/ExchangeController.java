@@ -3,13 +3,16 @@ package com.uninaswap.controllers;
 import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Listing;
+import com.uninaswap.model.ListingStatus;
+import com.uninaswap.model.Offer;
 import com.uninaswap.model.typeListing;
-import com.uninaswap.services.ListingService;
-import com.uninaswap.services.NavigationService;
+import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,13 +20,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
-public class ExchangeController implements Initializable {
+public class ExchangeController{
 
     @FXML private Button helpButton;
     @FXML private ImageView logoImage;
@@ -46,10 +50,12 @@ public class ExchangeController implements Initializable {
     @FXML private Button confirmExchangeButton;
 
     private Listing desiredProduct;
+    private final List<Listing> selectedListings = new ArrayList<>();
     private final ListingService listingService = ListingService.getInstance();
+    private final OfferService offerService = OfferService.getInstance();
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+   @FXML
+    public void initialize() {
         loadUserListings();
     }
 
@@ -60,14 +66,64 @@ public class ExchangeController implements Initializable {
 
     @FXML
     private void cancelExchange() {
-        // Cancel the exchange process
+       ValidationService.getInstance().showCancelExchangeMessage();
     }
 
     @FXML
-    private void confirmExchange() {
-        // Confirm and submit the exchange proposal
+    private void confirmExchange(ActionEvent event) {
+        double differenceValue = Double.parseDouble(this.differenceLabel.getText().replace("Differenza: €", ""));
+        if(differenceValue > desiredProduct.getPrice().doubleValue()){
+            confirmAction("Sei sicuro di voler procedere con lo scambio? Il valore dei tuoi prodotti è superiore a quello del prodotto desiderato.")
+                    .ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            for(Listing listing :selectedListings) {
+                                Offer o = new Offer(this.desiredProduct.getListingId(), UserSession.getInstance().getCurrentUserId(), listing.getPrice().doubleValue(),"Proposta di scambio", ListingStatus.PENDING, LocalDate.now());
+                                try {
+                                    offerService.createOffer(o);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            ValidationService.getInstance().showOfferProposalSuccess();
+                            NavigationService.getInstance().navigateToMainView(event);
+                        }
+                    });
+        }
+        else if(differenceValue < 0){
+            confirmAction("Sei sicuro di voler procedere con lo scambio? Il valore dei tuoi prodotti è inferiore a quello del prodotto desiderato.")
+                    .ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            for(Listing listing : selectedListings) {
+                                Offer o = new Offer(this.desiredProduct.getListingId(), UserSession.getInstance().getCurrentUserId(), listing.getPrice().doubleValue(),"Proposta di scambio", ListingStatus.PENDING, LocalDate.now());
+                                try {
+                                    offerService.createOffer(o);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            ValidationService.getInstance().showOfferProposalSuccess();
+                            NavigationService.getInstance().navigateToMainView(event);
+                        }
+                    });
+        }
+        else{
+            confirmAction("Sei sicuro di voler procedere con lo scambio? ")
+                    .ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            for(Listing listing :selectedListings) {
+                                Offer o = new Offer(this.desiredProduct.getListingId(), UserSession.getInstance().getCurrentUserId(), listing.getPrice().doubleValue(),"Proposta di scambio", ListingStatus.PENDING, LocalDate.now());
+                                try {
+                                    offerService.createOffer(o);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            ValidationService.getInstance().showOfferProposalSuccess();
+                            NavigationService.getInstance().navigateToMainView(event);
+                        }
+                    });
+        }
     }
-
 
     private void updateCalculations(Listing listing, boolean isSelected) {
         String valueText = this.totalValueLabel.getText().replace("€", "");
@@ -148,9 +204,8 @@ public class ExchangeController implements Initializable {
         String priceText;
         if (listing.getType() == typeListing.GIFT) {
             priceText = "Gratis";
-        } else if (listing.getType() == typeListing.EXCHANGE) {
-            priceText = "Scambio";
-        } else {
+        }
+        else {
             priceText = String.format("€%.2f", listing.getPrice());
         }
 
@@ -166,10 +221,12 @@ public class ExchangeController implements Initializable {
 
             if (newState) {
                 card.setStyle("-fx-padding: 10; -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f1f8e9;");
+                selectedListings.add(listing); // Add to selected listings
             } else {
                 card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
+                selectedListings.remove(listing); // Remove from selected listings
             }
-            updateCalculations(listing,newState);
+            updateCalculations(listing, newState);
         });
 
         VBox actionBox = new VBox(5);
@@ -221,4 +278,12 @@ public class ExchangeController implements Initializable {
             this.desiredProductImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
         }
     }
+    private Optional<ButtonType> confirmAction(String message) {
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Conferma scambio");
+        confirmDialog.setHeaderText("Conferma operazione");
+        confirmDialog.setContentText(message);
+
+        return confirmDialog.showAndWait();
+   }
 }

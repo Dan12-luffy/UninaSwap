@@ -21,6 +21,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="main-container" stylesheets="@../guiCSS/mainInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.MainController">
@@ -32,7 +33,18 @@
             <HBox alignment="CENTER_RIGHT" maxHeight="35.0" styleClass="top-banner">
                 <Label styleClass="welcome-text" text="Benvenuto in UninaSwap!" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="notificationButton" styleClass="icon-button" text="Notifiche" />
+
+                <!-- Container per il pulsante notifiche con badge -->
+                <StackPane>
+                    <Button fx:id="notificationButton" styleClass="icon-button" text="Notifiche" translateX="-19.0" translateY="1.0" />
+
+                    <!-- Badge notifiche posizionato in alto a destra -->
+                    <StackPane fx:id="notificationBadge" translateX="8.0" translateY="-8.0" visible="true" StackPane.alignment="TOP_RIGHT">
+                        <Circle fill="#ff4444" radius="10.0" stroke="#ffffff" strokeWidth="1.0" translateX="15.0" translateY="8.0" />
+                        <Label fx:id="notificationCountLabel" styleClass="notification-badge-text" text="3" textFill="white" translateX="16.0" translateY="8.0" />
+                    </StackPane>
+                </StackPane>
+
                 <padding>
                     <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                 </padding>
@@ -120,17 +132,17 @@
                         </HBox>
                     </VBox>
                 </TitledPane>
-            <TitledPane expanded="false" styleClass="filter-section" text="Tipologia (Nome da migliorare)">
-               <content>
-                  <VBox spacing="8">
-                     <children>
-                        <CheckBox fx:id="saleCeck" text="Vendita" />
-                        <CheckBox fx:id="swapCeck" text="Scambio" />
-                        <CheckBox fx:id="giftCeck" text="Regalo" />
-                     </children>
-                  </VBox>
-               </content>
-            </TitledPane>
+                <TitledPane expanded="false" styleClass="filter-section" text="Tipologia (Nome da migliorare)">
+                    <content>
+                        <VBox spacing="8">
+                            <children>
+                                <CheckBox fx:id="saleCeck" text="Vendita" />
+                                <CheckBox fx:id="swapCeck" text="Scambio" />
+                                <CheckBox fx:id="giftCeck" text="Regalo" />
+                            </children>
+                        </VBox>
+                    </content>
+                </TitledPane>
 
                 <TitledPane expanded="false" styleClass="filter-section" text="Facoltà">
                     <VBox spacing="8">
@@ -140,15 +152,15 @@
                         <CheckBox fx:id="economyCeck" text="Economia" />
                         <CheckBox fx:id="artCeck" text="Arte" />
                         <CheckBox fx:id="medicineCeck" text="Medicina" />
-                  <CheckBox fx:id="biologyCeck" text="Biologia" />
-                  <CheckBox fx:id="philosophyCeck" text="Filosofia" />
-                  <CheckBox fx:id="geographyCeck" text="Geografia" />
-                  <CheckBox fx:id="psicologyCeck" text="Psicologia" />
-                  <CheckBox fx:id="chemistryCeck" text="Chimica" />
-                  <CheckBox fx:id="astronomyCeck" text="Astronomia" />
-                  <CheckBox fx:id="tourismCeck" text="Turismo" />
-                  <CheckBox fx:id="linguisticsCeck" text="Linguistica" />
-                  <CheckBox fx:id="musicCeck" text="Musica" />
+                        <CheckBox fx:id="biologyCeck" text="Biologia" />
+                        <CheckBox fx:id="philosophyCeck" text="Filosofia" />
+                        <CheckBox fx:id="geographyCeck" text="Geografia" />
+                        <CheckBox fx:id="psicologyCeck" text="Psicologia" />
+                        <CheckBox fx:id="chemistryCeck" text="Chimica" />
+                        <CheckBox fx:id="astronomyCeck" text="Astronomia" />
+                        <CheckBox fx:id="tourismCeck" text="Turismo" />
+                        <CheckBox fx:id="linguisticsCeck" text="Linguistica" />
+                        <CheckBox fx:id="musicCeck" text="Musica" />
                     </VBox>
                 </TitledPane>
 
