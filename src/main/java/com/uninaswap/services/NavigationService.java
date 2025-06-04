@@ -132,5 +132,29 @@ public class NavigationService {
             ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Impossibile chiudere la vista dei preferiti.");
         }
     }
-
+    /*public void navigateToMakeOfferView(ActionEvent event, Listing listing) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/makeOfferInterface.fxml"));
+            Parent root = loader.load();
+            // Assuming you have a controller for the make offer view
+            MakeOfferController controller = loader.getController();
+            controller.setListing(listing);
+            setScene(event, root);
+        } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }
+    }
+*/
+   /* public void navigateToPurchaseConfirmationView(ActionEvent event, Listing listing) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/purchaseConfirmationInterface.fxml"));
+            Parent root = loader.load();
+            // Assuming you have a controller for the purchase confirmation view
+            PurchaseConfirmationController controller = loader.getController();
+            controller.setListing(listing);
+            setScene(event, root);
+        } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }
+    }*/
 }

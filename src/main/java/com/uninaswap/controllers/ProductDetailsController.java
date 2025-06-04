@@ -4,6 +4,7 @@ import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Listing;
 import com.uninaswap.services.FavouriteService;
 import com.uninaswap.services.NavigationService;
+import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -52,16 +53,24 @@ public class ProductDetailsController {
 
     @FXML
     private void onBuyButtonClicked(ActionEvent event) {
-        if (listing != null) {
-            System.out.println("Acquisto prodotto: " + listing.getListingId());
-        }
+      /* try {
+           if (listing != null) {
+               NavigationService.getInstance().navigateToPurchaseConfirmationView(event, listing);
+           }
+       }catch(Exception e){
+           ValidationService.getInstance().showFailedToOpenPageError();
+       }*/
     }
 
     @FXML
     private void onOfferButtonClicked(ActionEvent event) {
-        if (listing != null) {
-            System.out.println("Proposta per: " + listing.getListingId());
-        }
+       /* try {
+            if (listing != null) {
+                NavigationService.getInstance().navigateToMakeOfferView(event, listing);
+            }
+        }catch(Exception e){
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }*/
     }
 
     @FXML
