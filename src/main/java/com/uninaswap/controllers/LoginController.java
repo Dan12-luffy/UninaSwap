@@ -27,10 +27,10 @@ public class LoginController {
         String username = this.usernameField.getText();
         String password = this.passwordField.getText();
 
-        if (!ValidationService.getInstance().areCredentialsValid(username, password)) {
+        if (!ValidationService.getInstance().areCredentialsValid(username, password))
             return;
-        }
-        userService.authenticateUser(username, password);
+        if(!userService.authenticateUser(username, password))
+            return;
         NavigationService.getInstance().navigateToMainView(event);
     }
 

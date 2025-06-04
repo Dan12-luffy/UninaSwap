@@ -2,16 +2,16 @@ package com.uninaswap.model;
 
 import java.sql.Timestamp;
 
-public class Favorite {
+public class Favourite {
     private int favoriteId;
     private int userId;
     private int listingId;
     private Timestamp createdAt;
 
     // Constructors
-    public Favorite() {}
+    public Favourite() {}
 
-    public Favorite(int userId, int listingId) {
+    public Favourite(int userId, int listingId) {
         this.userId = userId;
         this.listingId = listingId;
     }

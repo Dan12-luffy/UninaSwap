@@ -4,45 +4,43 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class Listing {
+public abstract class Listing {
     private int listingId;
     private String title;
     private String imageUrl;
     private String description;
     private typeListing type; //ENUM
-    private BigDecimal price;
     private ListingStatus status; //ENUM
     private LocalDate publishDate;
+
     private int userId;
     private String category;
     private Integer categoryId;
 
-    public Listing() {}
+    protected Listing() {}
 
     // Costruttore completo
-    public Listing(Integer listingId, String title, String imageUrl, String description,
-                   typeListing type, BigDecimal price, ListingStatus status,
+    protected Listing(Integer listingId, String title, String imageUrl, String description,
+                   typeListing type, ListingStatus status,
                    LocalDate publishDate, Integer userId, String category) {
         this.listingId = listingId;
         this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
         this.type = type;
-        this.price = price;
         this.status = status;
         this.publishDate = publishDate;
         this.userId = userId;
         this.category = category;
     }
     //Costruttore senza id
-    public Listing(String title, String imageUrl, String description,
-                   typeListing type, BigDecimal price, ListingStatus status,
+    protected Listing(String title, String imageUrl, String description,
+                   typeListing type, ListingStatus status,
                    LocalDate publishDate, Integer userId, String category) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
         this.type = type;
-        this.price = price;
         this.status = status;
         this.publishDate = publishDate;
         this.userId = userId;
@@ -98,13 +96,6 @@ public class Listing {
         this.type = type;
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
 
     public ListingStatus getStatus() {
         return status;
@@ -138,6 +129,10 @@ public class Listing {
         this.category = category;
     }
 
+    public abstract typeListing getListingType();
+
+    public abstract BigDecimal getPrice();
+
     @Override
     public String toString() {
         return "Listing{" +
@@ -146,7 +141,6 @@ public class Listing {
                 ", imageUrl='" + imageUrl + '\'' +
                 ", description='" + description + '\'' +
                 ", type=" + type +
-                ", price=" + price +
                 ", status=" + status +
                 ", publishDate=" + publishDate +
                 ", userId=" + userId +
