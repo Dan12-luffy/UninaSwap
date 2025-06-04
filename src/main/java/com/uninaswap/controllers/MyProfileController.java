@@ -235,56 +235,57 @@ public class MyProfileController {
             loadUserFavorites();
         }
     }
-    private void setStatisticsSection(){
-        try{
+    private void setStatisticsSection() {
+        try {
             List<Listing> listings = listingService.getCurrentUserAvailableInsertions();
 
-            double minPrice = Integer.MAX_VALUE;
+            double minPrice = Double.MAX_VALUE;
             double maxPrice = 0;
             double sumPrice = 0.0;
+            int priceCount = 0;
 
             if (!listings.isEmpty()) {
-                if (listings.getFirst().getType() == typeListing.SALE) {
-                    minPrice = listings.getFirst().getPrice().doubleValue();
-                    maxPrice = listings.getFirst().getPrice().doubleValue();
-                }
-
-                for(Listing listing : listings){
-                    if(listing.getStatus() == ListingStatus.SOLD){
+                for (Listing listing : listings) {
+                    if (listing.getStatus() == ListingStatus.SOLD) {
                         this.acceptedOffersStat.setText(String.valueOf(Integer.parseInt(this.acceptedOffersStat.getText()) + 1));
-                    }
-                    if(listing.getStatus() == ListingStatus.PENDING){
+                    } else if (listing.getStatus() == ListingStatus.PENDING) {
                         this.pendingOffersStat.setText(String.valueOf(Integer.parseInt(this.pendingOffersStat.getText()) + 1));
-                    }
-                    if(listing.getStatus() == ListingStatus.REJECTED){
+                    } else if (listing.getStatus() == ListingStatus.REJECTED) {
                         this.rejectedOffersStat.setText(String.valueOf(Integer.parseInt(this.rejectedOffersStat.getText()) + 1));
                     }
-                    if(listing.getPrice().doubleValue() < minPrice) {
-                        minPrice = listing.getPrice().doubleValue();
-                    }
-                    if(listing.getPrice().doubleValue() > maxPrice) {
-                        maxPrice = listing.getPrice().doubleValue();
-                    }
-                    sumPrice += listing.getPrice() != null ? listing.getPrice().doubleValue() : 0.0;
-                }
 
-                // Only calculate average if there are items
-                double avgPrice = sumPrice / listings.size();
-                this.avgPriceLabel.setText(String.format("€%.2f", avgPrice));
+                    // Safely handle price calculations - check if price is not null
+                    if (listing.getPrice() != null) {
+                        double price = listing.getPrice().doubleValue();
+                        if (price < minPrice) {
+                            minPrice = price;
+                        }
+                        if (price > maxPrice) {
+                            maxPrice = price;
+                        }
+                        sumPrice += price;
+                        priceCount++;
+                    }
+                }
+                if (priceCount > 0) {
+                    double avgPrice = sumPrice / priceCount;
+                    this.avgPriceLabel.setText(String.format("€%.2f", avgPrice));
+                } else {
+                    this.avgPriceLabel.setText("€0.00");
+                }
             } else {
-                // Set default values when no listings exist
                 this.avgPriceLabel.setText("€0.00");
             }
 
-
-            // These run regardless of whether listings is empty
-            this.minPriceLabel.setText(minPrice == Integer.MAX_VALUE ? "€0.00" : String.format("€%.2f", minPrice));
+            this.minPriceLabel.setText(minPrice == Double.MAX_VALUE ? "€0.00" : String.format("€%.2f", minPrice));
             this.maxPriceLabel.setText(String.format("€%.2f", maxPrice));
 
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
             this.totalOffersStat.setText("0");
             this.maxPriceLabel.setText("€0.00");
+            this.minPriceLabel.setText("€0.00");
+            this.avgPriceLabel.setText("€0.00");
+            e.printStackTrace();
         }
     }
     private HBox createListingCard(Listing listing) {

@@ -1,9 +1,7 @@
 package com.uninaswap.dao;
 
 import com.uninaswap.databaseUtils.FilterCriteria;
-import com.uninaswap.model.Listing;
-import com.uninaswap.model.ListingStatus;
-import com.uninaswap.model.typeListing;
+import com.uninaswap.model.*;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.utility.DatabaseUtil;
 
@@ -64,8 +62,7 @@ public class ListingDaoImpl implements ListingDao {
 
             while (rs.next()) {
                 try {
-                    Listing listing = new Listing();
-                    mapResultSetToListing(rs, listing);
+                    Listing listing = createListingFromResultSet(rs);
                     listings.add(listing);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -265,11 +262,7 @@ public class ListingDaoImpl implements ListingDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     try {
-                        Listing listing = new Listing();
-                        mapResultSetToListing(rs, listing);
-                        String categoryName = rs.getString("category_name");
-                        listing.setCategory(categoryName != null ? categoryName : "Altro");
-
+                        Listing listing = createListingFromResultSet(rs);
                         listings.add(listing);
                     } catch (Exception e) {
                         System.err.println("Errore nel processare la lista: " + e.getMessage());
@@ -341,9 +334,7 @@ public class ListingDaoImpl implements ListingDao {
             stmt.setInt(1, listingId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Listing listing = new Listing();
-                    mapResultSetToListing(rs, listing);
-                    return listing;
+                    return createListingFromResultSet(rs);
                 }
             }
         } catch (SQLException e) {
@@ -360,7 +351,16 @@ public class ListingDaoImpl implements ListingDao {
         stmt.setString(2, listing.getImageUrl());
         stmt.setString(3, listing.getDescription());
         stmt.setString(4, listing.getType().name());
-        stmt.setBigDecimal(5, listing.getPrice());
+        switch (listing) {
+            case SaleListing saleListing -> stmt.setBigDecimal(5, saleListing.getPrice());
+            case ExchangeListing exchangeListing -> stmt.setBigDecimal(5, exchangeListing.getPrice());
+            case GiftListing giftListing -> stmt.setBigDecimal(5, BigDecimal.ZERO);
+            default -> {
+                stmt.setBigDecimal(5, BigDecimal.ZERO);
+                throw new SQLException("Tipo di inserzione sconosciuto");
+            }
+        }
+
         stmt.setString(6, listing.getStatus().name());
         stmt.setDate(7, new java.sql.Date(listing.getPublishDate().toEpochDay() * 24 * 60 * 60 * 1000)); // Convert LocalDate to java.sql.Date
         stmt.setInt(8, listing.getUserId());
@@ -370,24 +370,28 @@ public class ListingDaoImpl implements ListingDao {
         stmt.setInt(9, categoryId);
     }
 
-    private void mapResultSetToListing(ResultSet rs, Listing listing) throws SQLException {
-        listing.setListingId(rs.getInt("listingId"));
-        listing.setTitle(rs.getString("title"));
-        listing.setImageUrl(rs.getString("imageUrl"));
-        listing.setDescription(rs.getString("description"));
-        listing.setType(parseType(rs.getString("type")));
-        listing.setPrice(rs.getBigDecimal("price"));
-        listing.setStatus(parseStatus(rs.getString("status")));
-        listing.setPublishDate(rs.getDate("publishDate").toLocalDate());
-        listing.setUserId(rs.getInt("userId"));
-        listing.setCategory(rs.getString("category_name"));
+    public Listing createListingFromResultSet(ResultSet rs) throws SQLException {
+        int listingId = rs.getInt("listingId");
+        String title = rs.getString("title");
+        String imageUrl = rs.getString("imageUrl");
+        String description = rs.getString("description");
+        typeListing type = parseType(rs.getString("type"));
+        ListingStatus status = parseStatus(rs.getString("status"));
+        java.time.LocalDate publishDate = rs.getDate("publishDate").toLocalDate();
+        int userId = rs.getInt("userId");
+        String category = rs.getString("category_name");
+        BigDecimal price = rs.getBigDecimal("price");
+        Listing listing = ListingFactory.createListing(title, imageUrl, description, type, price, status, publishDate, userId, category);
+
+        listing.setListingId(listingId);
+
+        return listing;
     }
     private void executeQueryAndCreateTheList(List<Listing> listings, PreparedStatement stmt) throws SQLException {
         try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 try {
-                    Listing listing = new Listing();
-                    mapResultSetToListing(rs, listing);
+                    Listing listing = createListingFromResultSet(rs);
                     listings.add(listing);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -412,6 +416,7 @@ public class ListingDaoImpl implements ListingDao {
             return ListingStatus.AVAILABLE;
         }
     }
+
     private List<Listing> executeFilterQuery(String sql, List<Object> parameters) throws SQLException {
         List<Listing> listings = new ArrayList<>();
 
@@ -425,13 +430,11 @@ public class ListingDaoImpl implements ListingDao {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Listing listing = new Listing();
-                    mapResultSetToListing(rs, listing);
+                    Listing listing = createListingFromResultSet(rs);
                     listings.add(listing);
                 }
             }
         }
-
         return listings;
     }
 

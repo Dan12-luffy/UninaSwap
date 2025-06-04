@@ -3,6 +3,7 @@ package com.uninaswap.controllers; //TODO CLASSE NON FINITA, DA FINIRE
 import com.uninaswap.model.Listing;
 import com.uninaswap.dao.ListingDao;
 import com.uninaswap.dao.ListingDaoImpl;
+import com.uninaswap.model.ListingFactory;
 import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.typeListing;
 import com.uninaswap.services.ListingService;
@@ -120,8 +121,17 @@ public class NewInsertionController {
                 imagePath = this.defaultImagePath;
             }
 
-            Listing listing = new Listing(this.titleField.getText(), imagePath, this.descriptionArea.getText(), type, price, ListingStatus.AVAILABLE,
-                    LocalDate.now(), UserSession.getInstance().getCurrentUser().getId(), this.categoryComboBox.getValue());
+            Listing listing = ListingFactory.createListing(
+                    this.titleField.getText(),
+                    imagePath,
+                    this.descriptionArea.getText(),
+                    type,
+                    price,
+                    ListingStatus.AVAILABLE,
+                    LocalDate.now(),
+                    UserSession.getInstance().getCurrentUser().getId(),
+                    this.categoryComboBox.getValue()
+            );
 
             listingService.createListing(listing);
             ValidationService.getInstance().showNewInsertionSuccess();

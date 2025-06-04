@@ -22,52 +22,30 @@ public class FavouriteService {
         return instance;
     }
     public void addToFavorites(int listingId){
-        try{
-            int userId = UserSession.getInstance().getCurrentUserId();
-            favoriteDao.addFavorite(userId, listingId);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        int userId = UserSession.getInstance().getCurrentUserId();
+        favoriteDao.addFavorite(userId, listingId);
     }
     public void removeFromFavorites(int listingId) {
-        try {
-            int userId = UserSession.getInstance().getCurrentUserId();
-            favoriteDao.removeFavorite(userId, listingId);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        int userId = UserSession.getInstance().getCurrentUserId();
+        favoriteDao.removeFavorite(userId, listingId);
     }
     public boolean isFavorite(int listingId){
-        try{
-            int userId = UserSession.getInstance().getCurrentUserId();
-            return favoriteDao.isFavorite(userId, listingId);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        int userId = UserSession.getInstance().getCurrentUserId();
+        return favoriteDao.isFavorite(userId, listingId);
 
     }
     // Fix in FavoriteService.java
     public List<Listing> getUserFavorites() {
-        try {
-            int userId = UserSession.getInstance().getCurrentUserId();
-            return favoriteDao.getFavoritesByUserId(userId);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ArrayList<>(); // Return an empty list in case of error
-        }
+        int userId = UserSession.getInstance().getCurrentUserId();
+        return favoriteDao.getFavoritesByUserId(userId);
     }
 
     public void toggleFavorite(int listingId) {
-        try {
-            int userId = UserSession.getInstance().getCurrentUserId();
-            if (favoriteDao.isFavorite(userId, listingId)) {
-                favoriteDao.removeFavorite(userId, listingId);
-            } else {
-                favoriteDao.addFavorite(userId, listingId);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        int userId = UserSession.getInstance().getCurrentUserId();
+        if (favoriteDao.isFavorite(userId, listingId)) {
+            favoriteDao.removeFavorite(userId, listingId);
+        } else {
+            favoriteDao.addFavorite(userId, listingId);
         }
     }
 }

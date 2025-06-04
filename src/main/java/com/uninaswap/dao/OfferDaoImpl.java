@@ -47,12 +47,12 @@ public class OfferDaoImpl implements OfferDao {
     }
 
     @Override
-    public void updateOffer(int offerId, String title, String description, int categoryId, double price) throws Exception {
+    public void updateOffer(int offerId, String title, String description, int categoryId, double price){
 
     }
 
     @Override
-    public boolean acceptOffer(int offerId, int userId) throws Exception {
+    public boolean acceptOffer(int offerId, int userId) {
         String sql = "UPDATE offer SET status = 'ACCEPTED' WHERE offerid = ? AND userid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -67,7 +67,7 @@ public class OfferDaoImpl implements OfferDao {
     }
 
     @Override
-    public boolean rejectOffer(int offerId, int userId) throws Exception {
+    public boolean rejectOffer(int offerId, int userId){
         String sql = "UPDATE offer SET status = 'REJECTED' WHERE offerid = ? AND userid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -82,7 +82,7 @@ public class OfferDaoImpl implements OfferDao {
     }
 
     @Override
-    public Offer findOfferById(int offerId) throws Exception {
+    public Offer findOfferById(int offerId){
         String sql = "SELECT * FROM offer WHERE offerid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -98,7 +98,7 @@ public class OfferDaoImpl implements OfferDao {
         return null;
     }
     @Override
-    public List<Offer> findOffersForListing(int listingId) throws Exception {
+    public List<Offer> findOffersForListing(int listingId){
         String sql = "SELECT * FROM offer WHERE listingid = ?";
         try(Connection conn = DatabaseUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -110,7 +110,7 @@ public class OfferDaoImpl implements OfferDao {
         return null;
     }
     @Override
-    public List<Offer> findOfferMadeByCurrentUserID() throws SQLException {
+    public List<Offer> findOfferMadeByCurrentUserID(){
         String sql = "SELECT * FROM offer WHERE userid = ?";
         try(Connection conn = DatabaseUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -122,7 +122,7 @@ public class OfferDaoImpl implements OfferDao {
         return null;
     }
     @Override
-    public List<Offer> findOffersToCurrentUser() throws SQLException {
+    public List<Offer> findOffersToCurrentUser(){
         String sql = "SELECT o.* FROM offer o JOIN listings l ON o.listingid = l.listingid WHERE l.userid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -136,7 +136,7 @@ public class OfferDaoImpl implements OfferDao {
 
 
     @Override
-    public void updateOfferStatus(int offerId, ListingStatus status) throws Exception {
+    public void updateOfferStatus(int offerId, ListingStatus status){
         String sql = "UPDATE offer SET status = ? WHERE offerid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

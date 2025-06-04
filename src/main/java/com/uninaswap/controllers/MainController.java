@@ -94,7 +94,7 @@ public class MainController {
 
 
 
-
+    //TODO migliora la gestione delle eccezioni.
     private final int ALL_CATEGORIES_ID = -1; //Used to represent "All filter Categories", needed to clear the arraylist and filters
     private FilterCriteria currentFilter = new FilterCriteria();
     private final List<Integer> selectedCategories = new ArrayList<>();
@@ -113,7 +113,11 @@ public class MainController {
         this.sortComboBox.setValue("Più recenti");
         conditionToggleGroupSettings();
         //set up category buttons
-        setUpCategoryButtons();
+        try {
+            setUpCategoryButtons();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         // Select the "all conditions" option by default
         this.allConditionsRadio.setSelected(true);
         initializePriceRange();
@@ -448,8 +452,8 @@ public class MainController {
         this.maxPriceField.setText(String.valueOf((int)(maxPrice)));
     }
 
-    private void toggleButtonsSettings() {
-        CategoryDaoImpl categoryDao = new CategoryDaoImpl();
+    private void toggleButtonsSettings() throws Exception {
+        //CategoryDaoImpl categoryDao = new CategoryDaoImpl();
 
         this.allCategoryButton.setToggleGroup(null);
         this.booksCategoryButton.setToggleGroup(null);
@@ -460,15 +464,15 @@ public class MainController {
         this.otherCategoryButton.setToggleGroup(null);
 
         this.allCategoryButton.setUserData(ALL_CATEGORIES_ID);
-        this.booksCategoryButton.setUserData(categoryDao.getCategoryIdByName("Libri"));
-        this.electronicCategoryButton.setUserData(categoryDao.getCategoryIdByName("Elettronica"));
-        this.clothingCategoryButton.setUserData(categoryDao.getCategoryIdByName("Abbigliamento"));
-        this.notesCategoryButton.setUserData(categoryDao.getCategoryIdByName("Appunti"));
-        this.furnitureCategoryButton.setUserData(categoryDao.getCategoryIdByName("Arredamento"));
-        this.otherCategoryButton.setUserData(categoryDao.getCategoryIdByName("Altro"));
+        this.booksCategoryButton.setUserData(categoryService.getCategoryIdByName("Libri"));
+        this.electronicCategoryButton.setUserData(categoryService.getCategoryIdByName("Elettronica"));
+        this.clothingCategoryButton.setUserData(categoryService.getCategoryIdByName("Abbigliamento"));
+        this.notesCategoryButton.setUserData(categoryService.getCategoryIdByName("Appunti"));
+        this.furnitureCategoryButton.setUserData(categoryService.getCategoryIdByName("Arredamento"));
+        this.otherCategoryButton.setUserData(categoryService.getCategoryIdByName("Altro"));
     }
 
-    private void setUpCategoryButtons() {
+    private void setUpCategoryButtons() throws Exception {
 
         toggleButtonsSettings();
 

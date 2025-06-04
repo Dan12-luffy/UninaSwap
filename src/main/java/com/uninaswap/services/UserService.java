@@ -26,29 +26,17 @@ public class UserService {
         return instance;
     }
 
-    public boolean registerUser(User user) {
-        if (user.getUsername() == null ||  user.getPassword() == null) {
-            return false;
-        }
-
-        if (userDao.usernameAlreadyExists(user.getUsername())) {
-            return false;
-        }
-
-        user.setPassword(Sha256.hashPassword(user.getPassword()));
-
-        userDao.insertUser(user);
-        return true;
-    }
-
-    public void authenticateUser(String username, String password) {
+    public boolean authenticateUser(String username, String password) {
         User user = userDao.findUserByUsername(username);
-        if (user != null && authenticate(username, password)) {
+        String hashedPassword = hashPassword(password);
+
+        if (user != null && user.getPassword().equals(hashedPassword)) {
             UserSession.getInstance().login(user);
             ValidationService.getInstance().showLoginSuccess(user.getUsername());
-            return;
+            return true;
         }
         ValidationService.getInstance().showLoginError();
+        return false;
     }
 
     public boolean updateUsername(int userId, String newUsername) {
@@ -67,11 +55,6 @@ public class UserService {
 
     public String getUserFullName(int userId) {
         return userDao.findFullNameFromID(userId);
-    }
-
-    private boolean authenticate(String username, String password) {
-        User user = userDao.authenticateUser(username, hashPassword(password));
-        return user != null;
     }
 
     public boolean processRegistrationForm(@NotNull TextField nameField, @NotNull TextField surnameField, @NotNull ComboBox<String> facultyComboBox, @NotNull TextField usernameField, @NotNull PasswordField passwordField, @NotNull PasswordField confirmPasswordField) {
@@ -101,7 +84,6 @@ public class UserService {
             ValidationService.getInstance().showUsernameAlreadyExistsError();
             return false;
         }
-
         try {
             User user = new User();
             user.setFirst_name(name);

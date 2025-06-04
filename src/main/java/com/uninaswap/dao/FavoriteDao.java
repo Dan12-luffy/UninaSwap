@@ -5,11 +5,9 @@ import java.sql.SQLException;
 import com.uninaswap.model.Listing;
 
 public interface FavoriteDao {
-
-    void addFavorite(int userId, int listingId) throws SQLException;
-    void removeFavorite(int userId, int listingId) throws SQLException;
-    List<Listing> getFavoritesByUserId(int userId) throws SQLException;
-    boolean isFavorite(int userId, int listingId) throws SQLException;
-
-
+    void addFavorite(int userId, int listingId);
+    void removeFavorite(int userId, int listingId);
+    boolean isFavorite(int userId, int listingId);
+    List<Listing> getFavoritesByUserId(int userId);
+    int getFavoriteCount(int listingId);
 }
