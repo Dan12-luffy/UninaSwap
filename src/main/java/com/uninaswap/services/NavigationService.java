@@ -123,4 +123,14 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
+
+    public void closeFavoritesView(ActionEvent event) {
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+        }catch(Exception e){
+            ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Impossibile chiudere la vista dei preferiti.");
+        }
+    }
+
 }
