@@ -2,6 +2,7 @@ package com.uninaswap.controllers;
 
 import com.uninaswap.model.Listing;
 import com.uninaswap.services.FavouriteService;
+import com.uninaswap.services.NavigationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -85,8 +86,6 @@ public class FavoritesViewController {
 
     @FXML
     private void goBack(ActionEvent event) {
-        // Close the favorites window
-        Stage stage = (Stage) favoritesContainer.getScene().getWindow();
-        stage.close();
+        NavigationService.getInstance().closeFavoritesView(event);
     }
 }
