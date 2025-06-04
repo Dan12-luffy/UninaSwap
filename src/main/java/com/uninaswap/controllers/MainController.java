@@ -1,5 +1,6 @@
 package com.uninaswap.controllers;
 
+import com.kitfox.svg.A;
 import com.uninaswap.dao.CategoryDaoImpl;
 import com.uninaswap.dao.ListingDao;
 import com.uninaswap.dao.ListingDaoImpl;
@@ -513,11 +514,11 @@ public class MainController {
                         this.selectedCategories.remove(Integer.valueOf(ALL_CATEGORIES_ID));
                         this.allCategoryButton.setSelected(false);
                     }
-                    if (categoryId != -1) {
+                    if (categoryId != -ALL_CATEGORIES_ID) {
                         this.selectedCategories.add(categoryId);
                     }
                 } else {
-                    if (categoryId != -1) {
+                    if (categoryId != ALL_CATEGORIES_ID) {
                         this.selectedCategories.remove(Integer.valueOf(categoryId));
                     }
                     if (this.selectedCategories.isEmpty()) {
