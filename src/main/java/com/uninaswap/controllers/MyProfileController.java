@@ -357,6 +357,7 @@ public class MyProfileController {
         deleteButton.setOnAction(event -> {
             event.consume();
             deleteListing(listing);
+            setTotalAdsLabel();
         });
 
         actionButtons.getChildren().addAll(editButton, deleteButton);
