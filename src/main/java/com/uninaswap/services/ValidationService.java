@@ -145,4 +145,8 @@ public class ValidationService {
     public void showCancelExchangeMessage() {
         showAlert(Alert.AlertType.INFORMATION, "Scambio Annullato", "Lo scambio è stato annullato con successo, tornerai alla pagina principale.");
     }
+
+    public void showFailedToOpenFavouriteError() {
+        showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aprire la pagina dei preferiti.");
+    }
 }

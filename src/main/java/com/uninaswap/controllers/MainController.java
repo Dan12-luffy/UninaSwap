@@ -118,7 +118,7 @@ public class MainController {
         initializePriceRange();
         loadAllItems();
         this.maxPriceLabel.setText(((int)this.priceSlider.getMax() + "€"));
-        wishlistButton.setOnAction(event -> showFavorites());
+        wishlistButton.setOnAction(event -> showFavorites(event));
         searchField.focusedProperty().addListener((_, _, _) -> {
             searchButton.setDefaultButton(true);
         });
@@ -136,19 +136,6 @@ public class MainController {
         } catch (SQLException e) {
             this.resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
-        }
-    }
-    private void showFavorites() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/favoritesView.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("I miei preferiti");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Error loading favorites view: " + e.getMessage());
         }
     }
     private void initializePriceRange() {
@@ -604,5 +591,8 @@ public class MainController {
         this.excellentRadio.setToggleGroup(conditionToggleGroup);
         this.goodRadio.setToggleGroup(conditionToggleGroup);
         this.likeNewRadio.setSelected(true);
+    }
+    private void showFavorites(ActionEvent event) {
+        NavigationService.getInstance().navigateToFavouriteView(event);
     }
 }

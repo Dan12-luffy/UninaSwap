@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javafx.scene.input.MouseEvent;
@@ -124,12 +125,30 @@ public class NavigationService {
         }
     }
 
-    public void closeFavoritesView(ActionEvent event) {
+    public void closeFavouritesView(ActionEvent event) {
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
         }catch(Exception e){
             ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Impossibile chiudere la vista dei preferiti.");
+        }
+    }
+
+    public void navigateToFavouriteView(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/favouriteInterface.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Preferiti");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            Node source = (Node) event.getSource();
+            Stage ownerStage = (Stage) source.getScene().getWindow();
+            stage.initOwner(ownerStage);
+            stage.show();
+        } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenFavouriteError();
         }
     }
     /*public void navigateToMakeOfferView(ActionEvent event, Listing listing) {
