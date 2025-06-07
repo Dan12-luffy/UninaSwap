@@ -68,6 +68,7 @@ public class MainController {
     @FXML private Label resultsCountLabel;
     @FXML private Label maxPriceLabel;
     @FXML private Label minPriceLabel;
+    @FXML private Label notificationCountLabel;
     @FXML private CheckBox computerScienceCheck;
     @FXML private CheckBox scienceCheck;
     @FXML private CheckBox mathCheck;
@@ -107,7 +108,6 @@ public class MainController {
         this.sortComboBox.getItems().addAll("Più recenti", "Prezzo crescente", "Prezzo decrescente");
         this.sortComboBox.setValue("Più recenti");
         conditionToggleGroupSettings();
-        //set up category buttons
         try {
             setUpCategoryButtons();
         } catch (Exception e) {
@@ -117,8 +117,9 @@ public class MainController {
         this.allConditionsRadio.setSelected(true);
         initializePriceRange();
         loadAllItems();
+        setNotificationCountLabel();
         this.maxPriceLabel.setText(((int)this.priceSlider.getMax() + "€"));
-        wishlistButton.setOnAction(event -> showFavorites(event));
+        wishlistButton.setOnAction(this::showFavorites);
         searchField.focusedProperty().addListener((_, _, _) -> {
             searchButton.setDefaultButton(true);
         });
@@ -529,11 +530,9 @@ public class MainController {
         applyCurrentFilters();
     }
 
-
-    // New handler methods
     @FXML
-    private void onNotificationButtonClicked() {
-        System.out.println("Notification button clicked");
+    private void onNotificationButtonClicked(ActionEvent event) {
+        NavigationService.getInstance().navigateToNotificationsView(event);
     }
 
     @FXML
@@ -591,6 +590,10 @@ public class MainController {
         this.excellentRadio.setToggleGroup(conditionToggleGroup);
         this.goodRadio.setToggleGroup(conditionToggleGroup);
         this.likeNewRadio.setSelected(true);
+    }
+    private void setNotificationCountLabel(){
+        int offerCount = OfferService.getInstance().getOfferCountForCurrentUser();
+        this.notificationCountLabel.setText(String.valueOf(offerCount));
     }
     private void showFavorites(ActionEvent event) {
         NavigationService.getInstance().navigateToFavouriteView(event);

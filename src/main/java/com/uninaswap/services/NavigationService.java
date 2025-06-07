@@ -116,7 +116,6 @@ public class NavigationService {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/exchangeInterface.fxml"));
             Parent root = loader.load();
-            // Assuming you have a controller for the exchange view
             ExchangeController controller = loader.getController();
             controller.loadDesiredProduct(listing);
             setScene(event, root);
@@ -149,6 +148,15 @@ public class NavigationService {
             stage.show();
         } catch (IOException e) {
             ValidationService.getInstance().showFailedToOpenFavouriteError();
+        }
+    }
+    public void navigateToNotificationsView(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/notificationsInterface.fxml"));
+            Parent root = loader.load();
+            setScene(event, root);
+        } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
     /*public void navigateToMakeOfferView(ActionEvent event, Listing listing) {

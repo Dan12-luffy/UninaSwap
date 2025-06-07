@@ -36,12 +36,13 @@
 
                 <!-- Container per il pulsante notifiche con badge -->
                 <StackPane>
-                    <Button fx:id="notificationButton" styleClass="icon-button" text="Notifiche" translateX="-19.0" translateY="1.0" />
+                    <!-- Pulsante notifiche ottimizzato -->
+                    <Button fx:id="notificationButton" alignment="CENTER" contentDisplay="CENTER" minHeight="29.0" minWidth="123.0" onAction="#onNotificationButtonClicked" prefHeight="29.0" prefWidth="123.0" styleClass="icon-button" text="Notifiche" translateX="9.0" />
 
                     <!-- Badge notifiche posizionato in alto a destra -->
-                    <StackPane fx:id="notificationBadge" translateX="8.0" translateY="-8.0" visible="true" StackPane.alignment="TOP_RIGHT">
-                        <Circle fill="#ff4444" radius="10.0" stroke="#ffffff" strokeWidth="1.0" translateX="15.0" translateY="8.0" />
-                        <Label fx:id="notificationCountLabel" styleClass="notification-badge-text" text="3" textFill="white" translateX="16.0" translateY="8.0" />
+                    <StackPane fx:id="notificationBadge" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" prefHeight="29.0" prefWidth="133.0" translateX="9.0" translateY="-8.0" visible="true" StackPane.alignment="TOP_RIGHT">
+                        <Circle fill="#ff4444" mouseTransparent="true" radius="10.0" stroke="#ffffff" strokeWidth="1.0" translateX="45.0" translateY="8.0" />
+                        <Label fx:id="notificationCountLabel" mouseTransparent="true" styleClass="notification-badge-text" text="3" textFill="white" translateX="45.0" translateY="8.0" />
                     </StackPane>
                 </StackPane>
 
