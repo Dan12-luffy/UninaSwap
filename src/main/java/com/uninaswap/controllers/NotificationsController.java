@@ -53,7 +53,7 @@ public class NotificationsController implements Initializable {
     private final OfferDao offerDao = new OfferDaoImpl();
     private final ListingService listingService = ListingService.getInstance();
     private final UserService userService = UserService.getInstance();
-
+    //TODO, implementare le notifiche e il dettaglio dell'offerta
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -67,28 +67,13 @@ public class NotificationsController implements Initializable {
         notificationsContainer.getChildren().clear();
         List<Offer> offers = offerDao.findOffersToCurrentUser();
 
-        if (offers == null || offers.isEmpty()) {
-            showNoNotificationsMessage();
-            return;
-        }
-
-        // Update notification count
         notificationsCountLabel.setText(offers.size() + " nuove offerte");
-
-        // Add each offer to the container
         for (Offer offer : offers) {
             VBox offerCard = createOfferCard(offer);
             notificationsContainer.getChildren().add(offerCard);
-
-            // Add separator after each offer except the last one
-            if (offers.indexOf(offer) < offers.size() - 1) {
-                Separator separator = new Separator();
-                separator.getStyleClass().add("notification-separator");
-                notificationsContainer.getChildren().add(separator);
-            }
         }
     }
-
+    //Questo metodo non l'ho fatto io, l'ha fatto claude perch+è sono un cane
     private VBox createOfferCard(Offer offer) throws SQLException {
         VBox card = new VBox();
         card.setStyle("-fx-effect: none !important; -fx-background-insets: 0; -fx-border-color: #e0e0e0; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-padding: 12;");
@@ -159,26 +144,7 @@ public class NotificationsController implements Initializable {
 
         return card;
     }
-
-    private void showNoNotificationsMessage() {
-        notificationsCountLabel.setText("0 nuove offerte");
-
-        VBox placeholder = new VBox();
-        placeholder.setAlignment(javafx.geometry.Pos.CENTER);
-        placeholder.getStyleClass().add("no-notifications-placeholder");
-
-        Label placeholderText = new Label("Non hai notifiche");
-        placeholderText.getStyleClass().add("placeholder-text");
-
-        Label placeholderSubtext = new Label("Le notifiche appariranno qui quando riceverai delle offerte");
-        placeholderSubtext.getStyleClass().add("placeholder-subtext");
-
-        placeholder.getChildren().addAll(placeholderText, placeholderSubtext);
-        placeholder.setPadding(new Insets(20));
-
-        notificationsContainer.getChildren().add(placeholder);
-    }
-
+    //Sempre generato fa claude
     private String getTimeAgo(LocalDate date) {
         long days = ChronoUnit.DAYS.between(date, LocalDate.now());
 
@@ -188,7 +154,7 @@ public class NotificationsController implements Initializable {
 
         return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
-
+    //Claude anche qui
     private String formatAmount(double amount) {
         DecimalFormat df = new DecimalFormat("#,##0.00€");
         return df.format(amount);
