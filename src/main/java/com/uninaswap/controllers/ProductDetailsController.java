@@ -4,6 +4,7 @@ import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Listing;
 import com.uninaswap.services.FavouriteService;
 import com.uninaswap.services.NavigationService;
+import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.sql.Date;
@@ -36,6 +39,7 @@ public class ProductDetailsController {
     @FXML private Button favoriteButton;
     @FXML private Label availabilityLabel;
     @FXML private Label dateLabel;
+    @FXML private VBox actionButtonsVbox;
 
     private Listing listing;
 
@@ -84,7 +88,6 @@ public class ProductDetailsController {
             return;
         }
         this.listing = listing;
-
         this.productTitleLabel.setText(listing.getTitle());
         this.descriptionTextArea.setText(listing.getDescription());
         this.categoryLabel.setText(listing.getCategory());
@@ -108,14 +111,13 @@ public class ProductDetailsController {
         }
 
 
-        if (listing.getType() != null) {
+        if (listing.getType() != null && !listing.getUserId().equals(UserSession.getInstance().getCurrentUserId())) {
             switch (listing.getType()) {
                 case EXCHANGE:
                     this.actionButton.setText("Proponi scambio");
                     this.actionButton.setOnAction(this::onExchangeButtonClicked);
                     this.actionButton.setTranslateX(-150);
                     this.offerButton.setVisible(false);
-
                     break;
                 case GIFT:
                     this.actionButton.setText("Richiedi regalo");
@@ -129,6 +131,12 @@ public class ProductDetailsController {
                     this.offerButton.setVisible(true);
             }
         }
+        else{
+            actionButton.setVisible(false);
+            offerButton.setVisible(false);
+            actionButtonsVbox.setVisible(false);
+        }
+
         updateFavoriteButton();
     }
     private void calculateDaysDifferenceAndSetDateLabel(Listing listing, Label dateLabel) {
