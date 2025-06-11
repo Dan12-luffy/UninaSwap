@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="main-container" stylesheets="@../guiCSS/NotificationInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.NotificationsController">
+
+    <!-- Header principale -->
+    <top>
+        <VBox spacing="0">
+            <!-- Banner superiore -->
+            <HBox alignment="CENTER_RIGHT" maxHeight="35.0" styleClass="top-banner">
+                <Label styleClass="welcome-text" text="Benvenuto in UninaSwap!" />
+                <Region HBox.hgrow="ALWAYS" />
+
+                <!-- Pulsante torna alla home -->
+                <Button fx:id="homeButton" onAction="#onHomeButtonClicked" styleClass="icon-button" text="Torna alla Home" />
+
+                <padding>
+                    <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                </padding>
+            </HBox>
+
+            <!-- Header principale -->
+            <HBox alignment="CENTER" minHeight="60.0" styleClass="main-header">
+                <!-- Logo container -->
+                <HBox alignment="CENTER_LEFT" minWidth="200.0" styleClass="logo-container">
+                    <StackPane styleClass="logo-badge">
+                        <ImageView fx:id="logoImage" fitHeight="40.0" preserveRatio="true" styleClass="logo-image">
+                            <Image url="@../images/uninaswap_logo.png" />
+                        </ImageView>
+                    </StackPane>
+                </HBox>
+
+                <!-- Titolo pagina -->
+                <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                    <Label styleClass="page-title" text="Le tue Notifiche" />
+                </HBox>
+
+                <!-- Pulsanti navigazione -->
+                <HBox alignment="CENTER_RIGHT" spacing="15">
+                    <Button fx:id="profileButton" onAction="#onProfileButtonClicked" styleClass="nav-button" text="Profilo" />
+                </HBox>
+                <padding>
+                    <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                </padding>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Area principale delle notifiche -->
+    <center>
+        <VBox styleClass="content-area">
+            <!-- Header delle notifiche -->
+            <HBox alignment="CENTER_LEFT" styleClass="notifications-header">
+                <Label fx:id="notificationsCountLabel" styleClass="notifications-title" text="3 nuove offerte" />
+                <Region HBox.hgrow="ALWAYS" />
+
+                <!-- Filtri per tipo di notifica -->
+                <HBox spacing="5" styleClass="notification-filters" />
+            </HBox>
+
+            <!-- Lista delle notifiche -->
+            <ScrollPane fx:id="notificationsScrollPane" fitToWidth="true" styleClass="notifications-scroll" VBox.vgrow="ALWAYS">
+                <VBox fx:id="notificationsContainer" spacing="8" styleClass="notifications-container">
+
+                    <!-- Notifica offerta 1 -->
+                    <VBox styleClass="notification-card unread">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <!-- Indicatore non letto -->
+                            <Circle fx:id="unreadIndicator1" fill="#ff4444" radius="4.0" styleClass="unread-indicator" />
+
+                            <!-- Contenuto notifica -->
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label styleClass="notification-type" text="NUOVA OFFERTA" />
+                                    <Label styleClass="notification-time" text="2 ore fa" />
+                                </HBox>
+                                <Label styleClass="notification-title" text="Hai ricevuto un'offerta per 'Matematica Discreta - Grimaldi'" />
+                                <Label styleClass="notification-description" text="Marco R. ha offerto 25€ per il tuo libro. Prezzo richiesto: 30€" />
+                                <HBox spacing="8" styleClass="notification-actions">
+                                    <Label styleClass="offer-amount" text="Offerta: 25€" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="declineOffer1" onAction="#onDeclineOfferClicked" styleClass="decline-button" text="Rifiuta" />
+                                    <Button fx:id="acceptOffer1" onAction="#onAcceptOfferClicked" styleClass="accept-button" text="Accetta" />
+                                    <Button fx:id="counterOffer1" onAction="#onCounterOfferClicked" styleClass="counter-button" text="Controfferta" />
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <Separator styleClass="notification-separator" />
+
+                    <!-- Notifica offerta 2 -->
+                    <VBox styleClass="notification-card unread">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Circle fx:id="unreadIndicator2" fill="#ff4444" radius="4.0" styleClass="unread-indicator" />
+
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label styleClass="notification-type" text="NUOVA OFFERTA" />
+                                    <Label styleClass="notification-time" text="5 ore fa" />
+                                </HBox>
+                                <Label styleClass="notification-title" text="Hai ricevuto un'offerta per 'Calcolatrice Scientifica Casio'" />
+                                <Label styleClass="notification-description" text="Anna M. ha offerto 18€ per la tua calcolatrice. Prezzo richiesto: 20€" />
+                                <HBox spacing="8" styleClass="notification-actions">
+                                    <Label styleClass="offer-amount" text="Offerta: 18€" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="declineOffer2" onAction="#onDeclineOfferClicked" styleClass="decline-button" text="Rifiuta" />
+                                    <Button fx:id="acceptOffer2" onAction="#onAcceptOfferClicked" styleClass="accept-button" text="Accetta" />
+                                    <Button fx:id="counterOffer2" onAction="#onCounterOfferClicked" styleClass="counter-button" text="Controfferta" />
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <Separator styleClass="notification-separator" />
+
+                    <!-- Notifica scambio -->
+                    <VBox styleClass="notification-card unread">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Circle fx:id="unreadIndicator3" fill="#ff4444" radius="4.0" styleClass="unread-indicator" />
+
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label styleClass="notification-type swap" text="PROPOSTA SCAMBIO" />
+                                    <Label styleClass="notification-time" text="1 giorno fa" />
+                                </HBox>
+                                <Label styleClass="notification-title" text="Proposta di scambio per 'Appunti Algoritmi 2023'" />
+                                <Label prefHeight="18.0" prefWidth="125.0" styleClass="notification-description" text="Proposta offerta da:" />
+                                <HBox spacing="8" styleClass="notification-actions">
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="declineSwap1" onAction="#onDeclineSwapClicked" styleClass="decline-button" text="Rifiuta" />
+                                    <Button fx:id="acceptSwap1" onAction="#onAcceptSwapClicked" styleClass="accept-button" text="Accetta Scambio" />
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <Separator styleClass="notification-separator" />
+
+                    <!-- Notifica già letta -->
+                    <VBox styleClass="notification-card read" />
+
+                    <Separator styleClass="notification-separator" />
+
+                    <!-- Placeholder quando non ci sono più notifiche -->
+                    <VBox fx:id="noMoreNotifications" alignment="CENTER" styleClass="no-notifications-placeholder">
+                        <Label styleClass="placeholder-text" text="Non ci sono altre notifiche" />
+                        <Label styleClass="placeholder-subtext" text="Tutte le tue notifiche sono visualizzate qui sopra" />
+                    </VBox>
+
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

@@ -143,7 +143,6 @@ public class MainController {
             e.printStackTrace();
         }
     }
-
     private void showFavorites() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/favoritesView.fxml"));
@@ -157,7 +156,6 @@ public class MainController {
             System.err.println("Error loading favorites view: " + e.getMessage());
         }
     }
-
     private void initializePriceRange() {
         try {
             BigDecimal maxPrice = filterService.getMaxAvailablePrice();

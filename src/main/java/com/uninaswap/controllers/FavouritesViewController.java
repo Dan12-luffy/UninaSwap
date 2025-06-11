@@ -11,11 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.util.List;
 
-public class FavoritesViewController {
+public class FavouritesViewController {
     @FXML private VBox favoritesContainer;
     @FXML private Label emptyLabel;
 

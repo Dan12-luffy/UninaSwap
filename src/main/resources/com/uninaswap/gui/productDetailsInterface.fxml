@@ -26,7 +26,7 @@
             <HBox alignment="CENTER_LEFT" maxHeight="35.0" styleClass="top-banner">
                 <Label styleClass="welcome-text" text="Dettagli prodotto - UninaSwap" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="favoriteButton" styleClass="icon-button" onAction="#toggleFavorite" text="❤ Preferiti" />
+                <Button fx:id="favoriteButton" onAction="#toggleFavorite" styleClass="icon-button" text="❤ Preferiti" />
                 <padding>
                     <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                 </padding>
@@ -159,7 +159,7 @@
                             </VBox>
 
                             <!-- Pulsanti azione principali -->
-                            <VBox spacing="10" styleClass="action-section">
+                            <VBox fx:id="actionButtonsVbox" spacing="10" styleClass="action-section">
                                 <HBox alignment="CENTER" spacing="10" styleClass="primary-actions">
                                     <Button fx:id="actionButton" defaultButton="true" onAction="#onBuyButtonClicked" styleClass="buy-button" text="Acquista Ora" HBox.hgrow="ALWAYS" />
                                     <Button fx:id="offerButton" onAction="#onOfferButtonClicked" styleClass="offer-button" text="💰 Fai Offerta" HBox.hgrow="ALWAYS" />

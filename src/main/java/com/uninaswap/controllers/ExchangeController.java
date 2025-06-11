@@ -2,10 +2,7 @@ package com.uninaswap.controllers;
 
 import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.dao.UserDaoImpl;
-import com.uninaswap.model.Listing;
-import com.uninaswap.model.ListingStatus;
-import com.uninaswap.model.Offer;
-import com.uninaswap.model.typeListing;
+import com.uninaswap.model.*;
 import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,6 +50,7 @@ public class ExchangeController{
     private final List<Listing> selectedListings = new ArrayList<>();
     private final ListingService listingService = ListingService.getInstance();
     private final OfferService offerService = OfferService.getInstance();
+    private final OfferedItemsService offeredItemsService = OfferedItemsService.getInstance();
 
    @FXML
     public void initialize() {
@@ -65,64 +63,43 @@ public class ExchangeController{
     }
 
     @FXML
-    private void cancelExchange() {
+    private void cancelExchange(ActionEvent event) {
        ValidationService.getInstance().showCancelExchangeMessage();
+       NavigationService.getInstance().navigateToMainView(event);
     }
 
     @FXML
     private void confirmExchange(ActionEvent event) {
         double differenceValue = Double.parseDouble(this.differenceLabel.getText().replace("Differenza: €", ""));
-        if(differenceValue > desiredProduct.getPrice().doubleValue()){
-            confirmAction("Sei sicuro di voler procedere con lo scambio? Il valore dei tuoi prodotti è superiore a quello del prodotto desiderato.")
-                    .ifPresent(response -> {
-                        if (response == ButtonType.OK) {
-                            for(Listing listing :selectedListings) {
-                                Offer o = new Offer(this.desiredProduct.getListingId(), UserSession.getInstance().getCurrentUserId(), listing.getPrice().doubleValue(),"Proposta di scambio", ListingStatus.PENDING, LocalDate.now());
-                                try {
-                                    offerService.createOffer(o);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            ValidationService.getInstance().showOfferProposalSuccess();
-                            NavigationService.getInstance().navigateToMainView(event);
-                        }
-                    });
+        String confirmMessage;
+
+        if(differenceValue > 0) {
+            confirmMessage = "Sei sicuro di voler procedere con lo scambio? Il valore dei tuoi prodotti è superiore a quello del prodotto desiderato.";
+        } else if(differenceValue < 0) {
+            confirmMessage = "Sei sicuro di voler procedere con lo scambio? Il valore dei tuoi prodotti è inferiore a quello del prodotto desiderato.";
+        } else {
+            confirmMessage = "Sei sicuro di voler procedere con lo scambio?";
         }
-        else if(differenceValue < 0){
-            confirmAction("Sei sicuro di voler procedere con lo scambio? Il valore dei tuoi prodotti è inferiore a quello del prodotto desiderato.")
-                    .ifPresent(response -> {
-                        if (response == ButtonType.OK) {
-                            for(Listing listing : selectedListings) {
-                                Offer o = new Offer(this.desiredProduct.getListingId(), UserSession.getInstance().getCurrentUserId(), listing.getPrice().doubleValue(),"Proposta di scambio", ListingStatus.PENDING, LocalDate.now());
-                                try {
-                                    offerService.createOffer(o);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            ValidationService.getInstance().showOfferProposalSuccess();
-                            NavigationService.getInstance().navigateToMainView(event);
+
+        confirmAction(confirmMessage).ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    Offer offer = new Offer(this.desiredProduct.getListingId(), UserSession.getInstance().getCurrentUserId(), desiredProduct.getPrice().doubleValue(), "Proposta di scambio", ListingStatus.PENDING, LocalDate.now());
+                    int offerId = offerService.createOffer(offer);
+                    if (offerId > 0) {
+                        for (Listing listing : selectedListings) {
+                            OfferedItem offeredItem = new OfferedItem(offerId, listing.getListingId(), "Prodotto offerto", listing.getPrice().doubleValue());
+                            offeredItemsService.createOfferedItem(offeredItem);
                         }
-                    });
-        }
-        else{
-            confirmAction("Sei sicuro di voler procedere con lo scambio? ")
-                    .ifPresent(response -> {
-                        if (response == ButtonType.OK) {
-                            for(Listing listing :selectedListings) {
-                                Offer o = new Offer(this.desiredProduct.getListingId(), UserSession.getInstance().getCurrentUserId(), listing.getPrice().doubleValue(),"Proposta di scambio", ListingStatus.PENDING, LocalDate.now());
-                                try {
-                                    offerService.createOffer(o);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            ValidationService.getInstance().showOfferProposalSuccess();
-                            NavigationService.getInstance().navigateToMainView(event);
-                        }
-                    });
-        }
+                        ValidationService.getInstance().showOfferProposalSuccess();
+                        NavigationService.getInstance().navigateToMainView(event);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile completare lo scambio: " + e.getMessage());
+                }
+            }
+        });
     }
 
     private void updateCalculations(Listing listing, boolean isSelected) {
