@@ -288,10 +288,11 @@ public class MainController {
             this.resultsCountLabel.setText("Trovati 0 articoli");
         }
     }
+
     private VBox createItemCard(Listing listing) {
         // Create card layout
         VBox card = new VBox(10);
-        card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;");
+        card.getStyleClass().add("item-card");
         card.setPrefWidth(200);
         card.setPrefHeight(250);
         card.setMaxWidth(200);
@@ -299,6 +300,7 @@ public class MainController {
 
         // Create and configure image view
         ImageView imageView = new ImageView();
+        imageView.getStyleClass().add("item-image");
         imageView.setFitWidth(180);
         imageView.setFitHeight(140);
         imageView.setSmooth(true);
@@ -310,27 +312,26 @@ public class MainController {
             File imageFile = new File(listing.getImageUrl());
             imageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
-            //System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
             imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
         }
 
         Label titleLabel = new Label(listing.getTitle());
-        titleLabel.setWrapText(true);
-        titleLabel.setStyle("-fx-font-weight: bold;");
+        titleLabel.getStyleClass().add("item-title");
+
         Label priceLabel;
         if(listing.getType().equals(typeListing.GIFT) || listing.getType().equals(typeListing.EXCHANGE)) {
             priceLabel = new Label("Disponibile per: " + listing.getType());
         } else {
             priceLabel = new Label("€" + listing.getPrice());
         }
-        priceLabel.setStyle("-fx-font-size: 14px;");
+        priceLabel.getStyleClass().add("item-price");
 
         String labelText = listing.getCategory();
         if (labelText == null || labelText.isEmpty()) {
             labelText = listing.getType().toString();
         }
         Label categoryLabel = new Label(labelText);
-        categoryLabel.setStyle("-fx-font-size: 12px; -fx-background-color: #f0f0f0; -fx-padding: 2 5; -fx-background-radius: 3;");
+        categoryLabel.getStyleClass().add("item-category");
 
         card.getChildren().addAll(imageView, titleLabel, priceLabel, categoryLabel);
         card.setOnMouseClicked(event -> showItemDetails(event, listing));

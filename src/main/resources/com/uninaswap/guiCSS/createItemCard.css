@@ -1,0 +1,57 @@
+/* styles.css */
+
+/* Item card styles */
+.item-card {
+    -fx-padding: 10;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.item-image {
+    /* Any specific styles for the image view */
+}
+
+.item-title {
+    -fx-font-weight: bold;
+    -fx-wrap-text: true;
+}
+
+.item-price {
+    -fx-font-size: 14px;
+}
+
+.item-category {
+    -fx-font-size: 12px;
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 2 5;
+    -fx-background-radius: 3;
+}
+
+/* Existing listing card styles from other parts of your app */
+.listing-card {
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 4;
+}
+
+.listing-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.listing-price {
+    -fx-font-size: 13px;
+    -fx-text-fill: #2e7d32;
+}
+
+.listing-description {
+    -fx-font-size: 12px;
+}
+
+.delete-button {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+}
