@@ -18,7 +18,7 @@ import java.util.List;
 
 public class OfferDaoImpl implements OfferDao {
     @Override
-    public void createOffer(Offer o) {
+    public void createOffer(Offer o) throws SQLException {
         String sql = "INSERT INTO offer (listingid, userid, amount, status, message, offer_date) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -35,7 +35,7 @@ public class OfferDaoImpl implements OfferDao {
     }
 
     @Override
-    public void deleteOffer(int offerId) {
+    public void deleteOffer(int offerId) throws SQLException {
         String Sql = "DELETE FROM offer WHERE offerid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(Sql)) {

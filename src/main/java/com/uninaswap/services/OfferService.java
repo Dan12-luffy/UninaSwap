@@ -5,6 +5,7 @@ import com.uninaswap.dao.OfferDaoImpl;
 import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.Offer;
 import com.uninaswap.model.User;
+import javafx.scene.control.Alert;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -31,6 +32,7 @@ public class OfferService {
             ValidationService.getInstance().showWrongOfferError();
             return false;
         }
+        ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Creazione offerta", "Offerta creata con successo!");
         offerDao.createOffer(offer);
         return true;
     }

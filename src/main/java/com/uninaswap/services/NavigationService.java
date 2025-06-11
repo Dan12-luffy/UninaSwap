@@ -1,6 +1,7 @@
 package com.uninaswap.services;
 
 import com.uninaswap.controllers.ExchangeController;
+import com.uninaswap.controllers.MakeOfferController;
 import com.uninaswap.controllers.ProductDetailsController;
 import com.uninaswap.model.Listing;
 import javafx.event.ActionEvent;
@@ -132,7 +133,7 @@ public class NavigationService {
             ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Impossibile chiudere la vista dei preferiti.");
         }
     }
-    /*public void navigateToMakeOfferView(ActionEvent event, Listing listing) {
+    public void navigateToMakeOfferView(ActionEvent event, Listing listing) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/makeOfferInterface.fxml"));
             Parent root = loader.load();
@@ -144,7 +145,7 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
-*/
+
    /* public void navigateToPurchaseConfirmationView(ActionEvent event, Listing listing) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/purchaseConfirmationInterface.fxml"));

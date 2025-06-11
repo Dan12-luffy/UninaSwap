@@ -17,6 +17,7 @@ module com.uninaswap.uninaswap {
     requires annotations;
     requires java.desktop;
     requires svg.salamander;
+    requires javafx.graphics;
 
 
     exports com.uninaswap.controllers;
