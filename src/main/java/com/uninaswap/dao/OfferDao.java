@@ -15,8 +15,6 @@ public interface OfferDao {
     Offer findOfferById(int offerId) throws Exception;
     List<Offer> findOffersForListing(int listingId) throws Exception;
     List<Offer> findOfferMadeByCurrentUserID() throws SQLException;
-
     List<Offer> findOffersToCurrentUser() throws SQLException;
-
     void updateOfferStatus(int offerId, ListingStatus status) throws Exception;
 }

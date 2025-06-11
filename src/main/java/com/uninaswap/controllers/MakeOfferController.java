@@ -121,8 +121,8 @@ public class MakeOfferController {
         );
 
         try {
-            boolean success = OfferService.getInstance().createOffer(offer);
-            if (success) {
+            int offerId = OfferService.getInstance().createOffer(offer);
+            if (offerId > 0) {
                 validationService.showAlert(Alert.AlertType.INFORMATION, "Offerta inviata", "La tua offerta è stata inviata con successo al venditore!");
                 NavigationService.getInstance().navigateToMainView(event);
             } else {

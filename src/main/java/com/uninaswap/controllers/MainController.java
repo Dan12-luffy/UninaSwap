@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,17 +144,27 @@ public class MainController {
             e.printStackTrace();
         }
     }
-    private void showFavorites() {
+    public void showFavorites() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/favoritesView.fxml"));
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/favouriteInterface.fxml"));
             Parent root = loader.load();
+
+            FavouritesViewController controller = loader.getController();
+
+            Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("I miei preferiti");
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
+            stage.setResizable(false);
+
+            stage.initOwner(wishlistButton.getScene().getWindow());
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Error loading favorites view: " + e.getMessage());
+            validationService.showAlert(Alert.AlertType.ERROR,
+                    "Errore",
+                    "Impossibile visualizzare i preferiti: " + e.getMessage());
         }
     }
     private void initializePriceRange() {

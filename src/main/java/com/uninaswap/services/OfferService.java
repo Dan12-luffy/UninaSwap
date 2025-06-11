@@ -24,15 +24,15 @@ public class OfferService {
         return instance;
     }
 
-    public boolean createOffer(Offer offer) throws Exception {
+    public int createOffer(Offer offer) throws Exception {
         User currentUser = userSession.getCurrentUser();
         //TODO metodo da migliorare, non riuscirò a leggerlo neanche io domani che mi rimetto sul codice
         if (ListingService.getInstance().getListingByID(offer.getListingID()).getUserId() == currentUser.getId()) {
             ValidationService.getInstance().showWrongOfferError();
-            return false;
+            return -1;
         }
         offerDao.createOffer(offer);
-        return true;
+        return offer.getOfferID();
     }
 
     public void deleteOffer(int offerId) throws Exception {
