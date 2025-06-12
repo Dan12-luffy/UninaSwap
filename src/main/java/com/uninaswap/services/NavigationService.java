@@ -1,6 +1,7 @@
 package com.uninaswap.services;
 
 import com.uninaswap.controllers.ExchangeController;
+import com.uninaswap.controllers.MakeOfferController;
 import com.uninaswap.controllers.ProductDetailsController;
 import com.uninaswap.model.Listing;
 import javafx.event.ActionEvent;
@@ -8,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javafx.scene.input.MouseEvent;
@@ -116,6 +116,7 @@ public class NavigationService {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/exchangeInterface.fxml"));
             Parent root = loader.load();
+            // Assuming you have a controller for the exchange view
             ExchangeController controller = loader.getController();
             controller.loadDesiredProduct(listing);
             setScene(event, root);
@@ -124,7 +125,7 @@ public class NavigationService {
         }
     }
 
-    public void closeFavouritesView(ActionEvent event) {
+    public void closeFavoritesView(ActionEvent event) {
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
@@ -132,34 +133,7 @@ public class NavigationService {
             ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Impossibile chiudere la vista dei preferiti.");
         }
     }
-
-    public void navigateToFavouriteView(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/favouriteInterface.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Preferiti");
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.WINDOW_MODAL);
-            Node source = (Node) event.getSource();
-            Stage ownerStage = (Stage) source.getScene().getWindow();
-            stage.initOwner(ownerStage);
-            stage.show();
-        } catch (IOException e) {
-            ValidationService.getInstance().showFailedToOpenFavouriteError();
-        }
-    }
-    public void navigateToNotificationsView(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/notificationsInterface.fxml"));
-            Parent root = loader.load();
-            setScene(event, root);
-        } catch (IOException e) {
-            ValidationService.getInstance().showFailedToOpenPageError();
-        }
-    }
-    /*public void navigateToMakeOfferView(ActionEvent event, Listing listing) {
+    public void navigateToMakeOfferView(ActionEvent event, Listing listing) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/makeOfferInterface.fxml"));
             Parent root = loader.load();
@@ -171,7 +145,7 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
-*/
+
    /* public void navigateToPurchaseConfirmationView(ActionEvent event, Listing listing) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/purchaseConfirmationInterface.fxml"));

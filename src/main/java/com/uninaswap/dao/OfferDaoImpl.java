@@ -12,36 +12,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OfferDaoImpl implements OfferDao {
     @Override
-    public int createOffer(Offer o) {
+    public void createOffer(Offer o) {
         String sql = "INSERT INTO offer (listingid, userid, amount, status, message, offer_date) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, o.getListingID());
             stmt.setInt(2, o.getUserID());
             stmt.setDouble(3, o.getAmount());
             stmt.setString(4, o.getListingStatus().toString().toUpperCase());
             stmt.setString(5, o.getMessage());
             stmt.setDate(6, java.sql.Date.valueOf(o.getOfferDate()));
-            stmt.executeUpdate();
-
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    int generatedId = generatedKeys.getInt(1);
-                    o.setOfferID(generatedId);
-                    return generatedId;
-                } else {
-                    throw new SQLException("Creating offer failed, no ID obtained.");
-                }
-            }
+            stmt.executeUpdate(); //Converte Localdate a Date per il db
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'offerta: " + e.getMessage());
         }
-        return -1;
     }
 
     @Override
@@ -158,22 +148,6 @@ public class OfferDaoImpl implements OfferDao {
         }
     }
 
-    @Override
-    public int getOfferCountForUser(int userId) {
-        String sql = "SELECT COUNT(*) FROM offer o JOIN listings l ON o.listingid = l.listingid WHERE l.userid = ?";
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, userId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-            }
-        } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile contare le offerte per l'utente: " + e.getMessage());
-        }
-        return 0;
-    }
     @NotNull
     private List<Offer> getListingOffers(PreparedStatement stmt) throws SQLException {
         try (ResultSet rs = stmt.executeQuery()) {

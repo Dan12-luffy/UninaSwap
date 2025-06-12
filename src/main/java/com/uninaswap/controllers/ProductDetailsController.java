@@ -68,13 +68,13 @@ public class ProductDetailsController {
 
     @FXML
     private void onOfferButtonClicked(ActionEvent event) {
-       /* try {
+        try {
             if (listing != null) {
                 NavigationService.getInstance().navigateToMakeOfferView(event, listing);
             }
         }catch(Exception e){
             ValidationService.getInstance().showFailedToOpenPageError();
-        }*/
+        }
     }
 
     @FXML
@@ -83,6 +83,7 @@ public class ProductDetailsController {
             System.out.println("Contatta venditore: " + listing.getUserId());
         }
     }
+
     public void loadProductDetails(Listing listing) {
         if (listing == null) {
             return;
@@ -102,6 +103,7 @@ public class ProductDetailsController {
         calculateDaysDifferenceAndSetDateLabel(listing, this.dateLabel);
         this.sellerLabel.setText("Utente: " + new UserDaoImpl().findFullNameFromID(listing.getUserId()));
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
+
         try {
             File imageFile = new File(listing.getImageUrl());
             this.productImageView.setImage(new Image(imageFile.toURI().toString()));

@@ -24,13 +24,15 @@ public class OfferService {
         return instance;
     }
 
-    public int createOffer(Offer offer) {
-        try {
-            return offerDao.createOffer(offer);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public int createOffer(Offer offer) throws Exception {
+        User currentUser = userSession.getCurrentUser();
+        //TODO metodo da migliorare, non riuscirò a leggerlo neanche io domani che mi rimetto sul codice
+        if (ListingService.getInstance().getListingByID(offer.getListingID()).getUserId() == currentUser.getId()) {
+            ValidationService.getInstance().showWrongOfferError();
             return -1;
         }
+        offerDao.createOffer(offer);
+        return offer.getOfferID();
     }
 
     public void deleteOffer(int offerId) throws Exception {
@@ -52,7 +54,12 @@ public class OfferService {
     public boolean acceptOffer(int offerId) {
         try {
             Offer offer = offerDao.findOfferById(offerId);
-            return offer != null;
+            if (offer == null) {
+                return false;
+            }
+            offerDao.updateOfferStatus(offerId, ListingStatus.ACCEPTED);
+
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -64,7 +71,11 @@ public class OfferService {
     public boolean rejectOffer(int offerId) {
         try {
             Offer offer = offerDao.findOfferById(offerId);
-            return offer != null;
+            if (offer == null) {
+                return false;
+            }
+            offerDao.updateOfferStatus(offerId, ListingStatus.REJECTED);
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -78,8 +89,5 @@ public class OfferService {
 
     public Offer getOfferById(int offerId) throws Exception {
         return offerDao.findOfferById(offerId);
-    }
-    public int getOfferCountForCurrentUser(){
-        return offerDao.getOfferCountForUser(UserSession.getInstance().getCurrentUserId());
     }
 }

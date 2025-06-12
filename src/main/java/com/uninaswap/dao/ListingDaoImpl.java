@@ -13,12 +13,19 @@ import java.util.List;
 public class ListingDaoImpl implements ListingDao {
 
     @Override
-    public void insert(Listing listing) {
+    public void insert(Listing listing) throws SQLException {
         String sql = "INSERT INTO listings (title, imageUrl, description, type, price, status, publishDate, userId, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            System.out.println("Attendint to insert listing "+ listing.getTitle());
             populateListingStatement(stmt, listing);
-            stmt.executeUpdate();
+            int rowsAffected = stmt.executeUpdate();
+            System.out.println("Rows affected: " + rowsAffected);
+            if (rowsAffected > 0) {
+                System.out.println("Listing inserted successfully.");
+            } else {
+                System.out.println("No rows inserted. Check your data.");
+            }
 
         } catch (SQLException e) {
             logDatabaseError("Insert", e);

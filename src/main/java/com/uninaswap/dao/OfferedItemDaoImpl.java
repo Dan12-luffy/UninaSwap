@@ -17,7 +17,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
 
     @Override
     public void createOfferedItem(OfferedItem offeredItem) {
-        String sql = "INSERT INTO offereditem (offerid, offeredlistingid, offereditemdescription, offereditemvalue) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO offereditems (offerid, offeredlistingid, offereditemdescription, offereditemvalue) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, offeredItem.getOfferId());
@@ -33,7 +33,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
 
     @Override
     public void deleteOfferedItem(int offerItemId) {
-        String sql = "DELETE FROM offereditem WHERE offereditemid = ?";
+        String sql = "DELETE FROM offereditems WHERE offereditemid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, offerItemId);
@@ -46,7 +46,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
 
     @Override
     public void updateOfferedItem(int offerItemId, String offeredItemDescription, BigDecimal amount) {
-        String sql = "UPDATE offereditem SET offereditemdescription = ?, offereditemvalue = ? WHERE offereditemid = ?";
+        String sql = "UPDATE offereditems SET offereditemdescription = ?, offereditemvalue = ? WHERE offereditemid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, offeredItemDescription);
@@ -61,7 +61,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
 
     @Override
     public OfferedItem findOfferedItemById(int offerItemId) {
-        String sql = "SELECT * FROM offereditem WHERE offereditemid = ?";
+        String sql = "SELECT * FROM offereditems WHERE offereditemid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, offerItemId);
@@ -84,7 +84,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
 
     @Override
     public List<OfferedItem> findOfferedItemsByOfferId(int offerId) {
-        String sql = "SELECT * FROM offereditem WHERE offerid = ?";
+        String sql = "SELECT * FROM offereditems WHERE offerid = ?";
         List<OfferedItem> offeredItems = new ArrayList<>();
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -109,7 +109,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
 
     @Override
     public List<OfferedItem> findOfferedItemsForListingId(int listingId) {
-        String sql = "SELECT * FROM offereditem WHERE offeredlistingid = ?";
+        String sql = "SELECT * FROM offereditems WHERE offeredlistingid = ?";
         List<OfferedItem> offeredItems = new ArrayList<>();
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -134,7 +134,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
 
     @Override
     public List<OfferedItem> findOfferedItemsByOfferIdAndListingId(int offerId, int listingId) {
-        String sql = "SELECT * FROM offereditem WHERE offerid = ? AND offeredlistingid = ?";
+        String sql = "SELECT * FROM offereditems WHERE offerid = ? AND offeredlistingid = ?";
         List<OfferedItem> offeredItems = new ArrayList<>();
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

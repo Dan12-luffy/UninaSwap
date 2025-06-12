@@ -118,6 +118,7 @@ public class CategoryDaoImpl implements CategoryDao {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Errore" +
                     "Impossibile trovare l'ID della categoria: " + e.getMessage());
         }
+
         return -1; // Indica che la categoria non è stata trovata
     }
     @Override

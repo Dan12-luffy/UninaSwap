@@ -85,6 +85,6 @@ public class FavouritesViewController {
 
     @FXML
     private void goBack(ActionEvent event) {
-        NavigationService.getInstance().closeFavouritesView(event);
+        NavigationService.getInstance().closeFavoritesView(event);
     }
 }
