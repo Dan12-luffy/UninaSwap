@@ -2,18 +2,13 @@ package com.uninaswap.controllers;
 
 import com.uninaswap.dao.OfferDao;
 import com.uninaswap.dao.OfferDaoImpl;
-import com.uninaswap.model.Listing;
-import com.uninaswap.model.Offer;
-import com.uninaswap.model.User;
+import com.uninaswap.model.*;
 import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -73,7 +68,7 @@ public class NotificationsController implements Initializable {
             notificationsContainer.getChildren().add(offerCard);
         }
     }
-    //Questo metodo non l'ho fatto io, l'ha fatto claude perch+è sono un cane
+    //Questo metodo non l'ho fatto io, l'ha fatto claude perchè sono un cane
     private VBox createOfferCard(Offer offer) throws SQLException {
         VBox card = new VBox();
         card.setStyle("-fx-effect: none !important; -fx-background-insets: 0; -fx-border-color: #e0e0e0; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-padding: 12;");
@@ -89,6 +84,7 @@ public class NotificationsController implements Initializable {
 
         Listing listing = listingService.getListingByID(offer.getListingID());
         User offerUser = userService.getUserById(offer.getUserID());
+        List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offer.getOfferID());//.findOfferedItemsByOfferIdAndListingId(offer.getOfferID(), listing.getListingId());
 
         HBox header = new HBox();
         header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
@@ -102,14 +98,24 @@ public class NotificationsController implements Initializable {
 
         header.getChildren().addAll(notificationType, notificationTime);
 
-        String title = "Hai ricevuto un'offerta per '" + (listing != null ? listing.getTitle() : "Annuncio") + "'";
+        String title = "Hai ricevuto un'offerta per '" + listing.getTitle() + "'";
         Label notificationTitle = new Label(title);
         notificationTitle.getStyleClass().add("notification-title");
 
-        String description = (offerUser != null ? offerUser.getUsername() : "Un utente") +
-                " ha offerto " + formatAmount(offer.getAmount()) +
-                (listing != null ? ". Prezzo richiesto: " + formatAmount(listing.getPrice().doubleValue()) : "");
-        Label notificationDescription = new Label(description);
+        StringBuilder description = new StringBuilder((offerUser != null ? offerUser.getUsername() : "Un utente") +
+                " ha offerto " + listing.getTitle() + " dal valore: " + formatAmount(offer.getAmount()) +
+                ". Valore del prodotto: " + formatAmount(listing.getPrice().doubleValue()) + " ");
+
+        //TODO aggiustqre il for che mostra la lista degli oggetti offerti
+        for (OfferedItem offeredItem : offeredItems) {
+            Listing offeredListing = listingService.getListingByID(offeredItem.getListingId());
+            if (offeredListing != null) {
+                description.append("\nOggetti offerti:");
+                description.append("\n- ").append(offeredListing.getTitle());
+            }
+        }
+
+        Label notificationDescription = new Label(description.toString());
         notificationDescription.getStyleClass().add("notification-description");
 
         HBox actions = new HBox();
@@ -125,11 +131,11 @@ public class NotificationsController implements Initializable {
         Button declineButton = new Button("Rifiuta");
         declineButton.getStyleClass().add("decline-button");
         int offerId = offer.getOfferID();
-        declineButton.setOnAction(e -> handleDeclineOffer(offerId));
+        declineButton.setOnAction(e -> handleDeclineOffer(e,offerId));
 
         Button acceptButton = new Button("Accetta");
         acceptButton.getStyleClass().add("accept-button");
-        acceptButton.setOnAction(e -> handleAcceptOffer(offerId));
+        acceptButton.setOnAction(e -> handleAcceptOffer(e,offerId));
 
         Button counterButton = new Button("Controfferta");
         counterButton.getStyleClass().add("counter-button");
@@ -175,8 +181,16 @@ public class NotificationsController implements Initializable {
 
     }
 
-    private void handleAcceptOffer(int offerId) {
-      System.out.println("Offerta accettata");
+    private void handleAcceptOffer(ActionEvent event,int offerId) {
+        try {
+            offerDao.updateOfferStatus(offerId, ListingStatus.ACCEPTED);
+            loadUserOffers();
+            ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Offerta accettata", "L'offerta è stata accettata con successo.");
+            NavigationService.getInstance().navigateToMainView(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile accettare l'offerta: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -184,8 +198,16 @@ public class NotificationsController implements Initializable {
         // Called by static buttons in FXML, not used in dynamic generation
     }
 
-    private void handleDeclineOffer(int offerId) {
-       System.out.println("Offerta rifiutata: " + offerId);
+    private void handleDeclineOffer(ActionEvent event,int offerId) {
+        try {
+            offerDao.updateOfferStatus(offerId, ListingStatus.REJECTED);
+            loadUserOffers();
+            ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Offerta rifiutata", "L'offerta è stata rifiiutata con successo.");
+            NavigationService.getInstance().navigateToMainView(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile accettare l'offerta: " + e.getMessage());
+        }
     }
 
     @FXML
