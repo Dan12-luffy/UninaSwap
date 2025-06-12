@@ -45,6 +45,7 @@ public class OfferDaoImpl implements OfferDao {
             return -1;
         }
 
+
     @Override
     public void deleteOffer(int offerId) {
         String Sql = "DELETE FROM offer WHERE offerid = ?";
