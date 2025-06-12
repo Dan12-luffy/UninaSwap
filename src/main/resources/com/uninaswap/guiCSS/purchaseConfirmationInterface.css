@@ -1,0 +1,104 @@
+/* Importa stili di base */
+.root {
+    -fx-primary: #9B2000;
+    -fx-primary-light: #C62828;
+    -fx-primary-dark: #6D0000;
+    -fx-primary-transparent: rgba(155, 32, 0, 0.1);
+    -fx-secondary: #E8E1D5;
+    -fx-accent: #FFA726;
+    -fx-neutral: #F5F5F5;
+    -fx-neutral-dark: #212121;
+    -fx-muted: #757575;
+    -fx-success: #43A047;
+    -fx-warning: #FFA000;
+    -fx-danger: #E53935;
+}
+
+.main-container {
+    -fx-background-color: #F8F8F8;
+}
+
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.product-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
+}
+
+.product-image {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 4px;
+}
+
+.product-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.product-price {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary;
+}
+
+.product-seller {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-muted;
+}
+
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.product-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-padding: 0 0 0 5px;
+}
+
+.info-section {
+    -fx-padding: 10px;
+    -fx-background-color: -fx-primary-transparent;
+    -fx-background-radius: 4px;
+}
+
+.info-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.buy-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 4px;
+    -fx-padding: 10px 20px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.buy-button:hover {
+    -fx-background-color: -fx-primary-light;
+}
+
+.back-button {
+    -fx-background-color: #F5F5F5;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-background-radius: 4px;
+    -fx-padding: 10px 20px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-background-color: #EEEEEE;
+}

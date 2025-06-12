@@ -57,13 +57,13 @@ public class ProductDetailsController {
 
     @FXML
     private void onBuyButtonClicked(ActionEvent event) {
-      /* try {
+      try {
            if (listing != null) {
                NavigationService.getInstance().navigateToPurchaseConfirmationView(event, listing);
            }
        }catch(Exception e){
            ValidationService.getInstance().showFailedToOpenPageError();
-       }*/
+       }
     }
 
     @FXML

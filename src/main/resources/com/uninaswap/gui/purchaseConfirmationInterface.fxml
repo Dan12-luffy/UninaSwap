@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane stylesheets="/com/uninaswap/guiCSS/purchaseConfirmationInterface.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.uninaswap.controllers.PurchaseConfirmationController">
+    <center>
+        <VBox styleClass="main-container" alignment="CENTER" spacing="20" maxWidth="600">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30" />
+            </padding>
+
+            <Label text="Conferma Acquisto" styleClass="page-title"/>
+
+            <VBox styleClass="product-card" spacing="15">
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <ImageView fx:id="productImageView" fitHeight="120" fitWidth="120"
+                               preserveRatio="true" styleClass="product-image"/>
+
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label fx:id="titleLabel" styleClass="product-title" wrapText="true"/>
+                        <Label fx:id="priceLabel" styleClass="product-price"/>
+                        <Label fx:id="sellerLabel" styleClass="product-seller"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="5">
+                    <Label text="Descrizione:" styleClass="section-title"/>
+                    <Label fx:id="descriptionLabel" wrapText="true" styleClass="product-description"/>
+                </VBox>
+
+                <VBox spacing="10" styleClass="info-section">
+                    <Label styleClass="info-text" text="Cliccando su 'Conferma Acquisto', invierai una richiesta al venditore."/>
+                    <Label styleClass="info-text" text="Una volta confermata, l'offerta non potrà essere ritirata."/>
+                </VBox>
+
+                <HBox spacing="15" alignment="CENTER">
+                    <Button fx:id="confirmButton" text="Conferma Acquisto"
+                            onAction="#onConfirmPurchase" styleClass="buy-button"/>
+                    <Button fx:id="cancelButton" text="Annulla"
+                            onAction="#onCancelPurchase" styleClass="back-button"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>
