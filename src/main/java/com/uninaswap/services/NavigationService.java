@@ -3,6 +3,7 @@ package com.uninaswap.services;
 import com.uninaswap.controllers.ExchangeController;
 import com.uninaswap.controllers.MakeOfferController;
 import com.uninaswap.controllers.ProductDetailsController;
+import com.uninaswap.controllers.PurchaseConfirmationController;
 import com.uninaswap.model.Listing;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -137,7 +138,7 @@ public class NavigationService {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/makeOfferInterface.fxml"));
             Parent root = loader.load();
-            // Assuming you have a controller for the make offer view
+
             MakeOfferController controller = loader.getController();
             controller.setListing(listing);
             setScene(event, root);
@@ -146,16 +147,16 @@ public class NavigationService {
         }
     }
 
-   /* public void navigateToPurchaseConfirmationView(ActionEvent event, Listing listing) {
+    public void navigateToPurchaseConfirmationView(ActionEvent event, Listing listing) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/purchaseConfirmationInterface.fxml"));
             Parent root = loader.load();
-            // Assuming you have a controller for the purchase confirmation view
+
             PurchaseConfirmationController controller = loader.getController();
             controller.setListing(listing);
             setScene(event, root);
         } catch (IOException e) {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
-    }*/
+    }
 }
