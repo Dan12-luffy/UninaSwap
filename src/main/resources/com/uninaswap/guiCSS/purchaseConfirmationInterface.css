@@ -1,104 +1,407 @@
-/* Importa stili di base */
-.root {
-    -fx-primary: #9B2000;
-    -fx-primary-light: #C62828;
-    -fx-primary-dark: #6D0000;
-    -fx-primary-transparent: rgba(155, 32, 0, 0.1);
-    -fx-secondary: #E8E1D5;
-    -fx-accent: #FFA726;
-    -fx-neutral: #F5F5F5;
-    -fx-neutral-dark: #212121;
-    -fx-muted: #757575;
-    -fx-success: #43A047;
-    -fx-warning: #FFA000;
-    -fx-danger: #E53935;
+/* UninaSwap - Purchase Confirmation CSS */
+/* Basato sul design system principale */
+
+/* ============================
+   VARIABILI COLORE
+   ============================ */
+* {
+    -fx-primary: #9B2000;             /* Colore principale - bordeaux */
+    -fx-primary-light: #C62828;       /* Versione più chiara */
+    -fx-primary-dark: #6D0000;        /* Versione più scura */
+    -fx-primary-transparent: rgba(155, 32, 0, 0.1); /* Versione trasparente */
+
+    -fx-secondary: #E8E1D5;           /* Colore secondario - beige chiaro */
+    -fx-accent: #FFA726;              /* Accento - arancione */
+    -fx-neutral: #F5F5F5;             /* Neutro - quasi bianco */
+    -fx-neutral-dark: #212121;        /* Testo scuro */
+    -fx-muted: #757575;               /* Testo secondario */
+
+    -fx-success: #43A047;             /* Verde */
+    -fx-warning: #FFA000;             /* Arancione */
+    -fx-danger: #E53935;              /* Rosso */
+
+    -fx-shadow-low: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
+    -fx-shadow-medium: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
+    -fx-shadow-high: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 12, 0, 0, 4);
 }
 
+/* ============================
+   CONTAINER PRINCIPALE
+   ============================ */
 .main-container {
     -fx-background-color: #F8F8F8;
 }
 
+/* ============================
+   HEADER
+   ============================ */
+.header-section {
+    -fx-background-color: -fx-primary;
+}
+
+.header-bar {
+    -fx-background-color: -fx-primary;
+    -fx-padding: 15px;
+}
+
 .page-title {
-    -fx-font-size: 24px;
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: -fx-neutral-dark;
 }
 
-.product-card {
+.header-divider {
+    -fx-background-color: -fx-primary-dark;
+}
+
+/* ============================
+   CONTENT AREA
+   ============================ */
+.content-scroll {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+
+.content-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.main-content {
+    -fx-background-color: transparent;
+}
+
+/* ============================
+   LAYOUT PRODOTTO E ACQUISTO
+   ============================ */
+.product-purchase-container {
     -fx-background-color: white;
-    -fx-background-radius: 8px;
-    -fx-padding: 20px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
+    -fx-background-radius: 12px;
+    -fx-padding: 30px;
+    -fx-effect: -fx-shadow-medium;
+    -fx-alignment: TOP_CENTER;
 }
 
-.product-image {
-    -fx-background-color: #F0F0F0;
-    -fx-background-radius: 4px;
+.left-column {
+    -fx-min-width: 300px;
+    -fx-max-width: 320px;
+    -fx-alignment: TOP_CENTER;
+}
+
+.right-column {
+    -fx-min-width: 250px;
+    -fx-pref-width: 300px;
+    -fx-padding: 10px 0 0 0;
+}
+
+/* ============================
+   SEZIONE IMMAGINE
+   ============================ */
+.image-section {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 5px;
+}
+
+.main-image-container {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-effect: -fx-shadow-low;
+}
+
+.product-main-image {
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 8px;
+}
+
+.no-image-label {
+    -fx-text-fill: -fx-muted;
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+}
+
+/* ============================
+   SEZIONE DETTAGLI PRODOTTO
+   ============================ */
+.product-details-section {
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 10px;
+    -fx-padding: 20px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
 }
 
 .product-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -fx-neutral-dark;
-}
-
-.product-price {
-    -fx-font-size: 16px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-primary;
-}
-
-.product-seller {
-    -fx-font-size: 14px;
-    -fx-text-fill: -fx-muted;
-}
-
-.section-title {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -fx-neutral-dark;
+    -fx-wrap-text: true;
 }
 
 .product-description {
     -fx-font-size: 14px;
     -fx-text-fill: -fx-neutral-dark;
-    -fx-padding: 0 0 0 5px;
+    -fx-wrap-text: true;
+    -fx-line-spacing: 1.2;
 }
 
-.info-section {
-    -fx-padding: 10px;
-    -fx-background-color: -fx-primary-transparent;
-    -fx-background-radius: 4px;
+/* ============================
+   SEZIONE VENDITORE
+   ============================ */
+.seller-section {
+    -fx-background-color: rgba(67, 160, 71, 0.05);
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-border-color: rgba(67, 160, 71, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
 }
 
-.info-text {
-    -fx-font-size: 13px;
-    -fx-text-fill: -fx-neutral-dark;
+.seller-info {
+    -fx-alignment: CENTER_LEFT;
 }
 
-.buy-button {
-    -fx-background-color: -fx-primary;
+.seller-avatar {
+    -fx-background-color: -fx-success;
+    -fx-background-radius: 20px;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+}
+
+.avatar-placeholder {
     -fx-text-fill: white;
-    -fx-background-radius: 4px;
-    -fx-padding: 10px 20px;
+    -fx-font-size: 20px;
+}
+
+.seller-name {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-cursor: hand;
-}
-
-.buy-button:hover {
-    -fx-background-color: -fx-primary-light;
-}
-
-.back-button {
-    -fx-background-color: #F5F5F5;
     -fx-text-fill: -fx-neutral-dark;
-    -fx-background-radius: 4px;
-    -fx-padding: 10px 20px;
+}
+
+.seller-rating {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-accent;
+    -fx-font-weight: bold;
+}
+
+.seller-joined {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-muted;
+}
+
+/* ============================
+   SEZIONE ACQUISTO
+   ============================ */
+.purchase-section {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 20px;
+    -fx-border-color: -fx-primary;
+    -fx-border-width: 2;
+    -fx-border-style: dashed;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(155, 32, 0, 0.2), 8, 0, 0, 2);
+}
+
+.section-title-large {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary;
+}
+
+.section-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.price-info {
+    -fx-background-color: -fx-secondary;
+    -fx-background-radius: 20px;
+    -fx-padding: 8px 15px;
+}
+
+.price-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: normal;
+    -fx-text-fill: -fx-neutral-dark;
+}
+
+.price-value-large {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary;
+}
+
+/* ============================
+   SEZIONE VANTAGGI ACQUISTO
+   ============================ */
+.benefits-section {
+    -fx-background-color: rgba(255, 167, 38, 0.05);
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-border-color: rgba(255, 167, 38, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+
+.benefit-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-wrap-text: true;
+    -fx-padding: 2px 0;
+}
+
+/* ============================
+   SEZIONE AVVISI
+   ============================ */
+.warning-section {
+    -fx-background-color: rgba(229, 57, 53, 0.05);
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-border-color: rgba(229, 57, 53, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+
+.warning-title {
     -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-danger;
+}
+
+.warning-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-wrap-text: true;
+    -fx-padding: 2px 0;
+}
+
+/* ============================
+   BOTTONI
+   ============================ */
+.button-section {
+    -fx-padding: 10px 0 0 0;
+}
+
+.confirm-button {
+    -fx-background-color: linear-gradient(to bottom, -fx-primary, -fx-primary-dark);
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(155, 32, 0, 0.3), 6, 0, 0, 2);
+}
+
+.confirm-button:hover {
+    -fx-background-color: linear-gradient(to bottom, -fx-primary-light, -fx-primary);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(155, 32, 0, 0.4), 10, 0, 0, 3);
+}
+
+.confirm-button:pressed {
+    -fx-background-color: -fx-primary-dark;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.cancel-button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-neutral-dark;
+    -fx-font-size: 15px;
+    -fx-font-weight: normal;
+    -fx-border-color: #D0D0D0;
+    -fx-border-width: 2;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-padding: 10px 20px;
     -fx-cursor: hand;
 }
 
-.back-button:hover {
+.cancel-button:hover {
+    -fx-background-color: #F5F5F5;
+    -fx-border-color: -fx-muted;
+    -fx-text-fill: -fx-primary;
+}
+
+.cancel-button:pressed {
     -fx-background-color: #EEEEEE;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* ============================
+   SCROLLBAR PERSONALIZZATE
+   ============================ */
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 12px;
+    -fx-pref-height: 12px;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #D0D0D0;
+    -fx-background-radius: 6px;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #B0B0B0;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-shape: "";
+}
+
+/* ============================
+   TRANSIZIONI E ANIMAZIONI
+   ============================ */
+.confirm-button, .cancel-button {
+    -fx-transition: -fx-background-color 0.2s ease-out,
+    -fx-scale-x 0.2s ease-out,
+    -fx-scale-y 0.2s ease-out,
+    -fx-effect 0.2s ease-out;
+}
+
+/* ============================
+   RESPONSIVE DESIGN
+   ============================ */
+@media (max-width: 768px) {
+    .product-purchase-container {
+        -fx-orientation: vertical;
+        -fx-alignment: TOP_CENTER;
+    }
+
+    .left-column, .right-column {
+        -fx-min-width: 250px;
+        -fx-max-width: 500px;
+        -fx-pref-width: 100%;
+    }
 }

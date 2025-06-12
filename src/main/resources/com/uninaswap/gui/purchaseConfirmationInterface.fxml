@@ -1,52 +1,166 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
 
-<BorderPane stylesheets="/com/uninaswap/guiCSS/purchaseConfirmationInterface.css"
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="650.0" prefWidth="800.0"
+            styleClass="main-container"
+            stylesheets="@../guiCSS/purchaseConfirmationInterface.css"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.uninaswap.controllers.PurchaseConfirmationController">
-    <center>
-        <VBox styleClass="main-container" alignment="CENTER" spacing="20" maxWidth="600">
-            <padding>
-                <Insets top="30" right="30" bottom="30" left="30" />
-            </padding>
 
-            <Label text="Conferma Acquisto" styleClass="page-title"/>
-
-            <VBox styleClass="product-card" spacing="15">
-                <HBox spacing="20" alignment="CENTER_LEFT">
-                    <ImageView fx:id="productImageView" fitHeight="120" fitWidth="120"
-                               preserveRatio="true" styleClass="product-image"/>
-
-                    <VBox spacing="8" HBox.hgrow="ALWAYS">
-                        <Label fx:id="titleLabel" styleClass="product-title" wrapText="true"/>
-                        <Label fx:id="priceLabel" styleClass="product-price"/>
-                        <Label fx:id="sellerLabel" styleClass="product-seller"/>
-                    </VBox>
+    <top>
+        <VBox styleClass="header-section">
+            <children>
+                <HBox alignment="CENTER" prefHeight="80.0" styleClass="header-bar">
+                    <children>
+                        <Label styleClass="page-title" text="Conferma Acquisto" />
+                    </children>
                 </HBox>
-
-                <VBox spacing="5">
-                    <Label text="Descrizione:" styleClass="section-title"/>
-                    <Label fx:id="descriptionLabel" wrapText="true" styleClass="product-description"/>
-                </VBox>
-
-                <VBox spacing="10" styleClass="info-section">
-                    <Label styleClass="info-text" text="Cliccando su 'Conferma Acquisto', invierai una richiesta al venditore."/>
-                    <Label styleClass="info-text" text="Una volta confermata, l'offerta non potrà essere ritirata."/>
-                </VBox>
-
-                <HBox spacing="15" alignment="CENTER">
-                    <Button fx:id="confirmButton" text="Conferma Acquisto"
-                            onAction="#onConfirmPurchase" styleClass="buy-button"/>
-                    <Button fx:id="cancelButton" text="Annulla"
-                            onAction="#onCancelPurchase" styleClass="back-button"/>
-                </HBox>
-            </VBox>
+                <Region prefHeight="3.0" styleClass="header-divider" />
+            </children>
         </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll">
+            <content>
+                <VBox alignment="TOP_CENTER" spacing="30.0" styleClass="main-content">
+                    <padding>
+                        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+                    </padding>
+                    <children>
+                        <!-- Contenitore principale prodotto e acquisto -->
+                        <HBox alignment="TOP_CENTER" spacing="25.0" styleClass="product-purchase-container">
+
+                            <!-- Colonna sinistra - immagine e conferma acquisto -->
+                            <VBox spacing="25.0" styleClass="left-column">
+
+                                <!-- Sezione immagine -->
+                                <VBox alignment="CENTER" styleClass="image-section">
+                                    <children>
+                                        <VBox alignment="CENTER" styleClass="main-image-container">
+                                            <children>
+                                                <ImageView fx:id="productImageView" fitHeight="250.0" fitWidth="250.0"
+                                                           pickOnBounds="true" preserveRatio="true" styleClass="product-main-image" />
+                                                <Label fx:id="noImageLabel" managed="false" styleClass="no-image-label"
+                                                       text="Nessuna immagine disponibile" visible="false" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+
+                                <!-- Sezione conferma acquisto -->
+                                <VBox alignment="CENTER" spacing="20.0" styleClass="purchase-section">
+                                    <children>
+                                        <Label styleClass="section-title-large" text="Conferma il Tuo Acquisto" />
+
+                                        <VBox alignment="CENTER" spacing="15.0" styleClass="purchase-details">
+                                            <children>
+                                                <HBox alignment="CENTER" spacing="15.0" styleClass="price-info">
+                                                    <children>
+                                                        <Label styleClass="price-label" text="Prezzo totale:" />
+                                                        <Label fx:id="priceLabel" styleClass="price-value-large" text="€0.00" />
+                                                    </children>
+                                                </HBox>
+
+                                                <VBox alignment="CENTER" spacing="8.0" styleClass="purchase-info">
+                                                    <children>
+                                                        <Label fx:id="sellerLabel" styleClass="seller-info" text="Venditore: " />
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Avvisi importanti -->
+                                        <VBox spacing="8.0" styleClass="warning-section">
+                                            <children>
+                                                <Label styleClass="warning-title" text="⚠️ Informazioni Importanti" />
+                                                <Label styleClass="warning-text" text="• Cliccando conferma, invierai una richiesta al venditore" wrapText="true" />
+                                                <Label styleClass="warning-text" text="• L'offerta non potrà essere ritirata una volta inviata" wrapText="true" />
+                                                <Label styleClass="warning-text" text="• Il venditore riceverà la tua richiesta di acquisto" wrapText="true" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Bottoni azione -->
+                                        <HBox alignment="CENTER" spacing="20.0" styleClass="button-section">
+                                            <children>
+                                                <Button fx:id="confirmButton" defaultButton="true" mnemonicParsing="false"
+                                                        onAction="#onConfirmPurchase" prefWidth="140.0" styleClass="confirm-button"
+                                                        text="Conferma Acquisto" />
+                                                <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false"
+                                                        onAction="#onCancelPurchase" prefWidth="100.0" styleClass="cancel-button"
+                                                        text="Annulla" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Colonna destra - dettagli prodotto -->
+                            <VBox spacing="20.0" styleClass="right-column">
+                                <children>
+                                    <!-- Dettagli prodotto -->
+                                    <VBox styleClass="product-details-section">
+                                        <children>
+                                            <Label fx:id="titleLabel" styleClass="product-title" text="Nome Prodotto" wrapText="true" />
+                                            <Region prefHeight="15.0" />
+                                            <Label styleClass="section-title" text="Descrizione" />
+                                            <Region prefHeight="5.0" />
+                                            <Label fx:id="descriptionLabel" styleClass="product-description"
+                                                   text="Descrizione dettagliata del prodotto..." wrapText="true" />
+                                        </children>
+                                    </VBox>
+
+                                    <!-- Informazioni venditore -->
+                                    <VBox styleClass="seller-section">
+                                        <children>
+                                            <Label styleClass="section-title" text="Informazioni Venditore" />
+                                            <Region prefHeight="10.0" />
+                                            <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="seller-info">
+                                                <children>
+                                                    <VBox alignment="CENTER" styleClass="seller-avatar">
+                                                        <children>
+                                                            <Label styleClass="avatar-placeholder" text="V" />
+                                                        </children>
+                                                    </VBox>
+                                                    <VBox spacing="2.0">
+                                                        <children>
+                                                            <Label fx:id="sellerNameLabel" styleClass="seller-name" text="Nome Venditore" />
+                                                            <Label fx:id="sellerRatingLabel" styleClass="seller-rating" text="★★★★☆ 4.5/5" />
+                                                            <Label fx:id="sellerJoinedLabel" styleClass="seller-joined" text="Membro da Gennaio 2023" />
+                                                        </children>
+                                                    </VBox>
+                                                </children>
+                                            </HBox>
+                                        </children>
+                                    </VBox>
+
+                                    <!-- Vantaggi dell'acquisto diretto -->
+                                    <VBox styleClass="benefits-section">
+                                        <children>
+                                            <Label styleClass="section-title" text="Acquisto Diretto" />
+                                            <Region prefHeight="5.0" />
+                                            <Label styleClass="benefit-text" text="✓ Prezzo fisso senza contrattazioni" wrapText="true" />
+                                            <Label styleClass="benefit-text" text="✓ Richiesta di acquisto immediata" wrapText="true" />
+                                            <Label styleClass="benefit-text" text="✓ Priorità rispetto alle altre offerte" wrapText="true" />
+                                            <Label styleClass="benefit-text" text="✓ Processo di acquisto più veloce" wrapText="true" />
+                                        </children>
+                                    </VBox>
+                                </children>
+                            </VBox>
+                        </HBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
     </center>
 </BorderPane>
