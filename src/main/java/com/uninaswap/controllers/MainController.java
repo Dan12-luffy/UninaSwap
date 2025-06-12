@@ -147,7 +147,7 @@ public class MainController {
     public void showFavorites() {
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/favoriteInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/favouriteInterface.fxml"));
             Parent root = loader.load();
 
             FavouritesViewController controller = loader.getController();
