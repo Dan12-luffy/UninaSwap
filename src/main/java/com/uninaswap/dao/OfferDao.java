@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface OfferDao {
-    void createOffer(Offer o) throws Exception;
+    int createOffer(Offer o) throws Exception;
     void deleteOffer(int offerId) throws Exception;
     void updateOffer(int offerId, String title, String description, int categoryId, double price) throws Exception;
     boolean acceptOffer(int offerId, int userId) throws Exception;

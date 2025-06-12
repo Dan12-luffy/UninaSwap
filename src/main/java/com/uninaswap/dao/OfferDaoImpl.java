@@ -17,22 +17,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OfferDaoImpl implements OfferDao {
-    @Override
-    public void createOffer(Offer o) {
-        String sql = "INSERT INTO offer (listingid, userid, amount, status, message, offer_date) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, o.getListingID());
-            stmt.setInt(2, o.getUserID());
-            stmt.setDouble(3, o.getAmount());
-            stmt.setString(4, o.getListingStatus().toString().toUpperCase());
-            stmt.setString(5, o.getMessage());
-            stmt.setDate(6, java.sql.Date.valueOf(o.getOfferDate()));
-            stmt.executeUpdate(); //Converte Localdate a Date per il db
-        } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'offerta: " + e.getMessage());
+        @Override
+        public int createOffer(Offer o) {
+            String sql = "INSERT INTO offer (listingid, userid, amount, status, message, offer_date) VALUES (?, ?, ?, ?, ?, ?)";
+            try (Connection conn = DatabaseUtil.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                stmt.setInt(1, o.getListingID());
+                stmt.setInt(2, o.getUserID());
+                stmt.setDouble(3, o.getAmount());
+                stmt.setString(4, o.getListingStatus().toString().toUpperCase());
+                stmt.setString(5, o.getMessage());
+                stmt.setDate(6, java.sql.Date.valueOf(o.getOfferDate()));
+                stmt.executeUpdate();
+
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int generatedId = generatedKeys.getInt(1);
+                        o.setOfferID(generatedId);
+                        return generatedId;
+                    } else {
+                        throw new SQLException("Creating offer failed, no ID obtained.");
+                    }
+                }
+            } catch (SQLException e) {
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'offerta: " + e.getMessage());
+            }
+            return -1;
         }
-    }
 
     @Override
     public void deleteOffer(int offerId) {

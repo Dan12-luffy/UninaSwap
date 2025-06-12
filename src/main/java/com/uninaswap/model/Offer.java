@@ -23,7 +23,7 @@ public class Offer {
         this.offerDate = offerDate;
     }
 
-    public Integer getOfferID() {
+    public Integer  getOfferID() {
         return offerID;
     }
 
