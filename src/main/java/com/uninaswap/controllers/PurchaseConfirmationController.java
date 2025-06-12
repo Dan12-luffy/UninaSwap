@@ -91,6 +91,7 @@ public class PurchaseConfirmationController {
         try{
             User currentUser = UserSession.getInstance().getCurrentUser();
             verifyUser(currentUser);
+
             Offer offer = new Offer(
                     listing.getListingId(),
                     currentUser.getId(),
