@@ -36,11 +36,6 @@ public class PurchaseConfirmationController {
     @FXML
     private ImageView productImageView;
 
-    @FXML
-    private Button confirmButton;
-
-    @FXML
-    private Button cancelButton;
 
     private Listing listing;
     private ValidationService validationService = ValidationService.getInstance();
@@ -92,23 +87,11 @@ public class PurchaseConfirmationController {
             User currentUser = UserSession.getInstance().getCurrentUser();
             verifyUser(currentUser);
 
-            Offer offer = new Offer(
-                    listing.getListingId(),
-                    currentUser.getId(),
-                    listing.getPrice().doubleValue(),
-                    "Acquisto di " + listing.getTitle(),
-                    ListingStatus.PENDING,
-                    LocalDate.now()
-            );
+            listing.setStatus(ListingStatus.SOLD);
+            ListingService.getInstance().updateListing(listing);
 
-            int offerId = offerService.createOffer(offer);
-
-            if(offerId > 0){
-                validationService.showAlert(Alert.AlertType.INFORMATION, "Acquisto effettuato", "La tua offerta è stata inviata con successo.");
-                NavigationService.getInstance().navigateToMainView(event);
-            } else {
-                validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile effettuare l'acquisto. Riprova più tardi.");
-            }
+            validationService.showAlert(Alert.AlertType.INFORMATION," Acquisto effettuato ", "Acquisto completato con successo ! il prodotto è ora tuo " );
+            NavigationService.getInstance().navigateToMainView(event);
 
 
         }catch(Exception e){

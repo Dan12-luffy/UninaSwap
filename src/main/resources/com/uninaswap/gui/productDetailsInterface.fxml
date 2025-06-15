@@ -120,7 +120,7 @@
                                         <Label styleClass="avatar-placeholder" text="👤" />
                                     </StackPane>
                                     <VBox spacing="3">
-                                        <Label fx:id="sellerLabel" styleClass="seller-name" text="Nome Venditore" />
+                                        <Label fx:id="sellerLabel" styleClass="seller-name" text="Nome Venditore"/>
                                         <Label fx:id="sellerRatingLabel" styleClass="seller-rating" text="⭐⭐⭐⭐⭐ (4.8/5)" />
                                         <Label fx:id="sellerJoinedLabel" styleClass="seller-joined" text="Membro dal 2022" />
                                     </VBox>
