@@ -5,11 +5,7 @@ import com.uninaswap.model.Listing;
 import com.uninaswap.model.ListingStatus;
 import com.uninaswap.model.Offer;
 import com.uninaswap.model.User;
-import com.uninaswap.services.ListingService;
-import com.uninaswap.services.NavigationService;
-import com.uninaswap.services.OfferService;
-import com.uninaswap.services.ValidationService;
-import com.uninaswap.services.UserSession;
+import com.uninaswap.services.*;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -90,9 +86,16 @@ public class PurchaseConfirmationController {
             listing.setStatus(ListingStatus.SOLD);
             ListingService.getInstance().updateListing(listing);
 
-            validationService.showAlert(Alert.AlertType.INFORMATION," Acquisto effettuato ", "Acquisto completato con successo ! il prodotto è ora tuo " );
-            NavigationService.getInstance().navigateToMainView(event);
+            int transactionId = TransactionService.getInstance().recordSale(listing, currentUser);
 
+            if(transactionId > 0) {
+                validationService.showAlert(Alert.AlertType.INFORMATION, "Acquisto effettuato",
+                        "Acquisto completato con successo! Il prodotto è ora tuo.");
+            } else {
+                validationService.showAlert(Alert.AlertType.WARNING, "Acquisto effettuato",
+                        "Prodotto acquistato, ma errore nella registrazione della transazione.");
+            }
+            NavigationService.getInstance().navigateToMainView(event);
 
         }catch(Exception e){
            validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante l'elaborazione dell'acquisto: " + e.getMessage());

@@ -375,6 +375,7 @@ public class ListingDaoImpl implements ListingDao {
         CategoryDaoImpl category = new CategoryDaoImpl();
         int categoryId = category.getCategoryIdByName(listing.getCategory());
         stmt.setInt(9, categoryId);
+        stmt.setInt(10, listing.getListingId());
     }
 
     public Listing createListingFromResultSet(ResultSet rs) throws SQLException {

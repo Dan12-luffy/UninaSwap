@@ -1,0 +1,105 @@
+package com.uninaswap.dao;
+import com.uninaswap.model.Transaction;
+import com.uninaswap.utility.DatabaseUtil;
+
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TransactionDaoImpl implements TransactionDao {
+
+    public int createTransaction(Transaction transaction) {
+        String sql = "INSERT INTO transactions (listing_id, seller_id, buyer_id, amount, transaction_type, status, transaction_date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection connection = DatabaseUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setInt(1, transaction.getListingId());
+            preparedStatement.setInt(2, transaction.getSellerId());
+            preparedStatement.setInt(3, transaction.getBuyerId());
+            preparedStatement.setDouble(4, transaction.getAmount());
+            preparedStatement.setString(5, transaction.getTransactionType());
+            preparedStatement.setString(6, transaction.getStatus());
+            preparedStatement.setTimestamp(7, Timestamp.valueOf(transaction.getTransactionDate()));
+            preparedStatement.setString(8, transaction.getDescription());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return -1; // Indicating failure to create transaction
+    }
+
+    public Transaction findById(int transactionId) {
+        String sql = "SELECT * FROM transactions WHERE transaction_id = ?";
+        try (Connection connection = DatabaseUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, transactionId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return mapRowToTransaction(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Transaction> findByUserId(int userId) {
+        String sql = "SELECT * FROM transactions WHERE buyer_id = ? OR seller_id = ?";
+        List<Transaction> transactions = new ArrayList<>();
+        try (Connection connection = DatabaseUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                transactions.add(mapRowToTransaction(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return transactions;
+    }
+
+    public List<Transaction> findByListingId(int listingId) {
+        String sql = "SELECT * FROM transactions WHERE listing_id = ?";
+        List<Transaction> transactions = new ArrayList<>();
+        try (Connection connection = DatabaseUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, listingId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                transactions.add(mapRowToTransaction(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return transactions;
+    }
+
+    private Transaction mapRowToTransaction(ResultSet resultSet) throws SQLException {
+        Transaction transaction = new Transaction();
+        transaction.setTransactionId(resultSet.getInt("transaction_id"));
+        transaction.setListingId(resultSet.getInt("listing_id"));
+        transaction.setSellerId(resultSet.getInt("seller_id"));
+        transaction.setBuyerId(resultSet.getInt("buyer_id"));
+        transaction.setAmount(resultSet.getDouble("amount"));
+        transaction.setTransactionType(resultSet.getString("transaction_type"));
+        transaction.setStatus(resultSet.getString("status"));
+        transaction.setTransactionDate(resultSet.getTimestamp("transaction_date").toLocalDateTime());
+        transaction.setDescription(resultSet.getString("description"));
+        return transaction;
+    }
+}
