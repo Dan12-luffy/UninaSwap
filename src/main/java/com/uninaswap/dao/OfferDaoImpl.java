@@ -134,7 +134,7 @@ public class OfferDaoImpl implements OfferDao {
     }
     @Override
     public List<Offer> findOffersToCurrentUser(){
-        String sql = "SELECT o.* FROM offer o JOIN listings l ON o.listingid = l.listingid WHERE l.userid = ?";
+        String sql = "SELECT o.* FROM offer o JOIN listings l ON o.listingid = l.listingid WHERE l.userid = ? AND o.status = 'PENDING'";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, UserSession.getInstance().getCurrentUserId());

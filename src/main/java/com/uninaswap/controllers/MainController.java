@@ -558,11 +558,9 @@ public class MainController {
         applyCurrentFilters();
     }
 
-
-    // New handler methods
     @FXML
-    private void onNotificationButtonClicked() {
-        System.out.println("Notification button clicked");
+    private void onNotificationButtonClicked(ActionEvent event) {
+        NavigationService.getInstance().navigateToNotificationsView(event);
     }
 
     @FXML

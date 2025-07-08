@@ -6,6 +6,7 @@ import com.uninaswap.dao.UserDao;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.databaseUtils.FilterCriteria;
 import com.uninaswap.model.Listing;
+import com.uninaswap.model.ListingStatus;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -73,5 +74,16 @@ public class ListingService {
     }
     public Listing getListingByID(int listingId) throws SQLException {
         return listingDao.findListingById(listingId);
+    }
+
+    public void updateListingStatus(Integer listingId, ListingStatus listingStatus) {
+        try {
+            listingDao.updateListingStatus(listingId, listingStatus);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error updating listing status", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error occurred while updating listing status", e);
+        }
     }
 }

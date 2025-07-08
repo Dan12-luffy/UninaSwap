@@ -10,18 +10,23 @@ import java.util.List;
 public class TransactionDaoImpl implements TransactionDao {
 
     public int createTransaction(Transaction transaction) {
-        String sql = "INSERT INTO transactions (listing_id, seller_id, buyer_id, amount, transaction_type, status, transaction_date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO transactions (listing_id, offer_id, seller_id, buyer_id, amount, transaction_type, status, transaction_date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
         try (Connection connection = DatabaseUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setInt(1, transaction.getListingId());
-            preparedStatement.setInt(2, transaction.getSellerId());
-            preparedStatement.setInt(3, transaction.getBuyerId());
-            preparedStatement.setDouble(4, transaction.getAmount());
-            preparedStatement.setString(5, transaction.getTransactionType());
-            preparedStatement.setString(6, transaction.getStatus());
-            preparedStatement.setTimestamp(7, Timestamp.valueOf(transaction.getTransactionDate()));
-            preparedStatement.setString(8, transaction.getDescription());
+            if(transaction.getOfferId() == null) {
+                preparedStatement.setNull(2, Types.INTEGER);
+            } else {
+                preparedStatement.setInt(2, transaction.getOfferId());
+            }
+            preparedStatement.setInt(3, transaction.getSellerId());
+            preparedStatement.setInt(4, transaction.getBuyerId());
+            preparedStatement.setDouble(5, transaction.getAmount());
+            preparedStatement.setString(6, transaction.getTransactionType());
+            preparedStatement.setString(7, transaction.getStatus());
+            preparedStatement.setTimestamp(8, Timestamp.valueOf(transaction.getTransactionDate()));
+            preparedStatement.setString(9, transaction.getDescription());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
@@ -93,6 +98,7 @@ public class TransactionDaoImpl implements TransactionDao {
         Transaction transaction = new Transaction();
         transaction.setTransactionId(resultSet.getInt("transaction_id"));
         transaction.setListingId(resultSet.getInt("listing_id"));
+        transaction.setOfferId(resultSet.getInt("offer_id"));
         transaction.setSellerId(resultSet.getInt("seller_id"));
         transaction.setBuyerId(resultSet.getInt("buyer_id"));
         transaction.setAmount(resultSet.getDouble("amount"));

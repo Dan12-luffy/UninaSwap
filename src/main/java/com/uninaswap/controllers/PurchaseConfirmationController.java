@@ -17,26 +17,15 @@ import javafx.scene.image.ImageView;
 import java.time.LocalDate;
 
 public class PurchaseConfirmationController {
-    @FXML
-    private Label titleLabel;
-
-    @FXML
-    private Label priceLabel;
-
-    @FXML
-    private Label sellerLabel;
-
-    @FXML
-    private Label descriptionLabel;
-
-    @FXML
-    private ImageView productImageView;
-
+    @FXML private Label titleLabel;
+    @FXML private Label priceLabel;
+    @FXML private Label sellerLabel;
+    @FXML private Label descriptionLabel;
+    @FXML private ImageView productImageView;
 
     private Listing listing;
     private ValidationService validationService = ValidationService.getInstance();
     private OfferService offerService = OfferService.getInstance();
-
 
     public void setListing(Listing listing) {
         this.listing = listing;
@@ -83,12 +72,11 @@ public class PurchaseConfirmationController {
             User currentUser = UserSession.getInstance().getCurrentUser();
             verifyUser(currentUser);
 
-            listing.setStatus(ListingStatus.SOLD);
-            ListingService.getInstance().updateListing(listing);
-
-            int transactionId = TransactionService.getInstance().recordSale(listing, currentUser);
+            int transactionId = TransactionService.getInstance().recordSale(listing,null ,currentUser);
 
             if(transactionId > 0) {
+                listing.setStatus(ListingStatus.SOLD);
+                ListingService.getInstance().updateListing(listing);
                 validationService.showAlert(Alert.AlertType.INFORMATION, "Acquisto effettuato",
                         "Acquisto completato con successo! Il prodotto è ora tuo.");
             } else {

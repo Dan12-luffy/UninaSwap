@@ -6,6 +6,7 @@ public class Transaction {
 
     private int transactionId;
     private int listingId;
+    private Integer offerId;
     private int sellerId;
     private int buyerId;
     private double amount;
@@ -16,8 +17,10 @@ public class Transaction {
 
     public Transaction(){}
 
-    public Transaction(int listingId,int sellerId,int buyerId,double amount,String transactioType,String status,String description){
+    //Costruttore senza transactionId
+    public Transaction(int listingId,Integer offerId,int sellerId,int buyerId,double amount,String transactioType,String status,String description){
         this.listingId = listingId;
+        this.offerId = offerId;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
         this.amount = amount;
@@ -26,12 +29,25 @@ public class Transaction {
         this.description = description;
         this.transactionDate = LocalDateTime.now();
     }
+    /*public Transaction(int listingId,int sellerId,int buyerId,double amount,String transactioType,String status,String description){
+        this.listingId = listingId;
+        this.sellerId = sellerId;
+        this.buyerId = buyerId;
+        this.amount = amount;
+        this.transactioType = transactioType;
+        this.status = status;
+        this.description = description;
+        this.transactionDate = LocalDateTime.now();
+    }*/
 
     public int getTransactionId() { return transactionId; }
     public void setTransactionId(int transactionId) { this.transactionId = transactionId; }
 
     public int getListingId() { return listingId; }
     public void setListingId(int listingId) { this.listingId = listingId; }
+
+    public Integer getOfferId() { return this.offerId; }
+    public void setOfferId(Integer offerId) { this.offerId = offerId; }
 
     public int getSellerId() { return sellerId; }
     public void setSellerId(int sellerId) { this.sellerId = sellerId; }

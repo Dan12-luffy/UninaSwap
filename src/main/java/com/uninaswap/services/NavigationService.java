@@ -159,4 +159,13 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
+    public void navigateToNotificationsView(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/notificationsInterface.fxml"));
+            Parent root = loader.load();
+            setScene(event, root);
+        } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }
+    }
 }

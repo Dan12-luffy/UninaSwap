@@ -8,8 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
@@ -46,8 +48,11 @@ public class NotificationsController implements Initializable {
     @FXML private VBox noMoreNotifications;
 
     private final OfferDao offerDao = new OfferDaoImpl();
+    private final OfferService offerService = OfferService.getInstance();
     private final ListingService listingService = ListingService.getInstance();
     private final UserService userService = UserService.getInstance();
+    private final TransactionService transactionService = TransactionService.getInstance();
+
     //TODO, implementare le notifiche e il dettaglio dell'offerta
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -68,89 +73,147 @@ public class NotificationsController implements Initializable {
             notificationsContainer.getChildren().add(offerCard);
         }
     }
-    //Questo metodo non l'ho fatto io, l'ha fatto claude perchè sono un cane
+
     private VBox createOfferCard(Offer offer) throws SQLException {
         VBox card = new VBox();
         card.setStyle("-fx-effect: none !important; -fx-background-insets: 0; -fx-border-color: #e0e0e0; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-padding: 12;");
 
-        // Create the content layout
         HBox content = new HBox();
-        content.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-        content.setSpacing(12);
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(16);
 
         VBox offerContent = new VBox();
-        offerContent.setSpacing(4);
-        HBox.setHgrow(offerContent, javafx.scene.layout.Priority.ALWAYS);
+        offerContent.setSpacing(8);
+        HBox.setHgrow(offerContent, Priority.ALWAYS);
 
         Listing listing = listingService.getListingByID(offer.getListingID());
         User offerUser = userService.getUserById(offer.getUserID());
-        List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offer.getOfferID());//.findOfferedItemsByOfferIdAndListingId(offer.getOfferID(), listing.getListingId());
+        List<OfferedItem> offeredItems = OfferedItemsService.getInstance()
+                .findOfferedItemsByOfferId(offer.getOfferID());
+
+        // Usa il type del listing per determinare il tipo di notifica
+        String notificationType = getNotificationTypeFromListing(listing.getType());
 
         HBox header = new HBox();
-        header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-        header.setSpacing(8);
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.setSpacing(10);
+        header.setPadding(new Insets(0, 0, 4, 0));
 
-        Label notificationType = new Label("NUOVA OFFERTA");
-        notificationType.getStyleClass().add("notification-type");
+        Label notificationTypeLabel = new Label(notificationType);
+        notificationTypeLabel.getStyleClass().add("notification-type");
 
         Label notificationTime = new Label(getTimeAgo(offer.getOfferDate()));
         notificationTime.getStyleClass().add("notification-time");
 
-        header.getChildren().addAll(notificationType, notificationTime);
+        header.getChildren().addAll(notificationTypeLabel, notificationTime);
 
-        String title = "Hai ricevuto un'offerta per '" + listing.getTitle() + "'";
+        // Crea titolo e descrizione basati sul tipo di listing
+        String title = createNotificationTitle(listing.getType(), listing);
+        String description = createNotificationDescription(listing.getType(), offer, listing, offerUser, offeredItems);
+
         Label notificationTitle = new Label(title);
         notificationTitle.getStyleClass().add("notification-title");
 
-        StringBuilder description = new StringBuilder((offerUser != null ? offerUser.getUsername() : "Un utente") +
-                " ha offerto " + listing.getTitle() + " dal valore: " + formatAmount(offer.getAmount()) +
-                ". Valore del prodotto: " + formatAmount(listing.getPrice().doubleValue()) + " ");
-
-        //TODO aggiustqre il for che mostra la lista degli oggetti offerti
-        for (OfferedItem offeredItem : offeredItems) {
-            Listing offeredListing = listingService.getListingByID(offeredItem.getListingId());
-            if (offeredListing != null) {
-                description.append("\nOggetti offerti:");
-                description.append("\n- ").append(offeredListing.getTitle());
-            }
-        }
-
-        Label notificationDescription = new Label(description.toString());
+        Label notificationDescription = new Label(description);
         notificationDescription.getStyleClass().add("notification-description");
 
-        HBox actions = new HBox();
-        actions.setSpacing(8);
-        actions.getStyleClass().add("notification-actions");
+        Region verticalSpacer = new Region();
+        verticalSpacer.setPrefHeight(8);
 
-        Label offerAmount = new Label("Offerta: " + formatAmount(offer.getAmount()));
-        offerAmount.getStyleClass().add("offer-amount");
+        HBox actions = createActionButtons(offer, listing.getType());
 
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-
-        Button declineButton = new Button("Rifiuta");
-        declineButton.getStyleClass().add("decline-button");
-        int offerId = offer.getOfferID();
-        declineButton.setOnAction(e -> handleDeclineOffer(e,offerId));
-
-        Button acceptButton = new Button("Accetta");
-        acceptButton.getStyleClass().add("accept-button");
-        acceptButton.setOnAction(e -> handleAcceptOffer(e,offerId));
-
-        Button counterButton = new Button("Controfferta");
-        counterButton.getStyleClass().add("counter-button");
-        counterButton.setOnAction(e -> handleCounterOffer(offerId));
-
-        actions.getChildren().addAll(offerAmount, spacer, declineButton, acceptButton, counterButton);
-
-        offerContent.getChildren().addAll(header, notificationTitle, notificationDescription, actions);
-
+        offerContent.getChildren().addAll(header, notificationTitle, notificationDescription, verticalSpacer, actions);
         content.getChildren().add(offerContent);
         card.getChildren().add(content);
 
         return card;
     }
-    //Sempre generato fa claude
+
+    private String getNotificationTypeFromListing(typeListing type) {
+        return switch (type) {
+            case GIFT -> "RICHIESTA REGALO";
+            case EXCHANGE -> "PROPOSTA SCAMBIO";
+            case SALE -> "NUOVA OFFERTA";
+            case UNDEFINED -> null;
+        };
+    }
+
+    private String createNotificationTitle(typeListing type, Listing listing) {
+        return switch (type) {
+            case GIFT -> "Qualcuno vuole il tuo regalo: '" + listing.getTitle() + "'";
+            case EXCHANGE -> "Proposta di scambio per '" + listing.getTitle() + "'";
+            case SALE -> "Hai ricevuto un'offerta per '" + listing.getTitle() + "'";
+            case UNDEFINED -> null;
+        };
+    }
+
+    private String createNotificationDescription(typeListing type, Offer offer, Listing listing,
+                                                 User offerUser, List<OfferedItem> offeredItems) {
+        String username = offerUser != null ? offerUser.getUsername() : "Un utente";
+
+        return switch (type) {
+            case GIFT -> username + " vorrebbe ricevere il tuo regalo: " + listing.getTitle();
+
+            case EXCHANGE -> {
+                StringBuilder desc = new StringBuilder(username + " propone uno scambio per " + listing.getTitle());
+                if (!offeredItems.isEmpty()) {
+                    desc.append("\n\nOggetti offerti:");
+                    for (OfferedItem item : offeredItems) {
+                        try {
+                            Listing offeredListing = listingService.getListingByID(item.getListingId());
+                            if (offeredListing != null) {
+                                desc.append("\n- ").append(offeredListing.getTitle());
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                yield desc.toString();
+            }
+
+            case SALE -> username + " ha offerto " + formatAmount(offer.getAmount()) +
+                    " per " + listing.getTitle() +
+                    ". Prezzo richiesto: " + formatAmount(listing.getPrice().doubleValue());
+            case UNDEFINED -> null;
+        };
+    }
+
+    private HBox createActionButtons(Offer offer, typeListing listingType) {
+        HBox actions = new HBox();
+        actions.setSpacing(10);
+        actions.getStyleClass().add("notification-actions");
+        actions.setPadding(new Insets(4, 0, 0, 0));
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button declineButton = new Button("Rifiuta");
+        declineButton.getStyleClass().add("decline-button");
+        declineButton.setOnAction(e -> handleDeclineOffer(e, offer.getOfferID()));
+
+        String acceptButtonText = switch (listingType) {
+            case GIFT -> "Dona";
+            case EXCHANGE -> "Accetta Scambio";
+            case SALE -> "Accetta";
+            case UNDEFINED -> null;
+        };
+
+        Button acceptButton = new Button(acceptButtonText);
+        acceptButton.getStyleClass().add("accept-button");
+        acceptButton.setOnAction(e -> handleAcceptOffer(e, offer.getOfferID()));
+
+        if (listingType != typeListing.GIFT) {
+            Label offerAmount = new Label("Offerta: " + formatAmount(offer.getAmount()));
+            offerAmount.getStyleClass().add("offer-amount");
+            actions.getChildren().addAll(offerAmount, spacer, declineButton, acceptButton);
+        } else {
+            actions.getChildren().addAll(spacer, declineButton, acceptButton);
+        }
+
+        return actions;
+    }
+
     private String getTimeAgo(LocalDate date) {
         long days = ChronoUnit.DAYS.between(date, LocalDate.now());
 
@@ -160,7 +223,7 @@ public class NotificationsController implements Initializable {
 
         return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
-    //Claude anche qui
+
     private String formatAmount(double amount) {
         DecimalFormat df = new DecimalFormat("#,##0.00€");
         return df.format(amount);
@@ -181,15 +244,47 @@ public class NotificationsController implements Initializable {
 
     }
 
-    private void handleAcceptOffer(ActionEvent event,int offerId) {
+    private void handleAcceptOffer(ActionEvent event, int offerId) {
         try {
+            Offer offer = offerDao.findOfferById(offerId);
+            Listing listing = listingService.getListingByID(offer.getListingID());
+            User buyer = userService.getUserById(offer.getUserID());
+
+            // Usa il type del listing per determinare il tipo di transazione
+            switch (listing.getType()) {
+                case SALE:
+                    // Vendita normale
+                    transactionService.recordSale(listing, offer, buyer);
+                    ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
+                            "Vendita completata", "La vendita è stata completata con successo.");
+                    break;
+
+                case EXCHANGE:
+                    // Scambio
+                    transactionService.recordExchange(listing, offer, buyer);
+                    ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
+                            "Scambio accettato", "Lo scambio è stato accettato con successo.");
+                    break;
+
+                case GIFT:
+                    // Regalo
+                    transactionService.recordGift(listing, offer, buyer);
+                    ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
+                            "Regalo accettato", "Il regalo è stato accettato con successo.");
+                    break;
+            }
+
+            // Aggiorna lo status dell'offerta e del listing
             offerDao.updateOfferStatus(offerId, ListingStatus.ACCEPTED);
+            listingService.updateListingStatus(listing.getListingId(), ListingStatus.SOLD);
+
             loadUserOffers();
-            ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Offerta accettata", "L'offerta è stata accettata con successo.");
-            NavigationService.getInstance().navigateToMainView(event);
+            //NavigationService.getInstance().navigateToMainView(event);
+
         } catch (Exception e) {
             e.printStackTrace();
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile accettare l'offerta: " + e.getMessage());
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
+                    "Impossibile accettare l'offerta: " + e.getMessage());
         }
     }
 
@@ -203,7 +298,7 @@ public class NotificationsController implements Initializable {
             offerDao.updateOfferStatus(offerId, ListingStatus.REJECTED);
             loadUserOffers();
             ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Offerta rifiutata", "L'offerta è stata rifiiutata con successo.");
-            NavigationService.getInstance().navigateToMainView(event);
+            //NavigationService.getInstance().navigateToMainView(event);
         } catch (Exception e) {
             e.printStackTrace();
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile accettare l'offerta: " + e.getMessage());

@@ -204,7 +204,23 @@ public class ListingDaoImpl implements ListingDao {
         return BigDecimal.ZERO;
     }
 
-
+    @Override
+    public void updateListingStatus(int listingId, ListingStatus status) throws SQLException {
+        String sql = "UPDATE listings SET status = ? WHERE listingId = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status.name());
+            stmt.setInt(2, listingId);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Stato dell'inserzione aggiornato con successo.");
+            } else {
+                System.out.println("Nessuna riga aggiornata. Controlla l'ID dell'inserzione.");
+            }
+        } catch (SQLException e) {
+            logDatabaseError("Update Status", e);
+        }
+    }
     @Override
     public List<Listing> findInsertionsExcludingCurrentUser() throws SQLException {
         List<Listing> listings = new ArrayList<>();

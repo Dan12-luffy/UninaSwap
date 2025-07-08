@@ -20,22 +20,14 @@ import java.time.LocalDate;
 public class MakeOfferController {
     private Listing listing;
 
-    @FXML
-    private Label productTitleLabel;
-    @FXML
-    private Label productDescriptionLabel;
-    @FXML
-    private Label productPriceLabel;
-    @FXML
-    private TextField offerAmountField;
-    @FXML
-    private Button submitOfferButton;
-    @FXML
-    private ImageView productImageView;
-    @FXML
-    private Label noImageLabel;
-    @FXML
-    private Label offerValidationLabel;
+    @FXML private Label productTitleLabel;
+    @FXML private Label productDescriptionLabel;
+    @FXML private Label productPriceLabel;
+    @FXML private TextField offerAmountField;
+    @FXML private Button submitOfferButton;
+    @FXML private ImageView productImageView;
+    @FXML private Label noImageLabel;
+    @FXML private Label offerValidationLabel;
 
     private static final ValidationService validationService = ValidationService.getInstance();
 
@@ -45,7 +37,6 @@ public class MakeOfferController {
             productTitleLabel.setText(listing.getTitle());
             productDescriptionLabel.setText(listing.getDescription());
             productPriceLabel.setText("€" + listing.getPrice());
-
 
             setProductImage(listing.getImageUrl());
         }
@@ -74,6 +65,7 @@ public class MakeOfferController {
         // Inizializzazione se necessaria
     }
 
+    //TODO separa la logica di validazione in un metodo a parte
     @FXML
     private void handleSubmitOffer(ActionEvent event) {
         if (listing == null) {
@@ -86,7 +78,6 @@ public class MakeOfferController {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "L'importo dell'offerta non può essere vuoto.");
             return;
         }
-
         double offerAmount;
         try {
             offerAmount = Double.parseDouble(offerAmountStr.replace(",", "."));

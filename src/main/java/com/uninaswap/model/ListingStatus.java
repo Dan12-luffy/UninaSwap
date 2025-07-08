@@ -2,11 +2,11 @@ package com.uninaswap.model;
 
 public enum ListingStatus {
 
-    AVAILABLE("Available"),
-    PENDING("Pending"),
-    ACCEPTED("AccePted"),
-    REJECTED("Rejected"),
-    SOLD("Venduto");
+    AVAILABLE("AVAILABLE"),
+    PENDING("PENDING"),
+    ACCEPTED("ACCEPTED"),
+    REJECTED("REJECTED"),
+    SOLD("SOLD");
 
     private final String status;
 
@@ -17,7 +17,6 @@ public enum ListingStatus {
     public String getStatus() {
         return status;
     }
-
 
     @Override
     public String toString() {

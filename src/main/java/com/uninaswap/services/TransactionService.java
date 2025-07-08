@@ -3,8 +3,10 @@ package com.uninaswap.services;
 import com.uninaswap.dao.TransactionDao;
 import com.uninaswap.dao.TransactionDaoImpl;
 import com.uninaswap.model.Listing;
+import com.uninaswap.model.Offer;
 import com.uninaswap.model.Transaction;
 import com.uninaswap.model.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -24,12 +26,13 @@ public class TransactionService {
         return instance;
     }
     //crea una nuova transazione e la registra nel database
-    public int recordSale(Listing listing, User buyer) throws  SQLException{
+    public int recordSale(Listing listing, Offer offer,User buyer) throws  SQLException{
         Transaction transaction = new Transaction(
                 listing.getListingId(),
+                offer != null ? offer.getOfferID() : null,
                 listing.getUserId(), // seller ID
                 buyer.getId(),       // buyer ID
-                listing.getPrice().doubleValue(),
+                offer != null ? offer.getAmount(): listing.getPrice().doubleValue(),
                 "PURCHASE",
                 "COMPLETED",
                 "Vendita di: " + listing.getTitle()
@@ -37,6 +40,33 @@ public class TransactionService {
         return transactionDao.createTransaction(transaction);
     }
 
+    public int recordExchange(Listing listing, Offer offer, User buyer) throws SQLException {
+        Transaction transaction = new Transaction(
+                listing.getListingId(),
+                offer.getOfferID(),
+                listing.getUserId(),
+                buyer.getId(),
+                0.0,
+                "EXCHANGE",
+                "COMPLETED",
+                "Scambio di: " + listing.getTitle()
+        );
+        return transactionDao.createTransaction(transaction);
+    }
+
+    public int recordGift(Listing listing,Offer offer ,User buyer) throws SQLException {
+        Transaction transaction = new Transaction(
+                listing.getListingId(),
+                offer.getOfferID(),
+                listing.getUserId(),
+                buyer.getId(),
+                0.0,
+                "GIFT",
+                "COMPLETED",
+                "Regalo di: " + listing.getTitle()
+        );
+        return transactionDao.createTransaction(transaction);
+    }
     //ottiene tutte le transazioni effettuate da un utente
     public List<Transaction> getTransactionsByUserId(int userId) throws SQLException {
         return transactionDao.findByUserId(userId);
