@@ -158,6 +158,18 @@ public class OfferDaoImpl implements OfferDao {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aggiornare lo stato dell'offerta: " + e.getMessage());
         }
     }
+    @Override
+    public List<Offer> findRejectedOffersForCurrentUser(){
+        String sql = "SELECT * FROM offer WHERE userid = ? AND status = 'REJECTED'";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
+            return getListingOffers(stmt);
+        } catch (SQLException e) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte rifiutate per l'utente corrente: " + e.getMessage());
+        }
+        return null;
+    }
 
     @NotNull
     private List<Offer> getListingOffers(PreparedStatement stmt) throws SQLException {

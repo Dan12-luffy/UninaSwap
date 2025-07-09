@@ -8,8 +8,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" styleClass="main-container" stylesheets="@../guiCSS/makeoffer-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.MakeOfferController">
     <top>
@@ -40,7 +41,7 @@
                                 <!-- Sezione immagine -->
                                 <VBox alignment="CENTER" styleClass="image-section">
                                     <children>
-                                        <VBox alignment="CENTER" styleClass="main-image-container">
+                                        <VBox alignment="CENTER" styleClass="main-image-container" translateX="-11.0">
                                             <children>
                                                 <ImageView fx:id="productImageView" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" styleClass="product-main-image" />
                                                 <Label fx:id="noImageLabel" managed="false" styleClass="no-image-label" text="Nessuna immagine disponibile" visible="false" />
@@ -50,7 +51,7 @@
                                 </VBox>
 
                                 <!-- Sezione offerta -->
-                                <VBox alignment="CENTER" spacing="20.0" styleClass="offer-section">
+                                <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" styleClass="offer-section" translateX="-15.0">
                                     <children>
                                         <Label styleClass="section-title-large" text="La Tua Offerta" />
 
@@ -88,17 +89,20 @@
                             <!-- Colonna destra - dettagli prodotto -->
                             <VBox spacing="20.0" styleClass="right-column">
                                 <children>
-                                    <VBox styleClass="product-details-section">
+                                    <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="157.0" prefWidth="289.0" styleClass="product-details-section">
                                         <children>
                                             <Label fx:id="productTitleLabel" styleClass="product-title" text="Nome Prodotto" wrapText="true" />
                                             <Region prefHeight="15.0" />
                                             <Label styleClass="section-title" text="Descrizione" />
                                             <Region prefHeight="5.0" />
-                                            <Label fx:id="productDescriptionLabel" styleClass="product-description" text="Descrizione dettagliata del prodotto..." wrapText="true" />
+                                            <Label fx:id="productDescriptionLabel" prefHeight="45.0" prefWidth="247.0" styleClass="product-description" text="Descrizione dettagliata del prodotto..." wrapText="true">
+                                    <font>
+                                       <Font size="12.0" />
+                                    </font></Label>
                                         </children>
                                     </VBox>
 
-                                    <VBox styleClass="seller-section">
+                                    <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="122.0" prefWidth="289.0" styleClass="seller-section">
                                         <children>
                                             <Label styleClass="section-title" text="Informazioni Venditore" />
                                             <Region prefHeight="10.0" />

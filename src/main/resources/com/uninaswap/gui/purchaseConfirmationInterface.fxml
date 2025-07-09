@@ -17,15 +17,15 @@
             <children>
                 <HBox alignment="CENTER_LEFT" prefHeight="70.0" styleClass="header-bar">
                     <padding>
-                        <Insets left="20.0" right="20.0"/>
+                        <Insets left="20.0" right="20.0" />
                     </padding>
                     <children>
-                        <Label styleClass="page-title" text="Conferma Acquisto"/>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#onCancelPurchase" styleClass="back-button" text="← Indietro"/>
+                        <Label styleClass="page-title" text="Conferma Acquisto" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#onCancelPurchase" styleClass="back-button" text="← Indietro" />
                     </children>
                 </HBox>
-                <Region prefHeight="3.0" styleClass="header-divider"/>
+                <Region prefHeight="3.0" styleClass="header-divider" />
             </children>
         </VBox>
     </top>
@@ -35,7 +35,7 @@
             <content>
                 <VBox alignment="TOP_CENTER" spacing="30.0" styleClass="main-content">
                     <padding>
-                        <Insets bottom="40.0" left="40.0" right="40.0" top="30.0"/>
+                        <Insets bottom="40.0" left="40.0" right="40.0" top="30.0" />
                     </padding>
                     <children>
                         <!-- Main container -->
@@ -44,21 +44,21 @@
                             <!-- Left column - product image -->
                             <VBox alignment="TOP_CENTER" prefWidth="350.0" spacing="20.0" styleClass="left-column">
                                 <!-- Product image section -->
-                                <StackPane styleClass="main-image-container">
-                                    <ImageView fx:id="productImageView" fitHeight="280.0" fitWidth="280.0" pickOnBounds="true" preserveRatio="true" styleClass="product-main-image"/>
+                                <StackPane prefHeight="314.0" prefWidth="315.0" styleClass="main-image-container" translateX="-25.0">
+                                    <ImageView fx:id="productImageView" fitHeight="280.0" fitWidth="280.0" pickOnBounds="true" preserveRatio="true" styleClass="product-main-image" />
                                     <!-- Rimosso fx:id da noImageLabel perché non esiste nel controller -->
-                                    <Label managed="false" styleClass="no-image-label" text="Immagine non disponibile" visible="false"/>
+                                    <Label managed="false" styleClass="no-image-label" text="Immagine non disponibile" visible="false" />
                                 </StackPane>
 
                                 <!-- Product title -->
                                 <VBox alignment="CENTER" spacing="5.0" styleClass="product-title-container">
-                                    <Label fx:id="titleLabel" styleClass="product-title" text="Nome Prodotto" wrapText="true"/>
+                                    <Label fx:id="titleLabel" styleClass="product-title" text="Nome Prodotto" translateX="-30.0" wrapText="true" />
                                 </VBox>
 
                                 <!-- Description preview -->
                                 <VBox styleClass="description-preview">
-                                    <Label styleClass="section-title" text="Descrizione"/>
-                                    <Label fx:id="descriptionLabel" styleClass="description-text" text="Descrizione prodotto..." wrapText="true"/>
+                                    <Label styleClass="section-title" text="Descrizione" />
+                                    <Label fx:id="descriptionLabel" prefHeight="101.0" prefWidth="247.0" styleClass="description-text" text="Descrizione prodotto..." wrapText="true" />
                                 </VBox>
                             </VBox>
 
@@ -66,53 +66,53 @@
                             <VBox alignment="TOP_CENTER" prefWidth="350.0" spacing="25.0" styleClass="right-column">
                                 <!-- Purchase confirmation card -->
                                 <VBox alignment="CENTER" spacing="20.0" styleClass="purchase-confirmation-card">
-                                    <Label styleClass="section-title-large" text="Riepilogo Acquisto"/>
+                                    <Label styleClass="section-title-large" text="Riepilogo Acquisto" />
 
                                     <!-- Price section -->
                                     <VBox alignment="CENTER" spacing="5.0" styleClass="price-section">
-                                        <Label styleClass="price-label" text="Prezzo finale:"/>
-                                        <Label fx:id="priceLabel" styleClass="price-value" text="€0.00"/>
+                                        <Label styleClass="price-label" text="Prezzo finale:" />
+                                        <Label fx:id="priceLabel" styleClass="price-value" text="€0.00" />
                                     </VBox>
 
                                     <!-- Seller info -->
                                     <VBox styleClass="seller-section">
-                                        <Label styleClass="section-title" text="Informazioni Venditore"/>
+                                        <Label styleClass="section-title" text="Informazioni Venditore" />
                                         <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="seller-info">
                                             <VBox alignment="CENTER" styleClass="seller-avatar">
-                                                <Label styleClass="avatar-placeholder" text="V"/>
+                                                <Label styleClass="avatar-placeholder" text="V" />
                                             </VBox>
                                             <VBox spacing="2.0">
                                                 <!-- CAMBIATO: da sellerNameLabel a sellerLabel per corrispondere al controller -->
-                                                <Label fx:id="sellerLabel" styleClass="seller-name" text="Nome Venditore"/>
+                                                <Label fx:id="sellerLabel" styleClass="seller-name" text="Nome Venditore" />
                                                 <!-- Rimosso fx:id perché non esistono nel controller -->
-                                                <Label styleClass="seller-rating" text="⭐ 4.5/5"/>
-                                                <Label styleClass="seller-joined" text="Membro dal 2023"/>
+                                                <Label styleClass="seller-rating" text="⭐ 4.5/5" />
+                                                <Label styleClass="seller-joined" text="Membro dal 2023" />
                                             </VBox>
                                         </HBox>
                                     </VBox>
 
                                     <!-- Important notes -->
                                     <VBox spacing="10.0" styleClass="important-notes">
-                                        <Label styleClass="notes-title" text="Informazioni Importanti"/>
+                                        <Label styleClass="notes-title" text="Informazioni Importanti" />
                                         <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="note-item">
-                                            <Label styleClass="note-icon" text="✓"/>
-                                            <Label styleClass="note-text" text="Acquisto sicuro tramite piattaforma UninaSwap" wrapText="true"/>
+                                            <Label styleClass="note-icon" text="✓" />
+                                            <Label styleClass="note-text" text="Acquisto sicuro tramite piattaforma UninaSwap" wrapText="true" />
                                         </HBox>
                                         <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="note-item">
-                                            <Label styleClass="note-icon" text="✓"/>
-                                            <Label styleClass="note-text" text="Contatto diretto con il venditore" wrapText="true"/>
+                                            <Label styleClass="note-icon" text="✓" />
+                                            <Label styleClass="note-text" text="Contatto diretto con il venditore" wrapText="true" />
                                         </HBox>
                                         <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="note-item">
-                                            <Label styleClass="note-icon" text="⚠"/>
-                                            <Label styleClass="note-warning" text="L'acquisto è definitivo - Non sono previsti rimborsi" wrapText="true"/>
+                                            <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="note-icon" text="⚠" />
+                                            <Label styleClass="note-warning" text="L'acquisto è definitivo - Non sono previsti rimborsi" wrapText="true" />
                                         </HBox>
                                     </VBox>
                                 </VBox>
 
                                 <!-- Confirmation button -->
                                 <VBox alignment="CENTER" spacing="15.0" styleClass="button-section">
-                                    <Button fx:id="confirmButton" defaultButton="true" mnemonicParsing="false" onAction="#onConfirmPurchase" prefHeight="45.0" prefWidth="200.0" styleClass="confirm-button" text="Conferma Acquisto"/>
-                                    <Label styleClass="reassurance-text" text="Cliccando su Conferma Acquisto, accetti i termini e le condizioni di UninaSwap" wrapText="true"/>
+                                    <Button fx:id="confirmButton" defaultButton="true" mnemonicParsing="false" onAction="#onConfirmPurchase" prefHeight="45.0" prefWidth="200.0" styleClass="confirm-button" text="Conferma Acquisto" />
+                                    <Label styleClass="reassurance-text" text="Cliccando su Conferma Acquisto, accetti i termini e le condizioni di UninaSwap" wrapText="true" />
                                 </VBox>
                             </VBox>
                         </HBox>

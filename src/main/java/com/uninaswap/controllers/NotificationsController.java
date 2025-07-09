@@ -66,11 +66,19 @@ public class NotificationsController implements Initializable {
     private void loadUserOffers() throws SQLException {
         notificationsContainer.getChildren().clear();
         List<Offer> offers = offerDao.findOffersToCurrentUser();
+        List<Offer> rejectedOffers = offerDao.findRejectedOffersForCurrentUser();
 
-        notificationsCountLabel.setText(offers.size() + " nuove offerte");
+        int totalNotifications = offers.size() + rejectedOffers.size();
+        notificationsCountLabel.setText(totalNotifications + " notifiche");
+
         for (Offer offer : offers) {
             VBox offerCard = createOfferCard(offer);
             notificationsContainer.getChildren().add(offerCard);
+        }
+
+        for (Offer rejectedOffer : rejectedOffers) {
+            VBox rejectedOfferCard = createRejectedOfferCard(rejectedOffer);
+            notificationsContainer.getChildren().add(rejectedOfferCard);
         }
     }
 
@@ -127,6 +135,97 @@ public class NotificationsController implements Initializable {
         card.getChildren().add(content);
 
         return card;
+    }
+
+    private VBox createRejectedOfferCard(Offer offer) throws SQLException {
+        VBox card = new VBox();
+        card.setStyle("-fx-effect: none !important; -fx-background-insets: 0; -fx-border-color: #ff6b6b; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-padding: 12;");
+
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(16);
+
+        VBox offerContent = new VBox();
+        offerContent.setSpacing(8);
+        HBox.setHgrow(offerContent, Priority.ALWAYS);
+
+        Listing listing = listingService.getListingByID(offer.getListingID());
+
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.setSpacing(10);
+        header.setPadding(new Insets(0, 0, 4, 0));
+
+        Label statusLabel = new Label("OFFERTA RIFIUTATA");
+        statusLabel.getStyleClass().add("notification-type");
+        statusLabel.setStyle("-fx-text-fill: #ff6b6b;");
+
+        Label dateLabel = new Label(getTimeAgo(offer.getOfferDate()));
+        dateLabel.getStyleClass().add("notification-time");
+
+        header.getChildren().addAll(statusLabel, dateLabel);
+
+        Label titleLabel = new Label("La tua offerta per '" + listing.getTitle() + "' è stata rifiutata");
+        titleLabel.getStyleClass().add("notification-title");
+
+        Label descriptionLabel = new Label("Offerta: " + formatAmount(offer.getAmount()) +
+                " - Prezzo richiesto: " + formatAmount(listing.getPrice().doubleValue()));
+        descriptionLabel.getStyleClass().add("notification-description");
+
+        Region verticalSpacer = new Region();
+        verticalSpacer.setPrefHeight(8);
+
+        HBox actions = createRejectedOfferActions(offer, listing);
+
+        offerContent.getChildren().addAll(header, titleLabel, descriptionLabel, verticalSpacer, actions);
+        content.getChildren().add(offerContent);
+        card.getChildren().add(content);
+
+        return card;
+    }
+    private HBox createRejectedOfferActions(Offer offer, Listing listing) {
+        HBox actions = new HBox();
+        actions.setSpacing(10);
+        actions.getStyleClass().add("notification-actions");
+        actions.setPadding(new Insets(4, 0, 0, 0));
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button dismissButton = new Button("Rimuovi");
+        dismissButton.getStyleClass().add("decline-button");
+        dismissButton.setOnAction(e -> handleDismissOffer(offer.getOfferID()));
+
+        Button retryButton = new Button("Nuova Offerta");
+        retryButton.getStyleClass().add("accept-button");
+        retryButton.setOnAction(e -> handleRetryOffer(e, listing));
+
+        actions.getChildren().addAll(spacer, dismissButton, retryButton);
+
+        return actions;
+    }
+    private void handleDismissOffer(int offerId) {
+        try {
+            offerDao.deleteOffer(offerId);
+            loadUserOffers();
+            ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
+                    "Offerta rimossa", "L'offerta è stata rimossa dalla lista.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
+                    "Impossibile rimuovere l'offerta: " + e.getMessage());
+        }
+    }
+
+    private void handleRetryOffer(ActionEvent event, Listing listing) {
+        try {
+            // Naviga alla pagina di dettaglio del prodotto per fare una nuova offerta
+            NavigationService.getInstance().navigateToMakeOfferView(event, listing);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
+                    "Impossibile aprire la pagina del prodotto: " + e.getMessage());
+        }
     }
 
     private String getNotificationTypeFromListing(typeListing type) {
@@ -193,7 +292,7 @@ public class NotificationsController implements Initializable {
         declineButton.setOnAction(e -> handleDeclineOffer(e, offer.getOfferID()));
 
         String acceptButtonText = switch (listingType) {
-            case GIFT -> "Dona";
+            case GIFT -> "Regala";
             case EXCHANGE -> "Accetta Scambio";
             case SALE -> "Accetta";
             case UNDEFINED -> null;
