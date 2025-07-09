@@ -90,6 +90,12 @@ public class OfferService {
     public Offer getOfferById(int offerId) throws Exception {
         return offerDao.findOfferById(offerId);
     }
+    public List<Offer> getOffersToCurrentUser() throws Exception {
+        return offerDao.findOffersToCurrentUser();
+    }
+    public List<Offer> getRejectedOffersForCurrentUser() throws Exception {
+        return offerDao.findRejectedOffersForCurrentUser();
+    }
 
     public Listing getListingByOfferId(int offerId) throws Exception {
         Offer offer = offerDao.findOfferById(offerId);
@@ -98,4 +104,5 @@ public class OfferService {
         }
         return null;
     }
+
 }

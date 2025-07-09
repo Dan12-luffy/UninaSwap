@@ -6,6 +6,7 @@ import com.uninaswap.dao.ListingDao;
 import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.databaseUtils.FilterCriteria;
 import com.uninaswap.model.Listing;
+import com.uninaswap.model.Offer;
 import com.uninaswap.model.User;
 import com.uninaswap.model.typeListing;
 import com.uninaswap.services.*;
@@ -74,24 +75,25 @@ public class MainController {
     @FXML private Label resultsCountLabel;
     @FXML private Label maxPriceLabel;
     @FXML private Label minPriceLabel;
-    @FXML private CheckBox computerScienceCeck;
-    @FXML private CheckBox scienceCeck;
-    @FXML private CheckBox mathCeck;
-    @FXML private CheckBox economyCeck;
-    @FXML private CheckBox artCeck;
-    @FXML private CheckBox medicineCeck;
-    @FXML private CheckBox biologyCeck;
-    @FXML private CheckBox philosophyCeck;
-    @FXML private CheckBox geographyCeck;
-    @FXML private CheckBox psicologyCeck;
-    @FXML private CheckBox chemistryCeck;
-    @FXML private CheckBox astronomyCeck;
-    @FXML private CheckBox tourismCeck;
-    @FXML private CheckBox linguisticsCeck;
-    @FXML private CheckBox musicCeck;
-    @FXML private CheckBox saleCeck;
-    @FXML private CheckBox swapCeck;
-    @FXML private CheckBox giftCeck;
+    @FXML private Label notificationCountLabel;
+    @FXML private CheckBox computerScienceCheck;
+    @FXML private CheckBox scienceCheck;
+    @FXML private CheckBox mathCheck;
+    @FXML private CheckBox economyCheck;
+    @FXML private CheckBox artCheck;
+    @FXML private CheckBox medicineCheck;
+    @FXML private CheckBox biologyCheck;
+    @FXML private CheckBox philosophyCheck;
+    @FXML private CheckBox geographyCheck;
+    @FXML private CheckBox psicologyCheck;
+    @FXML private CheckBox chemistryCheck;
+    @FXML private CheckBox astronomyCheck;
+    @FXML private CheckBox tourismCheck;
+    @FXML private CheckBox linguisticsCheck;
+    @FXML private CheckBox musicCheck;
+    @FXML private CheckBox saleCheck;
+    @FXML private CheckBox swapCheck;
+    @FXML private CheckBox giftCheck;
 
 
 
@@ -103,13 +105,20 @@ public class MainController {
     private final UserSession userSession = UserSession.getInstance();
     private final FilterService filterService = FilterService.getInstance();
     private final ValidationService validationService = ValidationService.getInstance();
+    private final OfferService offerService = OfferService.getInstance();
 
     @FXML
-    private void initialize() {
+    private void initialize() throws Exception {
         User currentUser = userSession.getCurrentUser();
         if (currentUser != null) {
             this.usernameLabel.setText("Ciao " + currentUser.getUsername());
         }
+        //Aggiorna il contatore delle notifiche
+        List<Offer> offers = offerService.getOffersToCurrentUser();
+        List<Offer> rejectedOffers = offerService.getRejectedOffersForCurrentUser();
+        int totalNotifications = offers.size() + rejectedOffers.size();
+        this.notificationCountLabel.setText(String.valueOf(totalNotifications));
+
         this.sortComboBox.getItems().addAll("Più recenti", "Prezzo crescente", "Prezzo decrescente");
         this.sortComboBox.setValue("Più recenti");
         conditionToggleGroupSettings();
@@ -206,33 +215,6 @@ public class MainController {
             validationService.showInvalidPriceError();
         }
     }
-
-    /*private void displayFilteredListings(List<Listing> listings) {
-        if (!listings.isEmpty()) {
-            int column = 0;
-            int row = 0;
-            for (Listing listing : listings) {
-                VBox itemCard = createItemCard(listing);
-                itemsGrid.add(itemCard, column, row);
-
-                column++;
-
-                if (column > 3) {  // Max 4 columns
-                    column = 0;
-                    row++;
-                }
-            }
-
-            if (listings.size() == 1) {
-                resultsCountLabel.setText("Trovato 1 articolo");
-            } else {
-                resultsCountLabel.setText("Trovati " + listings.size() + " articoli");
-            }
-        } else {
-            resultsCountLabel.setText("Trovati 0 articoli");
-        }
-    }*/
-
 
     private void setupItemGrid() {
         this.itemsGrid.getChildren().clear();
@@ -383,21 +365,21 @@ public class MainController {
 
         // Get faculty filter values
         List<String> selectedFaculties = new ArrayList<>();
-        if (this.computerScienceCeck.isSelected()) selectedFaculties.add("Informatica");
-        if(this.scienceCeck.isSelected()) selectedFaculties.add("Scienze");
-        if (this.mathCeck.isSelected()) selectedFaculties.add("Matematica");
-        if (this.economyCeck.isSelected()) selectedFaculties.add("Economia");
-        if (this.artCeck.isSelected()) selectedFaculties.add("Arte");
-        if (this.medicineCeck.isSelected()) selectedFaculties.add("Medicina");
-        if (this.biologyCeck.isSelected()) selectedFaculties.add("Biologia");
-        if (this.philosophyCeck.isSelected()) selectedFaculties.add("Filosofia");
-        if (this.geographyCeck.isSelected()) selectedFaculties.add("Geografia");
-        if (this.psicologyCeck.isSelected()) selectedFaculties.add("Psicologia");
-        if (this.chemistryCeck.isSelected()) selectedFaculties.add("Chimica");
-        if (this.astronomyCeck.isSelected()) selectedFaculties.add("Astronomia");
-        if (this.tourismCeck.isSelected()) selectedFaculties.add("Turismo");
-        if (this.linguisticsCeck.isSelected()) selectedFaculties.add("Linguistica");
-        if (this.musicCeck.isSelected()) selectedFaculties.add("Musica");
+        if (this.computerScienceCheck.isSelected()) selectedFaculties.add("Informatica");
+        if(this.scienceCheck.isSelected()) selectedFaculties.add("Scienze");
+        if (this.mathCheck.isSelected()) selectedFaculties.add("Matematica");
+        if (this.economyCheck.isSelected()) selectedFaculties.add("Economia");
+        if (this.artCheck.isSelected()) selectedFaculties.add("Arte");
+        if (this.medicineCheck.isSelected()) selectedFaculties.add("Medicina");
+        if (this.biologyCheck.isSelected()) selectedFaculties.add("Biologia");
+        if (this.philosophyCheck.isSelected()) selectedFaculties.add("Filosofia");
+        if (this.geographyCheck.isSelected()) selectedFaculties.add("Geografia");
+        if (this.psicologyCheck.isSelected()) selectedFaculties.add("Psicologia");
+        if (this.chemistryCheck.isSelected()) selectedFaculties.add("Chimica");
+        if (this.astronomyCheck.isSelected()) selectedFaculties.add("Astronomia");
+        if (this.tourismCheck.isSelected()) selectedFaculties.add("Turismo");
+        if (this.linguisticsCheck.isSelected()) selectedFaculties.add("Linguistica");
+        if (this.musicCheck.isSelected()) selectedFaculties.add("Musica");
 
         // Set faculty filter if any selected
         if (!selectedFaculties.isEmpty()) {
@@ -407,9 +389,9 @@ public class MainController {
         }
         //Get type filter values
         List<typeListing> selectedTypes = new ArrayList<>();
-        if (this.saleCeck.isSelected()) selectedTypes.add(typeListing.SALE);
-        if (this.swapCeck.isSelected()) selectedTypes.add(typeListing.EXCHANGE);
-        if (this.giftCeck.isSelected()) selectedTypes.add(typeListing.GIFT);
+        if (this.saleCheck.isSelected()) selectedTypes.add(typeListing.SALE);
+        if (this.swapCheck.isSelected()) selectedTypes.add(typeListing.EXCHANGE);
+        if (this.giftCheck.isSelected()) selectedTypes.add(typeListing.GIFT);
 
         if(!selectedTypes.isEmpty()) {
             this.currentFilter.setTypes(selectedTypes);
