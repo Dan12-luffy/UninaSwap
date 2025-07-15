@@ -1,7 +1,5 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.dao.OfferDao;
-import com.uninaswap.dao.OfferDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
@@ -47,7 +45,6 @@ public class NotificationsController implements Initializable {
     @FXML private Button acceptSwap1;
     @FXML private VBox noMoreNotifications;
 
-    private final OfferDao offerDao = new OfferDaoImpl();
     private final OfferService offerService = OfferService.getInstance();
     private final ListingService listingService = ListingService.getInstance();
     private final UserService userService = UserService.getInstance();
@@ -58,15 +55,15 @@ public class NotificationsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             loadUserOffers();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void loadUserOffers() throws SQLException {
+    private void loadUserOffers() throws Exception {
         notificationsContainer.getChildren().clear();
-        List<Offer> offers = offerDao.findOffersToCurrentUser();
-        List<Offer> rejectedOffers = offerDao.findRejectedOffersForCurrentUser();
+        List<Offer> offers = offerService.getOffersToCurrentUser();
+        List<Offer> rejectedOffers = offerService.getRejectedOffersForCurrentUser();
 
         int totalNotifications = offers.size() + rejectedOffers.size();
         notificationsCountLabel.setText(totalNotifications + " notifiche");
@@ -206,7 +203,7 @@ public class NotificationsController implements Initializable {
     }
     private void handleDismissOffer(int offerId) {
         try {
-            offerDao.updateOfferStatus(offerId, InsertionStatus.DISMISSED);
+            offerService.updateOfferStatus(offerId, InsertionStatus.DISMISSED);
             loadUserOffers();
             ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                     "Offerta rimossa", "L'offerta è stata rimossa dalla lista.");
@@ -344,7 +341,7 @@ public class NotificationsController implements Initializable {
 
     private void handleAcceptOffer(ActionEvent event, int offerId) {
         try {
-            Offer offer = offerDao.findOfferById(offerId);
+            Offer offer = offerService.getOfferById(offerId);
             Insertion insertion = listingService.getListingByID(offer.getListingID());
             User buyer = userService.getUserById(offer.getUserID());
 
@@ -373,7 +370,7 @@ public class NotificationsController implements Initializable {
             }
 
             // Aggiorna lo status dell'offerta e del listing
-            offerDao.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
+            offerService.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
             listingService.updateListingStatus(insertion.getInsertionID(), InsertionStatus.SOLD);
 
             loadUserOffers();
@@ -397,7 +394,7 @@ public class NotificationsController implements Initializable {
             for (OfferedItem item : offeredItems) {
                 OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
             }
-            offerDao.updateOfferStatus(offerId, InsertionStatus.REJECTED);
+            offerService.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
             loadUserOffers();
             ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Offerta rifiutata", "L'offerta è stata rifiutata con successo.");
         } catch (Exception e) {
