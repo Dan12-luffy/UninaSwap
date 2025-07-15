@@ -2,8 +2,8 @@ package com.uninaswap.services;
 
 import com.uninaswap.dao.OfferDao;
 import com.uninaswap.dao.OfferDaoImpl;
-import com.uninaswap.model.Listing;
-import com.uninaswap.model.ListingStatus;
+import com.uninaswap.model.Insertion;
+import com.uninaswap.model.InsertionStatus;
 import com.uninaswap.model.Offer;
 import com.uninaswap.model.User;
 
@@ -58,7 +58,7 @@ public class OfferService {
             if (offer == null) {
                 return false;
             }
-            offerDao.updateOfferStatus(offerId, ListingStatus.ACCEPTED);
+            offerDao.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,7 +74,7 @@ public class OfferService {
             if (offer == null) {
                 return false;
             }
-            offerDao.updateOfferStatus(offerId, ListingStatus.REJECTED);
+            offerDao.updateOfferStatus(offerId, InsertionStatus.REJECTED);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -97,12 +97,17 @@ public class OfferService {
         return offerDao.findRejectedOffersForCurrentUser();
     }
 
-    public Listing getListingByOfferId(int offerId) throws Exception {
+    public Insertion getListingByOfferId(int offerId) throws Exception {
         Offer offer = offerDao.findOfferById(offerId);
         if (offer != null) {
             return ListingService.getInstance().getListingByID(offer.getListingID());
         }
         return null;
     }
-
+    public void updateOffer(int offerId, String title, String description, int categoryId, double price) throws Exception {
+        offerDao.updateOffer(offerId, title, description, categoryId, price);
+    }
+    public void updateOfferStatus(int offerId, InsertionStatus status) throws Exception {
+        offerDao.updateOfferStatus(offerId, status);
+    }
 }

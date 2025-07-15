@@ -10,15 +10,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListingDaoImpl implements ListingDao {
+public class InsertionDaoImpl implements InsertionDao {
 
     @Override
-    public void insert(Listing listing) throws SQLException {
-        String sql = "INSERT INTO listings (title, imageUrl, description, type, price, status, publishDate, userId, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void insert(Insertion insertion) throws SQLException {
+        String sql = "INSERT INTO insertion (title, imageUrl, description, type, price, status, publishDate, userId, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            System.out.println("Attendint to insert listing "+ listing.getTitle());
-            populateListingStatement(stmt, listing);
+            System.out.println("Attempting to insert listing " + insertion.getTitle());
+            populateInsertionStatement(stmt, insertion);
             int rowsAffected = stmt.executeUpdate();
             System.out.println("Rows affected: " + rowsAffected);
             if (rowsAffected > 0) {
@@ -26,42 +26,41 @@ public class ListingDaoImpl implements ListingDao {
             } else {
                 System.out.println("No rows inserted. Check your data.");
             }
-
         } catch (SQLException e) {
             logDatabaseError("Insert", e);
+            throw e;
         }
     }
 
-    public void delete(int listingId) {
-        String sql = "DELETE FROM listings WHERE listingId = ?";
+    public void delete(int insertionID) {
+        String sql = "DELETE FROM insertion WHERE insertionid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, listingId);
+            stmt.setInt(1, insertionID);
             stmt.executeUpdate();
         } catch (SQLException e) {
             logDatabaseError("Delete", e);
         }
     }
 
-    public void update(Listing listing) {
-        String sql = "UPDATE listings SET title = ?, imageUrl = ?, description = ?, type = ?, price = ?, status = ?, publishDate = ?, userId = ?, category_id = ? WHERE listingId = ?";
+    public void update(Insertion insertion) {
+        String sql = "UPDATE insertion SET title = ?, imageUrl = ?, description = ?, type = ?, price = ?, status = ?, publishDate = ?, userId = ?, category_id = ? WHERE insertionid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            populateListingStatement(stmt, listing);
+            populateInsertionStatement(stmt, insertion);
+            stmt.setInt(10, insertion.getInsertionID());
             stmt.executeUpdate();
         } catch (SQLException e) {
             logDatabaseError("Update", e);
         }
-
     }
 
     @Override
-    public List<Listing> findAll() throws SQLException {
-        List<Listing> listings = new ArrayList<>();
-        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
-                "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "ORDER BY l.publishDate DESC";
+    public List<Insertion> findAll() throws SQLException {
+        List<Insertion> insertions = new ArrayList<>();
+        String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
+                "LEFT JOIN category c ON i.category_id = c.category_id " +
+                "ORDER BY i.publishDate DESC";
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -69,51 +68,49 @@ public class ListingDaoImpl implements ListingDao {
 
             while (rs.next()) {
                 try {
-                    Listing listing = createListingFromResultSet(rs);
-                    listings.add(listing);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    Insertion insertion = createListingFromResultSet(rs);
+                    insertions.add(insertion);
+                } catch (SQLException e) {
+                    logDatabaseError("FindAll", e);
                     System.err.println("Errore nel processare la lista " + e.getMessage());
                 }
             }
         }
-        return listings;
+        return insertions;
     }
+
     @Override
-    public List<Listing> findByFilters(FilterCriteria criteria) throws SQLException {
+    public List<Insertion> findByFilters(FilterCriteria criteria) throws SQLException {
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT l.*, c.name as category_name FROM listings l ");
-        sql.append("LEFT JOIN category c ON l.category_id = c.category_id ");
-        sql.append("LEFT JOIN users u ON l.userId = u.userId ");
+        sql.append("SELECT i.*, c.name as category_name FROM insertion i ");
+        sql.append("LEFT JOIN category c ON i.category_id = c.category_id ");
+        sql.append("LEFT JOIN users u ON i.userId = u.userId ");
         sql.append("WHERE 1=1 ");
 
         List<Object> parameters = new ArrayList<>();
 
-        // Filtro per stato (sempre AVAILABLE se non specificato)
         if (criteria.getStatus() != null) {
-            sql.append("AND l.status = ? ");
+            sql.append("AND i.status = ? ");
             parameters.add(criteria.getStatus());
         } else {
-            sql.append("AND l.status = 'AVAILABLE' ");
+            sql.append("AND i.status = 'AVAILABLE' ");
         }
 
-        // Esclude l'utente corrente se specificato
         if (criteria.getExcludeUserId() != null) {
-            sql.append("AND l.userid != ? ");
+            sql.append("AND i.userid != ? ");
             parameters.add(criteria.getExcludeUserId());
         }
-        //Filtro per testo
+
         if (criteria.hasTextSearch()) {
-            sql.append("AND (LOWER(l.title) LIKE LOWER(?) OR LOWER(l.description) LIKE LOWER(?)) ");
+            sql.append("AND (LOWER(i.title) LIKE LOWER(?) OR LOWER(i.description) LIKE LOWER(?)) ");
             String searchPattern = "%" + criteria.getSearchText() + "%";
             parameters.add(searchPattern);
             parameters.add(searchPattern);
         }
 
-        // Filtro per categorie multiple
         if (criteria.hasCategoryFilter() && !criteria.getCategoryIds().contains(-1)) {
-            sql.append("AND l.category_id IN (");
-            for (int i = 0; i < criteria.getCategoryIds().size(); i++) {
+            sql.append("AND i.category_id IN (");
+            for (int i = 0; i < criteria.getCategoryIds().size(); ++i) {
                 sql.append("?");
                 if (i < criteria.getCategoryIds().size() - 1) {
                     sql.append(",");
@@ -123,18 +120,17 @@ public class ListingDaoImpl implements ListingDao {
             parameters.addAll(criteria.getCategoryIds());
         }
 
-        // Filtro per prezzo
         if (criteria.hasPriceFilter()) {
             if (criteria.getMinPrice() != null) {
-                sql.append("AND l.price >= ? ");
+                sql.append("AND i.price >= ? ");
                 parameters.add(criteria.getMinPrice());
             }
             if (criteria.getMaxPrice() != null) {
-                sql.append("AND l.price <= ? ");
+                sql.append("AND i.price <= ? ");
                 parameters.add(criteria.getMaxPrice());
             }
         }
-        //Filtro per facoltà
+
         if (criteria.hasFacultyFilter()) {
             sql.append("AND u.faculty IN (");
             for (int i = 0; i < criteria.getFacultyNames().size(); i++) {
@@ -146,37 +142,36 @@ public class ListingDaoImpl implements ListingDao {
             sql.append(") ");
             parameters.addAll(criteria.getFacultyNames());
         }
-        // Filtro per tipo
+
         if(criteria.hasTypeListingFilter()) {
-            sql.append("AND l.type IN (");
-            for (int i = 0; i < criteria.getTypes().size(); i++) {
+            sql.append("AND i.type IN (");
+            for (int i = 0; i < criteria.getTypes().size(); ++i) {
                 sql.append("?");
                 if (i < criteria.getTypes().size() - 1) {
                     sql.append(",");
                 }
             }
             sql.append(") ");
-            //A quanto pare java non prende gli enum come paramentri per le query, quindi li devo convertire in stringhe
-            for (typeListing type : criteria.getTypes()) {
+            for (typeInsertion type : criteria.getTypes()) {
                 parameters.add(type.name());
             }
         }
 
-        // Ordinamento
         sql.append("ORDER BY ");
         if ("price_asc".equals(criteria.getSortBy())) {
-            sql.append("l.price ASC ");
+            sql.append("i.price ASC ");
         } else if ("price_desc".equals(criteria.getSortBy())) {
-            sql.append("l.price DESC ");
+            sql.append("i.price DESC ");
         } else {
-            sql.append("l.publishDate DESC "); // Default: più recenti
+            sql.append("i.publishDate DESC ");
         }
 
         return executeFilterQuery(sql.toString(), parameters);
     }
+
     @Override
     public BigDecimal getMaxPrice() throws SQLException {
-        String sql = "SELECT MAX(price) as max_price FROM listings WHERE status = 'AVAILABLE' AND price IS NOT NULL";
+        String sql = "SELECT MAX(price) as max_price FROM insertion WHERE status = 'AVAILABLE' AND price IS NOT NULL";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -191,7 +186,7 @@ public class ListingDaoImpl implements ListingDao {
 
     @Override
     public BigDecimal getMinPrice() throws SQLException {
-        String sql = "SELECT MIN(price) as min_price FROM listings WHERE status = 'AVAILABLE' AND price IS NOT NULL AND price > 0";
+        String sql = "SELECT MIN(price) as min_price FROM insertion WHERE status = 'AVAILABLE' AND price IS NOT NULL AND price > 0";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -205,12 +200,12 @@ public class ListingDaoImpl implements ListingDao {
     }
 
     @Override
-    public void updateListingStatus(int listingId, ListingStatus status) throws SQLException {
-        String sql = "UPDATE listings SET status = ? WHERE listingId = ?";
+    public void updateListingStatus(int insertionID, InsertionStatus status){
+        String sql = "UPDATE insertion SET status = ? WHERE insertionid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, status.name());
-            stmt.setInt(2, listingId);
+            stmt.setInt(2, insertionID);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Stato dell'inserzione aggiornato con successo.");
@@ -221,60 +216,62 @@ public class ListingDaoImpl implements ListingDao {
             logDatabaseError("Update Status", e);
         }
     }
+
     @Override
-    public List<Listing> findInsertionsExcludingCurrentUser() throws SQLException {
-        List<Listing> listings = new ArrayList<>();
-        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
-                "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE l.status = 'AVAILABLE' AND l.userid != ? " +
-                "ORDER BY l.publishDate DESC";
+    public List<Insertion> findInsertionsExcludingCurrentUser() throws SQLException {
+        List<Insertion> insertions = new ArrayList<>();
+        String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
+                "LEFT JOIN category c ON i.category_id = c.category_id " +
+                "WHERE i.status = 'AVAILABLE' AND i.userid != ? " +
+                "ORDER BY i.publishDate DESC";
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, UserSession.getInstance().getCurrentUser().getId());
-
-            executeQueryAndCreateTheList(listings, stmt);
+            executeQueryAndCreateTheList(insertions, stmt);
         }
-        return listings;
+        return insertions;
     }
+
     @Override
-    public List<Listing> findCurrentUserAvailableInsertions() throws SQLException {
-        List<Listing> listings = new ArrayList<>();
-        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
-                "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE l.status = 'AVAILABLE' AND l.userid = ? " +
-                "ORDER BY l.publishDate DESC";
+    public List<Insertion> findCurrentUserAvailableInsertions() throws SQLException {
+        List<Insertion> insertions = new ArrayList<>();
+        String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
+                "LEFT JOIN category c ON i.category_id = c.category_id " +
+                "WHERE i.status = 'AVAILABLE' AND i.userid = ? " +
+                "ORDER BY i.publishDate DESC";
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, UserSession.getInstance().getCurrentUser().getId());
-            executeQueryAndCreateTheList(listings, stmt);
+            executeQueryAndCreateTheList(insertions, stmt);
         }
-        return listings;
+        return insertions;
     }
+
     @Override
-    public List<Listing> findCurrentUserInsertions() throws SQLException {
-        List<Listing> listings = new ArrayList<>();
-        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
-                "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE l.userid = ? " +
-                "ORDER BY l.publishDate DESC";
+    public List<Insertion> findCurrentUserInsertions() throws SQLException {
+        List<Insertion> insertions = new ArrayList<>();
+        String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
+                "LEFT JOIN category c ON i.category_id = c.category_id " +
+                "WHERE i.userid = ? " +
+                "ORDER BY i.publishDate DESC";
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, UserSession.getInstance().getCurrentUser().getId());
-            executeQueryAndCreateTheList(listings, stmt);
+            executeQueryAndCreateTheList(insertions, stmt);
         }
-        return listings;
+        return insertions;
     }
 
     @Override
-    public List<Listing> findByCategory(int categoryId) throws SQLException {
-        List<Listing> listings = new ArrayList<>();
-        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
-                "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE l.category_id = ? AND l.status = 'AVAILABLE' AND l.userid != ? " +
-                "ORDER BY l.publishDate DESC";
+    public List<Insertion> findByCategory(int categoryId) throws SQLException {
+        List<Insertion> insertions = new ArrayList<>();
+        String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
+                "LEFT JOIN category c ON i.category_id = c.category_id " +
+                "WHERE i.category_id = ? AND i.status = 'AVAILABLE' AND i.userid != ? " +
+                "ORDER BY i.publishDate DESC";
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -285,8 +282,8 @@ public class ListingDaoImpl implements ListingDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     try {
-                        Listing listing = createListingFromResultSet(rs);
-                        listings.add(listing);
+                        Insertion insertion = createListingFromResultSet(rs);
+                        insertions.add(insertion);
                     } catch (Exception e) {
                         System.err.println("Errore nel processare la lista: " + e.getMessage());
                     }
@@ -296,127 +293,129 @@ public class ListingDaoImpl implements ListingDao {
             System.err.println("Errore durante il recupero degli annunci per categoria " + categoryId + ": " + e.getMessage());
             throw e;
         }
-        return listings;
+        return insertions;
     }
+
     @Override
-    public List<Listing> findByStatus(String status) throws SQLException {
-        List<Listing> listings = new ArrayList<>();
-        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
-                "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE l.status = ? AND l.userid != ? " +
-                "ORDER BY l.publishDate DESC";
+    public List<Insertion> findByStatus(String status) throws SQLException {
+        List<Insertion> insertions = new ArrayList<>();
+        String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
+                "LEFT JOIN category c ON i.category_id = c.category_id " +
+                "WHERE i.status = ? AND i.userid != ? " +
+                "ORDER BY i.publishDate DESC";
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, status);
             stmt.setInt(2, UserSession.getInstance().getCurrentUser().getId());
-            executeQueryAndCreateTheList(listings, stmt);
+            executeQueryAndCreateTheList(insertions, stmt);
         }
-        return listings;
+        return insertions;
     }
 
     @Override
-    public List<Listing> findByFaculty(int facultyId) throws SQLException {
-        List<Listing> listings = new ArrayList<>();
-        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
-                "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE l.faculty_id = ? AND l.status = 'AVAILABLE' AND l.userid != ? " +
-                "ORDER BY l.publishDate DESC";
+    public List<Insertion> findByFaculty(int facultyId) throws SQLException {
+        List<Insertion> insertions = new ArrayList<>();
+        String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
+                "LEFT JOIN category c ON i.category_id = c.category_id " +
+                "WHERE i.faculty_id = ? AND i.status = 'AVAILABLE' AND i.userid != ? " +
+                "ORDER BY i.publishDate DESC";
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, facultyId);
             stmt.setInt(2, UserSession.getInstance().getCurrentUser().getId());
-            executeQueryAndCreateTheList(listings, stmt);
+            executeQueryAndCreateTheList(insertions, stmt);
         }
-        return listings;
+        return insertions;
     }
 
     @Override
-    public List<Listing> findByPriceRange(double minPrice, double maxPrice) throws SQLException {
-        List<Listing> listings = new ArrayList<>();
-        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
-                "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE price BETWEEN ? AND ? AND l.userid = ? ORDER BY publishDate DESC";
+    public List<Insertion> findByPriceRange(double minPrice, double maxPrice) throws SQLException {
+        List<Insertion> insertions = new ArrayList<>();
+        String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
+                "LEFT JOIN category c ON i.category_id = c.category_id " +
+                "WHERE price BETWEEN ? AND ? AND i.userid = ? ORDER BY publishDate DESC";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setDouble(1, minPrice);
             stmt.setDouble(2, maxPrice);
             stmt.setInt(3, UserSession.getInstance().getCurrentUser().getId());
-            executeQueryAndCreateTheList(listings, stmt);
+            executeQueryAndCreateTheList(insertions, stmt);
         }
-        return listings;
+        return insertions;
     }
+
     @Override
-    public Listing findListingById(int listingId) throws SQLException {
-        String sql = "SELECT l.*, c.name as category_name FROM listings l " +
-                "LEFT JOIN category c ON l.category_id = c.category_id " +
-                "WHERE l.listingId = ?";
+    public Insertion findListingById(int insertionID) {
+        String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
+                "LEFT JOIN category c ON i.category_id = c.category_id " +
+                "WHERE i.insertionid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, listingId);
+            stmt.setInt(1, insertionID);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return createListingFromResultSet(rs);
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Errore durante il recupero dell'annuncio con ID " + listingId + ": " + e.getMessage());
+            System.err.println("Errore durante il recupero dell'annuncio con ID " + insertionID + ": " + e.getMessage());
             e.printStackTrace();
         }
         return null;
     }
 
+    private void populateInsertionStatement(PreparedStatement stmt, Insertion insertion) throws SQLException {
+        stmt.setString(1, insertion.getTitle());
+        stmt.setString(2, insertion.getImageUrl());
+        stmt.setString(3, insertion.getDescription());
+        stmt.setString(4, insertion.getType().name());
 
-
-    private void populateListingStatement(PreparedStatement stmt, Listing listing) throws SQLException {
-        stmt.setString(1, listing.getTitle());
-        stmt.setString(2, listing.getImageUrl());
-        stmt.setString(3, listing.getDescription());
-        stmt.setString(4, listing.getType().name());
-        switch (listing) {
-            case SaleListing saleListing -> stmt.setBigDecimal(5, saleListing.getPrice());
-            case ExchangeListing exchangeListing -> stmt.setBigDecimal(5, exchangeListing.getPrice());
-            case GiftListing giftListing -> stmt.setBigDecimal(5, BigDecimal.ZERO);
+        switch (insertion) {
+            case SaleInsertion saleListing -> stmt.setBigDecimal(5, saleListing.getPrice());
+            case ExchangeInsertion exchangeListing -> stmt.setBigDecimal(5, exchangeListing.getPrice());
+            case GiftInsertion giftListing -> stmt.setBigDecimal(5, BigDecimal.ZERO);
             default -> {
                 stmt.setBigDecimal(5, BigDecimal.ZERO);
                 throw new SQLException("Tipo di inserzione sconosciuto");
             }
         }
 
-        stmt.setString(6, listing.getStatus().name());
-        stmt.setDate(7, new java.sql.Date(listing.getPublishDate().toEpochDay() * 24 * 60 * 60 * 1000)); // Convert LocalDate to java.sql.Date
-        stmt.setInt(8, listing.getUserId());
+        stmt.setString(6, insertion.getStatus().name());
+        stmt.setDate(7, new java.sql.Date(insertion.getPublishDate().toEpochDay() * 24 * 60 * 60 * 1000));
+        stmt.setInt(8, insertion.getUserId());
 
         CategoryDaoImpl category = new CategoryDaoImpl();
-        int categoryId = category.getCategoryIdByName(listing.getCategory());
+        int categoryId = category.getCategoryIdByName(insertion.getCategory());
         stmt.setInt(9, categoryId);
-        stmt.setInt(10, listing.getListingId());
+
+        // Removed line 10 that was causing the error for INSERT operations
     }
 
-    public Listing createListingFromResultSet(ResultSet rs) throws SQLException {
-        int listingId = rs.getInt("listingId");
+    public Insertion createListingFromResultSet(ResultSet rs) throws SQLException {
+        int listingId = rs.getInt("insertionid");
         String title = rs.getString("title");
         String imageUrl = rs.getString("imageUrl");
         String description = rs.getString("description");
-        typeListing type = parseType(rs.getString("type"));
-        ListingStatus status = parseStatus(rs.getString("status"));
+        typeInsertion type = parseType(rs.getString("type"));
+        InsertionStatus status = parseStatus(rs.getString("status"));
         java.time.LocalDate publishDate = rs.getDate("publishDate").toLocalDate();
         int userId = rs.getInt("userId");
         String category = rs.getString("category_name");
         BigDecimal price = rs.getBigDecimal("price");
-        Listing listing = ListingFactory.createListing(title, imageUrl, description, type, price, status, publishDate, userId, category);
 
-        listing.setListingId(listingId);
-
-        return listing;
+        Insertion insertion = InsertionFactory.createListing(title, imageUrl, description, type, price, status, publishDate, userId, category);
+        insertion.setInsertionID(listingId);
+        return insertion;
     }
-    private void executeQueryAndCreateTheList(List<Listing> listings, PreparedStatement stmt) throws SQLException {
+
+    private void executeQueryAndCreateTheList(List<Insertion> insertions, PreparedStatement stmt) throws SQLException {
         try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 try {
-                    Listing listing = createListingFromResultSet(rs);
-                    listings.add(listing);
+                    Insertion insertion = createListingFromResultSet(rs);
+                    insertions.add(insertion);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println("Errore nel processare la lista " + e.getMessage());
@@ -424,47 +423,47 @@ public class ListingDaoImpl implements ListingDao {
             }
         }
     }
-    private typeListing parseType(String typeStr) {
+
+    private typeInsertion parseType(String typeStr) {
         try {
-            return typeListing.valueOf(typeStr);
+            return typeInsertion.valueOf(typeStr);
         } catch (IllegalArgumentException e) {
             System.err.println("Tipo sconosciuto " + typeStr + " - default a SALE");
-            return typeListing.SALE;
-        }
-    }
-    private ListingStatus parseStatus(String statusStr) {
-        try {
-            return ListingStatus.valueOf(statusStr);
-        } catch (IllegalArgumentException e) {
-            System.err.println("Stato sconosciuto " + statusStr + " - default a AVAILABLE");
-            return ListingStatus.AVAILABLE;
+            return typeInsertion.SALE;
         }
     }
 
-    private List<Listing> executeFilterQuery(String sql, List<Object> parameters) throws SQLException {
-        List<Listing> listings = new ArrayList<>();
+    private InsertionStatus parseStatus(String statusStr) {
+        try {
+            return InsertionStatus.valueOf(statusStr);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Stato sconosciuto " + statusStr + " - default a AVAILABLE");
+            return InsertionStatus.AVAILABLE;
+        }
+    }
+
+    private List<Insertion> executeFilterQuery(String sql, List<Object> parameters) throws SQLException {
+        List<Insertion> insertions = new ArrayList<>();
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Imposta i parametri
             for (int i = 0; i < parameters.size(); i++) {
                 stmt.setObject(i + 1, parameters.get(i));
             }
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Listing listing = createListingFromResultSet(rs);
-                    listings.add(listing);
+                    Insertion insertion = createListingFromResultSet(rs);
+                    insertions.add(insertion);
                 }
             }
         }
-        return listings;
+        return insertions;
     }
 
-    //TODO spostare questo in validationservice
-    private  void logDatabaseError(String operation, Exception e){
+    private void logDatabaseError(String operation, Exception e){
         e.printStackTrace();
-        System.err.println("Errore durante l’operazione '%s': %s%n" + operation +  e.getMessage());
+        System.err.println("Errore durante l'operazione '" + operation + "': " + e.getMessage());
     }
 }

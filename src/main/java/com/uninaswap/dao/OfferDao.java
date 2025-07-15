@@ -1,6 +1,6 @@
 package com.uninaswap.dao;
 
-import com.uninaswap.model.ListingStatus;
+import com.uninaswap.model.InsertionStatus;
 import com.uninaswap.model.Offer;
 
 import java.sql.SQLException;
@@ -16,7 +16,7 @@ public interface OfferDao {
     List<Offer> findOffersForListing(int listingId) throws Exception;
     List<Offer> findOfferMadeByCurrentUserID() throws SQLException;
     List<Offer> findOffersToCurrentUser() throws SQLException;
-    void updateOfferStatus(int offerId, ListingStatus status) throws Exception;
+    void updateOfferStatus(int offerId, InsertionStatus status) throws Exception;
 
     List<Offer> findRejectedOffersForCurrentUser();
 }

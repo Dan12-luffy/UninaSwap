@@ -2,11 +2,10 @@ package com.uninaswap.services;
 
 import com.uninaswap.dao.TransactionDao;
 import com.uninaswap.dao.TransactionDaoImpl;
-import com.uninaswap.model.Listing;
+import com.uninaswap.model.Insertion;
 import com.uninaswap.model.Offer;
 import com.uninaswap.model.Transaction;
 import com.uninaswap.model.User;
-import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -26,44 +25,44 @@ public class TransactionService {
         return instance;
     }
     //crea una nuova transazione e la registra nel database
-    public int recordSale(Listing listing, Offer offer,User buyer) throws  SQLException{
+    public int recordSale(Insertion insertion, Offer offer, User buyer) throws  SQLException{
         Transaction transaction = new Transaction(
-                listing.getListingId(),
+                insertion.getInsertionID(),
                 offer != null ? offer.getOfferID() : null,
-                listing.getUserId(), // seller ID
+                insertion.getUserId(), // seller ID
                 buyer.getId(),       // buyer ID
-                offer != null ? offer.getAmount(): listing.getPrice().doubleValue(),
+                offer != null ? offer.getAmount(): insertion.getPrice().doubleValue(),
                 "PURCHASE",
                 "COMPLETED",
-                "Vendita di: " + listing.getTitle()
+                "Vendita di: " + insertion.getTitle()
         );
         return transactionDao.createTransaction(transaction);
     }
 
-    public int recordExchange(Listing listing, Offer offer, User buyer) throws SQLException {
+    public int recordExchange(Insertion insertion, Offer offer, User buyer) throws SQLException {
         Transaction transaction = new Transaction(
-                listing.getListingId(),
+                insertion.getInsertionID(),
                 offer.getOfferID(),
-                listing.getUserId(),
+                insertion.getUserId(),
                 buyer.getId(),
                 0.0,
                 "EXCHANGE",
                 "COMPLETED",
-                "Scambio di: " + listing.getTitle()
+                "Scambio di: " + insertion.getTitle()
         );
         return transactionDao.createTransaction(transaction);
     }
 
-    public int recordGift(Listing listing,Offer offer ,User buyer) throws SQLException {
+    public int recordGift(Insertion insertion, Offer offer , User buyer) throws SQLException {
         Transaction transaction = new Transaction(
-                listing.getListingId(),
+                insertion.getInsertionID(),
                 offer.getOfferID(),
-                listing.getUserId(),
+                insertion.getUserId(),
                 buyer.getId(),
                 0.0,
                 "GIFT",
                 "COMPLETED",
-                "Regalo di: " + listing.getTitle()
+                "Regalo di: " + insertion.getTitle()
         );
         return transactionDao.createTransaction(transaction);
     }

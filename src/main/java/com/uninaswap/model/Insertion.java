@@ -2,28 +2,27 @@ package com.uninaswap.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
-public abstract class Listing {
-    private int listingId;
+public abstract class Insertion {
+    private int insertionID;
     private String title;
     private String imageUrl;
     private String description;
-    private typeListing type; //ENUM
-    private ListingStatus status; //ENUM
+    private typeInsertion type; //ENUM
+    private InsertionStatus status; //ENUM
     private LocalDate publishDate;
 
     private int userId;
     private String category;
     private Integer categoryId;
 
-    protected Listing() {}
+    protected Insertion() {}
 
     // Costruttore completo
-    protected Listing(Integer listingId, String title, String imageUrl, String description,
-                   typeListing type, ListingStatus status,
-                   LocalDate publishDate, Integer userId, String category) {
-        this.listingId = listingId;
+    protected Insertion(Integer insertionID, String title, String imageUrl, String description,
+                        typeInsertion type, InsertionStatus status,
+                        LocalDate publishDate, Integer userId, String category) {
+        this.insertionID = insertionID;
         this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -34,9 +33,9 @@ public abstract class Listing {
         this.category = category;
     }
     //Costruttore senza id
-    protected Listing(String title, String imageUrl, String description,
-                   typeListing type, ListingStatus status,
-                   LocalDate publishDate, Integer userId, String category) {
+    protected Insertion(String title, String imageUrl, String description,
+                        typeInsertion type, InsertionStatus status,
+                        LocalDate publishDate, Integer userId, String category) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -48,8 +47,8 @@ public abstract class Listing {
     }
 
     // Getter e Setter
-    public Integer getListingId() {
-        return listingId;
+    public Integer getInsertionID() {
+        return insertionID;
     }
 
     public Integer getCategoryId() {
@@ -60,8 +59,8 @@ public abstract class Listing {
         this.categoryId = categoryId;
     }
 
-    public void setListingId(Integer listingId) {
-        this.listingId = listingId;
+    public void setInsertionID(Integer insertionID) {
+        this.insertionID = insertionID;
     }
 
     public String getTitle() {
@@ -88,20 +87,20 @@ public abstract class Listing {
         this.description = description;
     }
 
-    public typeListing getType() {
+    public typeInsertion getType() {
         return type;
     }
 
-    public void setType(typeListing type) {
+    public void setType(typeInsertion type) {
         this.type = type;
     }
 
 
-    public ListingStatus getStatus() {
+    public InsertionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(ListingStatus status) {
+    public void setStatus(InsertionStatus status) {
         this.status = status;
     }
 
@@ -129,14 +128,14 @@ public abstract class Listing {
         this.category = category;
     }
 
-    public abstract typeListing getListingType();
+    public abstract typeInsertion getListingType();
 
     public abstract BigDecimal getPrice();
 
     @Override
     public String toString() {
-        return "Listing{" +
-                "listingId=" + listingId +
+        return "Insertion{" +
+                "insertionID=" + insertionID +
                 ", title='" + title + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", description='" + description + '\'' +

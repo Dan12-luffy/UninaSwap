@@ -4,7 +4,7 @@ import com.uninaswap.controllers.ExchangeController;
 import com.uninaswap.controllers.MakeOfferController;
 import com.uninaswap.controllers.ProductDetailsController;
 import com.uninaswap.controllers.PurchaseConfirmationController;
-import com.uninaswap.model.Listing;
+import com.uninaswap.model.Insertion;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -67,12 +67,12 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
-    public void navigateToProductDetailsView(MouseEvent event, Listing listing) {
+    public void navigateToProductDetailsView(MouseEvent event, Insertion insertion) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/productDetailsInterface.fxml"));
             Parent root = loader.load();
             ProductDetailsController controller = loader.getController();
-            controller.loadProductDetails(listing);
+            controller.loadProductDetails(insertion);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setResizable(false);
@@ -113,13 +113,13 @@ public class NavigationService {
         }
     }
 
-    public void navigateToExchangeView(ActionEvent event, Listing listing) {
+    public void navigateToExchangeView(ActionEvent event, Insertion insertion) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/exchangeInterface.fxml"));
             Parent root = loader.load();
             // Assuming you have a controller for the exchange view
             ExchangeController controller = loader.getController();
-            controller.loadDesiredProduct(listing);
+            controller.loadDesiredProduct(insertion);
             setScene(event, root);
         } catch (IOException e) {
             ValidationService.getInstance().showFailedToOpenPageError();
@@ -134,26 +134,26 @@ public class NavigationService {
             ValidationService.getInstance().showAlert(javafx.scene.control.Alert.AlertType.ERROR, "Errore", "Impossibile chiudere la vista dei preferiti.");
         }
     }
-    public void navigateToMakeOfferView(ActionEvent event, Listing listing) {
+    public void navigateToMakeOfferView(ActionEvent event, Insertion insertion) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/makeOfferInterface.fxml"));
             Parent root = loader.load();
 
             MakeOfferController controller = loader.getController();
-            controller.setListing(listing);
+            controller.setListing(insertion);
             setScene(event, root);
         } catch (IOException e) {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
 
-    public void navigateToPurchaseConfirmationView(ActionEvent event, Listing listing) {
+    public void navigateToPurchaseConfirmationView(ActionEvent event, Insertion insertion) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/purchaseConfirmationInterface.fxml"));
             Parent root = loader.load();
 
             PurchaseConfirmationController controller = loader.getController();
-            controller.setListing(listing);
+            controller.setListing(insertion);
             setScene(event, root);
         } catch (IOException e) {
             ValidationService.getInstance().showFailedToOpenPageError();

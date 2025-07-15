@@ -1,12 +1,12 @@
 package com.uninaswap.services;
 
-import com.uninaswap.dao.ListingDao;
-import com.uninaswap.dao.ListingDaoImpl;
+import com.uninaswap.dao.InsertionDao;
+import com.uninaswap.dao.InsertionDaoImpl;
 import com.uninaswap.dao.UserDao;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.databaseUtils.FilterCriteria;
-import com.uninaswap.model.Listing;
-import com.uninaswap.model.ListingStatus;
+import com.uninaswap.model.Insertion;
+import com.uninaswap.model.InsertionStatus;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -14,11 +14,11 @@ import java.util.List;
 
 public class ListingService {
     private static final ListingService instance = new ListingService();
-    private final ListingDao listingDao;
+    private final InsertionDao insertionDao;
     private final UserDao userDao;
 
     private ListingService() {
-        this.listingDao = new ListingDaoImpl();
+        this.insertionDao = new InsertionDaoImpl();
         this.userDao = new UserDaoImpl();
     }
 
@@ -26,17 +26,17 @@ public class ListingService {
         return instance;
     }
 
-    public List<Listing> getAllListings() throws SQLException {
-        return listingDao.findAll();
+    public List<Insertion> getAllListings() throws SQLException {
+        return insertionDao.findAll();
     }
-    public void createListing(Listing listing) throws SQLException {
-        listingDao.insert(listing);
+    public void createListing(Insertion insertion) throws SQLException {
+        insertionDao.insert(insertion);
     }
-    public void updateListing(Listing listing) throws SQLException {
-        listingDao.update(listing);
+    public void updateListing(Insertion insertion) throws SQLException {
+        insertionDao.update(insertion);
     }
     public void deleteListing(int listingId) throws SQLException {
-        listingDao.delete(listingId);
+        insertionDao.delete(listingId);
     }
     /*public Listing findById(int listingId) throws SQLException {
         return listingDao.findById(listingId);
@@ -45,40 +45,40 @@ public class ListingService {
     public String getSellerFullName(int userId) {
         return userDao.findFullNameFromID(userId);
     }
-    public List<Listing> getListingsByFilters(FilterCriteria criteria) throws SQLException {
-        return listingDao.findByFilters(criteria);
+    public List<Insertion> getListingsByFilters(FilterCriteria criteria) throws SQLException {
+        return insertionDao.findByFilters(criteria);
     }
     public BigDecimal getInsertionMaxPrice() throws SQLException {
-        return listingDao.getMaxPrice();
+        return insertionDao.getMaxPrice();
     }
     public BigDecimal getInsertionMinPrice() throws SQLException {
-        return listingDao.getMinPrice();
+        return insertionDao.getMinPrice();
     }
-    public List<Listing> getInsertionsExcludingCurrentUser() throws SQLException {
-        return listingDao.findInsertionsExcludingCurrentUser();
+    public List<Insertion> getInsertionsExcludingCurrentUser() throws SQLException {
+        return insertionDao.findInsertionsExcludingCurrentUser();
     }
-    public List<Listing> getCurrentUserAvailableInsertions() throws SQLException {
-        return listingDao.findCurrentUserAvailableInsertions();
+    public List<Insertion> getCurrentUserAvailableInsertions() throws SQLException {
+        return insertionDao.findCurrentUserAvailableInsertions();
     }
-    public List<Listing> getCurrentUserInsertions() throws SQLException {
-        return listingDao.findCurrentUserInsertions();
+    public List<Insertion> getCurrentUserInsertions() throws SQLException {
+        return insertionDao.findCurrentUserInsertions();
     }
-    public List<Listing> getListingsByCategory(int categoryId) throws SQLException {
-        return listingDao.findByCategory(categoryId);
+    public List<Insertion> getListingsByCategory(int categoryId) throws SQLException {
+        return insertionDao.findByCategory(categoryId);
     }
-    public List<Listing> getListingsByStatus(String status) throws SQLException {
-        return listingDao.findByStatus(status);
+    public List<Insertion> getListingsByStatus(String status) throws SQLException {
+        return insertionDao.findByStatus(status);
     }
-    public List<Listing> getInsertionsByFaculty(int facultyId) throws SQLException {
-        return listingDao.findByFaculty(facultyId);
+    public List<Insertion> getInsertionsByFaculty(int facultyId) throws SQLException {
+        return insertionDao.findByFaculty(facultyId);
     }
-    public Listing getListingByID(int listingId) throws SQLException {
-        return listingDao.findListingById(listingId);
+    public Insertion getListingByID(int listingId) throws SQLException {
+        return insertionDao.findListingById(listingId);
     }
 
-    public void updateListingStatus(Integer listingId, ListingStatus listingStatus) {
+    public void updateListingStatus(Integer listingId, InsertionStatus insertionStatus) {
         try {
-            listingDao.updateListingStatus(listingId, listingStatus);
+            insertionDao.updateListingStatus(listingId, insertionStatus);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error updating listing status", e);

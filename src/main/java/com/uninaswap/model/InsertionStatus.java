@@ -1,16 +1,17 @@
 package com.uninaswap.model;
 
-public enum ListingStatus {
+public enum InsertionStatus {
 
     AVAILABLE("AVAILABLE"),
     PENDING("PENDING"),
     ACCEPTED("ACCEPTED"),
     REJECTED("REJECTED"),
-    SOLD("SOLD");
+    SOLD("SOLD"),
+    DISMISSED("DISMISSED");
 
     private final String status;
 
-    ListingStatus(String status) {
+    InsertionStatus(String status) {
         this.status = status;
     }
 

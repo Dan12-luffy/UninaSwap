@@ -1,7 +1,8 @@
 package com.uninaswap.dao;
 
-import com.uninaswap.model.ListingStatus;
+import com.uninaswap.model.InsertionStatus;
 import com.uninaswap.model.Offer;
+import com.uninaswap.model.typeOffer;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
 import com.uninaswap.utility.DatabaseUtil;
@@ -12,45 +13,48 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OfferDaoImpl implements OfferDao {
-        @Override
-        public int createOffer(Offer o) {
-            String sql = "INSERT INTO offer (listingid, userid, amount, status, message, offer_date) VALUES (?, ?, ?, ?, ?, ?)";
-            try (Connection conn = DatabaseUtil.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                stmt.setInt(1, o.getListingID());
-                stmt.setInt(2, o.getUserID());
+    @Override
+    public int createOffer(Offer o) {
+        String sql = "INSERT INTO offer (insertionid, userid, amount, status, message, typeoffer, offer_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, o.getListingID());
+            stmt.setInt(2, o.getUserID());
+            if (o.getAmount() != 0) {
                 stmt.setDouble(3, o.getAmount());
-                stmt.setString(4, o.getListingStatus().toString().toUpperCase());
-                stmt.setString(5, o.getMessage());
-                stmt.setDate(6, java.sql.Date.valueOf(o.getOfferDate()));
-                stmt.executeUpdate();
-
-                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int generatedId = generatedKeys.getInt(1);
-                        o.setOfferID(generatedId);
-                        return generatedId;
-                    } else {
-                        throw new SQLException("Creating offer failed, no ID obtained.");
-                    }
-                }
-            } catch (SQLException e) {
-                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'offerta: " + e.getMessage());
+            } else {
+                stmt.setNull(3, java.sql.Types.DECIMAL);
             }
-            return -1;
-        }
+            stmt.setString(4, o.getListingStatus().toString().toUpperCase());
+            stmt.setString(5, o.getMessage());
+            stmt.setString(6, o.getTypeOffer().getType());
+            stmt.setDate(7, java.sql.Date.valueOf(o.getOfferDate()));
+            stmt.executeUpdate();
 
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int generatedId = generatedKeys.getInt(1);
+                    o.setOfferID(generatedId);
+                    return generatedId;
+                } else {
+                    throw new SQLException("Creating offer failed, no ID obtained.");
+                }
+            }
+        } catch (SQLException e) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'offerta: " + e.getMessage());
+        }
+        return -1;
+    }
 
     @Override
     public void deleteOffer(int offerId) {
-        String Sql = "DELETE FROM offer WHERE offerid = ?";
+        String sql = "DELETE FROM offer WHERE offerid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(Sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, offerId);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -60,7 +64,8 @@ public class OfferDaoImpl implements OfferDao {
 
     @Override
     public void updateOffer(int offerId, String title, String description, int categoryId, double price){
-
+        // This method signature doesn't match offer updating logic
+        // You might want to change this to update offer-specific fields
     }
 
     @Override
@@ -109,9 +114,10 @@ public class OfferDaoImpl implements OfferDao {
         }
         return null;
     }
+
     @Override
     public List<Offer> findOffersForListing(int listingId){
-        String sql = "SELECT * FROM offer WHERE listingid = ?";
+        String sql = "SELECT * FROM offer WHERE insertionid = ?";
         try(Connection conn = DatabaseUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, listingId);
@@ -119,8 +125,9 @@ public class OfferDaoImpl implements OfferDao {
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte per l'inserzione: " + e.getMessage());
         }
-        return null;
+        return new ArrayList<>();
     }
+
     @Override
     public List<Offer> findOfferMadeByCurrentUserID(){
         String sql = "SELECT * FROM offer WHERE userid = ?";
@@ -131,11 +138,12 @@ public class OfferDaoImpl implements OfferDao {
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte per l'utente corrente: " + e.getMessage());
         }
-        return null;
+        return new ArrayList<>();
     }
+
     @Override
     public List<Offer> findOffersToCurrentUser(){
-        String sql = "SELECT o.* FROM offer o JOIN listings l ON o.listingid = l.listingid WHERE l.userid = ? AND o.status = 'PENDING'";
+        String sql = "SELECT o.* FROM offer o JOIN insertion i ON o.insertionid = i.insertionid WHERE i.userid = ? AND o.status = 'PENDING'";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
@@ -143,12 +151,11 @@ public class OfferDaoImpl implements OfferDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
-
     @Override
-    public void updateOfferStatus(int offerId, ListingStatus status){
+    public void updateOfferStatus(int offerId, InsertionStatus status){
         String sql = "UPDATE offer SET status = ? WHERE offerid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -159,6 +166,7 @@ public class OfferDaoImpl implements OfferDao {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aggiornare lo stato dell'offerta: " + e.getMessage());
         }
     }
+
     @Override
     public List<Offer> findRejectedOffersForCurrentUser(){
         String sql = "SELECT * FROM offer WHERE userid = ? AND status = 'REJECTED'";
@@ -169,7 +177,7 @@ public class OfferDaoImpl implements OfferDao {
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte rifiutate per l'utente corrente: " + e.getMessage());
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @NotNull
@@ -183,16 +191,41 @@ public class OfferDaoImpl implements OfferDao {
             return offers;
         }
     }
+
     @NotNull
     private Offer mapResultSetToOffer(ResultSet rs) throws SQLException {
         Offer offer = new Offer();
         offer.setOfferID(rs.getInt("offerid"));
-        offer.setListingID(rs.getInt("listingid"));
+        offer.setListingID(rs.getInt("insertionid"));
         offer.setUserID(rs.getInt("userid"));
-        offer.setAmount(rs.getDouble("amount"));
+
+        // Handle nullable amount
+        double amount = rs.getDouble("amount");
+        if (!rs.wasNull()) {
+            offer.setAmount(amount);
+        }
+
         offer.setMessage(rs.getString("message"));
-        offer.setListingStatus(ListingStatus.valueOf(rs.getString("status")));
+        offer.setListingStatus(InsertionStatus.valueOf(rs.getString("status")));
+        offer.setTypeOffer(mapDatabaseToTypeOffer(rs.getString("typeoffer")));
         offer.setOfferDate(rs.getDate("offer_date").toLocalDate());
         return offer;
+    }
+
+    private String mapTypeOfferToDatabase(typeOffer typeOffer) {
+        return switch (typeOffer) {
+            case EXCHANGE_OFFER -> "EXCHANGE";
+            case GIFT_OFFER -> "GIFT";
+            default -> "SALE";
+        };
+    }
+
+    private typeOffer mapDatabaseToTypeOffer(String dbValue) {
+        return switch (dbValue) {
+            case "EXCHANGE" -> typeOffer.EXCHANGE_OFFER;
+            case "GIFT" -> typeOffer.GIFT_OFFER;
+            case "SALE" -> typeOffer.SALE_OFFER;
+            default -> typeOffer.UNDEFINED;
+        };
     }
 }

@@ -8,19 +8,21 @@ public class Offer {
     private int userID;
     private double amount;
     private String message;
-    private ListingStatus listingStatus;
+    private typeOffer typeOffer;
+    private InsertionStatus insertionStatus;
     private LocalDate offerDate;
 
     public Offer() {
     }
 
-    public Offer(int listingID, int userID, double amount, String message, ListingStatus listingStatus, LocalDate offerDate) {
+    public Offer(int listingID, int userID, double amount, String message,typeOffer typeOffer, InsertionStatus insertionStatus, LocalDate offerDate) {
         this.listingID = listingID;
         this.userID = userID;
         this.amount = amount;
         this.message = message;
-        this.listingStatus = listingStatus;
+        this.insertionStatus = insertionStatus;
         this.offerDate = offerDate;
+        this.typeOffer = typeOffer;
     }
 
     public Integer  getOfferID() {
@@ -63,12 +65,12 @@ public class Offer {
         this.message = message;
     }
 
-    public ListingStatus getListingStatus() {
-        return listingStatus;
+    public InsertionStatus getListingStatus() {
+        return insertionStatus;
     }
 
-    public void setListingStatus(ListingStatus listingStatus) {
-        this.listingStatus = listingStatus;
+    public void setListingStatus(InsertionStatus insertionStatus) {
+        this.insertionStatus = insertionStatus;
     }
 
     public LocalDate getOfferDate() {
@@ -79,6 +81,15 @@ public class Offer {
         this.offerDate = offerDate;
     }
 
+    public void setTypeOffer(typeOffer typeoffer) {
+        this.typeOffer = typeoffer;
+    }
+
+    public typeOffer getTypeOffer() {
+        return typeOffer;
+    }
+
+
     @Override
     public String toString() {
         return "Offer{" +
@@ -87,8 +98,9 @@ public class Offer {
                 ", userID=" + userID +
                 ", amount=" + amount +
                 ", message='" + message + '\'' +
-                ", listingStatus=" + listingStatus +
+                ", listingStatus=" + insertionStatus +
                 ", offerDate=" + offerDate +
                 '}';
     }
+
 }

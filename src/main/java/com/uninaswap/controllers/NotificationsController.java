@@ -94,13 +94,13 @@ public class NotificationsController implements Initializable {
         offerContent.setSpacing(8);
         HBox.setHgrow(offerContent, Priority.ALWAYS);
 
-        Listing listing = listingService.getListingByID(offer.getListingID());
+        Insertion insertion = listingService.getListingByID(offer.getListingID());
         User offerUser = userService.getUserById(offer.getUserID());
         List<OfferedItem> offeredItems = OfferedItemsService.getInstance()
                 .findOfferedItemsByOfferId(offer.getOfferID());
 
         // Usa il type del listing per determinare il tipo di notifica
-        String notificationType = getNotificationTypeFromListing(listing.getType());
+        String notificationType = getNotificationTypeFromListing(insertion.getType());
 
         HBox header = new HBox();
         header.setAlignment(Pos.CENTER_LEFT);
@@ -116,8 +116,8 @@ public class NotificationsController implements Initializable {
         header.getChildren().addAll(notificationTypeLabel, notificationTime);
 
         // Crea titolo e descrizione basati sul tipo di listing
-        String title = createNotificationTitle(listing.getType(), listing);
-        String description = createNotificationDescription(listing.getType(), offer, listing, offerUser, offeredItems);
+        String title = createNotificationTitle(insertion.getType(), insertion);
+        String description = createNotificationDescription(insertion.getType(), offer, insertion, offerUser, offeredItems);
 
         Label notificationTitle = new Label(title);
         notificationTitle.getStyleClass().add("notification-title");
@@ -128,7 +128,7 @@ public class NotificationsController implements Initializable {
         Region verticalSpacer = new Region();
         verticalSpacer.setPrefHeight(8);
 
-        HBox actions = createActionButtons(offer, listing.getType());
+        HBox actions = createActionButtons(offer, insertion.getType());
 
         offerContent.getChildren().addAll(header, notificationTitle, notificationDescription, verticalSpacer, actions);
         content.getChildren().add(offerContent);
@@ -149,7 +149,7 @@ public class NotificationsController implements Initializable {
         offerContent.setSpacing(8);
         HBox.setHgrow(offerContent, Priority.ALWAYS);
 
-        Listing listing = listingService.getListingByID(offer.getListingID());
+        Insertion insertion = listingService.getListingByID(offer.getListingID());
 
         HBox header = new HBox();
         header.setAlignment(Pos.CENTER_LEFT);
@@ -165,17 +165,17 @@ public class NotificationsController implements Initializable {
 
         header.getChildren().addAll(statusLabel, dateLabel);
 
-        Label titleLabel = new Label("La tua offerta per '" + listing.getTitle() + "' è stata rifiutata");
+        Label titleLabel = new Label("La tua offerta per '" + insertion.getTitle() + "' è stata rifiutata");
         titleLabel.getStyleClass().add("notification-title");
 
         Label descriptionLabel = new Label("Offerta: " + formatAmount(offer.getAmount()) +
-                " - Prezzo richiesto: " + formatAmount(listing.getPrice().doubleValue()));
+                " - Prezzo richiesto: " + formatAmount(insertion.getPrice().doubleValue()));
         descriptionLabel.getStyleClass().add("notification-description");
 
         Region verticalSpacer = new Region();
         verticalSpacer.setPrefHeight(8);
 
-        HBox actions = createRejectedOfferActions(offer, listing);
+        HBox actions = createRejectedOfferActions(offer, insertion);
 
         offerContent.getChildren().addAll(header, titleLabel, descriptionLabel, verticalSpacer, actions);
         content.getChildren().add(offerContent);
@@ -183,7 +183,7 @@ public class NotificationsController implements Initializable {
 
         return card;
     }
-    private HBox createRejectedOfferActions(Offer offer, Listing listing) {
+    private HBox createRejectedOfferActions(Offer offer, Insertion insertion) {
         HBox actions = new HBox();
         actions.setSpacing(10);
         actions.getStyleClass().add("notification-actions");
@@ -198,7 +198,7 @@ public class NotificationsController implements Initializable {
 
         Button retryButton = new Button("Nuova Offerta");
         retryButton.getStyleClass().add("accept-button");
-        retryButton.setOnAction(e -> handleRetryOffer(e, listing));
+        retryButton.setOnAction(e -> handleRetryOffer(e, insertion));
 
         actions.getChildren().addAll(spacer, dismissButton, retryButton);
 
@@ -206,7 +206,7 @@ public class NotificationsController implements Initializable {
     }
     private void handleDismissOffer(int offerId) {
         try {
-            offerDao.deleteOffer(offerId);
+            offerDao.updateOfferStatus(offerId, InsertionStatus.DISMISSED);
             loadUserOffers();
             ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                     "Offerta rimossa", "L'offerta è stata rimossa dalla lista.");
@@ -217,10 +217,9 @@ public class NotificationsController implements Initializable {
         }
     }
 
-    private void handleRetryOffer(ActionEvent event, Listing listing) {
+    private void handleRetryOffer(ActionEvent event, Insertion insertion) {
         try {
-            // Naviga alla pagina di dettaglio del prodotto per fare una nuova offerta
-            NavigationService.getInstance().navigateToMakeOfferView(event, listing);
+            NavigationService.getInstance().navigateToMakeOfferView(event, insertion);
         } catch (Exception e) {
             e.printStackTrace();
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
@@ -228,7 +227,7 @@ public class NotificationsController implements Initializable {
         }
     }
 
-    private String getNotificationTypeFromListing(typeListing type) {
+    private String getNotificationTypeFromListing(typeInsertion type) {
         return switch (type) {
             case GIFT -> "RICHIESTA REGALO";
             case EXCHANGE -> "PROPOSTA SCAMBIO";
@@ -237,31 +236,31 @@ public class NotificationsController implements Initializable {
         };
     }
 
-    private String createNotificationTitle(typeListing type, Listing listing) {
+    private String createNotificationTitle(typeInsertion type, Insertion insertion) {
         return switch (type) {
-            case GIFT -> "Qualcuno vuole il tuo regalo: '" + listing.getTitle() + "'";
-            case EXCHANGE -> "Proposta di scambio per '" + listing.getTitle() + "'";
-            case SALE -> "Hai ricevuto un'offerta per '" + listing.getTitle() + "'";
+            case GIFT -> "Qualcuno vuole il tuo regalo: '" + insertion.getTitle() + "'";
+            case EXCHANGE -> "Proposta di scambio per '" + insertion.getTitle() + "'";
+            case SALE -> "Hai ricevuto un'offerta per '" + insertion.getTitle() + "'";
             case UNDEFINED -> null;
         };
     }
 
-    private String createNotificationDescription(typeListing type, Offer offer, Listing listing,
+    private String createNotificationDescription(typeInsertion type, Offer offer, Insertion insertion,
                                                  User offerUser, List<OfferedItem> offeredItems) {
         String username = offerUser != null ? offerUser.getUsername() : "Un utente";
 
         return switch (type) {
-            case GIFT -> username + " vorrebbe ricevere il tuo regalo: " + listing.getTitle();
+            case GIFT -> username + " vorrebbe ricevere il tuo regalo: " + insertion.getTitle();
 
             case EXCHANGE -> {
-                StringBuilder desc = new StringBuilder(username + " propone uno scambio per " + listing.getTitle());
+                StringBuilder desc = new StringBuilder(username + " propone uno scambio per " + insertion.getTitle());
                 if (!offeredItems.isEmpty()) {
                     desc.append("\n\nOggetti offerti:");
                     for (OfferedItem item : offeredItems) {
                         try {
-                            Listing offeredListing = listingService.getListingByID(item.getListingId());
-                            if (offeredListing != null) {
-                                desc.append("\n- ").append(offeredListing.getTitle());
+                            Insertion offeredInsertion = listingService.getListingByID(item.getListingId());
+                            if (offeredInsertion != null) {
+                                desc.append("\n- ").append(offeredInsertion.getTitle());
                             }
                         } catch (SQLException e) {
                             e.printStackTrace();
@@ -272,13 +271,13 @@ public class NotificationsController implements Initializable {
             }
 
             case SALE -> username + " ha offerto " + formatAmount(offer.getAmount()) +
-                    " per " + listing.getTitle() +
-                    ". Prezzo richiesto: " + formatAmount(listing.getPrice().doubleValue());
+                    " per " + insertion.getTitle() +
+                    ". Prezzo richiesto: " + formatAmount(insertion.getPrice().doubleValue());
             case UNDEFINED -> null;
         };
     }
 
-    private HBox createActionButtons(Offer offer, typeListing listingType) {
+    private HBox createActionButtons(Offer offer, typeInsertion listingType) {
         HBox actions = new HBox();
         actions.setSpacing(10);
         actions.getStyleClass().add("notification-actions");
@@ -289,7 +288,7 @@ public class NotificationsController implements Initializable {
 
         Button declineButton = new Button("Rifiuta");
         declineButton.getStyleClass().add("decline-button");
-        declineButton.setOnAction(e -> handleDeclineOffer(e, offer.getOfferID()));
+        declineButton.setOnAction(e -> handleDeclineOffer( offer.getOfferID()));
 
         String acceptButtonText = switch (listingType) {
             case GIFT -> "Regala";
@@ -302,7 +301,7 @@ public class NotificationsController implements Initializable {
         acceptButton.getStyleClass().add("accept-button");
         acceptButton.setOnAction(e -> handleAcceptOffer(e, offer.getOfferID()));
 
-        if (listingType != typeListing.GIFT) {
+        if (listingType != typeInsertion.GIFT) {
             Label offerAmount = new Label("Offerta: " + formatAmount(offer.getAmount()));
             offerAmount.getStyleClass().add("offer-amount");
             actions.getChildren().addAll(offerAmount, spacer, declineButton, acceptButton);
@@ -346,36 +345,36 @@ public class NotificationsController implements Initializable {
     private void handleAcceptOffer(ActionEvent event, int offerId) {
         try {
             Offer offer = offerDao.findOfferById(offerId);
-            Listing listing = listingService.getListingByID(offer.getListingID());
+            Insertion insertion = listingService.getListingByID(offer.getListingID());
             User buyer = userService.getUserById(offer.getUserID());
 
             // Usa il type del listing per determinare il tipo di transazione
-            switch (listing.getType()) {
+            switch (insertion.getType()) {
                 case SALE:
                     // Vendita normale
-                    transactionService.recordSale(listing, offer, buyer);
+                    transactionService.recordSale(insertion, offer, buyer);
                     ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                             "Vendita completata", "La vendita è stata completata con successo.");
                     break;
 
                 case EXCHANGE:
                     // Scambio
-                    transactionService.recordExchange(listing, offer, buyer);
+                    transactionService.recordExchange(insertion, offer, buyer);
                     ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                             "Scambio accettato", "Lo scambio è stato accettato con successo.");
                     break;
 
                 case GIFT:
                     // Regalo
-                    transactionService.recordGift(listing, offer, buyer);
+                    transactionService.recordGift(insertion, offer, buyer);
                     ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                             "Regalo accettato", "Il regalo è stato accettato con successo.");
                     break;
             }
 
             // Aggiorna lo status dell'offerta e del listing
-            offerDao.updateOfferStatus(offerId, ListingStatus.ACCEPTED);
-            listingService.updateListingStatus(listing.getListingId(), ListingStatus.SOLD);
+            offerDao.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
+            listingService.updateListingStatus(insertion.getInsertionID(), InsertionStatus.SOLD);
 
             loadUserOffers();
             //NavigationService.getInstance().navigateToMainView(event);
@@ -392,15 +391,18 @@ public class NotificationsController implements Initializable {
         // Called by static buttons in FXML, not used in dynamic generation
     }
 
-    private void handleDeclineOffer(ActionEvent event,int offerId) {
+    private void handleDeclineOffer(int offerId) {
         try {
-            offerDao.updateOfferStatus(offerId, ListingStatus.REJECTED);
+            List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId);
+            for (OfferedItem item : offeredItems) {
+                OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
+            }
+            offerDao.updateOfferStatus(offerId, InsertionStatus.REJECTED);
             loadUserOffers();
-            ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Offerta rifiutata", "L'offerta è stata rifiiutata con successo.");
-            //NavigationService.getInstance().navigateToMainView(event);
+            ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Offerta rifiutata", "L'offerta è stata rifiutata con successo.");
         } catch (Exception e) {
             e.printStackTrace();
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile accettare l'offerta: " + e.getMessage());
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile rifiutare l'offerta: " + e.getMessage());
         }
     }
 

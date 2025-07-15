@@ -1,16 +1,11 @@
 package com.uninaswap.controllers;
 
-import com.kitfox.svg.A;
-import com.uninaswap.dao.CategoryDaoImpl;
-import com.uninaswap.dao.ListingDao;
-import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.databaseUtils.FilterCriteria;
-import com.uninaswap.model.Listing;
+import com.uninaswap.model.Insertion;
 import com.uninaswap.model.Offer;
 import com.uninaswap.model.User;
-import com.uninaswap.model.typeListing;
+import com.uninaswap.model.typeInsertion;
 import com.uninaswap.services.*;
-import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +23,6 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +127,6 @@ public class MainController {
         initializePriceRange();
         loadAllItems();
         this.maxPriceLabel.setText(((int)this.priceSlider.getMax() + "€"));
-        wishlistButton.setOnAction(event -> showFavorites());
         searchField.focusedProperty().addListener((_, _, _) -> {
             searchButton.setDefaultButton(true);
         });
@@ -145,35 +138,12 @@ public class MainController {
             this.currentFilter = new FilterCriteria();
             this.currentFilter.setSortBy("date_desc"); // Più recenti per default
 
-            List<Listing> listings = filterService.searchListings(this.currentFilter);
-            displayListings(listings);
+            List<Insertion> insertions = filterService.searchListings(this.currentFilter);
+            displayListings(insertions);
 
         } catch (SQLException e) {
             this.resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
-        }
-    }
-    public void showFavorites() {
-        try {
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/favouriteInterface.fxml"));
-            Parent root = loader.load();
-
-            FavouritesViewController controller = loader.getController();
-
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setTitle("I miei preferiti");
-            stage.setScene(scene);
-            stage.setResizable(false);
-
-            stage.initOwner(wishlistButton.getScene().getWindow());
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            validationService.showAlert(Alert.AlertType.ERROR,
-                    "Errore",
-                    "Impossibile visualizzare i preferiti: " + e.getMessage());
         }
     }
     private void initializePriceRange() {
@@ -235,22 +205,22 @@ public class MainController {
     }
     private void applyCurrentFilters() {
         try {
-            List<Listing> listings = filterService.searchListings(currentFilter);
-            displayListings(listings);
+            List<Insertion> insertions = filterService.searchListings(currentFilter);
+            displayListings(insertions);
         } catch (SQLException e) {
             this.resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
         }
     }
-    private void displayListings(List<Listing> listings) {
+    private void displayListings(List<Insertion> insertions) {
         setupItemGrid();
 
-        if (!listings.isEmpty()) {
+        if (!insertions.isEmpty()) {
             int column = 0;
             int row = 0;
 
-            for (Listing listing : listings) {
-                VBox itemCard = createItemCard(listing);
+            for (Insertion insertion : insertions) {
+                VBox itemCard = createItemCard(insertion);
                 this.itemsGrid.add(itemCard, column, row);
 
                 column++;
@@ -261,16 +231,16 @@ public class MainController {
             }
 
             // Aggiorna contatore risultati
-            if (listings.size() == 1) {
+            if (insertions.size() == 1) {
                 this.resultsCountLabel.setText("Trovato 1 articolo");
             } else {
-                this.resultsCountLabel.setText("Trovati " + listings.size() + " articoli");
+                this.resultsCountLabel.setText("Trovati " + insertions.size() + " articoli");
             }
         } else {
             this.resultsCountLabel.setText("Trovati 0 articoli");
         }
     }
-    private VBox createItemCard(Listing listing) {
+    private VBox createItemCard(Insertion insertion) {
         // Create card layout
         VBox card = new VBox(10);
         card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;");
@@ -289,39 +259,39 @@ public class MainController {
         // Default image path
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
-            File imageFile = new File(listing.getImageUrl());
+            File imageFile = new File(insertion.getImageUrl());
             imageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
             //System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
             imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
         }
 
-        Label titleLabel = new Label(listing.getTitle());
+        Label titleLabel = new Label(insertion.getTitle());
         titleLabel.setWrapText(true);
         titleLabel.setStyle("-fx-font-weight: bold;");
         Label priceLabel;
-        if(listing.getType().equals(typeListing.GIFT) || listing.getType().equals(typeListing.EXCHANGE)) {
-            priceLabel = new Label("Disponibile per: " + listing.getType());
+        if(insertion.getType().equals(typeInsertion.GIFT) || insertion.getType().equals(typeInsertion.EXCHANGE)) {
+            priceLabel = new Label("Disponibile per: " + insertion.getType());
         } else {
-            priceLabel = new Label("€" + listing.getPrice());
+            priceLabel = new Label("€" + insertion.getPrice());
         }
         priceLabel.setStyle("-fx-font-size: 14px;");
 
-        String labelText = listing.getCategory();
+        String labelText = insertion.getCategory();
         if (labelText == null || labelText.isEmpty()) {
-            labelText = listing.getType().toString();
+            labelText = insertion.getType().toString();
         }
         Label categoryLabel = new Label(labelText);
         categoryLabel.setStyle("-fx-font-size: 12px; -fx-background-color: #f0f0f0; -fx-padding: 2 5; -fx-background-radius: 3;");
 
         card.getChildren().addAll(imageView, titleLabel, priceLabel, categoryLabel);
-        card.setOnMouseClicked(event -> showItemDetails(event, listing));
+        card.setOnMouseClicked(event -> showItemDetails(event, insertion));
 
         return card;
     }
 
-    private void showItemDetails(MouseEvent event, Listing listing) {
-        NavigationService.getInstance().navigateToProductDetailsView(event, listing);
+    private void showItemDetails(MouseEvent event, Insertion insertion) {
+        NavigationService.getInstance().navigateToProductDetailsView(event, insertion);
     }
 
     @FXML
@@ -330,8 +300,8 @@ public class MainController {
         if (!searchText.isEmpty()) {
             this.currentFilter.setSearchText(searchText);
             try {
-                List<Listing> listings = this.filterService.searchByText(searchText);
-                displayListings(listings);
+                List<Insertion> insertions = this.filterService.searchByText(searchText);
+                displayListings(insertions);
             } catch (SQLException e) {
                 this.resultsCountLabel.setText("Errore durante il caricamento");
                 e.printStackTrace();
@@ -388,10 +358,10 @@ public class MainController {
             this.currentFilter.setFacultyNames(null);
         }
         //Get type filter values
-        List<typeListing> selectedTypes = new ArrayList<>();
-        if (this.saleCheck.isSelected()) selectedTypes.add(typeListing.SALE);
-        if (this.swapCheck.isSelected()) selectedTypes.add(typeListing.EXCHANGE);
-        if (this.giftCheck.isSelected()) selectedTypes.add(typeListing.GIFT);
+        List<typeInsertion> selectedTypes = new ArrayList<>();
+        if (this.saleCheck.isSelected()) selectedTypes.add(typeInsertion.SALE);
+        if (this.swapCheck.isSelected()) selectedTypes.add(typeInsertion.EXCHANGE);
+        if (this.giftCheck.isSelected()) selectedTypes.add(typeInsertion.GIFT);
 
         if(!selectedTypes.isEmpty()) {
             this.currentFilter.setTypes(selectedTypes);

@@ -10,7 +10,7 @@ import java.util.List;
 public class TransactionDaoImpl implements TransactionDao {
 
     public int createTransaction(Transaction transaction) {
-        String sql = "INSERT INTO transactions (listing_id, offer_id, seller_id, buyer_id, amount, transaction_type, status, transaction_date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
+        String sql = "INSERT INTO transactions (insertion_id, offer_id, seller_id, buyer_id, amount, transaction_type, status, transaction_date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
         try (Connection connection = DatabaseUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -78,7 +78,7 @@ public class TransactionDaoImpl implements TransactionDao {
     }
 
     public List<Transaction> findByListingId(int listingId) {
-        String sql = "SELECT * FROM transactions WHERE listing_id = ?";
+        String sql = "SELECT * FROM transactions WHERE insertion_id = ?";
         List<Transaction> transactions = new ArrayList<>();
         try (Connection connection = DatabaseUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -97,7 +97,7 @@ public class TransactionDaoImpl implements TransactionDao {
     private Transaction mapRowToTransaction(ResultSet resultSet) throws SQLException {
         Transaction transaction = new Transaction();
         transaction.setTransactionId(resultSet.getInt("transaction_id"));
-        transaction.setListingId(resultSet.getInt("listing_id"));
+        transaction.setListingId(resultSet.getInt("insertionid"));
         transaction.setOfferId(resultSet.getInt("offer_id"));
         transaction.setSellerId(resultSet.getInt("seller_id"));
         transaction.setBuyerId(resultSet.getInt("buyer_id"));

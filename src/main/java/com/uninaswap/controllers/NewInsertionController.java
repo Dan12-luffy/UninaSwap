@@ -1,11 +1,9 @@
 package com.uninaswap.controllers; //TODO CLASSE NON FINITA, DA FINIRE
 
-import com.uninaswap.model.Listing;
-import com.uninaswap.dao.ListingDao;
-import com.uninaswap.dao.ListingDaoImpl;
-import com.uninaswap.model.ListingFactory;
-import com.uninaswap.model.ListingStatus;
-import com.uninaswap.model.typeListing;
+import com.uninaswap.model.Insertion;
+import com.uninaswap.model.InsertionFactory;
+import com.uninaswap.model.InsertionStatus;
+import com.uninaswap.model.typeInsertion;
 import com.uninaswap.services.ListingService;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
@@ -102,7 +100,7 @@ public class NewInsertionController {
                 ValidationService.getInstance().showNewInsertionMissingCampsError();
                 return;
             }
-            typeListing type = getTypeListing();
+            typeInsertion type = getTypeListing();
 
             BigDecimal price = BigDecimal.valueOf(0.0);
             if (!this.priceField.getText().isEmpty()) {
@@ -121,19 +119,19 @@ public class NewInsertionController {
                 imagePath = this.defaultImagePath;
             }
 
-            Listing listing = ListingFactory.createListing(
+            Insertion insertion = InsertionFactory.createListing(
                     this.titleField.getText(),
                     imagePath,
                     this.descriptionArea.getText(),
                     type,
                     price,
-                    ListingStatus.AVAILABLE,
+                    InsertionStatus.AVAILABLE,
                     LocalDate.now(),
                     UserSession.getInstance().getCurrentUser().getId(),
                     this.categoryComboBox.getValue()
             );
 
-            listingService.createListing(listing);
+            listingService.createListing(insertion);
             ValidationService.getInstance().showNewInsertionSuccess();
             NavigationService.getInstance().navigateToMyProfileView(event);
 
@@ -144,18 +142,15 @@ public class NewInsertionController {
     }
 
     @NotNull
-    private typeListing getTypeListing() {
-        typeListing type;
+    private typeInsertion getTypeListing() {
+        typeInsertion type;
         String typeValue = this.typeComboBox.getValue();
-        if ("Vendita".equals(typeValue)) {
-            type = typeListing.SALE;
-        } else if ("Scambio".equals(typeValue)) {
-            type = typeListing.EXCHANGE;
-        } else if ("Regalo".equals(typeValue)) {
-            type = typeListing.GIFT;
-        } else {
-            type = typeListing.SALE; // Default value
-        }
+        type = switch (typeValue) {
+            case "Vendita" -> typeInsertion.SALE;
+            case "Scambio" -> typeInsertion.EXCHANGE;
+            case "Regalo" -> typeInsertion.GIFT;
+            case null, default -> typeInsertion.SALE; // Default value
+        };
         return type;
     }
 

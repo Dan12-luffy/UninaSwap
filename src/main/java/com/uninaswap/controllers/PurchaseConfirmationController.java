@@ -1,20 +1,16 @@
 package com.uninaswap.controllers;
 
-import com.kitfox.svg.A;
-import com.uninaswap.model.Listing;
-import com.uninaswap.model.ListingStatus;
-import com.uninaswap.model.Offer;
+import com.uninaswap.model.Insertion;
+import com.uninaswap.model.InsertionStatus;
 import com.uninaswap.model.User;
 import com.uninaswap.services.*;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import java.time.LocalDate;
 
 public class PurchaseConfirmationController {
     @FXML private Label titleLabel;
@@ -23,30 +19,30 @@ public class PurchaseConfirmationController {
     @FXML private Label descriptionLabel;
     @FXML private ImageView productImageView;
 
-    private Listing listing;
+    private Insertion insertion;
     private ValidationService validationService = ValidationService.getInstance();
     private OfferService offerService = OfferService.getInstance();
 
-    public void setListing(Listing listing) {
-        this.listing = listing;
+    public void setListing(Insertion insertion) {
+        this.insertion = insertion;
         populateData();
     }
 
     private void populateData(){
-        if(listing != null){
-            titleLabel.setText(listing.getTitle());
-            priceLabel.setText(String.format("€%.2f", listing.getPrice()));
+        if(insertion != null){
+            titleLabel.setText(insertion.getTitle());
+            priceLabel.setText(String.format("€%.2f", insertion.getPrice()));
             try{
-                String sellerName = ListingService.getInstance().getSellerFullName(listing.getUserId());
+                String sellerName = ListingService.getInstance().getSellerFullName(insertion.getUserId());
                 sellerLabel.setText("Venditore : " + sellerName);
             }catch(Exception e){
                 sellerLabel.setText("Venditore : informazioni non disponibili");
 
             }
-            descriptionLabel.setText(listing.getDescription());
-            if(listing.getImageUrl() != null && !listing.getImageUrl().isEmpty()){
+            descriptionLabel.setText(insertion.getDescription());
+            if(insertion.getImageUrl() != null && !insertion.getImageUrl().isEmpty()){
                 try{
-                    Image image = new Image(listing.getImageUrl());
+                    Image image = new Image(insertion.getImageUrl());
                     productImageView.setImage(image);
                 } catch (Exception e) {
                     productImageView.setVisible(false);
@@ -58,13 +54,13 @@ public class PurchaseConfirmationController {
     }
     private void verifyUser(User currentUser) throws IllegalArgumentException{
 
-        if(listing.getUserId() == currentUser.getId()){
+        if(insertion.getUserId() == currentUser.getId()){
             throw new  IllegalArgumentException("Non puoi acquistare il tuo stesso prodotto.");
         }
     }
     @FXML
     private void onConfirmPurchase(ActionEvent event) {
-        if(listing == null){
+        if(insertion == null){
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Nessun prodotto selezionato.");
             return;
         }
@@ -72,11 +68,11 @@ public class PurchaseConfirmationController {
             User currentUser = UserSession.getInstance().getCurrentUser();
             verifyUser(currentUser);
 
-            int transactionId = TransactionService.getInstance().recordSale(listing,null ,currentUser);
+            int transactionId = TransactionService.getInstance().recordSale(insertion,null ,currentUser);
 
             if(transactionId > 0) {
-                listing.setStatus(ListingStatus.SOLD);
-                ListingService.getInstance().updateListing(listing);
+                insertion.setStatus(InsertionStatus.SOLD);
+                ListingService.getInstance().updateListing(insertion);
                 validationService.showAlert(Alert.AlertType.INFORMATION, "Acquisto effettuato",
                         "Acquisto completato con successo! Il prodotto è ora tuo.");
             } else {

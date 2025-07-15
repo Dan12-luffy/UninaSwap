@@ -1,6 +1,6 @@
 package com.uninaswap.databaseUtils;
 
-import com.uninaswap.model.typeListing;
+import com.uninaswap.model.typeInsertion;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,7 +12,7 @@ public class FilterCriteria {
     private BigDecimal maxPrice;
     private String sortBy; // "date_desc", "price_asc", "price_desc"
     private String status;
-    private List<typeListing> type;
+    private List<typeInsertion> type;
     private List<String> facultyNames;
     private Integer excludeUserId; // Per escludere gli annunci dell'utente corrente
 
@@ -45,8 +45,8 @@ public class FilterCriteria {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    public List<typeListing> getTypes() { return type; }
-    public void setTypes(List<typeListing> type) { this.type = type; }
+    public List<typeInsertion> getTypes() { return type; }
+    public void setTypes(List<typeInsertion> type) { this.type = type; }
 
     public List<String> getFacultyNames() { return facultyNames; }
     public void setFacultyNames(List<String> facultyNames) { this.facultyNames = facultyNames; }

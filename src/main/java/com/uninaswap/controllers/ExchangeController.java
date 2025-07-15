@@ -1,12 +1,10 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.dao.ListingDaoImpl;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -17,11 +15,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
-import java.math.BigDecimal;
-import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class ExchangeController{
@@ -46,8 +41,8 @@ public class ExchangeController{
     @FXML private Button previewExchangeButton;
     @FXML private Button confirmExchangeButton;
 
-    private Listing desiredProduct;
-    private final List<Listing> selectedListings = new ArrayList<>();
+    private Insertion desiredProduct;
+    private final List<Insertion> selectedInsertions = new ArrayList<>();
     private final ListingService listingService = ListingService.getInstance();
     private final OfferService offerService = OfferService.getInstance();
     private final OfferedItemsService offeredItemsService = OfferedItemsService.getInstance();
@@ -84,11 +79,11 @@ public class ExchangeController{
         confirmAction(confirmMessage).ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    Offer offer = new Offer(this.desiredProduct.getListingId(), UserSession.getInstance().getCurrentUserId(), desiredProduct.getPrice().doubleValue(), "Proposta di scambio", ListingStatus.PENDING, LocalDate.now());
+                    Offer offer = new Offer(this.desiredProduct.getInsertionID(), UserSession.getInstance().getCurrentUserId(), 0, null,typeOffer.EXCHANGE_OFFER, InsertionStatus.PENDING, LocalDate.now());
                     int offerId = offerService.createOffer(offer);
                     if (offerId > 0) {
-                        for (Listing listing : selectedListings) {
-                            OfferedItem offeredItem = new OfferedItem(offerId, listing.getListingId(), "Prodotto offerto", listing.getPrice().doubleValue());
+                        for (Insertion insertion : selectedInsertions) {
+                            OfferedItem offeredItem = new OfferedItem(offerId, insertion.getInsertionID(), "Prodotto offerto", insertion.getPrice().doubleValue());
                             offeredItemsService.createOfferedItem(offeredItem);
                         }
                         ValidationService.getInstance().showOfferProposalSuccess();
@@ -102,7 +97,7 @@ public class ExchangeController{
         });
     }
 
-    private void updateCalculations(Listing listing, boolean isSelected) {
+    private void updateCalculations(Insertion insertion, boolean isSelected) {
         String valueText = this.totalValueLabel.getText().replace("€", "");
         double totalValue = Double.parseDouble(valueText);
 
@@ -110,10 +105,10 @@ public class ExchangeController{
         int count = Integer.parseInt(countText);
 
         if(isSelected) {
-            totalValue += listing.getPrice().doubleValue();
+            totalValue += insertion.getPrice().doubleValue();
             count += 1;
         } else {
-            totalValue -= listing.getPrice().doubleValue();
+            totalValue -= insertion.getPrice().doubleValue();
             count -= 1;
         }
 
@@ -135,7 +130,7 @@ public class ExchangeController{
         // Enable/disable the confirm button based on selection status
     }
 
-    private HBox createListingCard(Listing listing) {
+    private HBox createListingCard(Insertion insertion) {
         HBox card = new HBox(15);
         card.setPrefWidth(this.yourProductsContainer.getPrefWidth() - 20);
         card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
@@ -164,7 +159,7 @@ public class ExchangeController{
 
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
-            File imageFile = new File(listing.getImageUrl());
+            File imageFile = new File(insertion.getImageUrl());
             imageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
             imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
@@ -174,16 +169,16 @@ public class ExchangeController{
         textContent.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         HBox.setHgrow(textContent, javafx.scene.layout.Priority.ALWAYS);
 
-        Label titleLabel = new Label(listing.getTitle());
+        Label titleLabel = new Label(insertion.getTitle());
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         titleLabel.setWrapText(true);
 
         String priceText;
-        if (listing.getType() == typeListing.GIFT) {
+        if (insertion.getType() == typeInsertion.GIFT) {
             priceText = "Gratis";
         }
         else {
-            priceText = String.format("€%.2f", listing.getPrice());
+            priceText = String.format("€%.2f", insertion.getPrice());
         }
 
         Label priceLabel = new Label(priceText);
@@ -198,12 +193,12 @@ public class ExchangeController{
 
             if (newState) {
                 card.setStyle("-fx-padding: 10; -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f1f8e9;");
-                selectedListings.add(listing); // Add to selected listings
+                selectedInsertions.add(insertion); // Add to selected listings
             } else {
                 card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
-                selectedListings.remove(listing); // Remove from selected listings
+                selectedInsertions.remove(insertion); // Remove from selected listings
             }
-            updateCalculations(listing, newState);
+            updateCalculations(insertion, newState);
         });
 
         VBox actionBox = new VBox(5);
@@ -215,17 +210,17 @@ public class ExchangeController{
 
     private void loadUserListings() {
         try {
-            List<Listing> listings = listingService.getCurrentUserAvailableInsertions();
+            List<Insertion> insertions = listingService.getCurrentUserAvailableInsertions();
 
             // Clear existing content
             this.yourProductsContainer.getChildren().clear();
 
-            if (listings.isEmpty()) {
+            if (insertions.isEmpty()) {
                 Label emptyLabel = new Label("Nessun annuncio trovato");
                 this.yourProductsContainer.getChildren().add(emptyLabel);
             } else {
-                for (Listing listing : listings) {
-                    this.yourProductsContainer.getChildren().add(createListingCard(listing));
+                for (Insertion insertion : insertions) {
+                    this.yourProductsContainer.getChildren().add(createListingCard(insertion));
                 }
             }
         } catch (SQLException e) {
@@ -235,20 +230,20 @@ public class ExchangeController{
         }
     }
 
-    public void loadDesiredProduct(Listing listing) {
-        if (listing == null) {
+    public void loadDesiredProduct(Insertion insertion) {
+        if (insertion == null) {
             return;
         }
-        this.desiredProduct = listing;
-        this.desiredProductNameLabel.setText(listing.getTitle());
-        this.desiredProductDescriptionLabel.setText(listing.getDescription());
-        this.desiredProductPriceLabel.setText("€" + listing.getPrice().toString());
-        this.desiredValueLabel.setText("€" + listing.getPrice().toString());
-        this.desiredProductOwnerLabel.setText("Utente: " + new UserDaoImpl().findFullNameFromID(listing.getUserId()));
+        this.desiredProduct = insertion;
+        this.desiredProductNameLabel.setText(insertion.getTitle());
+        this.desiredProductDescriptionLabel.setText(insertion.getDescription());
+        this.desiredProductPriceLabel.setText("€" + insertion.getPrice().toString());
+        this.desiredValueLabel.setText("€" + insertion.getPrice().toString());
+        this.desiredProductOwnerLabel.setText("Utente: " + new UserDaoImpl().findFullNameFromID(insertion.getUserId()));
 
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
-            File imageFile = new File(listing.getImageUrl());
+            File imageFile = new File(insertion.getImageUrl());
             this.desiredProductImageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
             System.out.println("Impossibile caricare l'immagine: " + e.getMessage());

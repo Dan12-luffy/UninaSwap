@@ -1,6 +1,6 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.dao.ListingDaoImpl;
+import com.uninaswap.dao.InsertionDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.*;
 import javafx.collections.FXCollections;
@@ -98,23 +98,22 @@ public class MyProfileController {
         setTotalAdsLabel();
         setStatisticsSection();
         loadUserListings();
-        loadUserFavorites();
         setPieChartAndBarChart();
     }
 
     private void loadUserListings() {
         try {
-            List<Listing> listings = listingService.getCurrentUserAvailableInsertions();
+            List<Insertion> insertions = listingService.getCurrentUserAvailableInsertions();
 
             // Clear existing content
             this.userAdsContainer.getChildren().clear();
 
-            if (listings.isEmpty()) {
+            if (insertions.isEmpty()) {
                 Label emptyLabel = new Label("Nessun annuncio trovato");
                 this.userAdsContainer.getChildren().add(emptyLabel);
             } else {
-                for (Listing listing : listings) {
-                    this.userAdsContainer.getChildren().add(createListingCard(listing));
+                for (Insertion insertion : insertions) {
+                    this.userAdsContainer.getChildren().add(createListingCard(insertion));
                 }
             }
         } catch (SQLException e) {
@@ -123,140 +122,30 @@ public class MyProfileController {
             userAdsContainer.getChildren().add(errorLabel);
         }
     }
-    private void loadUserFavorites() {
-        try {
-            List<Listing> favorites = FavouriteService.getInstance().getUserFavorites();
 
-            // Clear existing content
-            this.favoritesContainer.getChildren().clear();
 
-            if (favorites.isEmpty()) {
-                Label emptyLabel = new Label("Nessun elemento nei preferiti");
-                emptyLabel.getStyleClass().add("empty-message");
-                this.favoritesContainer.getChildren().add(emptyLabel);
-            } else {
-                for (Listing listing : favorites) {
-                    this.favoritesContainer.getChildren().add(createFavoriteCard(listing));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Label errorLabel = new Label("Errore nel caricamento dei preferiti");
-            errorLabel.getStyleClass().add("error-message");
-            favoritesContainer.getChildren().add(errorLabel);
-        }
-    }
-
-    private HBox createFavoriteCard(Listing listing) {
-        HBox card = new HBox(15);
-        card.setPrefWidth(this.favoritesContainer.getPrefWidth() - 20);
-        card.getStyleClass().add("listing-card");
-        card.setPrefHeight(100);
-
-        ImageView imageView = new ImageView();
-        imageView.setFitWidth(80);
-        imageView.setFitHeight(80);
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(true);
-        imageView.getStyleClass().add("listing-image");
-
-        String defaultImagePath = "/com/uninaswap/images/default_image.png";
-        try {
-            File imageFile = new File(listing.getImageUrl());
-            imageView.setImage(new Image(imageFile.toURI().toString()));
-        } catch (Exception e) {
-            imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
-        }
-
-        VBox textContent = new VBox(5);
-        textContent.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-        HBox.setHgrow(textContent, javafx.scene.layout.Priority.ALWAYS);
-
-        Label titleLabel = new Label(listing.getTitle());
-        titleLabel.getStyleClass().add("listing-title");
-        titleLabel.setWrapText(true);
-
-        String priceText;
-        if (listing.getType().equals(typeListing.GIFT)) {
-            priceText = typeListing.GIFT.toString();
-        }
-        else if (listing.getType().equals(typeListing.EXCHANGE)) {
-            priceText = typeListing.EXCHANGE.toString();
-        } else {
-            priceText = String.format("€%.2f", listing.getPrice());
-        }
-
-        Label priceLabel = new Label(priceText);
-        priceLabel.getStyleClass().add("listing-price");
-
-        HBox infoBox = new HBox(10);
-        Label statusLabel = new Label(listing.getStatus().toString());
-        statusLabel.getStyleClass().add("listing-status");
-
-        Label dateLabel = new Label(listing.getPublishDate() != null ? listing.getPublishDate().toString() : "");
-        dateLabel.getStyleClass().add("listing-date");
-
-        infoBox.getChildren().addAll(statusLabel, dateLabel);
-        textContent.getChildren().addAll(titleLabel, priceLabel, infoBox);
-
-        VBox actionButtons = new VBox(8);
-        actionButtons.setAlignment(javafx.geometry.Pos.CENTER);
-        actionButtons.setPrefWidth(80);
-
-        Button viewButton = new Button("Visualizza");
-        viewButton.getStyleClass().add("edit-button");
-        viewButton.setOnAction(event -> {
-            event.consume();
-            showItemDetails(null, listing);
-        });
-
-        Button removeButton = new Button("Rimuovi");
-        removeButton.getStyleClass().add("delete-button");
-        removeButton.setOnAction(event -> {
-            event.consume();
-            removeFavorite(listing);
-        });
-
-        actionButtons.getChildren().addAll(viewButton, removeButton);
-        card.getChildren().addAll(imageView, textContent, actionButtons);
-
-        return card;
-    }
-
-    private void removeFavorite(Listing listing ){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Rimuovi dai preferiti");
-        alert.setHeaderText("Rimuovere questo articolo dai preferiti?");
-        alert.setContentText("Stai per rimuovere ' " + listing.getTitle() + " ' dai tuoi preferiti.\nL'operazione non può essere annullata.");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if(result.isPresent() && result.get() == ButtonType.OK){
-            FavouriteService.getInstance().removeFromFavorites(listing.getListingId());
-            loadUserFavorites();
-        }
-    }
     private void setStatisticsSection() {
         try {
-            List<Listing> listings = listingService.getCurrentUserAvailableInsertions();
+            List<Insertion> insertions = listingService.getCurrentUserAvailableInsertions();
 
             double minPrice = Double.MAX_VALUE;
             double maxPrice = 0;
             double sumPrice = 0.0;
             int priceCount = 0;
 
-            if (!listings.isEmpty()) {
-                for (Listing listing : listings) {
-                    if (listing.getStatus() == ListingStatus.SOLD) {
+            if (!insertions.isEmpty()) {
+                for (Insertion insertion : insertions) {
+                    if (insertion.getStatus() == InsertionStatus.SOLD) {
                         this.acceptedOffersStat.setText(String.valueOf(Integer.parseInt(this.acceptedOffersStat.getText()) + 1));
-                    } else if (listing.getStatus() == ListingStatus.PENDING) {
+                    } else if (insertion.getStatus() == InsertionStatus.PENDING) {
                         this.pendingOffersStat.setText(String.valueOf(Integer.parseInt(this.pendingOffersStat.getText()) + 1));
-                    } else if (listing.getStatus() == ListingStatus.REJECTED) {
+                    } else if (insertion.getStatus() == InsertionStatus.REJECTED) {
                         this.rejectedOffersStat.setText(String.valueOf(Integer.parseInt(this.rejectedOffersStat.getText()) + 1));
                     }
 
                     // Safely handle price calculations - check if price is not null
-                    if (listing.getPrice() != null) {
-                        double price = listing.getPrice().doubleValue();
+                    if (insertion.getPrice() != null) {
+                        double price = insertion.getPrice().doubleValue();
                         if (price < minPrice) {
                             minPrice = price;
                         }
@@ -288,7 +177,7 @@ public class MyProfileController {
             e.printStackTrace();
         }
     }
-    private HBox createListingCard(Listing listing) {
+    private HBox createListingCard(Insertion insertion) {
         HBox card = new HBox(15);
         card.setPrefWidth(this.userAdsContainer.getPrefWidth() - 20);
         card.getStyleClass().add("listing-card");
@@ -303,7 +192,7 @@ public class MyProfileController {
 
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
-            File imageFile = new File(listing.getImageUrl());
+            File imageFile = new File(insertion.getImageUrl());
             imageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
             imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
@@ -313,27 +202,27 @@ public class MyProfileController {
         textContent.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         HBox.setHgrow(textContent, javafx.scene.layout.Priority.ALWAYS);
 
-        Label titleLabel = new Label(listing.getTitle());
+        Label titleLabel = new Label(insertion.getTitle());
         titleLabel.getStyleClass().add("listing-title");
         titleLabel.setWrapText(true);
 
         String priceText;
-        if (listing.getType().equals(typeListing.GIFT)) {
-            priceText = typeListing.GIFT.toString();
-        } else if (listing.getType().equals(typeListing.EXCHANGE)) {
-            priceText = typeListing.EXCHANGE.toString();
+        if (insertion.getType().equals(typeInsertion.GIFT)) {
+            priceText = typeInsertion.GIFT.toString();
+        } else if (insertion.getType().equals(typeInsertion.EXCHANGE)) {
+            priceText = typeInsertion.EXCHANGE.toString();
         } else {
-            priceText = String.format("€%.2f", listing.getPrice());
+            priceText = String.format("€%.2f", insertion.getPrice());
         }
 
         Label priceLabel = new Label(priceText);
         priceLabel.getStyleClass().add("listing-price");
 
         HBox infoBox = new HBox(10);
-        Label statusLabel = new Label(listing.getStatus().toString());
+        Label statusLabel = new Label(insertion.getStatus().toString());
         statusLabel.getStyleClass().add("listing-status");
 
-        Label dateLabel = new Label(listing.getPublishDate() != null ? listing.getPublishDate().toString() : "");
+        Label dateLabel = new Label(insertion.getPublishDate() != null ? insertion.getPublishDate().toString() : "");
         dateLabel.getStyleClass().add("listing-date");
 
         infoBox.getChildren().addAll(statusLabel, dateLabel);
@@ -348,7 +237,7 @@ public class MyProfileController {
 
         editButton.setOnAction(event -> {
             event.consume();
-            editListing(listing);
+            editListing(insertion);
         });
 
         Button deleteButton = new Button("Elimina");
@@ -356,29 +245,29 @@ public class MyProfileController {
 
         deleteButton.setOnAction(event -> {
             event.consume();
-            deleteListing(listing);
+            deleteListing(insertion);
             setTotalAdsLabel();
         });
 
         actionButtons.getChildren().addAll(editButton, deleteButton);
 
         card.getChildren().addAll(imageView, textContent, actionButtons);
-        card.setOnMouseClicked(event -> showItemDetails(event, listing));
+        card.setOnMouseClicked(event -> showItemDetails(event, insertion));
 
         return card;
     }
 
     private void setTotalAdsLabel(){
         try {
-            List<Listing> listingDao = listingService.getCurrentUserAvailableInsertions();
-            int totalInsertions = listingDao.size();
+            List<Insertion> insertionDao = listingService.getCurrentUserAvailableInsertions();
+            int totalInsertions = insertionDao.size();
             int availableListings = 0;
             int completedSales = 0;
             double totalEarnings = 0;
-            for(Listing l : listingDao){
-                if(l.getStatus().equals(ListingStatus.AVAILABLE))
+            for(Insertion l : insertionDao){
+                if(l.getStatus().equals(InsertionStatus.AVAILABLE))
                     availableListings++;
-                if(l.getStatus().equals(ListingStatus.SOLD)) {
+                if(l.getStatus().equals(InsertionStatus.SOLD)) {
                     completedSales++;
                     totalEarnings += l.getPrice() != null ? l.getPrice().doubleValue() : 0.0;
                 }
@@ -393,27 +282,27 @@ public class MyProfileController {
         }
     }
 
-    private void showItemDetails(MouseEvent event, Listing listing) {
-        NavigationService.getInstance().navigateToProductDetailsView(event, listing);
+    private void showItemDetails(MouseEvent event, Insertion insertion) {
+        NavigationService.getInstance().navigateToProductDetailsView(event, insertion);
     }
 
-    private void editListing(Listing listing) {
+    private void editListing(Insertion insertion) {
         // Placeholder for future edit functionality
-        System.out.println("Edit listing: " + listing.getListingId());
+        System.out.println("Edit listing: " + insertion.getInsertionID());
     }
 
-    private void deleteListing(Listing listing) {
+    private void deleteListing(Insertion insertion) {
         // Implement delete confirmation and functionality
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma eliminazione");
         alert.setHeaderText("Eliminare l'annuncio?");
-        alert.setContentText("Stai per eliminare l'annuncio: " + listing.getTitle() + "\nL'operazione non può essere annullata.");
+        alert.setContentText("Stai per eliminare l'annuncio: " + insertion.getTitle() + "\nL'operazione non può essere annullata.");
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
-                ListingDaoImpl listingDao = new ListingDaoImpl();
-                listingDao.delete(listing.getListingId());
+                InsertionDaoImpl listingDao = new InsertionDaoImpl();
+                listingDao.delete(insertion.getInsertionID());
                 loadUserListings();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -427,25 +316,25 @@ public class MyProfileController {
     }
     private void setPieChartAndBarChart(){
        try {
-           List<Listing> listings = listingService.getCurrentUserInsertions();
-           ObservableList<Listing> listingObservableList = FXCollections.observableArrayList(listings);
+           List<Insertion> insertions = listingService.getCurrentUserInsertions();
+           ObservableList<Insertion> insertionObservableList = FXCollections.observableArrayList(insertions);
 
            this.offerTypesPieChart.getData().clear();
            ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                   new PieChart.Data("Disponibili", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.AVAILABLE).count()),
-                   new PieChart.Data("In attesa", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.PENDING).count()),
-                   new PieChart.Data("Venduti", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.SOLD).count()),
-                   new PieChart.Data("Rifiutati", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.REJECTED).count())
+                   new PieChart.Data("Disponibili", insertionObservableList.stream().filter(l -> l.getStatus() == InsertionStatus.AVAILABLE).count()),
+                   new PieChart.Data("In attesa", insertionObservableList.stream().filter(l -> l.getStatus() == InsertionStatus.PENDING).count()),
+                   new PieChart.Data("Venduti", insertionObservableList.stream().filter(l -> l.getStatus() == InsertionStatus.SOLD).count()),
+                   new PieChart.Data("Rifiutati", insertionObservableList.stream().filter(l -> l.getStatus() == InsertionStatus.REJECTED).count())
            );
            this.offerTypesPieChart.setData(pieChartData);
 
            this.acceptedOffersBarChart.getData().clear();
            BarChart.Series<String, Number> series = new BarChart.Series<>();
            series.setName("Stato");
-           series.getData().add(new BarChart.Data<>("Disponibili", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.AVAILABLE).count()));
-           series.getData().add(new BarChart.Data<>("In attesa", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.PENDING).count()));
-           series.getData().add(new BarChart.Data<>("Venduti", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.SOLD).count()));
-           series.getData().add(new BarChart.Data<>("Rifiutati", listingObservableList.stream().filter(l -> l.getStatus() == ListingStatus.REJECTED).count()));
+           series.getData().add(new BarChart.Data<>("Disponibili", insertionObservableList.stream().filter(l -> l.getStatus() == InsertionStatus.AVAILABLE).count()));
+           series.getData().add(new BarChart.Data<>("In attesa", insertionObservableList.stream().filter(l -> l.getStatus() == InsertionStatus.PENDING).count()));
+           series.getData().add(new BarChart.Data<>("Venduti", insertionObservableList.stream().filter(l -> l.getStatus() == InsertionStatus.SOLD).count()));
+           series.getData().add(new BarChart.Data<>("Rifiutati", insertionObservableList.stream().filter(l -> l.getStatus() == InsertionStatus.REJECTED).count()));
            this.acceptedOffersBarChart.getData().add(series);
        } catch (Exception e) {
            e.printStackTrace();

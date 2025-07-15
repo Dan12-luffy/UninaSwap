@@ -1,8 +1,9 @@
 package com.uninaswap.controllers;
 
+import com.uninaswap.model.typeOffer;
 import javafx.event.ActionEvent;
-import com.uninaswap.model.Listing;
-import com.uninaswap.model.ListingStatus;
+import com.uninaswap.model.Insertion;
+import com.uninaswap.model.InsertionStatus;
 import com.uninaswap.model.Offer;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.OfferService;
@@ -18,7 +19,7 @@ import javafx.scene.image.Image;
 import java.time.LocalDate;
 
 public class MakeOfferController {
-    private Listing listing;
+    private Insertion insertion;
 
     @FXML private Label productTitleLabel;
     @FXML private Label productDescriptionLabel;
@@ -31,14 +32,14 @@ public class MakeOfferController {
 
     private static final ValidationService validationService = ValidationService.getInstance();
 
-    public void setListing(Listing listing) {
-        this.listing = listing;
-        if (listing != null) {
-            productTitleLabel.setText(listing.getTitle());
-            productDescriptionLabel.setText(listing.getDescription());
-            productPriceLabel.setText("€" + listing.getPrice());
+    public void setListing(Insertion insertion) {
+        this.insertion = insertion;
+        if (insertion != null) {
+            productTitleLabel.setText(insertion.getTitle());
+            productDescriptionLabel.setText(insertion.getDescription());
+            productPriceLabel.setText("€" + insertion.getPrice());
 
-            setProductImage(listing.getImageUrl());
+            setProductImage(insertion.getImageUrl());
         }
     }
 
@@ -68,7 +69,7 @@ public class MakeOfferController {
     //TODO separa la logica di validazione in un metodo a parte
     @FXML
     private void handleSubmitOffer(ActionEvent event) {
-        if (listing == null) {
+        if (insertion == null) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Nessun prodotto selezionato.");
             return;
         }
@@ -91,23 +92,24 @@ public class MakeOfferController {
             return;
         }
 
-        if (listing.getPrice() != null && offerAmount >= listing.getPrice().doubleValue()) {
+        if (insertion.getPrice() != null && offerAmount >= insertion.getPrice().doubleValue()) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Per offerte pari o superiori al prezzo di listino, usa 'Acquista Ora'.");
             return;
         }
 
         int currentUserId = UserSession.getInstance().getCurrentUser().getId();
-        if (listing.getUserId() == currentUserId) {
+        if (insertion.getUserId() == currentUserId) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Non puoi fare offerte sui tuoi annunci.");
             return;
         }
 
         Offer offer = new Offer(
-                listing.getListingId(),
+                insertion.getInsertionID(),
                 currentUserId,
                 offerAmount,
-                "Offerta per " + listing.getTitle(),
-                ListingStatus.PENDING,
+                null,
+                typeOffer.SALE_OFFER,
+                InsertionStatus.PENDING,
                 LocalDate.now()
         );
 
