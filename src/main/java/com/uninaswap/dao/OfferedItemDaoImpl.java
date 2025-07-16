@@ -17,13 +17,11 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
 
     @Override
     public void createOfferedItem(OfferedItem offeredItem) {
-        String sql = "INSERT INTO offereditems (offerid, offeredinsertionid, offereditemdescription, offereditemvalue) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO offereditems (offerid, offeredinsertionid) VALUES (?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, offeredItem.getOfferId());
             stmt.setInt(2, offeredItem.getListingId());
-            stmt.setString(3, offeredItem.getOfferedItemDescription());
-            stmt.setBigDecimal(4, BigDecimal.valueOf(offeredItem.getAmount()));
             stmt.executeUpdate();
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'oggetto offerto: " + e.getMessage());
@@ -44,7 +42,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
         }
     }
 
-    @Override
+    /*@Override
     public void updateOfferedItem(int offerItemId, String offeredItemDescription, BigDecimal amount) {
         String sql = "UPDATE offereditems SET offereditemdescription = ?, offereditemvalue = ? WHERE offereditemid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
@@ -57,7 +55,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aggiornare l'oggetto offerto: " + e.getMessage());
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Override
     public OfferedItem findOfferedItemById(int offerItemId) {
@@ -70,9 +68,6 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
             if (rs.next()) {
                 offeredItem.setOfferedItemId(rs.getInt("offereditemid"));
                 offeredItem.setOfferId(rs.getInt("offerid"));
-                offeredItem.setListingId(rs.getInt("offeredinsertionid"));
-                offeredItem.setOfferedItemDescription(rs.getString("offereditemdescription"));
-                offeredItem.setAmount(rs.getBigDecimal("offereditemvalue").doubleValue());
             }
             return offeredItem;
         } catch (SQLException e) {
@@ -95,8 +90,6 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
                 offeredItem.setOfferedItemId(rs.getInt("offereditemid"));
                 offeredItem.setOfferId(rs.getInt("offerid"));
                 offeredItem.setListingId(rs.getInt("offeredinsertionid"));
-                offeredItem.setOfferedItemDescription(rs.getString("offereditemdescription"));
-                offeredItem.setAmount(rs.getBigDecimal("offereditemvalue").doubleValue());
                 offeredItems.add(offeredItem);
             }
             return offeredItems;
@@ -120,8 +113,6 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
                 offeredItem.setOfferedItemId(rs.getInt("offereditemid"));
                 offeredItem.setOfferId(rs.getInt("offerid"));
                 offeredItem.setListingId(rs.getInt("offeredinsertionid"));
-                offeredItem.setOfferedItemDescription(rs.getString("offereditemdescription"));
-                offeredItem.setAmount(rs.getBigDecimal("offereditemvalue").doubleValue());
                 offeredItems.add(offeredItem);
             }
             return offeredItems;
@@ -146,8 +137,6 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
                 offeredItem.setOfferedItemId(rs.getInt("offereditemid"));
                 offeredItem.setOfferId(rs.getInt("offerid"));
                 offeredItem.setListingId(rs.getInt("offeredinsertionid"));
-                offeredItem.setOfferedItemDescription(rs.getString("offereditemdescription"));
-                offeredItem.setAmount(rs.getBigDecimal("offereditemvalue").doubleValue());
                 offeredItems.add(offeredItem);
             }
             return offeredItems;

@@ -216,7 +216,10 @@ public class NotificationsController implements Initializable {
 
     private void handleRetryOffer(ActionEvent event, Insertion insertion) {
         try {
-            NavigationService.getInstance().navigateToMakeOfferView(event, insertion);
+            if(insertion.getType() == typeInsertion.SALE)
+                NavigationService.getInstance().navigateToMakeOfferView(event, insertion);
+            else if(insertion.getType() == typeInsertion.EXCHANGE)
+                NavigationService.getInstance().navigateToExchangeView(event, insertion);
         } catch (Exception e) {
             e.printStackTrace();
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
@@ -394,7 +397,7 @@ public class NotificationsController implements Initializable {
             for (OfferedItem item : offeredItems) {
                 OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
             }
-            offerService.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
+            offerService.updateOfferStatus(offerId, InsertionStatus.REJECTED);
             loadUserOffers();
             ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Offerta rifiutata", "L'offerta è stata rifiutata con successo.");
         } catch (Exception e) {

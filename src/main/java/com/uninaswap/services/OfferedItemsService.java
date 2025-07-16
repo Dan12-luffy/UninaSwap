@@ -28,9 +28,6 @@ public class OfferedItemsService {
         offeredItemDao.deleteOfferedItem(offerItemId);
     }
 
-    public void updateOfferedItem(int offerItemId, String offeredItemDescription, BigDecimal amount) {
-        offeredItemDao.updateOfferedItem(offerItemId, offeredItemDescription, amount);
-    }
 
     public OfferedItem findOfferedItemById(int offerItemId) {
         return offeredItemDao.findOfferedItemById(offerItemId);

@@ -83,7 +83,7 @@ public class ExchangeController{
                     int offerId = offerService.createOffer(offer);
                     if (offerId > 0) {
                         for (Insertion insertion : selectedInsertions) {
-                            OfferedItem offeredItem = new OfferedItem(offerId, insertion.getInsertionID(), "Prodotto offerto", insertion.getPrice().doubleValue());
+                            OfferedItem offeredItem = new OfferedItem(offerId, insertion.getInsertionID());
                             offeredItemsService.createOfferedItem(offeredItem);
                         }
                         ValidationService.getInstance().showOfferProposalSuccess();
