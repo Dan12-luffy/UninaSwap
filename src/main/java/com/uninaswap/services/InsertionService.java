@@ -86,4 +86,16 @@ public class InsertionService {
             throw new RuntimeException("Unexpected error occurred while updating listing status", e);
         }
     }
+
+    public String getSellerInitials(Integer userId) {
+        String fullName = userDao.findFullNameFromID(userId);
+        if (fullName == null || fullName.isEmpty()) {
+            return "N/A";
+        }
+        String[] parts = fullName.split(" ");
+        if (parts.length < 2) {
+            return fullName.substring(0, 1).toUpperCase();
+        }
+        return (parts[0].substring(0, 1) + parts[1].charAt(0)).toUpperCase();
+    }
 }

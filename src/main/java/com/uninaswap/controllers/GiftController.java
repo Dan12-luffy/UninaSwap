@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 
+import javax.swing.*;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -23,20 +24,52 @@ public class GiftController {
     @FXML private Label productDescriptionLabel;
     @FXML private Label productTitleLabel;
     @FXML private Label ownerNameLabel;
+    @FXML private Label characterCountLabel;
+    @FXML private Button sendGiftOfferButton;
+    @FXML private Label ownerInitialsLabel;
 
 
     private static final InsertionService insertionService = InsertionService.getInstance();
+    private static final OfferService offerService = OfferService.getInstance();
+
+    @FXML public void initialize() {
+        if (motivationTextArea != null) {
+            motivationTextArea.textProperty().addListener((_, _, newValue) -> {
+                updateCharacterCount();
+                sendGiftOfferButton.setDisable(newValue.isEmpty());
+            });
+        }
+    }
 
     @FXML
-    private void sendGiftOffer() {
+    private void sendGiftOffer(ActionEvent event) {
         String message = motivationTextArea.getText();
-        // Valida e invia il messaggio al backend
+        if (message.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Il campo motivazione non può essere vuoto.", ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+        try {
+            Offer offer = new Offer(this.insertion.getInsertionID(), UserSession.getInstance().getCurrentUserId(), 0, message, typeOffer.GIFT_OFFER, InsertionStatus.PENDING, LocalDate.now());
+            offerService.createOffer(offer);
+            NavigationService.getInstance().navigateToMainView(event);
+        }
+        catch (Exception ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Errore durante l'invio dell'offerta: " + ex.getMessage(), ButtonType.OK);
+            alert.showAndWait();
+        }
     }
 
     @FXML
-    private void cancelGiftOffer() {
-        // Torna alla schermata precedente o chiudi il dialog
+    private void cancelGiftOffer(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Sei sicuro di voler annullare l'offerta?", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                NavigationService.getInstance().navigateToMainView(event);
+            }
+        });
     }
+
     @FXML
     private void goBack(ActionEvent event) {
         NavigationService.getInstance().navigateToMainView(event);
@@ -44,9 +77,25 @@ public class GiftController {
 
     @FXML
     private void updateCharacterCount() {
-        if (motivationTextArea != null) {
+        if (motivationTextArea != null && characterCountLabel != null) {
             int currentLength = motivationTextArea.getText().length();
             int maxLength = 500;
+            int remaining = maxLength - currentLength;
+
+            characterCountLabel.setText(remaining + "/" + maxLength);
+
+            if (remaining < 50) {
+                characterCountLabel.setStyle("-fx-text-fill: red;");
+            } else if (remaining < 100) {
+                characterCountLabel.setStyle("-fx-text-fill: orange;");
+            } else {
+                characterCountLabel.setStyle("-fx-text-fill: green;");
+            }
+
+            if (currentLength > maxLength) {
+                motivationTextArea.setText(motivationTextArea.getText().substring(0, maxLength));
+                motivationTextArea.positionCaret(maxLength);
+            }
         }
     }
     public void setListing(Insertion insertion) {
@@ -55,10 +104,11 @@ public class GiftController {
             productTitleLabel.setText(insertion.getTitle());
             productDescriptionLabel.setText(insertion.getDescription());
             ownerNameLabel.setText(insertionService.getSellerFullName(insertion.getUserId()));
-            setProductImage(insertion.getImageUrl());
+            ownerInitialsLabel.setText(insertionService.getSellerInitials(insertion.getUserId()));
+            setProductImage();
         }
     }
-    public void setProductImage(String imagePath) {
+    public void setProductImage() {
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
             File imageFile = new File(insertion.getImageUrl());

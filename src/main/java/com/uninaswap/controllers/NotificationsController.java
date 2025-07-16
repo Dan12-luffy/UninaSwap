@@ -134,7 +134,7 @@ public class NotificationsController implements Initializable {
         return card;
     }
 
-    private VBox createRejectedOfferCard(Offer offer) throws SQLException {
+    /*private VBox createRejectedOfferCard(Offer offer) throws SQLException {
         VBox card = new VBox();
         card.setStyle("-fx-effect: none !important; -fx-background-insets: 0; -fx-border-color: #ff6b6b; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-padding: 12;");
 
@@ -167,6 +167,72 @@ public class NotificationsController implements Initializable {
 
         Label descriptionLabel = new Label("Offerta: " + formatAmount(offer.getAmount()) +
                 " - Prezzo richiesto: " + formatAmount(insertion.getPrice().doubleValue()));
+        descriptionLabel.getStyleClass().add("notification-description");
+
+        Region verticalSpacer = new Region();
+        verticalSpacer.setPrefHeight(8);
+
+        HBox actions = createRejectedOfferActions(offer, insertion);
+
+        offerContent.getChildren().addAll(header, titleLabel, descriptionLabel, verticalSpacer, actions);
+        content.getChildren().add(offerContent);
+        card.getChildren().add(content);
+
+        return card;
+    }*/
+    private VBox createRejectedOfferCard(Offer offer) throws SQLException {
+        VBox card = new VBox();
+        card.setStyle("-fx-effect: none !important; -fx-background-insets: 0; -fx-border-color: #ff6b6b; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-padding: 12;");
+
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(16);
+
+        VBox offerContent = new VBox();
+        offerContent.setSpacing(8);
+        HBox.setHgrow(offerContent, Priority.ALWAYS);
+
+        Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
+        List<OfferedItem> offeredItems = OfferedItemsService.getInstance()
+                .findOfferedItemsByOfferId(offer.getOfferID());
+
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.setSpacing(10);
+        header.setPadding(new Insets(0, 0, 4, 0));
+
+        Label statusLabel = new Label("OFFERTA RIFIUTATA");
+        statusLabel.getStyleClass().add("notification-type");
+        statusLabel.setStyle("-fx-text-fill: #ff6b6b;");
+
+        Label dateLabel = new Label(getTimeAgo(offer.getOfferDate()));
+        dateLabel.getStyleClass().add("notification-time");
+
+        header.getChildren().addAll(statusLabel, dateLabel);
+
+        Label titleLabel = new Label("La tua offerta per '" + insertion.getTitle() + "' è stata rifiutata");
+        titleLabel.getStyleClass().add("notification-title");
+
+        // Crea descrizione basata sul tipo di inserzione
+        String description;
+        switch (insertion.getType()) {
+            case SALE:
+                description = "Offerta: " + formatAmount(offer.getAmount()) +
+                        " - Prezzo richiesto: " + formatAmount(insertion.getPrice().doubleValue());
+                break;
+            case EXCHANGE:
+                description = "Il venditore ha rifiutato la tua proposta di scambio per gli oggetti offerti\n";
+                break;
+            case GIFT:
+                description = offer.getMessage() != null && !offer.getMessage().isEmpty() ?
+                        "Messaggio: \"" + offer.getMessage() + "\"" :
+                        "Nessun messaggio";
+                break;
+            default:
+                description = "";
+        }
+
+        Label descriptionLabel = new Label(description);
         descriptionLabel.getStyleClass().add("notification-description");
 
         Region verticalSpacer = new Region();
@@ -250,8 +316,14 @@ public class NotificationsController implements Initializable {
         String username = offerUser != null ? offerUser.getUsername() : "Un utente";
 
         return switch (type) {
-            case GIFT -> username + " vorrebbe ricevere il tuo regalo: " + insertion.getTitle();
-
+            case GIFT -> {
+                StringBuilder desc = new StringBuilder(username + " vorrebbe ricevere il tuo regalo: " + insertion.getTitle());
+                // Include il messaggio di motivazione per le richieste regalo
+                if (offer.getMessage() != null && !offer.getMessage().isEmpty()) {
+                    desc.append("\n\nMessaggio: \"").append(offer.getMessage()).append("\"");
+                }
+                yield desc.toString();
+            }
             case EXCHANGE -> {
                 StringBuilder desc = new StringBuilder(username + " propone uno scambio per " + insertion.getTitle());
                 if (!offeredItems.isEmpty()) {
@@ -269,7 +341,6 @@ public class NotificationsController implements Initializable {
                 }
                 yield desc.toString();
             }
-
             case SALE -> username + " ha offerto " + formatAmount(offer.getAmount()) +
                     " per " + insertion.getTitle() +
                     ". Prezzo richiesto: " + formatAmount(insertion.getPrice().doubleValue());
@@ -288,7 +359,7 @@ public class NotificationsController implements Initializable {
 
         Button declineButton = new Button("Rifiuta");
         declineButton.getStyleClass().add("decline-button");
-        declineButton.setOnAction(e -> handleDeclineOffer( offer.getOfferID()));
+        declineButton.setOnAction(e -> handleDeclineOffer(offer.getOfferID()));
 
         String acceptButtonText = switch (listingType) {
             case GIFT -> "Regala";
@@ -301,7 +372,8 @@ public class NotificationsController implements Initializable {
         acceptButton.getStyleClass().add("accept-button");
         acceptButton.setOnAction(e -> handleAcceptOffer(e, offer.getOfferID()));
 
-        if (listingType != typeInsertion.GIFT) {
+        // Mostra l'importo solo per le offerte di vendita
+        if (listingType == typeInsertion.SALE) {
             Label offerAmount = new Label("Offerta: " + formatAmount(offer.getAmount()));
             offerAmount.getStyleClass().add("offer-amount");
             actions.getChildren().addAll(offerAmount, spacer, declineButton, acceptButton);

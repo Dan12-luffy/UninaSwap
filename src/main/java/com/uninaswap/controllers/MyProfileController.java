@@ -236,8 +236,7 @@ public class MyProfileController {
         editButton.getStyleClass().add("edit-button");
 
         editButton.setOnAction(event -> {
-            event.consume();
-            editListing(insertion);
+            editListing(event, insertion);
         });
 
         Button deleteButton = new Button("Elimina");
@@ -286,9 +285,8 @@ public class MyProfileController {
         NavigationService.getInstance().navigateToProductDetailsView(event, insertion);
     }
 
-    private void editListing(Insertion insertion) {
-        // Placeholder for future edit functionality
-        System.out.println("Edit listing: " + insertion.getInsertionID());
+    private void editListing(ActionEvent event, Insertion insertion) {
+        NavigationService.getInstance().navigateToEditListingView(event, insertion);
     }
 
     private void deleteListing(Insertion insertion) {

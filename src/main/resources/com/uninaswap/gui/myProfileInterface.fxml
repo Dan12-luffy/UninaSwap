@@ -225,25 +225,6 @@
                                     </ScrollPane>
                                 </VBox>
                             </Tab>
-                            <!-- Favorites Tab -->
-                            <Tab fx:id="favoritesTab" styleClass="profile-tab" text="❤️ Preferiti">
-                                <VBox spacing="15">
-                                    <padding>
-                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                    </padding>
-
-                                    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="ads-header">
-                                        <Label styleClass="section-title" text="I tuoi articoli preferiti" />
-                                        <Region HBox.hgrow="ALWAYS" />
-                                    </HBox>
-
-                                    <ScrollPane fitToWidth="true" prefHeight="400.0" styleClass="ads-scroll-pane">
-                                        <VBox fx:id="favoritesContainer" spacing="10" styleClass="ads-container">
-                                            <Label styleClass="placeholder-text" text="I tuoi preferiti appariranno qui" />
-                                        </VBox>
-                                    </ScrollPane>
-                                </VBox>
-                            </Tab>
 
                             <!-- Statistics Tab -->
                             <Tab styleClass="profile-tab" text="📊 Statistiche">

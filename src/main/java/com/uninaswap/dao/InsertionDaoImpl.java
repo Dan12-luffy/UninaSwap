@@ -17,15 +17,8 @@ public class InsertionDaoImpl implements InsertionDao {
         String sql = "INSERT INTO insertion (title, imageUrl, description, type, price, status, publishDate, userId, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            System.out.println("Attempting to insert listing " + insertion.getTitle());
             populateInsertionStatement(stmt, insertion);
-            int rowsAffected = stmt.executeUpdate();
-            System.out.println("Rows affected: " + rowsAffected);
-            if (rowsAffected > 0) {
-                System.out.println("Listing inserted successfully.");
-            } else {
-                System.out.println("No rows inserted. Check your data.");
-            }
+            stmt.executeUpdate();
         } catch (SQLException e) {
             logDatabaseError("Insert", e);
             throw e;

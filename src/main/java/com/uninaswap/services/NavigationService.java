@@ -109,6 +109,17 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
+    public void navigateToEditListingView(ActionEvent event, Insertion insertion) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/newInsertionInterface.fxml"));
+            Parent root = loader.load();
+            InsertionFormController controller = loader.getController();
+            controller.setInsertion(insertion);
+            setScene(event, root);
+        } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }
+    }
 
     public void navigateToExchangeView(ActionEvent event, Insertion insertion) {
         try {

@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" styleClass="product-details-container" stylesheets="@../guiCSS/productDetailsInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.ProductDetailsController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="783.0" prefWidth="1000.0" styleClass="product-details-container" stylesheets="@../guiCSS/productDetailsInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.ProductDetailsController">
 
     <top>
         <VBox spacing="0">
@@ -87,10 +87,7 @@
                             <!-- Immagine principale -->
                             <StackPane styleClass="main-image-container" translateY="-113.0">
                                 <ImageView fx:id="productImageView" fitHeight="280.0" fitWidth="280.0" styleClass="product-main-image" />
-                                <VBox alignment="TOP_RIGHT" styleClass="image-badges">
-                                    <Label fx:id="conditionBadge" styleClass="condition-badge" text="Ottime Condizioni" />
-                                    <Label fx:id="typeBadge" styleClass="type-badge" text="N/A" />
-                                </VBox>
+                                <VBox alignment="TOP_RIGHT" styleClass="image-badges" />
                             </StackPane>
 
                             <!-- Placeholder per immagini secondarie -->
@@ -116,7 +113,7 @@
                                 <Label styleClass="section-title" text="👤 Venditore" />
                                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="seller-info">
                                     <StackPane styleClass="seller-avatar">
-                                        <Label styleClass="avatar-placeholder" text="👤" />
+                                        <Label fx:id="sellerInitialsLabel" styleClass="avatar-placeholder" text="👤" />
                                     </StackPane>
                                     <VBox spacing="3">
                                         <Label fx:id="sellerLabel" styleClass="seller-name" text="Nome Venditore" />
@@ -136,8 +133,8 @@
                                     </columnConstraints>
                                     <rowConstraints>
                                         <RowConstraints />
-                                        <RowConstraints />
-                                        <RowConstraints />
+                                        <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+                                        <RowConstraints maxHeight="18.0" minHeight="18.0" prefHeight="18.0" />
                                         <RowConstraints />
                                     </rowConstraints>
 
@@ -145,11 +142,8 @@
                                         <Label styleClass="detail-label" text="Categoria:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                                         <Label fx:id="categoryLabel" styleClass="detail-value" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                                        <Label styleClass="detail-label" text="Condizioni:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                        <Label fx:id="conditionLabel" styleClass="detail-value" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-                                        <Label styleClass="detail-label" text="Disponibilità:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                        <Label fx:id="availabilityLabel" styleClass="detail-value available" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <Label styleClass="detail-label" text="Disponibilità:" translateY="-4.0" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                        <Label fx:id="availabilityLabel" styleClass="detail-value available" text="N/A" translateY="-4.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                                         <Label styleClass="detail-label" text="Pubblicato:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
                                         <Label fx:id="dateLabel" styleClass="detail-value" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="3" />

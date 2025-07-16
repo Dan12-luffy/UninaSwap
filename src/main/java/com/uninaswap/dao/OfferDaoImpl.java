@@ -29,7 +29,7 @@ public class OfferDaoImpl implements OfferDao {
             } else {
                 stmt.setNull(3, java.sql.Types.DECIMAL);
             }
-            stmt.setString(4, o.getListingStatus().toString().toUpperCase());
+            stmt.setString(4, o.getListingStatus().getStatus());
             stmt.setString(5, o.getMessage());
             stmt.setString(6, o.getTypeOffer().getType());
             stmt.setDate(7, java.sql.Date.valueOf(o.getOfferDate()));

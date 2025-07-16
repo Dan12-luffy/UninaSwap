@@ -59,8 +59,8 @@
     </top>
 
     <center>
-        <ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="579.0" prefWidth="1227.0" styleClass="content-scroll">
-            <VBox spacing="25.0" styleClass="main-content">
+        <ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="845.0" prefWidth="1227.0" styleClass="content-scroll">
+            <VBox maxHeight="-Infinity" minHeight="-Infinity" spacing="25.0" styleClass="main-content">
                 <padding>
                     <Insets bottom="25.0" left="25.0" right="25.0" top="20.0" />
                 </padding>
@@ -73,9 +73,8 @@
                             <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="317.0" prefWidth="318.0" spacing="10.0" styleClass="main-image-container">
                                 <Label styleClass="gift-badge" text="REGALO" translateX="104.0" translateY="-15.0" />
                                 <ImageView fx:id="productImageView" fitHeight="250.0" fitWidth="260.0" preserveRatio="true" scaleX="1.15" scaleY="1.15" styleClass="product-main-image">
-                                    <Image url="@../images/placeholder-image.png" />
+
                                 </ImageView>
-                                <Label styleClass="no-image-label" text="Immagine del prodotto" />
                             </VBox>
                         </VBox>
 
@@ -139,7 +138,7 @@
                         <!-- Bottoni azione -->
                         <VBox spacing="15.0" styleClass="button-section">
                             <HBox alignment="CENTER" spacing="20.0">
-                                <Button fx:id="sendGiftOfferButton" disable="true" onAction="#sendGiftOffer" styleClass="submit-button" text="🎁 Invia Richiesta Regalo" />
+                                <Button fx:id="sendGiftOfferButton" disable="true" onAction="#sendGiftOffer" styleClass="submit-button" text="Invia Richiesta Regalo" />
 
                                 <Button fx:id="cancelButton" onAction="#cancelGiftOffer" styleClass="cancel-button" text="Annulla" />
                             </HBox>

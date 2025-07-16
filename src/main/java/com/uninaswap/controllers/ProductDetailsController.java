@@ -2,9 +2,7 @@ package com.uninaswap.controllers;
 
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Insertion;
-import com.uninaswap.services.NavigationService;
-import com.uninaswap.services.UserSession;
-import com.uninaswap.services.ValidationService;
+import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,43 +19,24 @@ import java.util.Objects;
 
 public class ProductDetailsController {
 
-    @FXML
-    private Label productTitleLabel;
-    @FXML
-    private ImageView productImageView;
-    @FXML
-    private TextArea descriptionTextArea;
-    @FXML
-    private Label categoryLabel;
-    @FXML
-    private Label conditionLabel;
-    @FXML
-    private Label sellerLabel;
-    @FXML
-    private Label priceLabel;
-    @FXML
-    private Button actionButton;
-    @FXML
-    private Button offerButton;
-    @FXML
-    private Button contactButton;
-    @FXML
-    private Button backButton;
-    @FXML
-    private Label conditionBadge;
-    @FXML
-    private Label typeBadge;
-    @FXML
-    private Button favoriteButton;
-    @FXML
-    private Label availabilityLabel;
-    @FXML
-    private Label dateLabel;
-    @FXML
-    private VBox actionButtonsVbox;
+    @FXML private Label productTitleLabel;
+    @FXML private ImageView productImageView;
+    @FXML private TextArea descriptionTextArea;
+    @FXML private Label categoryLabel;
+    @FXML private Label sellerLabel;
+    @FXML private Label priceLabel;
+    @FXML private Label sellerInitialsLabel;
+    @FXML private Button actionButton;
+    @FXML private Button offerButton;
+    @FXML private Button backButton;
+    @FXML private Label availabilityLabel;
+    @FXML private Label dateLabel;
+    @FXML private VBox actionButtonsVbox;
 
     private Insertion insertion;
 
+    private final InsertionService insertionService = InsertionService.getInstance();
+    private final UserService userService = UserService.getInstance();
 
     @FXML
     public void initialize() {
@@ -109,6 +88,7 @@ public class ProductDetailsController {
         this.categoryLabel.setText(insertion.getCategory());
         this.availabilityLabel.setText(insertion.getStatus().toString());
         this.dateLabel.setText(insertion.getPublishDate().toString());
+        this.sellerInitialsLabel.setText(insertionService.getSellerInitials(insertion.getUserId()));
 
         if (insertion.getPrice() != null) {
             this.priceLabel.setText("€" + insertion.getPrice().toString());
@@ -116,7 +96,7 @@ public class ProductDetailsController {
             this.priceLabel.setText("Prezzo non disponibile");
         }
         calculateDaysDifferenceAndSetDateLabel(insertion, this.dateLabel);
-        this.sellerLabel.setText("Utente: " + new UserDaoImpl().findFullNameFromID(insertion.getUserId()));
+        this.sellerLabel.setText("Utente: " + userService.getUserFullName(insertion.getUserId()));
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
 
         try {

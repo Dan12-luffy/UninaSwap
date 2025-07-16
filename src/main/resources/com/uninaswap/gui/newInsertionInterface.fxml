@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="insertion-container" stylesheets="@../guiCSS/newInsertion.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.NewInsertionController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" styleClass="insertion-container" stylesheets="@../guiCSS/newInsertion.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.InsertionFormController">
 
     <top>
         <VBox spacing="0">
@@ -250,7 +250,7 @@
                         <Region HBox.hgrow="ALWAYS" />
                         <Button fx:id="cancelButton" onAction="#handleCancel" styleClass="cancel-button" text="Annulla" />
                         <Button fx:id="saveDraftButton" styleClass="draft-button" text="Salva Bozza" />
-                        <Button defaultButton="true" onAction="#handleSave" styleClass="publish-button" text="🚀 Pubblica Annuncio" />
+                        <Button fx:id="publishInsertionButton" defaultButton="true" onAction="#handleSave" styleClass="publish-button" text="🚀 Pubblica Annuncio" />
                     </HBox>
 
                     <!-- Footer informativo -->

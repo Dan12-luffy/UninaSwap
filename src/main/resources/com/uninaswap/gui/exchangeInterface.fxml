@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" styleClass="exchange-container" stylesheets="@../guiCSS/exchangeInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.ExchangeController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="855.0" prefWidth="1200.0" styleClass="exchange-container" stylesheets="@../guiCSS/exchangeInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.ExchangeController">
 
     <top>
         <VBox spacing="0">
@@ -61,7 +61,7 @@
 
     <center>
         <ScrollPane fitToWidth="true" styleClass="content-scroll-pane">
-            <VBox prefHeight="1328.0" prefWidth="1188.0" spacing="25.0" styleClass="content-area">
+            <VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="1328.0" prefWidth="1188.0" spacing="25.0" styleClass="content-area">
                 <padding>
                     <Insets bottom="25.0" left="25.0" right="25.0" top="20.0" />
                 </padding>

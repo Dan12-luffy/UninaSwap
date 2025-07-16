@@ -133,7 +133,7 @@
                         </HBox>
                     </VBox>
                 </TitledPane>
-                <TitledPane expanded="false" styleClass="filter-section" text="Tipologia (Nome da migliorare)">
+                <TitledPane expanded="false" styleClass="filter-section" text="Tipologia">
                     <content>
                         <VBox spacing="8">
                             <children>
@@ -156,7 +156,7 @@
                         <CheckBox fx:id="biologyCheck" text="Biologia" />
                         <CheckBox fx:id="philosophyCheck" text="Filosofia" />
                         <CheckBox fx:id="geographyCheck" text="Geografia" />
-                        <CheckBox fx:id="psichologyCheck" text="Psicologia" />
+                        <CheckBox fx:id="psychologyCheck" text="Psicologia" />
                         <CheckBox fx:id="chemistryCheck" text="Chimica" />
                         <CheckBox fx:id="astronomyCheck" text="Astronomia" />
                         <CheckBox fx:id="tourismCheck" text="Turismo" />
@@ -210,9 +210,6 @@
                         </columnConstraints>
                         <!-- Inserzioni caricate dai DAO -->
                     </GridPane>
-
-                    <!-- Pulsante carica altri risultati -->
-                    <Button fx:id="loadMoreButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="854.0" styleClass="load-more-button" text="Carica altri risultati" />
                 </VBox>
             </ScrollPane>
         </VBox>

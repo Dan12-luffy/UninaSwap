@@ -79,7 +79,7 @@ public class MainController {
     @FXML private CheckBox biologyCheck;
     @FXML private CheckBox philosophyCheck;
     @FXML private CheckBox geographyCheck;
-    @FXML private CheckBox psicologyCheck;
+    @FXML private CheckBox psychologyCheck;
     @FXML private CheckBox chemistryCheck;
     @FXML private CheckBox astronomyCheck;
     @FXML private CheckBox tourismCheck;
@@ -161,8 +161,7 @@ public class MainController {
 
         } catch (Exception e) {
             System.err.println("Errore nell'inizializzazione del range prezzi: " + e.getMessage());
-            // Fallback ai valori di default
-            this.priceSlider.setMax(1000.0);
+            this.priceSlider.setMax(3000.0);
             this.priceSlider.setMin(0.0);
         }
     }
@@ -344,7 +343,7 @@ public class MainController {
         if (this.biologyCheck.isSelected()) selectedFaculties.add("Biologia");
         if (this.philosophyCheck.isSelected()) selectedFaculties.add("Filosofia");
         if (this.geographyCheck.isSelected()) selectedFaculties.add("Geografia");
-        if (this.psicologyCheck.isSelected()) selectedFaculties.add("Psicologia");
+        if (this.psychologyCheck.isSelected()) selectedFaculties.add("Psicologia");
         if (this.chemistryCheck.isSelected()) selectedFaculties.add("Chimica");
         if (this.astronomyCheck.isSelected()) selectedFaculties.add("Astronomia");
         if (this.tourismCheck.isSelected()) selectedFaculties.add("Turismo");
