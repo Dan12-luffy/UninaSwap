@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+
+import java.io.File;
 import java.time.LocalDate;
 
 public class SaleController {
@@ -36,23 +38,18 @@ public class SaleController {
             productPriceLabel.setText("€" + insertion.getPrice());
             sellerNameLabel.setText(insertionService.getSellerFullName(insertion.getUserId()));
 
-            setProductImage(insertion.getImageUrl());
+            setProductImage();
         }
     }
 
-    public void setProductImage(String imagePath) {
-        if (imagePath != null && !imagePath.isEmpty()) {
-            try {
-                Image image = new Image(imagePath);
-                productImageView.setImage(image);
-                productImageView.setVisible(true);
-                noImageLabel.setVisible(false);
-            } catch (Exception e) {
-                // Se non riesce a caricare l'immagine, mostra il placeholder
-                productImageView.setVisible(false);
-                noImageLabel.setVisible(true);
-            }
-        } else {
+    public void setProductImage() {
+        try {
+            File imageFile = new File(insertion.getImageUrl());
+            this.productImageView.setImage(new Image(imageFile.toURI().toString()));
+            productImageView.setVisible(true);
+            noImageLabel.setVisible(false);
+        } catch (Exception e) {
+            // Se non riesce a caricare l'immagine, mostra il placeholder
             productImageView.setVisible(false);
             noImageLabel.setVisible(true);
         }
