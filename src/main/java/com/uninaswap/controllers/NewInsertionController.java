@@ -4,7 +4,7 @@ import com.uninaswap.model.Insertion;
 import com.uninaswap.model.InsertionFactory;
 import com.uninaswap.model.InsertionStatus;
 import com.uninaswap.model.typeInsertion;
-import com.uninaswap.services.ListingService;
+import com.uninaswap.services.InsertionService;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.services.ValidationService;
@@ -46,7 +46,7 @@ public class NewInsertionController {
     //private final String defaultImagePath = "file:/home/pr/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png";
     private final String defaultImagePath = "file:/home/drc/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path fisso danilo// Default image path fisso danilo
     private File selectedImageFile;
-    private final ListingService listingService = ListingService.getInstance();
+    private final InsertionService insertionService = InsertionService.getInstance();
 
     @FXML
     private void initialize() {
@@ -131,7 +131,7 @@ public class NewInsertionController {
                     this.categoryComboBox.getValue()
             );
 
-            listingService.createListing(insertion);
+            insertionService.createInsertion(insertion);
             ValidationService.getInstance().showNewInsertionSuccess();
             NavigationService.getInstance().navigateToMyProfileView(event);
 

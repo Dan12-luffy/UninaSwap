@@ -1,24 +1,18 @@
 package com.uninaswap.controllers;
 
 import com.uninaswap.model.typeOffer;
+import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
 import com.uninaswap.model.Insertion;
 import com.uninaswap.model.InsertionStatus;
 import com.uninaswap.model.Offer;
-import com.uninaswap.services.NavigationService;
-import com.uninaswap.services.OfferService;
-import com.uninaswap.services.UserSession;
-import com.uninaswap.services.ValidationService;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import java.time.LocalDate;
 
-public class MakeOfferController {
+public class SaleController {
     private Insertion insertion;
 
     @FXML private Label productTitleLabel;
@@ -29,8 +23,10 @@ public class MakeOfferController {
     @FXML private ImageView productImageView;
     @FXML private Label noImageLabel;
     @FXML private Label offerValidationLabel;
+    @FXML private Label sellerNameLabel;
 
     private static final ValidationService validationService = ValidationService.getInstance();
+    private static final InsertionService insertionService = InsertionService.getInstance();
 
     public void setListing(Insertion insertion) {
         this.insertion = insertion;
@@ -38,6 +34,7 @@ public class MakeOfferController {
             productTitleLabel.setText(insertion.getTitle());
             productDescriptionLabel.setText(insertion.getDescription());
             productPriceLabel.setText("€" + insertion.getPrice());
+            sellerNameLabel.setText(insertionService.getSellerFullName(insertion.getUserId()));
 
             setProductImage(insertion.getImageUrl());
         }
@@ -63,7 +60,22 @@ public class MakeOfferController {
 
     @FXML
     private void initialize() {
-        // Inizializzazione se necessaria
+        offerAmountField.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.isEmpty()) {
+                return change;
+            }
+            if (change.getText().equals(",")) {
+                change.setText(".");
+            }
+            if (newText.matches("\\d*(\\.\\d{0,2})?")) {
+                return change;
+            }
+            return null;
+        }));
+
+        offerAmountField.setPromptText("0.00");
     }
 
     //TODO separa la logica di validazione in un metodo a parte
@@ -79,14 +91,8 @@ public class MakeOfferController {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "L'importo dell'offerta non può essere vuoto.");
             return;
         }
-        double offerAmount;
-        try {
-            offerAmount = Double.parseDouble(offerAmountStr.replace(",", "."));
-        } catch (NumberFormatException e) {
-            validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Inserisci un importo valido.");
-            return;
-        }
 
+        double offerAmount = Double.parseDouble(offerAmountField.getText().trim());
         if (offerAmount <= 0) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "L'importo deve essere positivo.");
             return;

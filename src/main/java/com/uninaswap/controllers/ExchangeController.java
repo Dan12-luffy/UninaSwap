@@ -43,7 +43,7 @@ public class ExchangeController{
 
     private Insertion desiredProduct;
     private final List<Insertion> selectedInsertions = new ArrayList<>();
-    private final ListingService listingService = ListingService.getInstance();
+    private final InsertionService insertionService = InsertionService.getInstance();
     private final OfferService offerService = OfferService.getInstance();
     private final OfferedItemsService offeredItemsService = OfferedItemsService.getInstance();
 
@@ -210,7 +210,7 @@ public class ExchangeController{
 
     private void loadUserListings() {
         try {
-            List<Insertion> insertions = listingService.getCurrentUserAvailableInsertions();
+            List<Insertion> insertions = insertionService.getCurrentUserAvailableInsertions();
 
             // Clear existing content
             this.yourProductsContainer.getChildren().clear();

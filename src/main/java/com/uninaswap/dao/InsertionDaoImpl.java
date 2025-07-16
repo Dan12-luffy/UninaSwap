@@ -68,7 +68,7 @@ public class InsertionDaoImpl implements InsertionDao {
 
             while (rs.next()) {
                 try {
-                    Insertion insertion = createListingFromResultSet(rs);
+                    Insertion insertion = createInsertionFromResultSet(rs);
                     insertions.add(insertion);
                 } catch (SQLException e) {
                     logDatabaseError("FindAll", e);
@@ -200,7 +200,7 @@ public class InsertionDaoImpl implements InsertionDao {
     }
 
     @Override
-    public void updateListingStatus(int insertionID, InsertionStatus status){
+    public void updateInsertionStatus(int insertionID, InsertionStatus status){
         String sql = "UPDATE insertion SET status = ? WHERE insertionid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -282,7 +282,7 @@ public class InsertionDaoImpl implements InsertionDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     try {
-                        Insertion insertion = createListingFromResultSet(rs);
+                        Insertion insertion = createInsertionFromResultSet(rs);
                         insertions.add(insertion);
                     } catch (Exception e) {
                         System.err.println("Errore nel processare la lista: " + e.getMessage());
@@ -347,7 +347,7 @@ public class InsertionDaoImpl implements InsertionDao {
     }
 
     @Override
-    public Insertion findListingById(int insertionID) {
+    public Insertion findInsertionById(int insertionID) {
         String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
                 "LEFT JOIN category c ON i.category_id = c.category_id " +
                 "WHERE i.insertionid = ?";
@@ -356,7 +356,7 @@ public class InsertionDaoImpl implements InsertionDao {
             stmt.setInt(1, insertionID);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return createListingFromResultSet(rs);
+                    return createInsertionFromResultSet(rs);
                 }
             }
         } catch (SQLException e) {
@@ -393,7 +393,7 @@ public class InsertionDaoImpl implements InsertionDao {
         // Removed line 10 that was causing the error for INSERT operations
     }
 
-    public Insertion createListingFromResultSet(ResultSet rs) throws SQLException {
+    public Insertion createInsertionFromResultSet(ResultSet rs) throws SQLException {
         int listingId = rs.getInt("insertionid");
         String title = rs.getString("title");
         String imageUrl = rs.getString("imageUrl");
@@ -414,7 +414,7 @@ public class InsertionDaoImpl implements InsertionDao {
         try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 try {
-                    Insertion insertion = createListingFromResultSet(rs);
+                    Insertion insertion = createInsertionFromResultSet(rs);
                     insertions.add(insertion);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -454,7 +454,7 @@ public class InsertionDaoImpl implements InsertionDao {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Insertion insertion = createListingFromResultSet(rs);
+                    Insertion insertion = createInsertionFromResultSet(rs);
                     insertions.add(insertion);
                 }
             }

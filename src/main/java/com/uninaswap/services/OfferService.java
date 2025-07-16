@@ -28,7 +28,7 @@ public class OfferService {
     public int createOffer(Offer offer) throws Exception {
         User currentUser = userSession.getCurrentUser();
         //TODO metodo da migliorare, non riuscirò a leggerlo neanche io domani che mi rimetto sul codice
-        if (ListingService.getInstance().getListingByID(offer.getListingID()).getUserId() == currentUser.getId()) {
+        if (InsertionService.getInstance().getInsertionByID(offer.getListingID()).getUserId() == currentUser.getId()) {
             ValidationService.getInstance().showWrongOfferError();
             return -1;
         }
@@ -100,7 +100,7 @@ public class OfferService {
     public Insertion getListingByOfferId(int offerId) throws Exception {
         Offer offer = offerDao.findOfferById(offerId);
         if (offer != null) {
-            return ListingService.getInstance().getListingByID(offer.getListingID());
+            return InsertionService.getInstance().getInsertionByID(offer.getListingID());
         }
         return null;
     }

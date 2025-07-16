@@ -33,7 +33,7 @@ public class PurchaseConfirmationController {
             titleLabel.setText(insertion.getTitle());
             priceLabel.setText(String.format("€%.2f", insertion.getPrice()));
             try{
-                String sellerName = ListingService.getInstance().getSellerFullName(insertion.getUserId());
+                String sellerName = InsertionService.getInstance().getSellerFullName(insertion.getUserId());
                 sellerLabel.setText("Venditore : " + sellerName);
             }catch(Exception e){
                 sellerLabel.setText("Venditore : informazioni non disponibili");
@@ -72,7 +72,7 @@ public class PurchaseConfirmationController {
 
             if(transactionId > 0) {
                 insertion.setStatus(InsertionStatus.SOLD);
-                ListingService.getInstance().updateListing(insertion);
+                InsertionService.getInstance().updateInsertion(insertion);
                 validationService.showAlert(Alert.AlertType.INFORMATION, "Acquisto effettuato",
                         "Acquisto completato con successo! Il prodotto è ora tuo.");
             } else {

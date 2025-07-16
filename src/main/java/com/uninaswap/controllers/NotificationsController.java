@@ -46,7 +46,7 @@ public class NotificationsController implements Initializable {
     @FXML private VBox noMoreNotifications;
 
     private final OfferService offerService = OfferService.getInstance();
-    private final ListingService listingService = ListingService.getInstance();
+    private final InsertionService insertionService = InsertionService.getInstance();
     private final UserService userService = UserService.getInstance();
     private final TransactionService transactionService = TransactionService.getInstance();
 
@@ -91,7 +91,7 @@ public class NotificationsController implements Initializable {
         offerContent.setSpacing(8);
         HBox.setHgrow(offerContent, Priority.ALWAYS);
 
-        Insertion insertion = listingService.getListingByID(offer.getListingID());
+        Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
         User offerUser = userService.getUserById(offer.getUserID());
         List<OfferedItem> offeredItems = OfferedItemsService.getInstance()
                 .findOfferedItemsByOfferId(offer.getOfferID());
@@ -146,7 +146,7 @@ public class NotificationsController implements Initializable {
         offerContent.setSpacing(8);
         HBox.setHgrow(offerContent, Priority.ALWAYS);
 
-        Insertion insertion = listingService.getListingByID(offer.getListingID());
+        Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
 
         HBox header = new HBox();
         header.setAlignment(Pos.CENTER_LEFT);
@@ -258,7 +258,7 @@ public class NotificationsController implements Initializable {
                     desc.append("\n\nOggetti offerti:");
                     for (OfferedItem item : offeredItems) {
                         try {
-                            Insertion offeredInsertion = listingService.getListingByID(item.getListingId());
+                            Insertion offeredInsertion = insertionService.getInsertionByID(item.getListingId());
                             if (offeredInsertion != null) {
                                 desc.append("\n- ").append(offeredInsertion.getTitle());
                             }
@@ -345,7 +345,7 @@ public class NotificationsController implements Initializable {
     private void handleAcceptOffer(ActionEvent event, int offerId) {
         try {
             Offer offer = offerService.getOfferById(offerId);
-            Insertion insertion = listingService.getListingByID(offer.getListingID());
+            Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
             User buyer = userService.getUserById(offer.getUserID());
 
             // Usa il type del listing per determinare il tipo di transazione
@@ -374,7 +374,7 @@ public class NotificationsController implements Initializable {
 
             // Aggiorna lo status dell'offerta e del listing
             offerService.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
-            listingService.updateListingStatus(insertion.getInsertionID(), InsertionStatus.SOLD);
+            insertionService.updateInsertionStatus(insertion.getInsertionID(), InsertionStatus.SOLD);
 
             loadUserOffers();
             //NavigationService.getInstance().navigateToMainView(event);

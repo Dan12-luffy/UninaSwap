@@ -12,31 +12,31 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ListingService {
-    private static final ListingService instance = new ListingService();
+public class InsertionService {
+    private static final InsertionService instance = new InsertionService();
     private final InsertionDao insertionDao;
     private final UserDao userDao;
 
-    private ListingService() {
+    private InsertionService() {
         this.insertionDao = new InsertionDaoImpl();
         this.userDao = new UserDaoImpl();
     }
 
-    public static ListingService getInstance() {
+    public static InsertionService getInstance() {
         return instance;
     }
 
-    public List<Insertion> getAllListings() throws SQLException {
+    public List<Insertion> getAllInsertion() throws SQLException {
         return insertionDao.findAll();
     }
-    public void createListing(Insertion insertion) throws SQLException {
+    public void createInsertion(Insertion insertion) throws SQLException {
         insertionDao.insert(insertion);
     }
-    public void updateListing(Insertion insertion) throws SQLException {
+    public void updateInsertion(Insertion insertion) throws SQLException {
         insertionDao.update(insertion);
     }
-    public void deleteListing(int listingId) throws SQLException {
-        insertionDao.delete(listingId);
+    public void deleteInsertion(int insertionID) throws SQLException {
+        insertionDao.delete(insertionID);
     }
     /*public Listing findById(int listingId) throws SQLException {
         return listingDao.findById(listingId);
@@ -63,22 +63,22 @@ public class ListingService {
     public List<Insertion> getCurrentUserInsertions() throws SQLException {
         return insertionDao.findCurrentUserInsertions();
     }
-    public List<Insertion> getListingsByCategory(int categoryId) throws SQLException {
+    public List<Insertion> getInsertionsByCategory(int categoryId) throws SQLException {
         return insertionDao.findByCategory(categoryId);
     }
-    public List<Insertion> getListingsByStatus(String status) throws SQLException {
+    public List<Insertion> getInsertionsByStatus(String status) throws SQLException {
         return insertionDao.findByStatus(status);
     }
     public List<Insertion> getInsertionsByFaculty(int facultyId) throws SQLException {
         return insertionDao.findByFaculty(facultyId);
     }
-    public Insertion getListingByID(int listingId) throws SQLException {
-        return insertionDao.findListingById(listingId);
+    public Insertion getInsertionByID(int insertionID) throws SQLException {
+        return insertionDao.findInsertionById(insertionID);
     }
 
-    public void updateListingStatus(Integer listingId, InsertionStatus insertionStatus) {
+    public void updateInsertionStatus(Integer insertionID, InsertionStatus insertionStatus) {
         try {
-            insertionDao.updateListingStatus(listingId, insertionStatus);
+            insertionDao.updateInsertionStatus(insertionID, insertionStatus);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error updating listing status", e);

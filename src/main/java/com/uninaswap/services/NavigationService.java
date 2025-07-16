@@ -1,9 +1,6 @@
 package com.uninaswap.services;
 
-import com.uninaswap.controllers.ExchangeController;
-import com.uninaswap.controllers.MakeOfferController;
-import com.uninaswap.controllers.ProductDetailsController;
-import com.uninaswap.controllers.PurchaseConfirmationController;
+import com.uninaswap.controllers.*;
 import com.uninaswap.model.Insertion;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -139,7 +136,19 @@ public class NavigationService {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/makeOfferInterface.fxml"));
             Parent root = loader.load();
 
-            MakeOfferController controller = loader.getController();
+            SaleController controller = loader.getController();
+            controller.setListing(insertion);
+            setScene(event, root);
+        } catch (IOException e) {
+            ValidationService.getInstance().showFailedToOpenPageError();
+        }
+    }
+
+    public void navigateToGiftView(ActionEvent event, Insertion insertion) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/giftInterface.fxml"));
+            Parent root = loader.load();
+            GiftController controller = loader.getController();
             controller.setListing(insertion);
             setScene(event, root);
         } catch (IOException e) {

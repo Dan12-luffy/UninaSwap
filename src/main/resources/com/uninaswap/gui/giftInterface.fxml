@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" styleClass="main-container" stylesheets="@../guiCSS/giftInterface.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.GiftController">
+
+    <top>
+        <VBox spacing="0" styleClass="header-section">
+            <!-- Banner superiore -->
+            <HBox alignment="CENTER_LEFT" maxHeight="35.0" styleClass="top-banner">
+                <Label styleClass="welcome-text" text="Richiesta Regalo UninaSwap" />
+                <Region HBox.hgrow="ALWAYS" />
+                <padding>
+                    <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                </padding>
+            </HBox>
+
+            <!-- Header principale -->
+            <HBox alignment="CENTER" minHeight="60.0" styleClass="header-bar">
+                <!-- Logo container -->
+                <HBox alignment="CENTER_LEFT" minWidth="200.0" styleClass="logo-container">
+                    <StackPane styleClass="logo-badge">
+                        <Rectangle height="50.0" styleClass="logo-background" width="180.0" />
+                        <ImageView fx:id="logoImage" fitHeight="40.0" preserveRatio="true" styleClass="logo-image">
+                            <Image url="@../images/uninaswap_logo.png" />
+                        </ImageView>
+                    </StackPane>
+                </HBox>
+
+                <!-- Titolo centrale -->
+                <HBox alignment="CENTER" styleClass="title-container" HBox.hgrow="ALWAYS">
+                    <Label styleClass="page-title" text="🎁 Richiesta Regalo" />
+                </HBox>
+
+                <!-- Pulsante indietro -->
+                <HBox alignment="CENTER_RIGHT" spacing="15">
+                    <Button fx:id="backButton" onAction="#goBack" styleClass="back-button" text="← Indietro" />
+                </HBox>
+                <padding>
+                    <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                </padding>
+            </HBox>
+
+            <Separator styleClass="header-divider" />
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="579.0" prefWidth="1227.0" styleClass="content-scroll">
+            <VBox spacing="25.0" styleClass="main-content">
+                <padding>
+                    <Insets bottom="25.0" left="25.0" right="25.0" top="20.0" />
+                </padding>
+
+                <!-- Container principale -->
+                <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="902.0" prefWidth="1165.0" spacing="30.0" styleClass="gift-offer-container">
+                    <!-- Colonna sinistra - Immagine prodotto -->
+                    <VBox spacing="20.0" styleClass="left-column">
+                        <VBox spacing="15.0" styleClass="image-section">
+                            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="317.0" prefWidth="318.0" spacing="10.0" styleClass="main-image-container">
+                                <Label styleClass="gift-badge" text="REGALO" translateX="104.0" translateY="-15.0" />
+                                <ImageView fx:id="productImageView" fitHeight="250.0" fitWidth="260.0" preserveRatio="true" scaleX="1.15" scaleY="1.15" styleClass="product-main-image">
+                                    <Image url="@../images/placeholder-image.png" />
+                                </ImageView>
+                                <Label styleClass="no-image-label" text="Immagine del prodotto" />
+                            </VBox>
+                        </VBox>
+
+                        <!-- Dettagli prodotto -->
+                        <VBox spacing="15.0" styleClass="product-details-section">
+                            <Label styleClass="section-title" text="📋 Dettagli Prodotto" />
+                            <VBox spacing="8.0">
+                                <Label fx:id="productTitleLabel" styleClass="product-title" text="Nome Prodotto" />
+                                <Label fx:id="productDescriptionLabel" styleClass="product-description" text="Descrizione del prodotto..." wrapText="true" />
+                            </VBox>
+                        </VBox>
+
+                        <!-- Informazioni proprietario -->
+                        <VBox spacing="15.0" styleClass="gift-giver-section">
+                            <Label styleClass="section-title" text="👤 Proprietario" />
+                            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="giver-info">
+                                <StackPane styleClass="giver-avatar">
+                                    <Label fx:id="ownerInitialsLabel" styleClass="avatar-placeholder" text="NU" />
+                                </StackPane>
+                                <VBox spacing="3.0">
+                                    <Label fx:id="ownerNameLabel" styleClass="giver-name" text="Nome Utente" />
+                                    <Label fx:id="ownerRatingLabel" styleClass="giver-rating" text="⭐ 4.5/5" />
+                                    <Label fx:id="ownerJoinedLabel" styleClass="giver-joined" text="Membro dal 2023" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Colonna destra - Sezione messaggio -->
+                    <VBox spacing="20.0" styleClass="right-column">
+                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="334.0" prefWidth="772.0" spacing="20.0" styleClass="offer-section">
+                            <Label styleClass="section-title-large" text="💌 Messaggio per il Proprietario" />
+
+                            <VBox spacing="15.0" styleClass="message-section">
+                                <Label styleClass="message-label" text="Scrivi un messaggio motivazionale per spiegare perché vorresti ricevere questo prodotto in regalo:" />
+
+                                <TextArea fx:id="motivationTextArea" onKeyTyped="#updateCharacterCount" prefHeight="150.0" prefWidth="400.0" promptText="Caro/a proprietario/a, sono interessato/a al tuo prodotto perché..." styleClass="message-input" wrapText="true" />
+
+                                <Label fx:id="characterCountLabel" styleClass="message-counter" text="0/500 caratteri" />
+                                <Label fx:id="validationMessageLabel" styleClass="validation-message" text="" />
+                            </VBox>
+                        </VBox>
+
+                        <!-- Suggerimenti -->
+                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="265.0" prefWidth="773.0" spacing="15.0" styleClass="gift-tips">
+                            <Label styleClass="section-title" text="💡 Suggerimenti per un buon messaggio" />
+
+                            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="8.0">
+                                <Label styleClass="tip-item" text="• Spiega perché il prodotto è importante per te" />
+                                <Label styleClass="tip-item" text="• Racconta una storia personale collegata al prodotto" />
+                                <Label styleClass="tip-item" text="• Mostra gratitudine e rispetto per il proprietario" />
+                                <Label styleClass="tip-item" text="• Sii sincero/a e autentico/a" />
+                            </VBox>
+
+                            <VBox spacing="8.0" styleClass="gift-motivation-example">
+                                <Label styleClass="example-title" text="Esempio di messaggio:" />
+                                <Label styleClass="example-text" text="Ciao! Sono uno studente di ingegneria e questo libro mi aiuterebbe molto con i miei studi. Ho sempre ammirato la generosità della comunità UninaSwap e spero di poter ricambiare in futuro. Grazie per aver considerato la mia richiesta!" wrapText="true" />
+                            </VBox>
+                        </VBox>
+
+                        <!-- Bottoni azione -->
+                        <VBox spacing="15.0" styleClass="button-section">
+                            <HBox alignment="CENTER" spacing="20.0">
+                                <Button fx:id="sendGiftOfferButton" disable="true" onAction="#sendGiftOffer" styleClass="submit-button" text="🎁 Invia Richiesta Regalo" />
+
+                                <Button fx:id="cancelButton" onAction="#cancelGiftOffer" styleClass="cancel-button" text="Annulla" />
+                            </HBox>
+
+                            <!-- Note informative -->
+                            <VBox spacing="5.0" styleClass="gift-notes">
+                                <Label styleClass="note-title" text="📝 Note importanti:" />
+                                <Label styleClass="note-text" text="• Le richieste regalo sono gratuite e non prevedono scambi di denaro" />
+                                <Label styleClass="note-text" text="• Il proprietario può accettare o rifiutare liberamente la richiesta" />
+                                <Label styleClass="note-text" text="• Sii rispettoso/a: non tutti i prodotti sono disponibili come regalo" />
+                            </VBox>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

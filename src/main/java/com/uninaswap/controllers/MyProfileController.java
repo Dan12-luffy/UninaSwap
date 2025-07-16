@@ -79,7 +79,7 @@ public class MyProfileController {
     @FXML private VBox favoritesContainer;
 
     private final UserService userService = UserService.getInstance();
-    private final ListingService listingService = ListingService.getInstance();
+    private final InsertionService insertionService = InsertionService.getInstance();
     private final ValidationService validationService = ValidationService.getInstance();
 
     @FXML
@@ -103,7 +103,7 @@ public class MyProfileController {
 
     private void loadUserListings() {
         try {
-            List<Insertion> insertions = listingService.getCurrentUserAvailableInsertions();
+            List<Insertion> insertions = insertionService.getCurrentUserAvailableInsertions();
 
             // Clear existing content
             this.userAdsContainer.getChildren().clear();
@@ -126,7 +126,7 @@ public class MyProfileController {
 
     private void setStatisticsSection() {
         try {
-            List<Insertion> insertions = listingService.getCurrentUserAvailableInsertions();
+            List<Insertion> insertions = insertionService.getCurrentUserAvailableInsertions();
 
             double minPrice = Double.MAX_VALUE;
             double maxPrice = 0;
@@ -259,7 +259,7 @@ public class MyProfileController {
 
     private void setTotalAdsLabel(){
         try {
-            List<Insertion> insertionDao = listingService.getCurrentUserAvailableInsertions();
+            List<Insertion> insertionDao = insertionService.getCurrentUserAvailableInsertions();
             int totalInsertions = insertionDao.size();
             int availableListings = 0;
             int completedSales = 0;
@@ -316,7 +316,7 @@ public class MyProfileController {
     }
     private void setPieChartAndBarChart(){
        try {
-           List<Insertion> insertions = listingService.getCurrentUserInsertions();
+           List<Insertion> insertions = insertionService.getCurrentUserInsertions();
            ObservableList<Insertion> insertionObservableList = FXCollections.observableArrayList(insertions);
 
            this.offerTypesPieChart.getData().clear();

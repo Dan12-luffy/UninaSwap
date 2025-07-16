@@ -21,6 +21,14 @@ public enum InsertionStatus {
 
     @Override
     public String toString() {
-        return status;
+        return switch (status) {
+            case "AVAILABLE" -> "Disponibile";
+            case "PENDING" -> "In attesa di approvazione";
+            case "ACCEPTED" -> "Accettato";
+            case "REJECTED" -> "Rifiutato";
+            case "SOLD" -> "Venduto";
+            case "DISMISSED" -> "Offerta accantonata";
+            default -> "Stato sconosciuto";
+        };
     }
 }

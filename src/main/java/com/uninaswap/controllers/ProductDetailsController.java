@@ -176,8 +176,7 @@ public class ProductDetailsController {
 
     private void onGiftButtonClicked(ActionEvent event) {
         if (insertion != null) {
-            // Logica per l'acquisto del prodotto
-            System.out.println("Regalo prodotto: " + insertion.getInsertionID());
+            NavigationService.getInstance().navigateToGiftView(event, this.insertion);
         }
     }
 }
