@@ -404,10 +404,6 @@ public class NotificationsController implements Initializable {
         NavigationService.getInstance().navigateToMainView(event);
     }
 
-    @FXML
-    void onProfileButtonClicked() {
-        System.out.println("Profile button clicked");
-    }
 
     @FXML
     void onAcceptOfferClicked() {

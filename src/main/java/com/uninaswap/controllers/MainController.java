@@ -61,7 +61,6 @@ public class MainController {
     @FXML private TextField maxPriceField;
     @FXML private Button applyPriceButton;
     @FXML private Button loadMoreButton;
-    @FXML private ComboBox<String> sortComboBox;
     @FXML private ToggleButton listViewButton;
     @FXML private ToggleButton gridViewButton;
     @FXML private GridPane itemsGrid;
@@ -113,8 +112,7 @@ public class MainController {
         int totalNotifications = offers.size() + rejectedOffers.size();
         this.notificationCountLabel.setText(String.valueOf(totalNotifications));
 
-        this.sortComboBox.getItems().addAll("Più recenti", "Prezzo crescente", "Prezzo decrescente");
-        this.sortComboBox.setValue("Più recenti");
+
         conditionToggleGroupSettings();
         //set up category buttons
         try {
@@ -543,24 +541,10 @@ public class MainController {
         System.out.println("My items button clicked");
     }
 
-    @FXML
-    private void onSortChanged() {
-        String selectedSort = this.sortComboBox.getValue();
-        String sortBy = switch (selectedSort) {
-            case "Prezzo crescente" -> "price_asc";
-            case "Prezzo decrescente" -> "price_desc";
-            default -> "date_desc";
-        };
 
-        this.currentFilter.setSortBy(sortBy);
-        applyCurrentFilters();
-    }
 
-    @FXML
-    private void onViewToggled(ActionEvent event) {
-        boolean isList = listViewButton.isSelected();
-        System.out.println("View changed to: " + (isList ? "List" : "Grid"));
-    }
+
+
 
     private void conditionToggleGroupSettings(){
         ToggleGroup conditionToggleGroup = new ToggleGroup();
