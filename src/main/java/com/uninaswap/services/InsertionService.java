@@ -75,9 +75,6 @@ public class InsertionService {
     public Insertion getInsertionByID(int insertionID) throws SQLException {
         return insertionDao.findInsertionById(insertionID);
     }
-    public List<Insertion> getCurrentUserAvailableInsertionsForCounterOffer(int originalOfferId) throws SQLException {
-        return insertionDao.findCurrentUserAvailableInsertionsForCounterOffer(UserSession.getInstance().getCurrentUserId(), originalOfferId);
-    }
 
     public void updateInsertionStatus(Integer insertionID, InsertionStatus insertionStatus) {
         try {

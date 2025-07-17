@@ -190,32 +190,4 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
-    public void navigateToExchangeViewWithOffer(ActionEvent event, Insertion insertion, Offer offer) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/exchangeInterface.fxml"));
-            Parent root = loader.load();
-
-            ExchangeController controller = loader.getController();
-            controller.loadDesiredProduct(insertion);
-            controller.loadOffer(offer);
-
-            if (event != null) {
-                setScene(event, root);
-            } else {
-                // Handle the case when event is null
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.setResizable(false);
-                stage.centerOnScreen();
-                stage.show();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            ValidationService.getInstance().showAlert(
-                    Alert.AlertType.ERROR,
-                    "Errore di Navigazione",
-                    "Impossibile aprire la pagina di scambio: " + e.getMessage()
-            );
-        }
-    }
 }

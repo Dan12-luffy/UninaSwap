@@ -27,7 +27,6 @@ public interface InsertionDao {
     List<Insertion> findByCategory(int categoryId) throws SQLException;
     List<Insertion> findByPriceRange(double minPrice, double maxPrice) throws SQLException;
     List<Insertion> findByFilters(FilterCriteria criteria) throws SQLException;
-    List<Insertion> findCurrentUserAvailableInsertionsForCounterOffer(int userId, int originalOfferId) throws SQLException;
     List<Insertion> findAvailableInsertionsByUserId(int userId) throws SQLException;
     BigDecimal getMaxPrice() throws SQLException;
     BigDecimal getMinPrice() throws SQLException;

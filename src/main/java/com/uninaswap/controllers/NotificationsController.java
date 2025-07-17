@@ -379,12 +379,7 @@ public class NotificationsController implements Initializable {
             actions.getChildren().addAll(spacer, offerAmount, declineButton, acceptButton);
 
         } else if(listingType == typeInsertion.EXCHANGE){
-
-            Button counterOfferButton = new Button("Controfferta");
-            counterOfferButton.getStyleClass().add("counter-button");
-            counterOfferButton.setOnAction(e -> handleCounterOffer(e, offer.getOfferID()));
-
-            actions.getChildren().addAll(spacer, declineButton, counterOfferButton, acceptButton);
+            actions.getChildren().addAll(spacer, declineButton, acceptButton);
 
         }else{
             actions.getChildren().addAll(spacer, declineButton, acceptButton);
@@ -436,11 +431,6 @@ public class NotificationsController implements Initializable {
                 case EXCHANGE:
                     // Scambio
                     transactionService.recordExchange(insertion, offer, buyer);
-                    /*List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId);
-                    for (OfferedItem item : offeredItems) {
-                        OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
-                        insertionService.updateInsertionStatus(item.getInsertionId(), InsertionStatus.SOLD);
-                    }*/
                     ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                             "Scambio accettato", "Lo scambio è stato accettato con successo.");
                     break;
@@ -492,23 +482,6 @@ public class NotificationsController implements Initializable {
     @FXML
     void onCounterOfferClicked() {
         System.out.println("Counter button clicked");
-    }
-
-    private void handleCounterOffer(ActionEvent event, int offerId) {
-        try {
-            Offer originalOffer = offerService.getOfferById(offerId);
-            Insertion insertion = insertionService.getInsertionByID(originalOffer.getListingID());
-
-            NavigationService.getInstance().navigateToExchangeViewWithOffer(event, insertion, originalOffer);
-
-        } catch (Exception e) {
-            ValidationService.getInstance().showAlert(
-                    Alert.AlertType.ERROR,
-                    "Errore",
-                    "Impossibile aprire la schermata di controfferta: " + e.getMessage()
-            );
-            e.printStackTrace();
-        }
     }
 
     @FXML

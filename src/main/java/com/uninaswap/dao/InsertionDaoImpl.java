@@ -181,35 +181,6 @@ public class InsertionDaoImpl implements InsertionDao {
         }
         return insertions;
     }
-    @Override
-    public List<Insertion> findCurrentUserAvailableInsertionsForCounterOffer(int userId, int originalOfferId) throws SQLException {
-        List<Insertion> insertions = new ArrayList<>();
-
-        String sql = "SELECT DISTINCT i.*, c.name as category_name FROM insertion i " +
-                "LEFT JOIN category c ON i.category_id = c.category_id " +
-                "WHERE i.userid = ? AND (" +
-                "   i.status = 'AVAILABLE' OR " +
-                "   (i.status = 'PENDING' AND i.insertionid IN (" +
-                "       SELECT oi.offeredinsertionid FROM offeredItems oi " +
-                "       WHERE oi.offerid = ?" +
-                "   ))" +
-                ") ORDER BY i.publishdate DESC";
-
-        try (Connection connection = DatabaseUtil.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setInt(1, userId);
-            preparedStatement.setInt(2, originalOfferId);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    Insertion insertion = createInsertionFromResultSet(resultSet);
-                    insertions.add(insertion);
-                }
-            }
-        }
-        return insertions;
-    }
 
     @Override
     public BigDecimal getMaxPrice() throws SQLException {
