@@ -14,7 +14,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OfferDaoImpl implements OfferDao {
     @Override
@@ -191,7 +193,37 @@ public class OfferDaoImpl implements OfferDao {
             return offers;
         }
     }
+    @Override
+    public Map<String, Double> getAcceptedSaleOfferStatistics() throws SQLException {
+        Map<String, Double> statistics = new HashMap<>();
+        statistics.put("avg", 0.0);
+        statistics.put("min", 0.0);
+        statistics.put("max", 0.0);
 
+        String sql = "SELECT AVG(o.amount) as avg_price, MIN(o.amount) as min_price, " +
+                "MAX(o.amount) as max_price FROM offer o " +
+                "JOIN insertion i ON o.insertionid = i.insertionid " +
+                "WHERE o.status = 'ACCEPTED' AND i.type = 'SALE'";
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                double avg = rs.getDouble("avg_price");
+                double min = rs.getDouble("min_price");
+                double max = rs.getDouble("max_price");
+
+                if (!rs.wasNull()) {
+                    statistics.put("avg", avg);
+                    statistics.put("min", min);
+                    statistics.put("max", max);
+                }
+            }
+        }
+
+        return statistics;
+    }
     @NotNull
     private Offer mapResultSetToOffer(ResultSet rs) throws SQLException {
         Offer offer = new Offer();

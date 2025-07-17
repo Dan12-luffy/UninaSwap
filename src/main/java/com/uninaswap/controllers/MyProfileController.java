@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -81,6 +82,8 @@ public class MyProfileController {
     private final UserService userService = UserService.getInstance();
     private final InsertionService insertionService = InsertionService.getInstance();
     private final ValidationService validationService = ValidationService.getInstance();
+    private final OfferService offerService = OfferService.getInstance();
+
 
     @FXML
     public void initialize() {
@@ -99,6 +102,7 @@ public class MyProfileController {
         setStatisticsSection();
         loadUserListings();
         setPieChartAndBarChart();
+        loadAcceptedSaleOfferStatistics();
     }
 
     private void loadUserListings() {
@@ -122,7 +126,23 @@ public class MyProfileController {
             userAdsContainer.getChildren().add(errorLabel);
         }
     }
+    private void loadAcceptedSaleOfferStatistics() {
+        try {
+            Map<String, Double> stats = offerService.getAcceptedSaleOfferStatistics();
 
+            // Update the UI labels with the statistics
+            avgPriceLabel.setText(String.format("€%.2f", stats.get("avg")));
+            minPriceLabel.setText(String.format("€%.2f", stats.get("min")));
+            maxPriceLabel.setText(String.format("€%.2f", stats.get("max")));
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            // Set default values in case of error
+            avgPriceLabel.setText("€0.00");
+            minPriceLabel.setText("€0.00");
+            maxPriceLabel.setText("€0.00");
+        }
+    }
 
     private void setStatisticsSection() {
         try {

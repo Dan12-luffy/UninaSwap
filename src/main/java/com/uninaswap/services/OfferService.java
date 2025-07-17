@@ -9,6 +9,7 @@ import com.uninaswap.model.User;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 
 public class OfferService {
@@ -96,7 +97,9 @@ public class OfferService {
     public List<Offer> getRejectedOffersForCurrentUser() throws Exception {
         return offerDao.findRejectedOffersForCurrentUser();
     }
-
+    public Map<String, Double> getAcceptedSaleOfferStatistics() throws SQLException {
+        return offerDao.getAcceptedSaleOfferStatistics();
+    }
     public Insertion getListingByOfferId(int offerId) throws Exception {
         Offer offer = offerDao.findOfferById(offerId);
         if (offer != null) {

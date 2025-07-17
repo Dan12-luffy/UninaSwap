@@ -5,6 +5,7 @@ import com.uninaswap.model.Offer;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface OfferDao {
     int createOffer(Offer o) throws Exception;
@@ -17,6 +18,6 @@ public interface OfferDao {
     List<Offer> findOfferMadeByCurrentUserID() throws SQLException;
     List<Offer> findOffersToCurrentUser() throws SQLException;
     void updateOfferStatus(int offerId, InsertionStatus status) throws Exception;
-
+    Map<String, Double> getAcceptedSaleOfferStatistics() throws SQLException;
     List<Offer> findRejectedOffersForCurrentUser();
 }
