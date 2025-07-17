@@ -480,7 +480,7 @@ public class MainController {
                         this.selectedCategories.remove(Integer.valueOf(ALL_CATEGORIES_ID));
                         this.allCategoryButton.setSelected(false);
                     }
-                    if (categoryId != ALL_CATEGORIES_ID) {
+                    if (categoryId != -ALL_CATEGORIES_ID) {
                         this.selectedCategories.add(categoryId);
                     }
                 } else {
