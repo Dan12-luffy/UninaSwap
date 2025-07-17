@@ -229,10 +229,11 @@
                                     <Label styleClass="field-label" text="Luogo di ritiro:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                                     <ComboBox fx:id="locationComboBox" maxWidth="250.0" prefWidth="250.0" promptText="Seleziona la facoltà" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
+                                    <!-- Sostituisci il TextArea deliveryArea con questo ComboBox -->
                                     <Label styleClass="field-label" text="Modalità consegna:" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.valignment="TOP" />
                                     <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                        <TextArea fx:id="deliveryArea" prefHeight="120.0" promptText="Descrivi come e dove puoi consegnare l'articolo...&#10;Es: Consegna a mano presso la facoltà, spedizione (costi a carico dell'acquirente), ritiro a domicilio" styleClass="main-text-area" wrapText="true" />
-                                        <Label styleClass="field-hint" text="Fornisci dettagli su luogo, orari, costi e modalità di consegna" />
+                                        <ComboBox fx:id="deliveryMethodComboBox" maxWidth="250.0" prefWidth="250.0" promptText="Seleziona modalità" styleClass="combo-box" />
+                                        <Label styleClass="field-hint" text="Scegli come intendi consegnare l'articolo" />
                                     </VBox>
                                 </children>
                             </GridPane>

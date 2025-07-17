@@ -14,7 +14,7 @@ public class InsertionDaoImpl implements InsertionDao {
 
     @Override
     public void insert(Insertion insertion) throws SQLException {
-        String sql = "INSERT INTO insertion (title, imageUrl, description, type, price, status, publishDate, userId, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO insertion (title, imageUrl, description, delivery_method, type, price, status, publishDate, userId, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             populateInsertionStatement(stmt, insertion);
@@ -37,11 +37,11 @@ public class InsertionDaoImpl implements InsertionDao {
     }
 
     public void update(Insertion insertion) {
-        String sql = "UPDATE insertion SET title = ?, imageUrl = ?, description = ?, type = ?, price = ?, status = ?, publishDate = ?, userId = ?, category_id = ? WHERE insertionid = ?";
+        String sql = "UPDATE insertion SET title = ?, imageUrl = ?, description = ?, delivery_method = ?, type = ?, price = ?, status = ?, publishDate = ?, userId = ?, category_id = ? WHERE insertionid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             populateInsertionStatement(stmt, insertion);
-            stmt.setInt(10, insertion.getInsertionID());
+            stmt.setInt(11, insertion.getInsertionID());
             stmt.executeUpdate();
         } catch (SQLException e) {
             logDatabaseError("Update", e);
@@ -363,27 +363,26 @@ public class InsertionDaoImpl implements InsertionDao {
         stmt.setString(1, insertion.getTitle());
         stmt.setString(2, insertion.getImageUrl());
         stmt.setString(3, insertion.getDescription());
-        stmt.setString(4, insertion.getType().name());
+        stmt.setString(4, insertion.getDeliveryMethod());
+        stmt.setString(5, insertion.getType().name());
 
         switch (insertion) {
-            case SaleInsertion saleListing -> stmt.setBigDecimal(5, saleListing.getPrice());
-            case ExchangeInsertion exchangeListing -> stmt.setBigDecimal(5, exchangeListing.getPrice());
-            case GiftInsertion giftListing -> stmt.setBigDecimal(5, BigDecimal.ZERO);
+            case SaleInsertion saleListing -> stmt.setBigDecimal(6, saleListing.getPrice());
+            case ExchangeInsertion exchangeListing -> stmt.setBigDecimal(6, exchangeListing.getPrice());
+            case GiftInsertion giftListing -> stmt.setBigDecimal(6, BigDecimal.ZERO);
             default -> {
-                stmt.setBigDecimal(5, BigDecimal.ZERO);
+                stmt.setBigDecimal(6, BigDecimal.ZERO);
                 throw new SQLException("Tipo di inserzione sconosciuto");
             }
         }
 
-        stmt.setString(6, insertion.getStatus().name());
-        stmt.setDate(7, new java.sql.Date(insertion.getPublishDate().toEpochDay() * 24 * 60 * 60 * 1000));
-        stmt.setInt(8, insertion.getUserId());
+        stmt.setString(7, insertion.getStatus().name());
+        stmt.setDate(8, new java.sql.Date(insertion.getPublishDate().toEpochDay() * 24 * 60 * 60 * 1000));
+        stmt.setInt(9, insertion.getUserId());
 
         CategoryDaoImpl category = new CategoryDaoImpl();
         int categoryId = category.getCategoryIdByName(insertion.getCategory());
-        stmt.setInt(9, categoryId);
-
-        // Removed line 10 that was causing the error for INSERT operations
+        stmt.setInt(10, categoryId);
     }
 
     public Insertion createInsertionFromResultSet(ResultSet rs) throws SQLException {
@@ -397,8 +396,9 @@ public class InsertionDaoImpl implements InsertionDao {
         int userId = rs.getInt("userId");
         String category = rs.getString("category_name");
         BigDecimal price = rs.getBigDecimal("price");
+        String deliveryMethod = rs.getString("delivery_method");
 
-        Insertion insertion = InsertionFactory.createListing(title, imageUrl, description, type, price, status, publishDate, userId, category);
+        Insertion insertion = InsertionFactory.createListing(title, imageUrl, description, type, price, status, publishDate, userId, category, deliveryMethod);
         insertion.setInsertionID(listingId);
         return insertion;
     }
