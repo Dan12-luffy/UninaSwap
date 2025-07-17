@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
@@ -72,8 +71,6 @@
                 </HBox>
 
                 <HBox alignment="CENTER_RIGHT" spacing="15">
-                    <Button fx:id="wishlistButton" styleClass="nav-button" text="Preferiti" />
-                    <Button fx:id="messagesButton" styleClass="nav-button" text="Messaggi" />
                     <Button fx:id="sellButton" onAction="#onSellButtonClicked" styleClass="sell-button" text="Vendi Articolo" />
                 </HBox>
                 <padding>
@@ -192,9 +189,6 @@
             <HBox alignment="CENTER_LEFT" styleClass="results-header">
                 <Label fx:id="resultsCountLabel" styleClass="results-title" text="Caricamento articoli..." />
                 <Region HBox.hgrow="ALWAYS" />
-                <ComboBox fx:id="sortComboBox" prefWidth="150.0" promptText="Più recenti" styleClass="sort-dropdown" />
-                <ToggleButton fx:id="listViewButton" selected="true" styleClass="view-toggle" text="Lista" />
-                <ToggleButton fx:id="gridViewButton" styleClass="view-toggle" text="Griglia" />
             </HBox>
 
             <!-- Contenitore principale degli articoli completamente vuoto -->
