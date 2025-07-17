@@ -97,7 +97,7 @@ public class TransactionDaoImpl implements TransactionDao {
     private Transaction mapRowToTransaction(ResultSet resultSet) throws SQLException {
         Transaction transaction = new Transaction();
         transaction.setTransactionId(resultSet.getInt("transaction_id"));
-        transaction.setListingId(resultSet.getInt("insertionid"));
+        transaction.setListingId(resultSet.getInt("insertion_id"));
         transaction.setOfferId(resultSet.getInt("offer_id"));
         transaction.setSellerId(resultSet.getInt("seller_id"));
         transaction.setBuyerId(resultSet.getInt("buyer_id"));

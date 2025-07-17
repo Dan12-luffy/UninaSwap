@@ -200,10 +200,10 @@ public class OfferDaoImpl implements OfferDao {
         statistics.put("min", 0.0);
         statistics.put("max", 0.0);
 
-        String sql = "SELECT AVG(o.amount) as avg_price, MIN(o.amount) as min_price, " +
-                "MAX(o.amount) as max_price FROM offer o " +
-                "JOIN insertion i ON o.insertionid = i.insertionid " +
-                "WHERE o.status = 'ACCEPTED' AND i.type = 'SALE'";
+        String sql = "SELECT AVG(t.amount) as avg_price, MIN(t.amount) as min_price, " +
+                "MAX(t.amount) as max_price FROM transactions t " +
+                "JOIN insertion i ON t.insertion_id = i.insertionid " +
+                "WHERE t.status = 'COMPLETED' AND i.type = 'SALE'";
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
