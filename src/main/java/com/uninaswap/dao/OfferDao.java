@@ -20,4 +20,6 @@ public interface OfferDao {
     void updateOfferStatus(int offerId, InsertionStatus status) throws Exception;
     Map<String, Double> getAcceptedSaleOfferStatistics() throws SQLException;
     List<Offer> findRejectedOffersForCurrentUser();
+    List<Offer> getPendingOffersByUser() throws SQLException;
+    List<Offer> getCompletedOffersByUser(int userId) throws SQLException;
 }

@@ -379,6 +379,37 @@
                                     </HBox>
                                 </VBox>
                             </Tab>
+                            <Tab styleClass="profile-tab" text="⏳ Offerte in Attesa">
+                                <VBox spacing="15">
+                                    <padding>
+                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                    </padding>
+
+                                    <Label styleClass="section-title" text="Le tue offerte attualmente in attesa" />
+
+                                    <ScrollPane fitToWidth="true" prefHeight="400.0" styleClass="ads-scroll-pane">
+                                        <VBox fx:id="pendingOffersContainer" spacing="10" styleClass="ads-container">
+                                            <Label styleClass="placeholder-text" text="Le offerte in attesa appariranno qui" />
+                                        </VBox>
+                                    </ScrollPane>
+                                </VBox>
+                            </Tab>
+                            <Tab styleClass="profile-tab" text="✅ Operazioni Concluse">
+                                <VBox spacing="15">
+                                    <padding>
+                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                    </padding>
+
+                                    <Label styleClass="section-title" text="Le tue operazioni andate a buon fine" />
+
+                                    <ScrollPane fitToWidth="true" prefHeight="400.0" styleClass="ads-scroll-pane">
+                                        <VBox fx:id="completedOperationsContainer" spacing="10" styleClass="ads-container">
+                                            <Label styleClass="placeholder-text" text="Le operazioni concluse appariranno qui" />
+                                        </VBox>
+                                    </ScrollPane>
+                                </VBox>
+                            </Tab>
+
                         </TabPane>
                     </VBox>
                 </HBox>

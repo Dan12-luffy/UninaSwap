@@ -235,6 +235,59 @@ public class OfferDaoImpl implements OfferDao {
 
         return statistics;
     }
+    public List<Offer> getPendingOffersByUser() throws SQLException {
+        List<Offer> pendingOffers = new ArrayList<>();
+
+        String sentSql = "SELECT * FROM offer WHERE userid = ? AND status = 'PENDING'";
+
+
+        // try per le offerte che sono state inviate dall'utente
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(sentSql)) {
+                stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        pendingOffers.add(mapResultSetToOffer(rs));
+                    }
+                }
+            }
+
+
+        }
+
+        return pendingOffers;
+    }
+
+    public List<Offer> getCompletedOffersByUser(int userId) throws SQLException {
+        List<Offer> completedOffers = new ArrayList<>();
+
+        // Get offers sent by the user with ACCEPTED status
+        String sentSql = "SELECT * FROM offer WHERE userid = ? AND status = 'ACCEPTED'";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sentSql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    completedOffers.add(mapResultSetToOffer(rs));
+                }
+            }
+        }
+
+        // Get offers received by the user with ACCEPTED status
+        String receivedSql = "SELECT o.* FROM offer o JOIN insertion i ON o.insertionid = i.insertionid " +
+                "WHERE i.userid = ? AND o.status = 'ACCEPTED'";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(receivedSql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    completedOffers.add(mapResultSetToOffer(rs));
+                }
+            }
+        }
+
+        return completedOffers;
+    }
     @NotNull
     private Offer mapResultSetToOffer(ResultSet rs) throws SQLException {
         Offer offer = new Offer();

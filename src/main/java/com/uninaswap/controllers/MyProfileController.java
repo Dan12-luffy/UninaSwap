@@ -76,8 +76,8 @@ public class MyProfileController {
     @FXML private Label avgPriceLabel;
     @FXML private Label minPriceLabel;
     @FXML private Label maxPriceLabel;
-    @FXML private Tab favoritesTab;
-    @FXML private VBox favoritesContainer;
+    @FXML private VBox pendingOffersContainer;
+    @FXML private VBox completedOperationsContainer;
 
     private final UserService userService = UserService.getInstance();
     private final InsertionService insertionService = InsertionService.getInstance();
@@ -103,6 +103,7 @@ public class MyProfileController {
         loadUserListings();
         setPieChartAndBarChart();
         loadAcceptedSaleOfferStatistics();
+        loadPendingOffers();
     }
 
     private void loadUserListings() {
@@ -450,6 +451,97 @@ public class MyProfileController {
         }
     }
 
+    private void loadPendingOffers(){
+
+        try{
+            pendingOffersContainer.getChildren().clear();
+
+            List<Offer> pendingOffers = offerService.getPendingOffersByUser();
+            if(pendingOffers.isEmpty()){
+                Label emptyLabel = new Label("Nessuna offerta in sospeso");
+                pendingOffersContainer.getChildren().add(emptyLabel);
+            } else {
+                for(Offer offer : pendingOffers){
+                    pendingOffersContainer.getChildren().add(createOfferCard(offer,false));
+                }
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+            Label errorLabel = new Label("Errore nel caricamento delle offerte in sospeso");
+            pendingOffersContainer.getChildren().add(errorLabel);
+        }
+    }
+    private HBox createOfferCard(Offer offer, boolean isCompleted) {
+        HBox card = new HBox(15);
+        card.getStyleClass().add("offer-card");
+        card.setPrefHeight(100);
+        try {
+            Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
+
+            ImageView imageView = new ImageView();
+            imageView.setFitWidth(80);
+            imageView.setFitHeight(80);
+            imageView.setPreserveRatio(true);
+
+            String defaultImagePath = "/com/uninaswap/images/default_image.png";
+            try {
+                File imageFile = new File(insertion.getImageUrl());
+                imageView.setImage(new Image(imageFile.toURI().toString()));
+            } catch (Exception e) {
+                imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
+            }
+
+            VBox textContent = new VBox(5);
+            textContent.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+            HBox.setHgrow(textContent, javafx.scene.layout.Priority.ALWAYS);
+
+            Label titleLabel = new Label(insertion.getTitle());
+            titleLabel.getStyleClass().add("offer-title");
+
+            String dateText = "Data: " + offer.getOfferDate();
+            Label dateLabel = new Label(dateText);
+            dateLabel.getStyleClass().add("offer-date");
+
+            Label valueLabel = new Label(String.format("Valore: €%.2f", offer.getAmount()));
+            valueLabel.getStyleClass().add("offer-value");
+
+            textContent.getChildren().addAll(titleLabel, dateLabel, valueLabel);
+
+            VBox buttonContainer = new VBox(8);
+            buttonContainer.setAlignment(javafx.geometry.Pos.CENTER);
+
+            if (!isCompleted) {
+                Button cancelButton = new Button("Annulla");
+                cancelButton.getStyleClass().add("cancel-button");
+                cancelButton.setOnAction(event -> cancelOffer(offer.getOfferID()));
+                buttonContainer.getChildren().add(cancelButton);
+            }
+
+            card.getChildren().addAll(imageView, textContent, buttonContainer);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Label errorLabel = new Label("Errore nel caricamento dell'offerta");
+            card.getChildren().add(errorLabel);
+        }
+
+        return card;
+    }
+    private void cancelOffer(int offerId) {
+        try {
+            boolean success = offerService.rejectOffer(offerId);
+            if (success) {
+                validationService.showAlert(Alert.AlertType.INFORMATION, "Successo", "Offerta annullata con successo.");
+                loadPendingOffers();
+            } else {
+                validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile annullare l'offerta.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante l'annullamento dell'offerta.");
+        }
+    }
 
 
 }

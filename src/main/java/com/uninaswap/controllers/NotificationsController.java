@@ -376,11 +376,6 @@ public class NotificationsController implements Initializable {
             Label offerAmount = new Label("Offerta: " + formatAmount(offer.getAmount()));
             offerAmount.getStyleClass().add("offer-amount");
 
-            Button counterOfferButton = new Button("Controfferta");
-            counterOfferButton.getStyleClass().add("counter-button");
-            counterOfferButton.setOnAction(e -> handleCounterOffer(offer.getOfferID()));
-
-            actions.getChildren().addAll(offerAmount, spacer, declineButton, counterOfferButton, acceptButton);
         } else if(listingType == typeInsertion.EXCHANGE){
 
             Button counterOfferButton = new Button("Controfferta");

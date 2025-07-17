@@ -100,6 +100,13 @@ public class OfferService {
     public Map<String, Double> getAcceptedSaleOfferStatistics() throws SQLException {
         return offerDao.getAcceptedSaleOfferStatistics();
     }
+    public List<Offer> getPendingOffersByUser() throws Exception {
+        return offerDao.getPendingOffersByUser();
+    }
+    public List<Offer> getCompletedOffersByUser(int userId) throws Exception {
+        return offerDao.getCompletedOffersByUser(userId);
+    }
+
     public Insertion getListingByOfferId(int offerId) throws Exception {
         Offer offer = offerDao.findOfferById(offerId);
         if (offer != null) {
