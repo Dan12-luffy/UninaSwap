@@ -64,8 +64,6 @@ public class MyProfileController {
     @FXML private Button pushNotificationsButton;
     @FXML private Button changePasswordButton;
     @FXML private Button enable2FAButton;
-    @FXML private Button downloadDataButton;
-    @FXML private Button deleteAccountButton;
     @FXML private Button logoutButton;
     @FXML private Label totalOffersStat;
     @FXML private Label acceptedOffersStat;
@@ -104,6 +102,7 @@ public class MyProfileController {
         setPieChartAndBarChart();
         loadAcceptedSaleOfferStatistics();
         loadPendingOffers();
+        loadCompletedOperations();
     }
 
     private void loadUserListings() {
@@ -127,24 +126,6 @@ public class MyProfileController {
             userAdsContainer.getChildren().add(errorLabel);
         }
     }
-    private void loadAcceptedSaleOfferStatistics() {
-        try {
-            Map<String, Double> stats = offerService.getAcceptedSaleOfferStatistics();
-
-            // Update the UI labels with the statistics
-            avgPriceLabel.setText(String.format("€%.2f", stats.get("avg")));
-            minPriceLabel.setText(String.format("€%.2f", stats.get("min")));
-            maxPriceLabel.setText(String.format("€%.2f", stats.get("max")));
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-            // Set default values in case of error
-            avgPriceLabel.setText("€0.00");
-            minPriceLabel.setText("€0.00");
-            maxPriceLabel.setText("€0.00");
-        }
-    }
-
     private void setStatisticsSection() {
         try {
             List<Insertion> insertions = insertionService.getCurrentUserAvailableInsertions();
@@ -196,6 +177,23 @@ public class MyProfileController {
             this.minPriceLabel.setText("€0.00");
             this.avgPriceLabel.setText("€0.00");
             e.printStackTrace();
+        }
+    }
+    private void loadAcceptedSaleOfferStatistics() {
+        try {
+            Map<String, Double> stats = offerService.getAcceptedSaleOfferStatistics();
+
+            // Update the UI labels with the statistics
+            avgPriceLabel.setText(String.format("€%.2f", stats.get("avg")));
+            minPriceLabel.setText(String.format("€%.2f", stats.get("min")));
+            maxPriceLabel.setText(String.format("€%.2f", stats.get("max")));
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            // Set default values in case of error
+            avgPriceLabel.setText("€0.00");
+            minPriceLabel.setText("€0.00");
+            maxPriceLabel.setText("€0.00");
         }
     }
     private HBox createListingCard(Insertion insertion) {
@@ -527,6 +525,26 @@ public class MyProfileController {
         }
 
         return card;
+    }
+    private void loadCompletedOperations() {
+        try {
+            completedOperationsContainer.getChildren().clear();
+
+            List<Offer> completedOffers = offerService.getCompletedOffersByUser(UserSession.getInstance().getCurrentUserId());
+            if (completedOffers.isEmpty()) {
+                Label emptyLabel = new Label("Nessuna operazione completata");
+                emptyLabel.getStyleClass().add("palceholder-text");
+                completedOperationsContainer.getChildren().add(emptyLabel);
+            } else {
+                for (Offer offer : completedOffers) {
+                    completedOperationsContainer.getChildren().add(createOfferCard(offer, true));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Label errorLabel = new Label("Errore nel caricamento delle operazioni completate");
+            completedOperationsContainer.getChildren().add(errorLabel);
+        }
     }
     private void cancelOffer(int offerId) {
         try {
