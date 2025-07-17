@@ -65,9 +65,20 @@ public class OfferDaoImpl implements OfferDao {
     }
 
     @Override
-    public void updateOffer(int offerId, String title, String description, int categoryId, double price){
-        // This method signature doesn't match offer updating logic
-        // You might want to change this to update offer-specific fields
+    public void updateOffer(Offer offer) throws SQLException {
+        String query = "UPDATE offer SET insertionid = ?, userid = ?, amount = ?, message = ?, status = ?, typeoffer = ?, offer_date = ? WHERE offerid = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, offer.getListingID());
+            stmt.setInt(2, offer.getUserID());
+            stmt.setDouble(3, offer.getAmount());
+            stmt.setString(4, offer.getMessage());
+            stmt.setString(5, offer.getListingStatus().getStatus());
+            stmt.setString(6, mapTypeOfferToDatabase(offer.getTypeOffer()));
+            stmt.setDate(7, java.sql.Date.valueOf(offer.getOfferDate()));
+            stmt.setInt(8, offer.getOfferID());
+            stmt.executeUpdate();
+        }
     }
 
     @Override

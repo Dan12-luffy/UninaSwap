@@ -376,8 +376,22 @@ public class NotificationsController implements Initializable {
         if (listingType == typeInsertion.SALE) {
             Label offerAmount = new Label("Offerta: " + formatAmount(offer.getAmount()));
             offerAmount.getStyleClass().add("offer-amount");
-            actions.getChildren().addAll(offerAmount, spacer, declineButton, acceptButton);
-        } else {
+
+            // Aggiungi il bottone per la controfferta
+            Button counterOfferButton = new Button("Controfferta");
+            counterOfferButton.getStyleClass().add("counter-button");
+            counterOfferButton.setOnAction(e -> handleCounterOffer(offer.getOfferID()));
+
+            actions.getChildren().addAll(offerAmount, spacer, declineButton, counterOfferButton, acceptButton);
+        } else if(listingType == typeInsertion.EXCHANGE){
+            // Aggiungi il bottone per la controfferta
+            Button counterOfferButton = new Button("Controfferta");
+            counterOfferButton.getStyleClass().add("counter-button");
+            counterOfferButton.setOnAction(e -> handleCounterOffer(offer.getOfferID()));
+
+            actions.getChildren().addAll(spacer, declineButton, counterOfferButton, acceptButton);
+
+        }else{
             actions.getChildren().addAll(spacer, declineButton, acceptButton);
         }
 
@@ -480,7 +494,21 @@ public class NotificationsController implements Initializable {
     }
 
     private void handleCounterOffer(int offerId) {
-        System.out.println("Funzionalità di controfferta in sviluppo");
+        try {
+            Offer originalOffer = offerService.getOfferById(offerId);
+            Insertion insertion = insertionService.getInsertionByID(originalOffer.getListingID());
+
+            // Navigate to the exchange view with the current insertion and offer
+            NavigationService.getInstance().navigateToExchangeViewWithOffer(null, insertion, originalOffer);
+
+        } catch (Exception e) {
+            ValidationService.getInstance().showAlert(
+                    Alert.AlertType.ERROR,
+                    "Errore",
+                    "Impossibile aprire la schermata di controfferta: " + e.getMessage()
+            );
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -492,4 +520,5 @@ public class NotificationsController implements Initializable {
     void onDeclineSwapClicked() {
         // Logic for handling swaps
     }
+
 }

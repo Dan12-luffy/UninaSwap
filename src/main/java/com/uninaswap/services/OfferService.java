@@ -107,8 +107,8 @@ public class OfferService {
         }
         return null;
     }
-    public void updateOffer(int offerId, String title, String description, int categoryId, double price) throws Exception {
-        offerDao.updateOffer(offerId, title, description, categoryId, price);
+    public void updateOffer(Offer o ) throws Exception {
+        offerDao.updateOffer(o);
     }
     public void updateOfferStatus(int offerId, InsertionStatus status) throws Exception {
         offerDao.updateOfferStatus(offerId, status);

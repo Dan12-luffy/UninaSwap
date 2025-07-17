@@ -10,7 +10,7 @@ import java.util.Map;
 public interface OfferDao {
     int createOffer(Offer o) throws Exception;
     void deleteOffer(int offerId) throws Exception;
-    void updateOffer(int offerId, String title, String description, int categoryId, double price) throws Exception;
+    void updateOffer(Offer o) throws Exception;
     boolean acceptOffer(int offerId, int userId) throws Exception;
     boolean rejectOffer(int offerId, int userId) throws Exception;
     Offer findOfferById(int offerId) throws Exception;

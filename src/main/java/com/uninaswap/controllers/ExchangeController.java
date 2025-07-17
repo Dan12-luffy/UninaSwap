@@ -1,5 +1,6 @@
 package com.uninaswap.controllers;
 
+import com.kitfox.svg.A;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.*;
@@ -41,6 +42,7 @@ public class ExchangeController{
     @FXML private Button previewExchangeButton;
     @FXML private Button confirmExchangeButton;
 
+    private Offer currentOffer;
     private Insertion desiredProduct;
     private final List<Insertion> selectedInsertions = new ArrayList<>();
     private final InsertionService insertionService = InsertionService.getInstance();
@@ -228,6 +230,38 @@ public class ExchangeController{
             Label errorLabel = new Label("Errore nel caricamento degli annunci");
             yourProductsContainer.getChildren().add(errorLabel);
         }
+    }
+    private void counterOffer(ActionEvent actionEvent) {
+       try{
+           if(this.currentOffer == null){
+               ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Nessuna offerta selezionata per la controfferta.");
+                return;
+           }
+           // rimuove i vecchi oggetti proposti
+           offeredItemsService.deleteOfferedItem(this.currentOffer.getOfferID());
+
+           // inserisce i nuovi oggetti proposti
+           for(Insertion insertion : selectedInsertions){
+                OfferedItem offeredItem = new OfferedItem(this.currentOffer.getOfferID(), insertion.getInsertionID());
+                offeredItemsService.createOfferedItem(offeredItem);
+           }
+
+           //rimetti in stato PENDING l'offerta
+           currentOffer.setListingStatus(InsertionStatus.PENDING);
+           offerService.updateOffer(currentOffer);
+
+           ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Controproposta inviata", "L'offerta è stata modificata e reinviata.");
+           NavigationService.getInstance().navigateToMainView(actionEvent);
+
+       }catch(Exception e ){
+              e.printStackTrace();
+              ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inviare la controproposta: " + e.getMessage());
+       }
+    }
+
+    public void loadOffer(Offer offer) {
+        this.currentOffer = offer;
+
     }
 
     public void loadDesiredProduct(Insertion insertion) {
