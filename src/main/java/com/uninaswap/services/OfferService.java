@@ -29,10 +29,10 @@ public class OfferService {
     public int createOffer(Offer offer) throws Exception {
         User currentUser = userSession.getCurrentUser();
         //TODO metodo da migliorare, non riuscirò a leggerlo neanche io domani che mi rimetto sul codice
-        if (InsertionService.getInstance().getInsertionByID(offer.getListingID()).getUserId() == currentUser.getId()) {
+        /*if (InsertionService.getInstance().getInsertionByID(offer.getListingID()).getUserId() == currentUser.getId()) {
             ValidationService.getInstance().showWrongOfferError();
             return -1;
-        }
+        }*/
         offerDao.createOffer(offer);
         return offer.getOfferID();
     }

@@ -75,6 +75,9 @@ public class InsertionService {
     public Insertion getInsertionByID(int insertionID) throws SQLException {
         return insertionDao.findInsertionById(insertionID);
     }
+    public List<Insertion> getCurrentUserAvailableInsertionsForCounterOffer(int originalOfferId) throws SQLException {
+        return insertionDao.findCurrentUserAvailableInsertionsForCounterOffer(UserSession.getInstance().getCurrentUserId(), originalOfferId);
+    }
 
     public void updateInsertionStatus(Integer insertionID, InsertionStatus insertionStatus) {
         try {
@@ -97,5 +100,9 @@ public class InsertionService {
             return fullName.substring(0, 1).toUpperCase();
         }
         return (parts[0].substring(0, 1) + parts[1].charAt(0)).toUpperCase();
+    }
+
+    public List<Insertion> getAvailableInsertionsByUserId(int userId) throws SQLException {
+        return insertionDao.findAvailableInsertionsByUserId(userId);
     }
 }

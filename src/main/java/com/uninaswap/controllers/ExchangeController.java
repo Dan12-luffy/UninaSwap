@@ -216,8 +216,6 @@ public class ExchangeController{
     private void loadUserListings() {
         try {
             List<Insertion> insertions = insertionService.getCurrentUserAvailableInsertions();
-
-            // Clear existing content
             this.yourProductsContainer.getChildren().clear();
 
             if (insertions.isEmpty()) {
@@ -235,43 +233,236 @@ public class ExchangeController{
         }
     }
     private void counterOffer(ActionEvent actionEvent) {
-       try{
-           if(this.currentOffer == null){
-               ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Nessuna offerta selezionata per la controfferta.");
+        try {
+            if (this.currentOffer == null) {
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Nessuna offerta da controbattere.");
                 return;
-           }
-           List<OfferedItem> oldOfferedItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(this.currentOffer.getOfferID());
-           for(OfferedItem item : oldOfferedItems){
-               Insertion oldInsertion = insertionService.getInsertionByID(item.getInsertionId());
-               oldInsertion.setStatus(InsertionStatus.AVAILABLE);
-               insertionService.updateInsertion(oldInsertion);
-           }
-           for(Insertion insertion : selectedInsertions){
-               OfferedItem offeredItem = new OfferedItem(currentOffer.getOfferID(), insertion.getInsertionID());
-               offeredItemsService.createOfferedItem(offeredItem);
+            }
 
-               insertion.setStatus(InsertionStatus.PENDING);
+            if (selectedInsertions.isEmpty()) {
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona almeno un prodotto per la controfferta.");
+                return;
+            }
+
+            List<OfferedItem> oldOfferedItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(this.currentOffer.getOfferID());
+
+            // Elimina l'offerta precedente e libera gli item
+            for (OfferedItem item : oldOfferedItems) {
+                Insertion insertion = insertionService.getInsertionByID(item.getInsertionId());
+                insertion.setStatus(InsertionStatus.AVAILABLE);
                 insertionService.updateInsertion(insertion);
-           }
+            }
+            offerService.deleteOffer(this.currentOffer.getOfferID());
 
-           //rimetti in stato PENDING l'offerta
-           currentOffer.setListingStatus(InsertionStatus.PENDING);
-           offerService.updateOffer(currentOffer);
+            // Crea la controfferta per il prodotto dell'altro utente che hai selezionato
+            Insertion targetInsertion = selectedInsertions.get(0); // Prodotto dell'altro utente che vuoi
 
-           ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Controproposta inviata", "L'offerta è stata modificata e reinviata.");
-           NavigationService.getInstance().navigateToMainView(actionEvent);
+            // CORREZIONE: Temporaneamente cambia il tipo del prodotto target per permettere la controfferta
+            typeInsertion originalType = targetInsertion.getType();
+            targetInsertion.setType(typeInsertion.EXCHANGE);
+            insertionService.updateInsertion(targetInsertion);
 
-       }catch(Exception e ){
-              e.printStackTrace();
-              ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inviare la controproposta: " + e.getMessage());
-       }
+            Offer counterOffer = new Offer(
+                    targetInsertion.getInsertionID(), // Prodotto dell'altro utente che vuoi
+                    UserSession.getInstance().getCurrentUserId(), // Tu stai facendo la controfferta
+                    0,
+                    null,
+                    typeOffer.EXCHANGE_OFFER,
+                    InsertionStatus.PENDING,
+                    LocalDate.now()
+            );
+
+            int newOfferId = offerService.createOffer(counterOffer);
+
+            if (newOfferId > 0) {
+                // Aggiungi il TUO prodotto originale come controfferta
+                OfferedItem offeredItem = new OfferedItem(newOfferId, this.desiredProduct.getInsertionID());
+                OfferedItemsService.getInstance().createOfferedItem(offeredItem);
+
+                // Marca il prodotto dell'altro utente come PENDING
+                targetInsertion.setStatus(InsertionStatus.PENDING);
+                insertionService.updateInsertion(targetInsertion);
+
+                // Marca anche il TUO prodotto originale come PENDING
+                this.desiredProduct.setStatus(InsertionStatus.PENDING);
+                insertionService.updateInsertion(this.desiredProduct);
+
+                ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Controfferta inviata", "La controfferta è stata inviata con successo.");
+                NavigationService.getInstance().navigateToMainView(actionEvent);
+            } else {
+                // Se la creazione dell'offerta fallisce, ripristina il tipo originale
+                targetInsertion.setType(originalType);
+                insertionService.updateInsertion(targetInsertion);
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile creare la controfferta.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inviare la controfferta: " + e.getMessage());
+        }
+    }
+    /*private void counterOffer(ActionEvent actionEvent) {
+        try {
+            if (this.currentOffer == null) {
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Nessuna offerta da controbattere.");
+                return;
+            }
+
+            if (selectedInsertions.isEmpty()) {
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona almeno un prodotto per la controfferta.");
+                return;
+            }
+
+            List<OfferedItem> oldOfferedItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(this.currentOffer.getOfferID());
+            int originalOfferUserId = this.currentOffer.getUserID();
+
+            // Elimina l'offerta precedente e libera gli item
+            for (OfferedItem item : oldOfferedItems) {
+                Insertion insertion = insertionService.getInsertionByID(item.getInsertionId());
+                insertion.setStatus(InsertionStatus.AVAILABLE);
+                insertionService.updateInsertion(insertion);
+            }
+            offerService.deleteOffer(this.currentOffer.getOfferID());
+
+            // CORREZIONE: Crea la controfferta per il prodotto dell'altro utente che hai selezionato
+            Insertion targetInsertion = selectedInsertions.get(0); // Il prodotto dell'altro utente che vuoi
+
+            Offer counterOffer = new Offer(
+                    targetInsertion.getInsertionID(), // Prodotto dell'altro utente che vuoi
+                    UserSession.getInstance().getCurrentUserId(), // Tu stai facendo la controfferta
+                    0,
+                    null,
+                    typeOffer.EXCHANGE_OFFER,
+                    InsertionStatus.PENDING,
+                    LocalDate.now()
+            );
+
+            int newOfferId = offerService.createOffer(counterOffer);
+
+            if (newOfferId > 0) {
+                // Aggiungi il TUO prodotto originale come controfferta
+                OfferedItem offeredItem = new OfferedItem(newOfferId, this.desiredProduct.getInsertionID());
+                OfferedItemsService.getInstance().createOfferedItem(offeredItem);
+
+                ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Controfferta inviata", "La controfferta è stata inviata con successo.");
+                NavigationService.getInstance().navigateToMainView(actionEvent);
+            } else {
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile creare la controfferta.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inviare la controfferta: " + e.getMessage());
+        }
+    }*/
+    /*private void counterOffer(ActionEvent actionEvent) {
+        try {
+            if (this.currentOffer == null) {
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Nessuna offerta da controbattere.");
+                return;
+            }
+
+            if (selectedInsertions.isEmpty()) {
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Seleziona almeno un prodotto per la controfferta.");
+                return;
+            }
+
+            List<OfferedItem> oldOfferedItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(this.currentOffer.getOfferID());
+
+            // Elimina l'offerta precedente e libera gli item
+            for (OfferedItem item : oldOfferedItems) {
+                Insertion insertion = insertionService.getInsertionByID(item.getInsertionId());
+                insertion.setStatus(InsertionStatus.AVAILABLE);
+                insertionService.updateInsertion(insertion);
+            }
+            offerService.deleteOffer(this.currentOffer.getOfferID());
+
+            // CORREZIONE: selectedInsertions ora contiene i prodotti dell'altro utente
+            // Crea la controfferta per il prodotto dell'altro utente che hai selezionato
+            Insertion targetInsertion = selectedInsertions.get(0); // Prodotto dell'altro utente che vuoi
+
+            Offer counterOffer = new Offer(
+                    targetInsertion.getInsertionID(), // Prodotto dell'altro utente che vuoi
+                    UserSession.getInstance().getCurrentUserId(), // Tu stai facendo la controfferta
+                    0,
+                    null,
+                    typeOffer.EXCHANGE_OFFER,
+                    InsertionStatus.PENDING,
+                    LocalDate.now()
+            );
+
+            int newOfferId = offerService.createOffer(counterOffer);
+
+            if (newOfferId > 0) {
+                // Aggiungi il TUO prodotto originale come controfferta
+                OfferedItem offeredItem = new OfferedItem(newOfferId, this.desiredProduct.getInsertionID());
+                OfferedItemsService.getInstance().createOfferedItem(offeredItem);
+
+                ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Controfferta inviata", "La controfferta è stata inviata con successo.");
+                NavigationService.getInstance().navigateToMainView(actionEvent);
+            } else {
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile creare la controfferta.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inviare la controfferta: " + e.getMessage());
+        }
+    }*/
+    private void loadProductsForCounterOffer(int originalOfferId) throws Exception {
+        yourProductsContainer.getChildren().clear();
+
+        // 1. Trova l'utente che ha fatto l'offerta originale
+        Offer originalOffer = offerService.getOfferById(originalOfferId);
+        int originalOfferUserId = originalOffer.getUserID();
+
+        // 2. Carica i prodotti dell'utente che ha fatto l'offerta originale che erano stati offerti
+        List<OfferedItem> originalOfferedItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(originalOfferId);
+
+        // 3. Carica tutti i prodotti disponibili dell'utente che ha fatto l'offerta originale
+        List<Insertion> offererAvailableInsertions = insertionService.getAvailableInsertionsByUserId(originalOfferUserId);
+
+        // 4. Crea un Set per evitare duplicati
+        Set<Integer> addedInsertions = new HashSet<>();
+
+        // Aggiungi prima i prodotti che erano stati offerti originalmente
+        for (OfferedItem item : originalOfferedItems) {
+            Insertion insertion = insertionService.getInsertionByID(item.getInsertionId());
+            if (insertion != null && insertion.getUserId() == originalOfferUserId && addedInsertions.add(insertion.getInsertionID())) {
+                HBox card = createListingCard(insertion);
+                yourProductsContainer.getChildren().add(card);
+            }
+        }
+
+        // Aggiungi poi tutti gli altri prodotti disponibili dell'utente che ha fatto l'offerta
+        for (Insertion insertion : offererAvailableInsertions) {
+            if (addedInsertions.add(insertion.getInsertionID())) {
+                HBox card = createListingCard(insertion);
+                yourProductsContainer.getChildren().add(card);
+            }
+        }
+
+        // Se non ci sono prodotti da mostrare
+        if (yourProductsContainer.getChildren().isEmpty()) {
+            Label emptyLabel = new Label("Nessun prodotto disponibile dall'utente");
+            yourProductsContainer.getChildren().add(emptyLabel);
+        }
     }
 
     public void loadOffer(Offer offer) {
         this.currentOffer = offer;
 
+        if (offer != null) {
+            try {
+                // Carica i prodotti dell'utente che ha fatto l'offerta originale
+                loadProductsForCounterOffer(offer.getOfferID());
+            } catch (Exception e) {
+                e.printStackTrace();
+                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
+                        "Impossibile caricare i prodotti: " + e.getMessage());
+            }
+        }
     }
-
     public void loadDesiredProduct(Insertion insertion) {
         if (insertion == null) {
             return;
@@ -300,4 +491,24 @@ public class ExchangeController{
 
         return confirmDialog.showAndWait();
    }
+    private void loadUserListings(int userId) throws SQLException {
+        List<Insertion> insertions;
+
+        if (userId == UserSession.getInstance().getCurrentUserId()) {
+            insertions = insertionService.getCurrentUserAvailableInsertions();
+        } else {
+            insertions = insertionService.getAvailableInsertionsByUserId(userId);
+        }
+
+        yourProductsContainer.getChildren().clear();
+
+        if (insertions.isEmpty()) {
+            Label emptyLabel = new Label("Nessun annuncio trovato");
+            yourProductsContainer.getChildren().add(emptyLabel);
+        } else {
+            for (Insertion insertion : insertions) {
+                yourProductsContainer.getChildren().add(createListingCard(insertion));
+            }
+        }
+    }
 }

@@ -380,7 +380,7 @@ public class NotificationsController implements Initializable {
 
             Button counterOfferButton = new Button("Controfferta");
             counterOfferButton.getStyleClass().add("counter-button");
-            counterOfferButton.setOnAction(e -> handleCounterOffer(offer.getOfferID()));
+            counterOfferButton.setOnAction(e -> handleCounterOffer(e, offer.getOfferID()));
 
             actions.getChildren().addAll(spacer, declineButton, counterOfferButton, acceptButton);
 
@@ -423,7 +423,6 @@ public class NotificationsController implements Initializable {
             Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
             User buyer = userService.getUserById(offer.getUserID());
 
-            // Usa il type del listing per determinare il tipo di transazione
             switch (insertion.getType()) {
                 case SALE:
                     // Vendita normale
@@ -435,6 +434,11 @@ public class NotificationsController implements Initializable {
                 case EXCHANGE:
                     // Scambio
                     transactionService.recordExchange(insertion, offer, buyer);
+                    /*List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId);
+                    for (OfferedItem item : offeredItems) {
+                        OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
+                        insertionService.updateInsertionStatus(item.getInsertionId(), InsertionStatus.SOLD);
+                    }*/
                     ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                             "Scambio accettato", "Lo scambio è stato accettato con successo.");
                     break;
@@ -488,13 +492,12 @@ public class NotificationsController implements Initializable {
         System.out.println("Counter button clicked");
     }
 
-    private void handleCounterOffer(int offerId) {
+    private void handleCounterOffer(ActionEvent event, int offerId) {
         try {
             Offer originalOffer = offerService.getOfferById(offerId);
             Insertion insertion = insertionService.getInsertionByID(originalOffer.getListingID());
 
-            // Navigate to the exchange view with the current insertion and offer
-            NavigationService.getInstance().navigateToExchangeViewWithOffer(null, insertion, originalOffer);
+            NavigationService.getInstance().navigateToExchangeViewWithOffer(event, insertion, originalOffer);
 
         } catch (Exception e) {
             ValidationService.getInstance().showAlert(
