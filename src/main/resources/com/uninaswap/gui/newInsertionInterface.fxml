@@ -29,8 +29,6 @@
             <HBox alignment="CENTER_RIGHT" maxHeight="35.0" styleClass="top-banner">
                 <Label styleClass="welcome-text" text="Pubblica il tuo annuncio su UninaSwap" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="helpButton" styleClass="icon-button" text="Aiuto" />
-                <Button fx:id="previewButton" styleClass="icon-button" text="Anteprima" />
                 <padding>
                     <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                 </padding>
@@ -55,7 +53,6 @@
 
                 <!-- Pulsanti azione -->
                 <HBox alignment="CENTER_RIGHT" spacing="15">
-                    <Button fx:id="saveAsDraftButton" styleClass="nav-button" text="Salva Bozza" />
                     <Button fx:id="backButton" onAction="#goBack" styleClass="back-button" text="Indietro" />
                 </HBox>
                 <padding>
@@ -232,10 +229,11 @@
                                     <Label styleClass="field-label" text="Luogo di ritiro:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                                     <ComboBox fx:id="locationComboBox" maxWidth="250.0" prefWidth="250.0" promptText="Seleziona la facoltà" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
+                                    <!-- Sostituisci il TextArea deliveryArea con questo ComboBox -->
                                     <Label styleClass="field-label" text="Modalità consegna:" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.valignment="TOP" />
                                     <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                        <TextArea fx:id="deliveryArea" prefHeight="120.0" promptText="Descrivi come e dove puoi consegnare l'articolo...&#10;Es: Consegna a mano presso la facoltà, spedizione (costi a carico dell'acquirente), ritiro a domicilio" styleClass="main-text-area" wrapText="true" />
-                                        <Label styleClass="field-hint" text="Fornisci dettagli su luogo, orari, costi e modalità di consegna" />
+                                        <ComboBox fx:id="deliveryMethodComboBox" maxWidth="250.0" prefWidth="250.0" promptText="Seleziona modalità" styleClass="combo-box" />
+                                        <Label styleClass="field-hint" text="Scegli come intendi consegnare l'articolo" />
                                     </VBox>
                                 </children>
                             </GridPane>
@@ -246,10 +244,8 @@
 
                     <!-- Pulsanti finali -->
                     <HBox alignment="CENTER" spacing="20.0" styleClass="action-buttons">
-                        <Button fx:id="previewFinalButton" styleClass="preview-button" text="👁 Anteprima Annuncio" />
                         <Region HBox.hgrow="ALWAYS" />
                         <Button fx:id="cancelButton" onAction="#handleCancel" styleClass="cancel-button" text="Annulla" />
-                        <Button fx:id="saveDraftButton" styleClass="draft-button" text="Salva Bozza" />
                         <Button fx:id="publishInsertionButton" defaultButton="true" onAction="#handleSave" styleClass="publish-button" text="🚀 Pubblica Annuncio" />
                     </HBox>
 

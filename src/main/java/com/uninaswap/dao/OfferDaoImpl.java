@@ -272,20 +272,6 @@ public class OfferDaoImpl implements OfferDao {
                 }
             }
         }
-
-        // Get offers received by the user with ACCEPTED status
-        String receivedSql = "SELECT o.* FROM offer o JOIN insertion i ON o.insertionid = i.insertionid " +
-                "WHERE i.userid = ? AND o.status = 'ACCEPTED'";
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(receivedSql)) {
-            stmt.setInt(1, userId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    completedOffers.add(mapResultSetToOffer(rs));
-                }
-            }
-        }
-
         return completedOffers;
     }
     @NotNull

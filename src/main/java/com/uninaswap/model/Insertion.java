@@ -14,6 +14,7 @@ public abstract class Insertion {
 
     private int userId;
     private String category;
+    private String deliveryMethod;
     private Integer categoryId;
 
     protected Insertion() {}
@@ -50,86 +51,70 @@ public abstract class Insertion {
     public Integer getInsertionID() {
         return insertionID;
     }
-
     public Integer getCategoryId() {
         return categoryId;
     }
-
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
-
     public void setInsertionID(Integer insertionID) {
         this.insertionID = insertionID;
     }
-
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public String getImageUrl() {
         return imageUrl;
     }
-
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
-
     public typeInsertion getType() {
         return type;
     }
-
     public void setType(typeInsertion type) {
         this.type = type;
     }
-
-
     public InsertionStatus getStatus() {
         return status;
     }
-
     public void setStatus(InsertionStatus status) {
         this.status = status;
     }
-
     public LocalDate getPublishDate() {
         return publishDate;
     }
-
     public void setPublishDate(LocalDate publishDate) {
         this.publishDate = publishDate;
     }
-
     public Integer getUserId() {
         return userId;
     }
-
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
-
     public String getCategory() {
         return category;
     }
-
     public void setCategory(String category) {
         this.category = category;
     }
-
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
     public abstract typeInsertion getListingType();
-
     public abstract BigDecimal getPrice();
 
     @Override

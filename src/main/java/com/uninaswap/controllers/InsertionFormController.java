@@ -32,16 +32,15 @@ public class InsertionFormController {
     @FXML private Button cancelButton;
     @FXML private ComboBox<String> categoryComboBox;
     @FXML private Label characterCountLabel;
-    @FXML private Button previewButton;
     @FXML private Button saveAsDraftButton;
     @FXML private Button backButton;
-    @FXML private Button previewFinalButton;
-    @FXML private Button saveDraftButton;
     @FXML private ComboBox<String> locationComboBox;
     @FXML private Label priceLabel;
     @FXML private ImageView logoImage;
     @FXML private ImageView mainImagePreview;
     @FXML private Button publishInsertionButton;
+    @FXML private ComboBox<String> deliveryMethodComboBox;
+
 
     private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path portatile danilo
     private File selectedImageFile;
@@ -56,6 +55,9 @@ public class InsertionFormController {
         this.statusComboBox.getItems().addAll("Nuovo", "Come nuovo", "Buone condizioni", "Usato");
         this.categoryComboBox.getItems().addAll("Libri", "Appunti", "Elettronica", "Arredamento", "Abbigliamento", "Altro");
         this.locationComboBox.getItems().addAll("Monte Sant'Angelo", "Fuorigrotta", "Agnano", "Centro Storico");
+
+        this.deliveryMethodComboBox.getItems().addAll("Consegna a mano", "Ritiro in sede", "Spedizione");
+        this.deliveryMethodComboBox.setValue("Consegna a mano"); // Default value
 
         // Set default values
         this.typeComboBox.setValue("Vendita");
@@ -82,6 +84,7 @@ public class InsertionFormController {
     private void handleSelectImage() {
         selectImage();
     }
+
     private void selectImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleziona un'immagine");
@@ -124,6 +127,7 @@ public class InsertionFormController {
             if (isEditedInsertion && insertionToEdit != null) {
                 insertionId = insertionToEdit.getInsertionID();
             }
+            String deliveryMethod = this.deliveryMethodComboBox.getValue();
 
             Insertion insertion = InsertionFactory.createListing(
                     this.titleField.getText(),
@@ -134,7 +138,8 @@ public class InsertionFormController {
                     InsertionStatus.AVAILABLE,
                     LocalDate.now(),
                     UserSession.getInstance().getCurrentUser().getId(),
-                    this.categoryComboBox.getValue()
+                    this.categoryComboBox.getValue(),
+                    deliveryMethod
             );
 
             if (isEditedInsertion && insertionId != null) {
@@ -147,7 +152,7 @@ public class InsertionFormController {
                 insertionService.updateInsertion(insertion);
 
             ValidationService.getInstance().showNewInsertionSuccess();
-            NavigationService.getInstance().navigateToMyProfileView(event);
+            NavigationService.getInstance().navigateToMainView(event);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,6 +196,13 @@ public class InsertionFormController {
             this.typeComboBox.setValue(insertion.getType().toString());
             this.statusComboBox.setValue(insertion.getStatus().toString());
             this.categoryComboBox.setValue(insertion.getCategory());
+
+            if (insertion.getDeliveryMethod() != null && !insertion.getDeliveryMethod().isEmpty()) {
+                this.deliveryMethodComboBox.setValue(insertion.getDeliveryMethod());
+            } else {
+                this.deliveryMethodComboBox.setValue("Consegna a mano"); // Default
+            }
+
             this.publishInsertionButton.setText("Modifica Inserzione");
             this.isEditedInsertion = true;
             this.insertionToEdit = insertion;
