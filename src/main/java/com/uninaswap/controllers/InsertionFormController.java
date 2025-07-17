@@ -32,11 +32,8 @@ public class InsertionFormController {
     @FXML private Button cancelButton;
     @FXML private ComboBox<String> categoryComboBox;
     @FXML private Label characterCountLabel;
-    @FXML private Button previewButton;
     @FXML private Button saveAsDraftButton;
     @FXML private Button backButton;
-    @FXML private Button previewFinalButton;
-    @FXML private Button saveDraftButton;
     @FXML private ComboBox<String> locationComboBox;
     @FXML private Label priceLabel;
     @FXML private ImageView logoImage;
@@ -82,6 +79,7 @@ public class InsertionFormController {
     private void handleSelectImage() {
         selectImage();
     }
+
     private void selectImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleziona un'immagine");

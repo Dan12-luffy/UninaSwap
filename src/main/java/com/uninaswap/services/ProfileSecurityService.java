@@ -22,10 +22,11 @@ public class ProfileSecurityService {
     public boolean changePassword(String currentPassword, String newPassword){
         try{
             String hashedCurrentPassword = Sha256.hashPassword(currentPassword);
-            if(UserSession.getInstance().getCurrentUser().getPassword().equals(hashedCurrentPassword)){
+            if(!UserSession.getInstance().getCurrentUser().getPassword().equals(hashedCurrentPassword)){
                 ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "La password attuale non è corretta");
                 return false;
             }
+
             if(!isValidPassword(newPassword)){
                 ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "La nuova password non è valida");
                 return false;
