@@ -1,6 +1,5 @@
 package com.uninaswap.controllers;
 
-import com.kitfox.svg.A;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.*;
@@ -67,6 +66,10 @@ public class ExchangeController{
 
     @FXML
     private void confirmExchange(ActionEvent event) {
+       if(currentOffer != null) {
+           counterOffer(event);
+           return;
+       }
         double differenceValue = Double.parseDouble(this.differenceLabel.getText().replace("Differenza: €", ""));
         String confirmMessage;
 
@@ -237,13 +240,18 @@ public class ExchangeController{
                ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Nessuna offerta selezionata per la controfferta.");
                 return;
            }
-           // rimuove i vecchi oggetti proposti
-           offeredItemsService.deleteOfferedItem(this.currentOffer.getOfferID());
-
-           // inserisce i nuovi oggetti proposti
+           List<OfferedItem> oldOfferedItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(this.currentOffer.getOfferID());
+           for(OfferedItem item : oldOfferedItems){
+               Insertion oldInsertion = insertionService.getInsertionByID(item.getInsertionId());
+               oldInsertion.setStatus(InsertionStatus.AVAILABLE);
+               insertionService.updateInsertion(oldInsertion);
+           }
            for(Insertion insertion : selectedInsertions){
-                OfferedItem offeredItem = new OfferedItem(this.currentOffer.getOfferID(), insertion.getInsertionID());
-                offeredItemsService.createOfferedItem(offeredItem);
+               OfferedItem offeredItem = new OfferedItem(currentOffer.getOfferID(), insertion.getInsertionID());
+               offeredItemsService.createOfferedItem(offeredItem);
+
+               insertion.setStatus(InsertionStatus.PENDING);
+                insertionService.updateInsertion(insertion);
            }
 
            //rimetti in stato PENDING l'offerta

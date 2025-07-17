@@ -28,7 +28,7 @@ public class OfferedItem {
         this.offerId = offerId;
     }
 
-    public int getListingId() {
+    public int getInsertionId() {
         return listingId;
     }
 

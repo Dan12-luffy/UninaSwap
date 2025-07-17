@@ -5,7 +5,6 @@ import com.uninaswap.services.ValidationService;
 import com.uninaswap.utility.DatabaseUtil;
 import javafx.scene.control.Alert;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +20,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, offeredItem.getOfferId());
-            stmt.setInt(2, offeredItem.getListingId());
+            stmt.setInt(2, offeredItem.getInsertionId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'oggetto offerto: " + e.getMessage());

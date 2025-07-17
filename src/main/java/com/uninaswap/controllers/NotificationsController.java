@@ -330,7 +330,7 @@ public class NotificationsController implements Initializable {
                     desc.append("\n\nOggetti offerti:");
                     for (OfferedItem item : offeredItems) {
                         try {
-                            Insertion offeredInsertion = insertionService.getInsertionByID(item.getListingId());
+                            Insertion offeredInsertion = insertionService.getInsertionByID(item.getInsertionId());
                             if (offeredInsertion != null) {
                                 desc.append("\n- ").append(offeredInsertion.getTitle());
                             }
@@ -372,19 +372,17 @@ public class NotificationsController implements Initializable {
         acceptButton.getStyleClass().add("accept-button");
         acceptButton.setOnAction(e -> handleAcceptOffer(e, offer.getOfferID()));
 
-        // Mostra l'importo solo per le offerte di vendita
         if (listingType == typeInsertion.SALE) {
             Label offerAmount = new Label("Offerta: " + formatAmount(offer.getAmount()));
             offerAmount.getStyleClass().add("offer-amount");
 
-            // Aggiungi il bottone per la controfferta
             Button counterOfferButton = new Button("Controfferta");
             counterOfferButton.getStyleClass().add("counter-button");
             counterOfferButton.setOnAction(e -> handleCounterOffer(offer.getOfferID()));
 
             actions.getChildren().addAll(offerAmount, spacer, declineButton, counterOfferButton, acceptButton);
         } else if(listingType == typeInsertion.EXCHANGE){
-            // Aggiungi il bottone per la controfferta
+
             Button counterOfferButton = new Button("Controfferta");
             counterOfferButton.getStyleClass().add("counter-button");
             counterOfferButton.setOnAction(e -> handleCounterOffer(offer.getOfferID()));
@@ -477,7 +475,9 @@ public class NotificationsController implements Initializable {
         try {
             List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId);
             for (OfferedItem item : offeredItems) {
-                OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
+                Insertion insertion = insertionService.getInsertionByID(item.getInsertionId());
+                insertion.setStatus(InsertionStatus.AVAILABLE);
+                insertionService.updateInsertion(insertion);
             }
             offerService.updateOfferStatus(offerId, InsertionStatus.REJECTED);
             loadUserOffers();
