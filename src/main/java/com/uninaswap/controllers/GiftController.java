@@ -96,6 +96,7 @@ public class GiftController {
             }
         }
     }
+
     public void setInsertion(Insertion insertion) {
         this.insertion = insertion;
         if (insertion != null) {

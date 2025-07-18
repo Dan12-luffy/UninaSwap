@@ -43,7 +43,8 @@ public class ExchangeController{
 
    @FXML
     public void initialize() {
-        loadUserInsertions();
+
+       loadUserInsertions();
     }
 
     @FXML

@@ -31,16 +31,17 @@ public class InsertionFormController {
     @FXML private ComboBox<String> categoryComboBox;
     @FXML private ComboBox<String> locationComboBox;
     @FXML private Label priceLabel;
+    @FXML private Label characterCountLabel;
     @FXML private ImageView mainImagePreview;
     @FXML private Button publishInsertionButton;
     @FXML private ComboBox<String> deliveryMethodComboBox;
     @FXML private TitledPane productDescription;
-
+    @FXML private Label headFunctionalityLabel;
 
     private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png";
     private File selectedImageFile;
     private final InsertionService insertionService = InsertionService.getInstance();
-    private boolean isEditedInsertion = false; // Flag to check if the insertion is being edited
+    private boolean isEditedInsertion = false; // Flag che serve per capire se si sta modificando un'inserzione esistente o creando una nuova
     private Insertion insertionToEdit = null;
 
     @FXML
@@ -70,8 +71,22 @@ public class InsertionFormController {
                 this.priceField.setDisable(false);
                 this.priceLabel.setText("Prezzo: ");
             }
-
         });
+        this.priceField.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.isEmpty()) {
+                return change;
+            }
+            if (change.getText().equals(",")) {
+                change.setText(".");
+            }
+            if (newText.matches("\\d*(\\.\\d{0,2})?")) {
+                return change;
+            }
+            return null;
+        }));
+        updateCharacterCount();
     }
 
     @FXML
@@ -154,6 +169,30 @@ public class InsertionFormController {
     }
 
     @FXML
+    private void updateCharacterCount() {
+        if (this.descriptionArea != null && this.characterCountLabel != null) {
+            int currentLength = this.descriptionArea.getText().length();
+            int maxLength = 500;
+            int remaining = maxLength - currentLength;
+
+            this.characterCountLabel.setText(remaining + "/" + maxLength);
+
+            if (remaining < 50) {
+                this.characterCountLabel.setStyle("-fx-text-fill: red;");
+            } else if (remaining < 100) {
+                this.characterCountLabel.setStyle("-fx-text-fill: orange;");
+            } else {
+                this.characterCountLabel.setStyle("-fx-text-fill: green;");
+            }
+
+            if (currentLength > maxLength) {
+                this.descriptionArea.setText(this.descriptionArea.getText().substring(0, maxLength));
+                this.descriptionArea.positionCaret(maxLength);
+            }
+        }
+    }
+
+    @FXML
     private void goBack(ActionEvent event) {
         NavigationService.getInstance().navigateToMainView(event);
     }
@@ -174,6 +213,7 @@ public class InsertionFormController {
             this.descriptionArea.setText(insertion.getDescription());
             this.typeComboBox.setValue(insertion.getType().toString());
             this.categoryComboBox.setValue(insertion.getCategory());
+            this.headFunctionalityLabel.setText("Modifica Inserzione");
 
             if (insertion.getDeliveryMethod() != null && !insertion.getDeliveryMethod().isEmpty()) {
                 this.deliveryMethodComboBox.setValue(insertion.getDeliveryMethod());

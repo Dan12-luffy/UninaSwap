@@ -48,7 +48,7 @@
 
                 <!-- Titolo centrale -->
                 <HBox alignment="CENTER" styleClass="title-container" HBox.hgrow="ALWAYS">
-                    <Label styleClass="header-title" text="Crea nuova inserzione" />
+                    <Label fx:id="headFunctionalityLabel" styleClass="header-title" text="Crea nuova inserzione" />
                 </HBox>
 
                 <!-- Pulsanti azione -->
@@ -155,9 +155,9 @@
                     <TitledPane fx:id="productDescription" expanded="true" styleClass="form-section" text="📄 Descrizione Dettagliata">
                         <VBox spacing="15">
                             <VBox spacing="5">
-                                <TextArea fx:id="descriptionArea" prefHeight="150.0" promptText="Descrivi l'articolo in dettaglio: condizioni, anno di acquisto, motivo della vendita, eventuali difetti, contenuti inclusi..." styleClass="main-text-area" wrapText="true" />
+                                <TextArea fx:id="descriptionArea" onKeyTyped="#updateCharacterCount" prefHeight="150.0" promptText="Descrivi l'articolo in dettaglio: condizioni, anno di acquisto, motivo della vendita, eventuali difetti, contenuti inclusi..." styleClass="main-text-area" wrapText="true" />
                                 <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label fx:id="characterCountLabel" styleClass="character-count" text="0/500 caratteri" />
+                                    <Label fx:id="characterCountLabel" onKeyTyped="#updateCharacterCount" styleClass="character-count" text="0/500 caratteri" />
                                     <Region HBox.hgrow="ALWAYS" />
                                     <Label styleClass="field-hint" text="Una descrizione dettagliata aumenta le possibilità di vendita" />
                                 </HBox>
