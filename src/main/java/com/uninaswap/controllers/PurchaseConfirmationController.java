@@ -24,7 +24,6 @@ public class PurchaseConfirmationController {
     private Insertion insertion;
     private final ValidationService validationService = ValidationService.getInstance();
 
-
     @FXML
     private void onConfirmPurchase(ActionEvent event) {
         if(this.insertion == null){

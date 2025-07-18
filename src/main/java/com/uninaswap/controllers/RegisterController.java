@@ -41,6 +41,7 @@ public class RegisterController {
     private void navigateToLogin(ActionEvent event) {
         NavigationService.getInstance().navigateToLoginView(event);
     }
+
     private TextFormatter<String> createTextFormatter(int maxLength) {
         return new TextFormatter<>(change -> {
             if (change.getControlNewText().length() <= maxLength) {
