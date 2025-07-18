@@ -22,4 +22,6 @@ public interface OfferDao {
     List<Offer> findRejectedOffersForCurrentUser();
     List<Offer> getPendingOffersByUser() throws SQLException;
     List<Offer> getCompletedOffersByUser(int userId) throws SQLException;
+    List<Offer> getDirectPurchaseByUser(int userId) throws SQLException;
+    List<Offer> getAllCompletedOperationsByUser(int userId) throws SQLException;
 }

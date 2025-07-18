@@ -493,7 +493,7 @@ public class MyProfileController {
         try {
             completedOperationsContainer.getChildren().clear();
 
-            List<Offer> completedOffers = offerService.getCompletedOffersByUser(UserSession.getInstance().getCurrentUserId());
+            List<Offer> completedOffers = offerService.getAllCompletedOperationsByUser(UserSession.getInstance().getCurrentUserId());
             if (completedOffers.isEmpty()) {
                 Label emptyLabel = new Label("Nessuna operazione completata");
                 emptyLabel.getStyleClass().add("palceholder-text");

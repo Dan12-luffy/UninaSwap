@@ -67,6 +67,7 @@ public class OfferService {
 
         return true;
     }
+
     public boolean completeOfferRejection(int offerId) throws Exception {
         Offer offer = offerDao.findOfferById(offerId);
         if (offer == null) return false;
@@ -135,7 +136,12 @@ public class OfferService {
     public List<Offer> getCompletedOffersByUser(int userId) throws Exception {
         return offerDao.getCompletedOffersByUser(userId);
     }
-
+    public List<Offer> getDirectPurchaseByUser(int userId) throws Exception {
+        return offerDao.getDirectPurchaseByUser(userId);
+    }
+    public List<Offer> getAllCompletedOperationsByUser(int userId) throws Exception {
+        return offerDao.getAllCompletedOperationsByUser(userId);
+    }
     public Insertion getInsertionByOfferId(int offerId) throws Exception {
         Offer offer = offerDao.findOfferById(offerId);
         if (offer != null) {

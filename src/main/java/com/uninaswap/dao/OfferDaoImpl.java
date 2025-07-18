@@ -275,6 +275,49 @@ public class OfferDaoImpl implements OfferDao {
         }
         return completedOffers;
     }
+
+    public List<Offer> getDirectPurchaseByUser(int userId) throws SQLException {
+        List<Offer> directPurchaseOffers = new ArrayList<>();
+
+       String directPurchaseSql =
+               "SELECT t.transaction_id, t.insertion_id, t.buyer_id, t.amount, " +
+                       "t.transaction_date, i.type " +
+                       "FROM transactions t " +
+                       "JOIN insertion i ON t.insertion_id = i.insertionid " +
+                       "WHERE t.buyer_id = ? AND t.status = 'COMPLETED' " +
+                       "AND (t.offer_id IS NULL OR NOT EXISTS (SELECT 1 FROM offer o WHERE o.offerid = t.offer_id))";
+
+       try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(directPurchaseSql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Offer offer = new Offer();
+                    offer.setOfferID(rs.getInt("transaction_id"));
+                    offer.setInsertionID(rs.getInt("insertion_id"));
+                    offer.setUserID(rs.getInt("buyer_id"));
+                    offer.setAmount(rs.getDouble("amount"));
+                    offer.setOfferDate(rs.getDate("transaction_date").toLocalDate());
+                    offer.setTypeOffer(mapDatabaseToTypeOffer(rs.getString("type")));
+                    offer.setInsertionStatus(InsertionStatus.ACCEPTED);
+                    directPurchaseOffers.add(offer);
+
+                }
+            }
+       } catch (SQLException e) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile recuperare le offerte di acquisto diretto: " + e.getMessage());
+       }
+        return directPurchaseOffers;
+    }
+
+    public List<Offer> getAllCompletedOperationsByUser(int userId) throws SQLException {
+        List<Offer> completedOperations = new ArrayList<>();
+
+        completedOperations.addAll(getCompletedOffersByUser(userId));
+        completedOperations.addAll(getDirectPurchaseByUser(userId));
+        return completedOperations;
+
+    }
     @NotNull
     private Offer mapResultSetToOffer(ResultSet rs) throws SQLException {
         Offer offer = new Offer();
