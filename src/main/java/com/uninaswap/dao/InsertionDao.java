@@ -12,15 +12,15 @@ public interface InsertionDao {
     // CRUD operations
 
     void insert(Insertion insertion) throws SQLException;
-    void delete(int listingId) throws SQLException;
+    void delete(int insertionID) throws SQLException;
     void update(Insertion insertion) throws SQLException;
     List<Insertion> findAll() throws SQLException;
 
-    void updateInsertionStatus(int listingId, InsertionStatus status) throws SQLException;
+    void updateInsertionStatus(int insertionID, InsertionStatus status) throws SQLException;
 
     List<Insertion> findInsertionsExcludingCurrentUser() throws SQLException;
     List<Insertion> findCurrentUserAvailableInsertions() throws SQLException;
-    Insertion findInsertionById(int listingId) throws SQLException;
+    Insertion findInsertionById(int insertionID) throws SQLException;
 
     List<Insertion> findCurrentUserInsertions() throws SQLException;
 

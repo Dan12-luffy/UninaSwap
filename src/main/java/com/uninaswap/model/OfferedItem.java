@@ -3,13 +3,13 @@ package com.uninaswap.model;
 public class OfferedItem {
     private int offeredItemId;
     private int offerId;
-    private int listingId;
+    private int insertionID;
 
     public OfferedItem() {}
 
-    public OfferedItem(int offerId, int listingId) {
+    public OfferedItem(int offerId, int insertionID) {
         this.offerId = offerId;
-        this.listingId = listingId;
+        this.insertionID = insertionID;
     }
 
     public int getOfferedItemId() {
@@ -29,11 +29,11 @@ public class OfferedItem {
     }
 
     public int getInsertionId() {
-        return listingId;
+        return insertionID;
     }
 
-    public void setListingId(int listingId) {
-        this.listingId = listingId;
+    public void setInsertionID(int insertionID) {
+        this.insertionID = insertionID;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class OfferedItem {
         return "OfferedItem{" +
                 "offeredItemId=" + offeredItemId +
                 ", offerId=" + offerId +
-                ", listingId=" + listingId +
+                ", insertionID=" + insertionID +
                 '}';
     }
 }

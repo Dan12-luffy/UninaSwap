@@ -4,35 +4,35 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class SaleInsertion extends Insertion {
-    private BigDecimal listingPrice;
+    private BigDecimal insertionPrice;
 
     public SaleInsertion() {
         super();
     }
-    public SaleInsertion(Integer listingId, String title, String imageUrl, String description,
-                         typeInsertion type, BigDecimal listingPrice, InsertionStatus status,
+    public SaleInsertion(Integer insertionID, String title, String imageUrl, String description,
+                         typeInsertion type, BigDecimal insertionPrice, InsertionStatus status,
                          LocalDate publishDate, Integer userId, String category) {
-        super(listingId, title, imageUrl, description, type ,status, publishDate, userId, category);
-        this.listingPrice = listingPrice;
+        super(insertionID, title, imageUrl, description, type ,status, publishDate, userId, category);
+        this.insertionPrice = insertionPrice;
     }
     // Costruttore senza id
     public SaleInsertion(String title, String imageUrl, String description,
                          typeInsertion type, BigDecimal price, InsertionStatus status,
                          LocalDate publishDate, Integer userId, String category) {
         super(title, imageUrl, description, type, status, publishDate, userId, category);
-        this.listingPrice = price;
+        this.insertionPrice = price;
     }
 
     @Override
-    public typeInsertion getListingType() {
+    public typeInsertion getInsertionType() {
         return typeInsertion.SALE;
     }
     @Override
     public BigDecimal getPrice() {
-        return listingPrice;
+        return insertionPrice;
     }
 
     public void setPrice(BigDecimal price) {
-        this.listingPrice = price;
+        this.insertionPrice = price;
     }
 }

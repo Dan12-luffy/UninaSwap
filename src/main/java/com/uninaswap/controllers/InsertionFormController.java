@@ -125,7 +125,7 @@ public class InsertionFormController {
             }
             String deliveryMethod = this.deliveryMethodComboBox.getValue();
 
-            Insertion insertion = InsertionFactory.createListing(
+            Insertion insertion = InsertionFactory.createInsertion(
                     this.titleField.getText(),
                     imagePath,
                     this.descriptionArea.getText(),

@@ -3,14 +3,11 @@ package com.uninaswap.services;
 import com.uninaswap.dao.UserDao;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.User;
-import com.uninaswap.utility.Sha256;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NotNull;
-
-import java.sql.SQLException;
 
 import static com.uninaswap.utility.Sha256.hashPassword;
 

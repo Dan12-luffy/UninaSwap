@@ -71,8 +71,8 @@ public class ExchangeController{
                             OfferedItem offeredItem = new OfferedItem(offerId, insertion.getInsertionID());
                             offeredItemsService.createOfferedItem(offeredItem);
                         }
-                        ValidationService.getInstance().showOfferProposalSuccess();
                         NavigationService.getInstance().navigateToMainView(event);
+                        ValidationService.getInstance().showOfferProposalSuccess();
                     }
                 } catch (ExchangeException e) {
                     ExchangeException.showError(e.getMessage());
@@ -187,10 +187,10 @@ public class ExchangeController{
 
             if (newState) {
                 card.setStyle("-fx-padding: 10; -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f1f8e9;");
-                selectedInsertions.add(insertion); // Add to selected listings
+                selectedInsertions.add(insertion);
             } else {
                 card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
-                selectedInsertions.remove(insertion); // Remove from selected listings
+                selectedInsertions.remove(insertion);
             }
             updateCalculations(insertion, newState);
         });

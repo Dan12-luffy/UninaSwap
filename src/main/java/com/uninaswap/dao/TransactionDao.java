@@ -9,6 +9,6 @@ public interface TransactionDao  {
     int createTransaction(Transaction transaction);
     Transaction findById(int transactionId);
     List<Transaction> findByUserId(int userId);
-    List<Transaction> findByListingId(int listingId);
+    List<Transaction> findByInsertionID(int insertionID);
 
 }

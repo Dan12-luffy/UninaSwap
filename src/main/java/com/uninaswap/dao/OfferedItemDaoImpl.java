@@ -70,7 +70,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
                 OfferedItem offeredItem = new OfferedItem();
                 offeredItem.setOfferedItemId(rs.getInt("offereditemid"));
                 offeredItem.setOfferId(rs.getInt("offerid"));
-                offeredItem.setListingId(rs.getInt("offeredinsertionid"));
+                offeredItem.setInsertionID(rs.getInt("offeredinsertionid"));
                 offeredItems.add(offeredItem);
             }
             return offeredItems;
@@ -81,18 +81,18 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
     }
 
     @Override
-    public List<OfferedItem> findOfferedItemsForListingId(int listingId) {
+    public List<OfferedItem> findOfferedItemsForInsertionID(int insertionID) {
         String sql = "SELECT * FROM offereditems WHERE offeredinsertionid = ?";
         List<OfferedItem> offeredItems = new ArrayList<>();
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, listingId);
+            stmt.setInt(1, insertionID);
             var rs = stmt.executeQuery();
             while (rs.next()) {
                 OfferedItem offeredItem = new OfferedItem();
                 offeredItem.setOfferedItemId(rs.getInt("offereditemid"));
                 offeredItem.setOfferId(rs.getInt("offerid"));
-                offeredItem.setListingId(rs.getInt("offeredinsertionid"));
+                offeredItem.setInsertionID(rs.getInt("offeredinsertionid"));
                 offeredItems.add(offeredItem);
             }
             return offeredItems;
@@ -103,19 +103,19 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
     }
 
     @Override
-    public List<OfferedItem> findOfferedItemsByOfferIdAndListingId(int offerId, int listingId) {
+    public List<OfferedItem> findOfferedItemsByOfferIdAndInsertionID(int offerId, int insertionID) {
         String sql = "SELECT * FROM offereditems WHERE offerid = ? AND offeredinsertionid = ?";
         List<OfferedItem> offeredItems = new ArrayList<>();
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, offerId);
-            stmt.setInt(2, listingId);
+            stmt.setInt(2, insertionID);
             var rs = stmt.executeQuery();
             while (rs.next()) {
                 OfferedItem offeredItem = new OfferedItem();
                 offeredItem.setOfferedItemId(rs.getInt("offereditemid"));
                 offeredItem.setOfferId(rs.getInt("offerid"));
-                offeredItem.setListingId(rs.getInt("offeredinsertionid"));
+                offeredItem.setInsertionID(rs.getInt("offeredinsertionid"));
                 offeredItems.add(offeredItem);
             }
             return offeredItems;

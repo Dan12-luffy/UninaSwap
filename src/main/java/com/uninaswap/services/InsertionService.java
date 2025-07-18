@@ -38,14 +38,11 @@ public class InsertionService {
     public void deleteInsertion(int insertionID) throws SQLException {
         insertionDao.delete(insertionID);
     }
-    /*public Listing findById(int listingId) throws SQLException {
-        return listingDao.findById(listingId);
-    }*/
 
     public String getSellerFullName(int userId) {
         return userDao.findFullNameFromID(userId);
     }
-    public List<Insertion> getListingsByFilters(FilterCriteria criteria) throws SQLException {
+    public List<Insertion> getInsertionsByFilters(FilterCriteria criteria) throws SQLException {
         return insertionDao.findByFilters(criteria);
     }
     public BigDecimal getInsertionMaxPrice() throws SQLException {
@@ -84,9 +81,9 @@ public class InsertionService {
             insertionDao.updateInsertionStatus(insertionID, insertionStatus);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error updating listing status", e);
+            throw new RuntimeException("Error updating insertion status", e);
         } catch (Exception e) {
-            throw new RuntimeException("Unexpected error occurred while updating listing status", e);
+            throw new RuntimeException("Unexpected error occurred while updating insertion status", e);
         }
     }
 

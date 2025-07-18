@@ -114,7 +114,7 @@ public abstract class Insertion {
     public void setDeliveryMethod(String deliveryMethod) {
         this.deliveryMethod = deliveryMethod;
     }
-    public abstract typeInsertion getListingType();
+    public abstract typeInsertion getInsertionType();
     public abstract BigDecimal getPrice();
 
     @Override

@@ -100,7 +100,7 @@ public class NavigationService {
         }
     }
 
-    public void navigateToCreateListingView(ActionEvent event) {
+    public void navigateToCreateInsertionView(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/insertionFormInterface.fxml"));
             Parent root = loader.load();
@@ -109,7 +109,7 @@ public class NavigationService {
             ValidationService.getInstance().showFailedToOpenPageError();
         }
     }
-    public void navigateToEditListingView(ActionEvent event, Insertion insertion) {
+    public void navigateToEditInsertionView(ActionEvent event, Insertion insertion) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/insertionFormInterface.fxml"));
             Parent root = loader.load();
@@ -148,7 +148,7 @@ public class NavigationService {
             Parent root = loader.load();
 
             SaleController controller = loader.getController();
-            controller.setListing(insertion);
+            controller.setInsertion(insertion);
             setScene(event, root);
         } catch (IOException e) {
             ValidationService.getInstance().showFailedToOpenPageError();
@@ -173,7 +173,7 @@ public class NavigationService {
             Parent root = loader.load();
 
             PurchaseConfirmationController controller = loader.getController();
-            controller.setListing(insertion);
+            controller.setInsertion(insertion);
             setScene(event, root);
         } catch (IOException e) {
             ValidationService.getInstance().showFailedToOpenPageError();

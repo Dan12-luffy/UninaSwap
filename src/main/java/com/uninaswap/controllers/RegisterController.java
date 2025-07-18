@@ -1,14 +1,11 @@
 package com.uninaswap.controllers;
 
 import com.uninaswap.model.Faculty;
-import com.uninaswap.model.User;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserService;
-import com.uninaswap.services.ValidationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 
 public class RegisterController {
 

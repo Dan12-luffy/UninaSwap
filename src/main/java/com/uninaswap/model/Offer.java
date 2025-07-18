@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Offer {
     private Integer offerID;
-    private int listingID;
+    private int insertionID;
     private int userID;
     private double amount;
     private String message;
@@ -15,8 +15,8 @@ public class Offer {
     public Offer() {
     }
 
-    public Offer(int listingID, int userID, double amount, String message,typeOffer typeOffer, InsertionStatus insertionStatus, LocalDate offerDate) {
-        this.listingID = listingID;
+    public Offer(int insertionID, int userID, double amount, String message, typeOffer typeOffer, InsertionStatus insertionStatus, LocalDate offerDate) {
+        this.insertionID = insertionID;
         this.userID = userID;
         this.amount = amount;
         this.message = message;
@@ -33,12 +33,12 @@ public class Offer {
         this.offerID = offerID;
     }
 
-    public int getListingID() {
-        return listingID;
+    public int getInsertionID() {
+        return insertionID;
     }
 
-    public void setListingID(int listingID) {
-        this.listingID = listingID;
+    public void setInsertionID(int insertionID) {
+        this.insertionID = insertionID;
     }
 
     public int getUserID() {
@@ -65,11 +65,11 @@ public class Offer {
         this.message = message;
     }
 
-    public InsertionStatus getListingStatus() {
+    public InsertionStatus getInsertionStatus() {
         return insertionStatus;
     }
 
-    public void setListingStatus(InsertionStatus insertionStatus) {
+    public void setInsertionStatus(InsertionStatus insertionStatus) {
         this.insertionStatus = insertionStatus;
     }
 
@@ -94,11 +94,11 @@ public class Offer {
     public String toString() {
         return "Offer{" +
                 "offerID=" + offerID +
-                ", listingID=" + listingID +
+                ", insertionID=" + insertionID +
                 ", userID=" + userID +
                 ", amount=" + amount +
                 ", message='" + message + '\'' +
-                ", listingStatus=" + insertionStatus +
+                ", insertionStatus=" + insertionStatus +
                 ", offerDate=" + offerDate +
                 '}';
     }

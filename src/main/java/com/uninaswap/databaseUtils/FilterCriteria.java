@@ -68,7 +68,7 @@ public class FilterCriteria {
     public boolean hasFacultyFilter() {
         return facultyNames != null && !facultyNames.isEmpty();
     }
-    public boolean hasTypeListingFilter() {
+    public boolean hasTypeInsertionFilter() {
         return type != null && !type.isEmpty();
     }
 }

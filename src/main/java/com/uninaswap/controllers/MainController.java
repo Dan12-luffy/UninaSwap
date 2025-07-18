@@ -14,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.input.MouseEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -125,7 +124,7 @@ public class MainController {
             this.currentFilter.setSearchText(searchText);
             try {
                 List<Insertion> insertions = this.filterService.searchByText(searchText);
-                displayListings(insertions);
+                displayInsertions(insertions);
             } catch (SQLException e) {
                 this.resultsCountLabel.setText("Errore durante il caricamento");
                 ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante la ricerca: " + e.getMessage());
@@ -293,7 +292,7 @@ public class MainController {
     @FXML
     private void onSellButtonClicked(ActionEvent event) {
         try {
-            NavigationService.getInstance().navigateToCreateListingView(event);
+            NavigationService.getInstance().navigateToCreateInsertionView(event);
         }catch(Exception e){
             validationService.showFailedToOpenPageError();
         }
@@ -328,15 +327,15 @@ public class MainController {
 
     private void applyCurrentFilters() {
         try {
-            List<Insertion> insertions = filterService.searchListings(currentFilter);
-            displayListings(insertions);
+            List<Insertion> insertions = filterService.searchInsertions(currentFilter);
+            displayInsertions(insertions);
         } catch (SQLException e) {
             this.resultsCountLabel.setText("Errore durante il caricamento");
             e.printStackTrace();
         }
     }
 
-    private void displayListings(List<Insertion> insertions) {
+    private void displayInsertions(List<Insertion> insertions) {
         setupItemGrid();
 
         if (!insertions.isEmpty()) {
@@ -467,8 +466,8 @@ public class MainController {
             this.currentFilter = new FilterCriteria();
             this.currentFilter.setSortBy("date_desc");
 
-            List<Insertion> insertions = filterService.searchListings(this.currentFilter);
-            displayListings(insertions);
+            List<Insertion> insertions = filterService.searchInsertions(this.currentFilter);
+            displayInsertions(insertions);
 
         } catch (SQLException e) {
             this.resultsCountLabel.setText("Errore durante il caricamento");

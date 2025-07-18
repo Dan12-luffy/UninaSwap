@@ -4,7 +4,6 @@ import com.uninaswap.dao.OfferedItemDao;
 import com.uninaswap.dao.OfferedItemDaoImpl;
 import com.uninaswap.model.OfferedItem;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class OfferedItemsService {
@@ -33,15 +32,15 @@ public class OfferedItemsService {
         return offeredItemDao.findOfferedItemById(offerItemId);
     }
 
-    public List<OfferedItem> findOfferedItemsByOfferIdAndListingId(int offerId, int listingId) {
-        return offeredItemDao.findOfferedItemsByOfferIdAndListingId(offerId, listingId);
+    public List<OfferedItem> findOfferedItemsByOfferIdAndInsertionID(int offerId, int insertionID) {
+        return offeredItemDao.findOfferedItemsByOfferIdAndInsertionID(offerId, insertionID);
     }
 
     public List<OfferedItem> findOfferedItemsByOfferId(int offerId) {
         return offeredItemDao.findOfferedItemsByOfferId(offerId);
     }
 
-    public List<OfferedItem> findOfferedItemsForListingId(int listingId) {
-        return offeredItemDao.findOfferedItemsForListingId(listingId);
+    public List<OfferedItem> findOfferedItemsForInsertionID(int insertionID) {
+        return offeredItemDao.findOfferedItemsForInsertionID(insertionID);
     }
 }

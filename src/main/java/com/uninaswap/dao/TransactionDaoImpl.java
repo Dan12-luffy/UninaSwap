@@ -3,7 +3,6 @@ import com.uninaswap.model.Transaction;
 import com.uninaswap.utility.DatabaseUtil;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class TransactionDaoImpl implements TransactionDao {
         try (Connection connection = DatabaseUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            preparedStatement.setInt(1, transaction.getListingId());
+            preparedStatement.setInt(1, transaction.getInsertionID());
             if(transaction.getOfferId() == null) {
                 preparedStatement.setNull(2, Types.INTEGER);
             } else {
@@ -76,13 +75,13 @@ public class TransactionDaoImpl implements TransactionDao {
         return transactions;
     }
 
-    public List<Transaction> findByListingId(int listingId) {
+    public List<Transaction> findByInsertionID(int insertionID) {
         String sql = "SELECT * FROM transactions WHERE insertion_id = ?";
         List<Transaction> transactions = new ArrayList<>();
         try (Connection connection = DatabaseUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, listingId);
+            preparedStatement.setInt(1, insertionID);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 transactions.add(mapRowToTransaction(resultSet));
@@ -96,7 +95,7 @@ public class TransactionDaoImpl implements TransactionDao {
     private Transaction mapRowToTransaction(ResultSet resultSet) throws SQLException {
         Transaction transaction = new Transaction();
         transaction.setTransactionId(resultSet.getInt("transaction_id"));
-        transaction.setListingId(resultSet.getInt("insertion_id"));
+        transaction.setInsertionID(resultSet.getInt("insertion_id"));
         transaction.setOfferId(resultSet.getInt("offer_id"));
         transaction.setSellerId(resultSet.getInt("seller_id"));
         transaction.setBuyerId(resultSet.getInt("buyer_id"));

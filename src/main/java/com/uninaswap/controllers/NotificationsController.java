@@ -75,13 +75,12 @@ public class NotificationsController implements Initializable {
         offerContent.setSpacing(8);
         HBox.setHgrow(offerContent, Priority.ALWAYS);
 
-        Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
+        Insertion insertion = insertionService.getInsertionByID(offer.getInsertionID());
         User offerUser = userService.getUserById(offer.getUserID());
         List<OfferedItem> offeredItems = OfferedItemsService.getInstance()
                 .findOfferedItemsByOfferId(offer.getOfferID());
 
-        // Usa il type del listing per determinare il tipo di notifica
-        String notificationType = getNotificationTypeFromListing(insertion.getType());
+        String notificationType = getNotificationTypeFromInsertion(insertion.getType());
 
         HBox header = new HBox();
         header.setAlignment(Pos.CENTER_LEFT);
@@ -96,7 +95,6 @@ public class NotificationsController implements Initializable {
 
         header.getChildren().addAll(notificationTypeLabel, notificationTime);
 
-        // Crea titolo e descrizione basati sul tipo di listing
         String title = createNotificationTitle(insertion.getType(), insertion);
         String description = createNotificationDescription(insertion.getType(), offer, insertion, offerUser, offeredItems);
 
@@ -130,7 +128,7 @@ public class NotificationsController implements Initializable {
         offerContent.setSpacing(8);
         HBox.setHgrow(offerContent, Priority.ALWAYS);
 
-        Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
+        Insertion insertion = insertionService.getInsertionByID(offer.getInsertionID());
 
         HBox header = new HBox();
         header.setAlignment(Pos.CENTER_LEFT);
@@ -227,7 +225,7 @@ public class NotificationsController implements Initializable {
         }
     }
 
-    private String getNotificationTypeFromListing(typeInsertion type) {
+    private String getNotificationTypeFromInsertion(typeInsertion type) {
         return switch (type) {
             case GIFT -> "RICHIESTA REGALO";
             case EXCHANGE -> "PROPOSTA SCAMBIO";
@@ -281,7 +279,7 @@ public class NotificationsController implements Initializable {
         };
     }
 
-    private HBox createActionButtons(Offer offer, typeInsertion listingType) {
+    private HBox createActionButtons(Offer offer, typeInsertion insertionType) {
         HBox actions = new HBox();
         actions.setSpacing(10);
         actions.getStyleClass().add("notification-actions");
@@ -294,7 +292,7 @@ public class NotificationsController implements Initializable {
         declineButton.getStyleClass().add("decline-button");
         declineButton.setOnAction(e -> handleDeclineOffer(offer.getOfferID()));
 
-        String acceptButtonText = switch (listingType) {
+        String acceptButtonText = switch (insertionType) {
             case GIFT -> "Regala";
             case EXCHANGE -> "Accetta Scambio";
             case SALE -> "Accetta";
@@ -305,13 +303,13 @@ public class NotificationsController implements Initializable {
         acceptButton.getStyleClass().add("accept-button");
         acceptButton.setOnAction(e -> handleAcceptOffer(e, offer.getOfferID()));
 
-        if (listingType == typeInsertion.SALE) {
+        if (insertionType == typeInsertion.SALE) {
             Label offerAmount = new Label("Offerta: " + formatAmount(offer.getAmount()));
             offerAmount.getStyleClass().add("offer-amount");
 
             actions.getChildren().addAll(spacer, offerAmount, declineButton, acceptButton);
 
-        } else if(listingType == typeInsertion.EXCHANGE){
+        } else if(insertionType == typeInsertion.EXCHANGE){
             actions.getChildren().addAll(spacer, declineButton, acceptButton);
 
         }else{
@@ -339,7 +337,7 @@ public class NotificationsController implements Initializable {
     private void handleAcceptOffer(ActionEvent event, int offerId) {
         try {
             Offer offer = offerService.getOfferById(offerId);
-            Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
+            Insertion insertion = insertionService.getInsertionByID(offer.getInsertionID());
             User buyer = userService.getUserById(offer.getUserID());
 
             switch (insertion.getType()) {

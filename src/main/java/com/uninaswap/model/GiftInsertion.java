@@ -15,7 +15,7 @@ public class GiftInsertion extends Insertion {
     }
 
     @Override
-    public typeInsertion getListingType() {
+    public typeInsertion getInsertionType() {
         return typeInsertion.GIFT;
     }
     @Override

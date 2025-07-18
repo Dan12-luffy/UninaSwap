@@ -20,7 +20,7 @@ public class FilterService {
         return instance;
     }
 
-    public List<Insertion> searchListings(FilterCriteria criteria) throws SQLException {
+    public List<Insertion> searchInsertions(FilterCriteria criteria) throws SQLException {
         // Imposta l'utente corrente da escludere se non specificato
         if (criteria.getExcludeUserId() == null && UserSession.getInstance().getCurrentUser() != null) {
             criteria.setExcludeUserId(UserSession.getInstance().getCurrentUser().getId());
@@ -40,19 +40,19 @@ public class FilterService {
     public List<Insertion> searchByText(String text) throws SQLException {
         FilterCriteria criteria = new FilterCriteria();
         criteria.setSearchText(text);
-        return searchListings(criteria);
+        return searchInsertions(criteria);
     }
 
     public List<Insertion> searchByCategories(List<Integer> categoryIds) throws SQLException {
         FilterCriteria criteria = new FilterCriteria();
         criteria.setCategoryIds(categoryIds);
-        return searchListings(criteria);
+        return searchInsertions(criteria);
     }
 
     public List<Insertion> searchByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) throws SQLException {
         FilterCriteria criteria = new FilterCriteria();
         criteria.setMinPrice(minPrice);
         criteria.setMaxPrice(maxPrice);
-        return searchListings(criteria);
+        return searchInsertions(criteria);
     }
 }

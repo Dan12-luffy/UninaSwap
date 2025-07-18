@@ -110,7 +110,7 @@ public class SaleController {
         NavigationService.getInstance().navigateToMainView(event);
     }
 
-    public void setListing(Insertion insertion) {
+    public void setInsertion(Insertion insertion) {
         this.insertion = insertion;
         if (insertion != null) {
             productTitleLabel.setText(insertion.getTitle());

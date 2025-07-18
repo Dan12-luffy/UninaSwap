@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ExchangeInsertion extends Insertion {
-    private BigDecimal listingPrice;
+    private BigDecimal insertionPrice;
     public ExchangeInsertion() {
         super();
     }
@@ -13,18 +13,18 @@ public class ExchangeInsertion extends Insertion {
                              typeInsertion type, BigDecimal price, InsertionStatus status,
                              LocalDate publishDate, Integer userId, String category) {
         super(title, imageUrl, description, type, status, publishDate, userId, category);
-        this.listingPrice = price;
+        this.insertionPrice = price;
     }
 
     @Override
-    public typeInsertion getListingType() {
+    public typeInsertion getInsertionType() {
         return typeInsertion.EXCHANGE;
     }
     @Override
     public BigDecimal getPrice() {
-        return listingPrice;
+        return insertionPrice;
     }
     public void setPrice(BigDecimal price) {
-        this.listingPrice = price;
+        this.insertionPrice = price;
     }
 }

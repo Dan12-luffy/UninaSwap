@@ -138,7 +138,7 @@ public class InsertionDaoImpl implements InsertionDao {
             parameters.addAll(criteria.getFacultyNames());
         }
 
-        if(criteria.hasTypeListingFilter()) {
+        if(criteria.hasTypeInsertionFilter()) {
             sql.append("AND i.type IN (");
             for (int i = 0; i < criteria.getTypes().size(); ++i) {
                 sql.append("?");
@@ -389,9 +389,9 @@ public class InsertionDaoImpl implements InsertionDao {
         stmt.setString(5, insertion.getType().name());
 
         switch (insertion) {
-            case SaleInsertion saleListing -> stmt.setBigDecimal(6, saleListing.getPrice());
-            case ExchangeInsertion exchangeListing -> stmt.setBigDecimal(6, exchangeListing.getPrice());
-            case GiftInsertion giftListing -> stmt.setBigDecimal(6, BigDecimal.ZERO);
+            case SaleInsertion saleInsertion -> stmt.setBigDecimal(6, saleInsertion.getPrice());
+            case ExchangeInsertion exchangeInsertion -> stmt.setBigDecimal(6, exchangeInsertion.getPrice());
+            case GiftInsertion giftInsertion -> stmt.setBigDecimal(6, BigDecimal.ZERO);
             default -> {
                 stmt.setBigDecimal(6, BigDecimal.ZERO);
                 throw new SQLException("Tipo di inserzione sconosciuto");
@@ -408,7 +408,7 @@ public class InsertionDaoImpl implements InsertionDao {
     }
 
     public Insertion createInsertionFromResultSet(ResultSet rs) throws SQLException {
-        int listingId = rs.getInt("insertionid");
+        int insertionID = rs.getInt("insertionid");
         String title = rs.getString("title");
         String imageUrl = rs.getString("imageUrl");
         String description = rs.getString("description");
@@ -420,8 +420,8 @@ public class InsertionDaoImpl implements InsertionDao {
         BigDecimal price = rs.getBigDecimal("price");
         String deliveryMethod = rs.getString("delivery_method");
 
-        Insertion insertion = InsertionFactory.createListing(title, imageUrl, description, type, price, status, publishDate, userId, category, deliveryMethod);
-        insertion.setInsertionID(listingId);
+        Insertion insertion = InsertionFactory.createInsertion(title, imageUrl, description, type, price, status, publishDate, userId, category, deliveryMethod);
+        insertion.setInsertionID(insertionID);
         return insertion;
     }
 

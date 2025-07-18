@@ -57,7 +57,7 @@ public class PurchaseConfirmationController {
         NavigationService.getInstance().navigateToMainView(event);
     }
 
-    public void setListing(Insertion insertion) {
+    public void setInsertion(Insertion insertion) {
         this.insertion = insertion;
         populateData();
     }

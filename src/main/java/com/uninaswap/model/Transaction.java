@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     private int transactionId;
-    private int listingId;
+    private int insertionID;
     private Integer offerId;
     private int sellerId;
     private int buyerId;
@@ -18,8 +18,8 @@ public class Transaction {
     public Transaction(){}
 
     //Costruttore senza transactionId
-    public Transaction(int listingId,Integer offerId,int sellerId,int buyerId,double amount,String transactioType,String status,String description){
-        this.listingId = listingId;
+    public Transaction(int insertionID, Integer offerId, int sellerId, int buyerId, double amount, String transactioType, String status, String description){
+        this.insertionID = insertionID;
         this.offerId = offerId;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
@@ -29,22 +29,12 @@ public class Transaction {
         this.description = description;
         this.transactionDate = LocalDateTime.now();
     }
-    /*public Transaction(int listingId,int sellerId,int buyerId,double amount,String transactioType,String status,String description){
-        this.listingId = listingId;
-        this.sellerId = sellerId;
-        this.buyerId = buyerId;
-        this.amount = amount;
-        this.transactioType = transactioType;
-        this.status = status;
-        this.description = description;
-        this.transactionDate = LocalDateTime.now();
-    }*/
 
     public int getTransactionId() { return transactionId; }
     public void setTransactionId(int transactionId) { this.transactionId = transactionId; }
 
-    public int getListingId() { return listingId; }
-    public void setListingId(int listingId) { this.listingId = listingId; }
+    public int getInsertionID() { return insertionID; }
+    public void setInsertionID(int insertionID) { this.insertionID = insertionID; }
 
     public Integer getOfferId() { return this.offerId; }
     public void setOfferId(Integer offerId) { this.offerId = offerId; }
@@ -74,7 +64,7 @@ public class Transaction {
     public String toString() {
         return "Transaction{" +
                 "transactionId=" + transactionId +
-                ", listingId=" + listingId +
+                ", insertionID" + insertionID +
                 ", sellerId=" + sellerId +
                 ", buyerId=" + buyerId +
                 ", amount=" + amount +

@@ -26,7 +26,7 @@ public class OfferService {
     public int createOffer(Offer offer) throws Exception {
         User currentUser = userSession.getCurrentUser();
         //TODO metodo da migliorare, non riuscirò a leggerlo neanche io domani che mi rimetto sul codice
-        if (InsertionService.getInstance().getInsertionByID(offer.getListingID()).getUserId() == currentUser.getId()) {
+        if (InsertionService.getInstance().getInsertionByID(offer.getInsertionID()).getUserId() == currentUser.getId()) {
             ValidationService.getInstance().showWrongOfferError();
             return -1;
         }
@@ -39,8 +39,8 @@ public class OfferService {
         offerDao.deleteOffer(offer.getOfferID());
     }
 
-    public List<Offer> getOffersForListing(int listingId) throws Exception {
-        return offerDao.findOffersForListing(listingId);
+    public List<Offer> getOffersForInsertion(int insertionID) throws Exception {
+        return offerDao.findOffersForInsertion(insertionID);
     }
 
     public List<Offer> getOffersMadeByCurrentUser() throws SQLException {
@@ -54,7 +54,7 @@ public class OfferService {
         Offer offer = offerDao.findOfferById(offerId);
         if (offer == null) return false;
 
-        Insertion insertion = InsertionService.getInstance().getInsertionByID(offer.getListingID());
+        Insertion insertion = InsertionService.getInstance().getInsertionByID(offer.getInsertionID());
         User buyer = UserService.getInstance().getUserById(offer.getUserID());
         switch (insertion.getType()) {
             case SALE -> TransactionService.getInstance().recordSale(insertion, offer, buyer);
@@ -113,8 +113,8 @@ public class OfferService {
             throw new RuntimeException(e);
         }
     }
-    public List<Offer> getListingOffers(int listingId) throws Exception {
-        return offerDao.findOffersForListing(listingId);
+    public List<Offer> getInsertionOffers(int insertionID) throws Exception {
+        return offerDao.findOffersForInsertion(insertionID);
     }
 
     public Offer getOfferById(int offerId) throws Exception {
@@ -136,10 +136,10 @@ public class OfferService {
         return offerDao.getCompletedOffersByUser(userId);
     }
 
-    public Insertion getListingByOfferId(int offerId) throws Exception {
+    public Insertion getInsertionByOfferId(int offerId) throws Exception {
         Offer offer = offerDao.findOfferById(offerId);
         if (offer != null) {
-            return InsertionService.getInstance().getInsertionByID(offer.getListingID());
+            return InsertionService.getInstance().getInsertionByID(offer.getInsertionID());
         }
         return null;
     }

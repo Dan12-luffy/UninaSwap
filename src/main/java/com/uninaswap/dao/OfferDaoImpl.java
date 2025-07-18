@@ -25,14 +25,14 @@ public class OfferDaoImpl implements OfferDao {
         String sql = "INSERT INTO offer (insertionid, userid, amount, status, message, typeoffer, offer_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, o.getListingID());
+            stmt.setInt(1, o.getInsertionID());
             stmt.setInt(2, o.getUserID());
             if (o.getAmount() != 0) {
                 stmt.setDouble(3, o.getAmount());
             } else {
                 stmt.setNull(3, java.sql.Types.DECIMAL);
             }
-            stmt.setString(4, o.getListingStatus().getStatus());
+            stmt.setString(4, o.getInsertionStatus().getStatus());
             stmt.setString(5, o.getMessage());
             stmt.setString(6, o.getTypeOffer().getType());
             stmt.setDate(7, java.sql.Date.valueOf(o.getOfferDate()));
@@ -70,11 +70,11 @@ public class OfferDaoImpl implements OfferDao {
         String query = "UPDATE offer SET insertionid = ?, userid = ?, amount = ?, message = ?, status = ?, typeoffer = ?, offer_date = ? WHERE offerid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, offer.getListingID());
+            stmt.setInt(1, offer.getInsertionID());
             stmt.setInt(2, offer.getUserID());
             stmt.setDouble(3, offer.getAmount());
             stmt.setString(4, offer.getMessage());
-            stmt.setString(5, offer.getListingStatus().getStatus());
+            stmt.setString(5, offer.getInsertionStatus().getStatus());
             stmt.setString(6, mapTypeOfferToDatabase(offer.getTypeOffer()));
             stmt.setDate(7, java.sql.Date.valueOf(offer.getOfferDate()));
             stmt.setInt(8, offer.getOfferID());
@@ -130,12 +130,12 @@ public class OfferDaoImpl implements OfferDao {
     }
 
     @Override
-    public List<Offer> findOffersForListing(int listingId){
+    public List<Offer> findOffersForInsertion(int insertionID){
         String sql = "SELECT * FROM offer WHERE insertionid = ?";
         try(Connection conn = DatabaseUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, listingId);
-            return getListingOffers(stmt);
+            stmt.setInt(1, insertionID);
+            return getInsertionOffers(stmt);
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte per l'inserzione: " + e.getMessage());
         }
@@ -148,7 +148,7 @@ public class OfferDaoImpl implements OfferDao {
         try(Connection conn = DatabaseUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
-            return getListingOffers(stmt);
+            return getInsertionOffers(stmt);
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte per l'utente corrente: " + e.getMessage());
         }
@@ -161,7 +161,7 @@ public class OfferDaoImpl implements OfferDao {
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
-            return getListingOffers(stmt);
+            return getInsertionOffers(stmt);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -187,7 +187,7 @@ public class OfferDaoImpl implements OfferDao {
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
-            return getListingOffers(stmt);
+            return getInsertionOffers(stmt);
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte rifiutate per l'utente corrente: " + e.getMessage());
         }
@@ -195,7 +195,7 @@ public class OfferDaoImpl implements OfferDao {
     }
 
     @NotNull
-    private List<Offer> getListingOffers(PreparedStatement stmt) throws SQLException {
+    private List<Offer> getInsertionOffers(PreparedStatement stmt) throws SQLException {
         try (ResultSet rs = stmt.executeQuery()) {
             List<Offer> offers = new ArrayList<>();
             while(rs.next()) {
@@ -279,7 +279,7 @@ public class OfferDaoImpl implements OfferDao {
     private Offer mapResultSetToOffer(ResultSet rs) throws SQLException {
         Offer offer = new Offer();
         offer.setOfferID(rs.getInt("offerid"));
-        offer.setListingID(rs.getInt("insertionid"));
+        offer.setInsertionID(rs.getInt("insertionid"));
         offer.setUserID(rs.getInt("userid"));
 
         // Handle nullable amount
@@ -289,7 +289,7 @@ public class OfferDaoImpl implements OfferDao {
         }
 
         offer.setMessage(rs.getString("message"));
-        offer.setListingStatus(InsertionStatus.valueOf(rs.getString("status")));
+        offer.setInsertionStatus(InsertionStatus.valueOf(rs.getString("status")));
         offer.setTypeOffer(mapDatabaseToTypeOffer(rs.getString("typeoffer")));
         offer.setOfferDate(rs.getDate("offer_date").toLocalDate());
         return offer;

@@ -71,14 +71,14 @@ public class MyProfileController {
         this.facultyComboBox.setValue(currentUser.getFaculty());
         setTotalAdsLabel();
         setStatisticsSection();
-        loadUserListings();
+        loadUserInsertions();
         setPieChartAndBarChart();
         loadAcceptedSaleOfferStatistics();
         loadPendingOffers();
         loadCompletedOperations();
     }
 
-    private void loadUserListings() {
+    private void loadUserInsertions() {
         try {
             List<Insertion> insertions = insertionService.getCurrentUserAvailableInsertions();
 
@@ -90,7 +90,7 @@ public class MyProfileController {
                 this.userAdsContainer.getChildren().add(emptyLabel);
             } else {
                 for (Insertion insertion : insertions) {
-                    this.userAdsContainer.getChildren().add(createListingCard(insertion));
+                    this.userAdsContainer.getChildren().add(createInsertionCard(insertion));
                 }
             }
         } catch (SQLException e) {
@@ -162,7 +162,7 @@ public class MyProfileController {
             maxPriceLabel.setText("€0.00");
         }
     }
-    private HBox createListingCard(Insertion insertion) {
+    private HBox createInsertionCard(Insertion insertion) {
         HBox card = new HBox(15);
         card.setPrefWidth(this.userAdsContainer.getPrefWidth() - 20);
         card.getStyleClass().add("listing-card");
@@ -221,7 +221,7 @@ public class MyProfileController {
         editButton.getStyleClass().add("edit-button");
 
         editButton.setOnAction(event -> {
-            editListing(event, insertion);
+            editInsertion(event, insertion);
         });
 
         Button deleteButton = new Button("Elimina");
@@ -229,7 +229,7 @@ public class MyProfileController {
 
         deleteButton.setOnAction(event -> {
             event.consume();
-            deleteListing(insertion);
+            deleteInsertion(insertion);
             setTotalAdsLabel();
         });
 
@@ -245,19 +245,19 @@ public class MyProfileController {
         try {
             List<Insertion> insertions = insertionService.getCurrentUserInsertions();
             int totalInsertions = insertions.size();
-            int availableListings = 0;
+            int availableInsertions = 0;
             int completedSales = 0;
             double totalEarnings = 0;
             for(Insertion l : insertions){
                 if(l.getStatus().equals(InsertionStatus.AVAILABLE))
-                    availableListings++;
+                    availableInsertions++;
                 if(l.getStatus().equals(InsertionStatus.SOLD)) {
                     completedSales++;
                     totalEarnings += l.getPrice() != null ? l.getPrice().doubleValue() : 0.0;
                 }
             }
             this.totalAdsLabel.setText(String.valueOf(totalInsertions));
-            this.activeSalesLabel.setText(String.valueOf(availableListings));
+            this.activeSalesLabel.setText(String.valueOf(availableInsertions));
             this.completedSalesLabel.setText(String.valueOf(completedSales));
             this.totalEarningsLabel.setText(String.format("€%.2f", totalEarnings));
         }catch (Exception e){
@@ -272,12 +272,11 @@ public class MyProfileController {
         NavigationService.getInstance().navigateToProductDetailsView(event, insertion);
     }
 
-    private void editListing(ActionEvent event, Insertion insertion) {
-        NavigationService.getInstance().navigateToEditListingView(event, insertion);
+    private void editInsertion(ActionEvent event, Insertion insertion) {
+        NavigationService.getInstance().navigateToEditInsertionView(event, insertion);
     }
 
-    private void deleteListing(Insertion insertion) {
-        // Implement delete confirmation and functionality
+    private void deleteInsertion(Insertion insertion) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma eliminazione");
         alert.setHeaderText("Eliminare l'annuncio?");
@@ -286,9 +285,8 @@ public class MyProfileController {
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
-                InsertionDaoImpl listingDao = new InsertionDaoImpl();
-                listingDao.delete(insertion.getInsertionID());
-                loadUserListings();
+                insertionService.deleteInsertion(insertion.getInsertionID());
+                loadUserInsertions();
             } catch (Exception e) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Errore");
@@ -441,7 +439,7 @@ public class MyProfileController {
         card.getStyleClass().add("offer-card");
         card.setPrefHeight(100);
         try {
-            Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
+            Insertion insertion = insertionService.getInsertionByID(offer.getInsertionID());
 
             ImageView imageView = new ImageView();
             imageView.setFitWidth(80);
