@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
@@ -103,16 +102,6 @@
                     <Region HBox.hgrow="ALWAYS" />
                     <Button fx:id="resetFilters" onAction="#onResetFiltersClicked" styleClass="text-button" text="Azzera" />
                 </HBox>
-
-                <!-- Filtri principali - tutti chiusi di default -->
-                <TitledPane expanded="false" styleClass="filter-section" text="Stato">
-                    <VBox spacing="8">
-                        <RadioButton fx:id="allConditionsRadio" selected="true" text="Tutti gli stati" />
-                        <RadioButton fx:id="likeNewRadio" text="Come nuovo" />
-                        <RadioButton fx:id="excellentRadio" text="Ottime condizioni" />
-                        <RadioButton fx:id="goodRadio" text="Buone condizioni" />
-                    </VBox>
-                </TitledPane>
 
                 <TitledPane expanded="false" styleClass="filter-section" text="Prezzo">
                     <VBox spacing="8">

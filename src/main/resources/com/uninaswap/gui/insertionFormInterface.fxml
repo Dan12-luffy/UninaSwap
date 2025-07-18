@@ -124,7 +124,7 @@
                     </TitledPane>
 
                     <!-- Sezione Prezzo e Condizioni -->
-                    <TitledPane expanded="true" styleClass="form-section" text="💰 Prezzo e Condizioni">
+                    <TitledPane expanded="true" styleClass="form-section" text="💰 Prezzo">
                         <GridPane hgap="20" styleClass="form-grid" vgap="20">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="NEVER" maxWidth="150.0" minWidth="120.0" />
@@ -140,19 +140,13 @@
                                 <Label fx:id="priceLabel" prefHeight="20.0" prefWidth="162.0" styleClass="field-label" text="Prezzo:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                                 <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
                                     <HBox alignment="CENTER_LEFT" spacing="10">
-                                        <TextField fx:id="priceField" maxWidth="150.0" promptText="0.00" styleClass="price-field" />
-                                        <Label styleClass="currency-label" text="€" />
+                                        <TextField fx:id="priceField" maxWidth="150.0" promptText="0.00" styleClass="price-field" translateY="11.0" />
+                                        <Label styleClass="currency-label" text="€" translateY="11.0" />
                                         <Region HBox.hgrow="ALWAYS" />
                                     </HBox>
-                                    <Label styleClass="field-hint" text="Inserisci un prezzo competitivo per vendere più velocemente" />
+                                    <Label styleClass="field-hint" text="Inserisci un prezzo competitivo per vendere più velocemente" translateY="12.0" />
                                 </VBox>
-
-                                <!-- Stato -->
-                                <Label styleClass="field-label" text="Condizioni:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                    <ComboBox fx:id="statusComboBox" maxWidth="250.0" prefWidth="250.0" styleClass="combo-box" />
-                                    <Label styleClass="field-hint" text="Sii onesto sulle condizioni dell'articolo" />
-                                </VBox>
+                                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             </children>
                         </GridPane>
                     </TitledPane>

@@ -27,7 +27,6 @@ public class InsertionFormController {
     @FXML private TextArea descriptionArea;
     @FXML private ComboBox<String> typeComboBox;
     @FXML private TextField priceField;
-    @FXML private ComboBox<String> statusComboBox;
     @FXML private ComboBox<String> categoryComboBox;
     @FXML private ComboBox<String> locationComboBox;
     @FXML private Label priceLabel;
@@ -47,7 +46,6 @@ public class InsertionFormController {
     private void initialize() {
         // Initialize comboboxes with values
         this.typeComboBox.getItems().addAll("Vendita", "Scambio", "Regalo");
-        this.statusComboBox.getItems().addAll("Nuovo", "Come nuovo", "Buone condizioni", "Usato");
         this.categoryComboBox.getItems().addAll("Libri", "Appunti", "Elettronica", "Arredamento", "Abbigliamento", "Altro");
         this.locationComboBox.getItems().addAll("Monte Sant'Angelo", "Fuorigrotta", "Agnano", "Centro Storico");
 
@@ -56,7 +54,6 @@ public class InsertionFormController {
 
         // Set default values
         this.typeComboBox.setValue("Vendita");
-        this.statusComboBox.setValue("Usato");
         this.categoryComboBox.setValue("Altro");
         this.locationComboBox.setValue("Monte Sant'Angelo");
         this.mainImagePreview.setImage(new Image(this.defaultImagePath));
@@ -123,7 +120,7 @@ public class InsertionFormController {
             if (this.isEditedInsertion && this.insertionToEdit != null) {
                 insertionId = this.insertionToEdit.getInsertionID();
             }
-            String deliveryMethod = this.deliveryMethodComboBox.getValue();
+            String deliveryMethod = this.locationComboBox.getValue() + " " + this.deliveryMethodComboBox.getValue();
 
             Insertion insertion = InsertionFactory.createInsertion(
                     this.titleField.getText(),
@@ -175,7 +172,6 @@ public class InsertionFormController {
             this.titleField.setText(insertion.getTitle());
             this.descriptionArea.setText(insertion.getDescription());
             this.typeComboBox.setValue(insertion.getType().toString());
-            this.statusComboBox.setValue(insertion.getStatus().toString());
             this.categoryComboBox.setValue(insertion.getCategory());
 
             if (insertion.getDeliveryMethod() != null && !insertion.getDeliveryMethod().isEmpty()) {

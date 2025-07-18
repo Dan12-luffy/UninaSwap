@@ -34,10 +34,6 @@ public class MainController {
     @FXML private ToggleButton notesCategoryButton;
     @FXML private ToggleButton furnitureCategoryButton;
     @FXML private ToggleButton otherCategoryButton;
-    @FXML private RadioButton allConditionsRadio;
-    @FXML private RadioButton likeNewRadio;
-    @FXML private RadioButton excellentRadio;
-    @FXML private RadioButton goodRadio;
     @FXML private Slider priceSlider;
     @FXML private TextField minPriceField;
     @FXML private TextField maxPriceField;
@@ -85,12 +81,10 @@ public class MainController {
         List<Offer> rejectedOffers = offerService.getRejectedOffersForCurrentUser();
         int totalNotifications = offers.size() + rejectedOffers.size();
         this.notificationCountLabel.setText(String.valueOf(totalNotifications));
-        this.allConditionsRadio.setSelected(true);
         this.maxPriceLabel.setText(((int)this.priceSlider.getMax() + "€"));
         this.searchField.focusedProperty().addListener((_, _, _) -> {
             this.searchButton.setDefaultButton(true);
         });
-        conditionToggleGroupSettings();
         setUpCategoryButtons();
         initializePriceRange();
         loadAllItems();
@@ -207,7 +201,6 @@ public class MainController {
         // Reset UI
         this.searchField.clear();
         this.allCategoryButton.setSelected(true);
-        this.allConditionsRadio.setSelected(true);
 
         // Reset altri toggle buttons
         this.booksCategoryButton.setSelected(false);
@@ -492,14 +485,5 @@ public class MainController {
             this.priceSlider.setMax(3000.0);
             this.priceSlider.setMin(0.0);
         }
-    }
-
-    private void conditionToggleGroupSettings(){
-        ToggleGroup conditionToggleGroup = new ToggleGroup();
-        this.allConditionsRadio.setToggleGroup(conditionToggleGroup);
-        this.likeNewRadio.setToggleGroup(conditionToggleGroup);
-        this.excellentRadio.setToggleGroup(conditionToggleGroup);
-        this.goodRadio.setToggleGroup(conditionToggleGroup);
-        this.likeNewRadio.setSelected(true);
     }
 }
