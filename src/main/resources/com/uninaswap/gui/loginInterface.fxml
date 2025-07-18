@@ -99,13 +99,6 @@
 
             <!-- Link password dimenticata -->
             <HBox alignment="CENTER_RIGHT" prefWidth="300.0" translateY="31.0">
-               <children>
-                  <Hyperlink fx:id="forgotPasswordLink" styleClass="forgot-password" text="Password dimenticata?" translateY="-58.0">
-                     <font>
-                        <Font size="12.0" />
-                     </font>
-                  </Hyperlink>
-               </children>
                <VBox.margin>
                   <Insets bottom="5.0" top="-5.0" />
                </VBox.margin>

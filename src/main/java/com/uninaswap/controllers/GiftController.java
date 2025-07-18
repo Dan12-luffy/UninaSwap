@@ -10,8 +10,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
-
-import javax.swing.*;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -33,17 +31,17 @@ public class GiftController {
     private static final OfferService offerService = OfferService.getInstance();
 
     @FXML public void initialize() {
-        if (motivationTextArea != null) {
-            motivationTextArea.textProperty().addListener((_, _, newValue) -> {
-                updateCharacterCount();
-                sendGiftOfferButton.setDisable(newValue.isEmpty());
+        if (this.motivationTextArea != null) {
+            this.motivationTextArea.textProperty().addListener((_, _, newValue) -> {
+                this.updateCharacterCount();
+                this.sendGiftOfferButton.setDisable(newValue.isEmpty());
             });
         }
     }
 
     @FXML
     private void sendGiftOffer(ActionEvent event) {
-        String message = motivationTextArea.getText();
+        String message = this.motivationTextArea.getText();
         if (message.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Il campo motivazione non può essere vuoto.", ButtonType.OK);
             alert.showAndWait();
@@ -77,45 +75,45 @@ public class GiftController {
 
     @FXML
     private void updateCharacterCount() {
-        if (motivationTextArea != null && characterCountLabel != null) {
-            int currentLength = motivationTextArea.getText().length();
+        if (this.motivationTextArea != null && this.characterCountLabel != null) {
+            int currentLength = this.motivationTextArea.getText().length();
             int maxLength = 500;
             int remaining = maxLength - currentLength;
 
-            characterCountLabel.setText(remaining + "/" + maxLength);
+            this.characterCountLabel.setText(remaining + "/" + maxLength);
 
             if (remaining < 50) {
-                characterCountLabel.setStyle("-fx-text-fill: red;");
+                this.characterCountLabel.setStyle("-fx-text-fill: red;");
             } else if (remaining < 100) {
-                characterCountLabel.setStyle("-fx-text-fill: orange;");
+                this.characterCountLabel.setStyle("-fx-text-fill: orange;");
             } else {
-                characterCountLabel.setStyle("-fx-text-fill: green;");
+                this.characterCountLabel.setStyle("-fx-text-fill: green;");
             }
 
             if (currentLength > maxLength) {
-                motivationTextArea.setText(motivationTextArea.getText().substring(0, maxLength));
-                motivationTextArea.positionCaret(maxLength);
+                this.motivationTextArea.setText(this.motivationTextArea.getText().substring(0, maxLength));
+                this.motivationTextArea.positionCaret(maxLength);
             }
         }
     }
-    public void setListing(Insertion insertion) {
+    public void setInsertion(Insertion insertion) {
         this.insertion = insertion;
         if (insertion != null) {
-            productTitleLabel.setText(insertion.getTitle());
-            productDescriptionLabel.setText(insertion.getDescription());
-            ownerNameLabel.setText(insertionService.getSellerFullName(insertion.getUserId()));
-            ownerInitialsLabel.setText(insertionService.getSellerInitials(insertion.getUserId()));
-            setProductImage();
+            this.productTitleLabel.setText(insertion.getTitle());
+            this.productDescriptionLabel.setText(insertion.getDescription());
+            this.ownerNameLabel.setText(insertionService.getSellerFullName(insertion.getUserId()));
+            this.ownerInitialsLabel.setText(insertionService.getSellerInitials(insertion.getUserId()));
+            this.setProductImage();
         }
     }
     public void setProductImage() {
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
-            File imageFile = new File(insertion.getImageUrl());
+            File imageFile = new File(this.insertion.getImageUrl());
             this.productImageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
             System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
-            this.productImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
+            this.productImageView.setImage(new Image(Objects.requireNonNull(this.getClass().getResourceAsStream(defaultImagePath))));
         }
     }
 }

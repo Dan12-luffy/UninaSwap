@@ -25,7 +25,6 @@
             <HBox alignment="CENTER_LEFT" maxHeight="35.0" styleClass="top-banner">
                 <Label styleClass="welcome-text" text="Proposta di Scambio UninaSwap" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="helpButton" styleClass="icon-button" text="?" />
                 <padding>
                     <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                 </padding>

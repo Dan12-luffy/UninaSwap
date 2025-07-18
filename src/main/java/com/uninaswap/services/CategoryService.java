@@ -30,14 +30,4 @@ public class CategoryService {
     public int getCategoryIdByName(String name) throws Exception {
         return categoryDao.getCategoryIdByName(name);
     }
-
-    /*public String getCategoryNameById(int categoryId) {
-        try {
-            Category category = categoryDao.findById(categoryId);
-            return category != null ? category.getName() : null;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }*/
 }

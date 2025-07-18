@@ -1,4 +1,4 @@
-package com.uninaswap.controllers; //TODO CLASSE NON FINITA, DA FINIRE
+package com.uninaswap.controllers;
 
 import com.uninaswap.model.Insertion;
 import com.uninaswap.model.InsertionFactory;
@@ -16,7 +16,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -29,20 +28,16 @@ public class InsertionFormController {
     @FXML private ComboBox<String> typeComboBox;
     @FXML private TextField priceField;
     @FXML private ComboBox<String> statusComboBox;
-    @FXML private Button cancelButton;
     @FXML private ComboBox<String> categoryComboBox;
-    @FXML private Label characterCountLabel;
-    @FXML private Button saveAsDraftButton;
-    @FXML private Button backButton;
     @FXML private ComboBox<String> locationComboBox;
     @FXML private Label priceLabel;
-    @FXML private ImageView logoImage;
     @FXML private ImageView mainImagePreview;
     @FXML private Button publishInsertionButton;
     @FXML private ComboBox<String> deliveryMethodComboBox;
+    @FXML private TitledPane productDescription;
 
 
-    private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png"; // Default image path portatile danilo
+    private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png";
     private File selectedImageFile;
     private final InsertionService insertionService = InsertionService.getInstance();
     private boolean isEditedInsertion = false; // Flag to check if the insertion is being edited
@@ -71,6 +66,7 @@ public class InsertionFormController {
                 this.priceField.setDisable(true);
             } else if (this.typeComboBox.getValue().equals("Scambio")) {
                 this.priceLabel.setText("Valore dell'oggetto: ");
+                this.productDescription.setText("Descrizione dettagliata del prodotto e cio che vorresti ricevere in cambio");
             }
             else{
                 this.priceField.setDisable(false);
@@ -124,8 +120,8 @@ public class InsertionFormController {
             }
 
             Integer insertionId = null;
-            if (isEditedInsertion && insertionToEdit != null) {
-                insertionId = insertionToEdit.getInsertionID();
+            if (this.isEditedInsertion && this.insertionToEdit != null) {
+                insertionId = this.insertionToEdit.getInsertionID();
             }
             String deliveryMethod = this.deliveryMethodComboBox.getValue();
 
@@ -142,7 +138,7 @@ public class InsertionFormController {
                     deliveryMethod
             );
 
-            if (isEditedInsertion && insertionId != null) {
+            if (this.isEditedInsertion && insertionId != null) {
                 insertion.setInsertionID(insertionId);
             }
 
@@ -155,24 +151,9 @@ public class InsertionFormController {
             NavigationService.getInstance().navigateToMainView(event);
 
         } catch (Exception e) {
-            e.printStackTrace();
             ValidationService.getInstance().showNewInsertionError();
         }
     }
-
-    @NotNull
-    private typeInsertion getTypeListing() {
-        typeInsertion type;
-        String typeValue = this.typeComboBox.getValue();
-        type = switch (typeValue) {
-            case "Vendita" -> typeInsertion.SALE;
-            case "Scambio" -> typeInsertion.EXCHANGE;
-            case "Regalo" -> typeInsertion.GIFT;
-            case null, default -> typeInsertion.SALE; // Default value
-        };
-        return type;
-    }
-
 
     @FXML
     private void goBack(ActionEvent event) {
@@ -222,5 +203,16 @@ public class InsertionFormController {
                 this.imagePathField.setText(this.defaultImagePath);
             }
         }
+    }
+    private typeInsertion getTypeListing() {
+        typeInsertion type;
+        String typeValue = this.typeComboBox.getValue();
+        type = switch (typeValue) {
+            case "Vendita" -> typeInsertion.SALE;
+            case "Scambio" -> typeInsertion.EXCHANGE;
+            case "Regalo" -> typeInsertion.GIFT;
+            case null, default -> typeInsertion.SALE; // Default value
+        };
+        return type;
     }
 }

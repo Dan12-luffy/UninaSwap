@@ -2,10 +2,7 @@ package com.uninaswap.services;
 
 import com.uninaswap.dao.OfferDao;
 import com.uninaswap.dao.OfferDaoImpl;
-import com.uninaswap.model.Insertion;
-import com.uninaswap.model.InsertionStatus;
-import com.uninaswap.model.Offer;
-import com.uninaswap.model.User;
+import com.uninaswap.model.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -51,6 +48,38 @@ public class OfferService {
     }
     public List<Offer> getOffersReceivedByCurrentUser() throws SQLException {
         return offerDao.findOffersToCurrentUser();
+    }
+
+    public boolean completeOfferAcceptance(int offerId) throws Exception {
+        Offer offer = offerDao.findOfferById(offerId);
+        if (offer == null) return false;
+
+        Insertion insertion = InsertionService.getInstance().getInsertionByID(offer.getListingID());
+        User buyer = UserService.getInstance().getUserById(offer.getUserID());
+        switch (insertion.getType()) {
+            case SALE -> TransactionService.getInstance().recordSale(insertion, offer, buyer);
+            case EXCHANGE -> TransactionService.getInstance().recordExchange(insertion, offer, buyer);
+            case GIFT -> TransactionService.getInstance().recordGift(insertion, offer, buyer);
+        }
+
+        offerDao.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
+        InsertionService.getInstance().updateInsertionStatus(insertion.getInsertionID(), InsertionStatus.SOLD);
+
+        return true;
+    }
+    public boolean completeOfferRejection(int offerId) throws Exception {
+        Offer offer = offerDao.findOfferById(offerId);
+        if (offer == null) return false;
+
+        List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId);
+        for (OfferedItem item : offeredItems) {
+            Insertion insertion = InsertionService.getInstance().getInsertionByID(item.getInsertionId());
+            insertion.setStatus(InsertionStatus.AVAILABLE);
+            InsertionService.getInstance().updateInsertion(insertion);
+        }
+
+        offerDao.updateOfferStatus(offerId, InsertionStatus.REJECTED);
+        return true;
     }
 
     public boolean acceptOffer(int offerId) {

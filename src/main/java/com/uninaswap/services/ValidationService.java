@@ -5,6 +5,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.SQLException;
+
 public class ValidationService {
     private static final ValidationService instance = new ValidationService();
 
@@ -128,25 +130,31 @@ public class ValidationService {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
     public void showNewInsertionSuccess() {
         showAlert(Alert.AlertType.INFORMATION, "Inserzione salvata", "L'inserzione è stata salvata con successo!");
     }
-
-
     public void showWrongOfferError() {
         showAlert(Alert.AlertType.ERROR, "Errore", "Non puoi fare un'offerta su una tua inserzione.");
     }
-
     public void showOfferProposalSuccess() {
         showAlert(Alert.AlertType.INFORMATION, "Offerta Inviata", "La tua offerta è stata inviata con successo!");
     }
-
     public void showCancelExchangeMessage() {
         showAlert(Alert.AlertType.INFORMATION, "Scambio Annullato", "Lo scambio è stato annullato con successo, tornerai alla pagina principale.");
     }
+    public void showLoadAllItemsError() {
+        showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile caricare gli oggetti.");
+    }
 
-    public void showFailedToOpenFavouriteError() {
-        showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aprire la pagina dei preferiti.");
+    public void showFailedToSetStatsError() {
+        showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile impostare le statistiche.");    
+    }
+
+    public void showInsertionAnnulledSuccess() {
+        showAlert(Alert.AlertType.INFORMATION, "Successo", "Offerta annullata con successo.");
+    }
+
+    public void showSqlError(SQLException e) {
+        showAlert(Alert.AlertType.ERROR, "Errore SQL", "Si è verificato un errore durante l'esecuzione della query: " + e.getMessage());
     }
 }

@@ -12,9 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
-import javafx.scene.image.ImageView;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -26,31 +23,14 @@ import java.util.ResourceBundle;
 
 public class NotificationsController implements Initializable {
 
-    @FXML private Button homeButton;
-    @FXML private ImageView logoImage;
-    @FXML private Button profileButton;
     @FXML private Label notificationsCountLabel;
-    @FXML private ScrollPane notificationsScrollPane;
     @FXML private VBox notificationsContainer;
-    @FXML private Circle unreadIndicator1;
-    @FXML private Button declineOffer1;
-    @FXML private Button acceptOffer1;
-    @FXML private Button counterOffer1;
-    @FXML private Circle unreadIndicator2;
-    @FXML private Button declineOffer2;
-    @FXML private Button acceptOffer2;
-    @FXML private Button counterOffer2;
-    @FXML private Circle unreadIndicator3;
-    @FXML private Button declineSwap1;
-    @FXML private Button acceptSwap1;
-    @FXML private VBox noMoreNotifications;
 
     private final OfferService offerService = OfferService.getInstance();
     private final InsertionService insertionService = InsertionService.getInstance();
     private final UserService userService = UserService.getInstance();
     private final TransactionService transactionService = TransactionService.getInstance();
 
-    //TODO, implementare le notifiche e il dettaglio dell'offerta
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -60,6 +40,10 @@ public class NotificationsController implements Initializable {
         }
     }
 
+    @FXML
+    void onHomeButtonClicked(ActionEvent event) {
+        NavigationService.getInstance().navigateToMainView(event);
+    }
     private void loadUserOffers() throws Exception {
         notificationsContainer.getChildren().clear();
         List<Offer> offers = offerService.getOffersToCurrentUser();
@@ -134,52 +118,6 @@ public class NotificationsController implements Initializable {
         return card;
     }
 
-    /*private VBox createRejectedOfferCard(Offer offer) throws SQLException {
-        VBox card = new VBox();
-        card.setStyle("-fx-effect: none !important; -fx-background-insets: 0; -fx-border-color: #ff6b6b; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-padding: 12;");
-
-        HBox content = new HBox();
-        content.setAlignment(Pos.CENTER_LEFT);
-        content.setSpacing(16);
-
-        VBox offerContent = new VBox();
-        offerContent.setSpacing(8);
-        HBox.setHgrow(offerContent, Priority.ALWAYS);
-
-        Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
-
-        HBox header = new HBox();
-        header.setAlignment(Pos.CENTER_LEFT);
-        header.setSpacing(10);
-        header.setPadding(new Insets(0, 0, 4, 0));
-
-        Label statusLabel = new Label("OFFERTA RIFIUTATA");
-        statusLabel.getStyleClass().add("notification-type");
-        statusLabel.setStyle("-fx-text-fill: #ff6b6b;");
-
-        Label dateLabel = new Label(getTimeAgo(offer.getOfferDate()));
-        dateLabel.getStyleClass().add("notification-time");
-
-        header.getChildren().addAll(statusLabel, dateLabel);
-
-        Label titleLabel = new Label("La tua offerta per '" + insertion.getTitle() + "' è stata rifiutata");
-        titleLabel.getStyleClass().add("notification-title");
-
-        Label descriptionLabel = new Label("Offerta: " + formatAmount(offer.getAmount()) +
-                " - Prezzo richiesto: " + formatAmount(insertion.getPrice().doubleValue()));
-        descriptionLabel.getStyleClass().add("notification-description");
-
-        Region verticalSpacer = new Region();
-        verticalSpacer.setPrefHeight(8);
-
-        HBox actions = createRejectedOfferActions(offer, insertion);
-
-        offerContent.getChildren().addAll(header, titleLabel, descriptionLabel, verticalSpacer, actions);
-        content.getChildren().add(offerContent);
-        card.getChildren().add(content);
-
-        return card;
-    }*/
     private VBox createRejectedOfferCard(Offer offer) throws SQLException {
         VBox card = new VBox();
         card.setStyle("-fx-effect: none !important; -fx-background-insets: 0; -fx-border-color: #ff6b6b; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-padding: 12;");
@@ -193,8 +131,6 @@ public class NotificationsController implements Initializable {
         HBox.setHgrow(offerContent, Priority.ALWAYS);
 
         Insertion insertion = insertionService.getInsertionByID(offer.getListingID());
-        List<OfferedItem> offeredItems = OfferedItemsService.getInstance()
-                .findOfferedItemsByOfferId(offer.getOfferID());
 
         HBox header = new HBox();
         header.setAlignment(Pos.CENTER_LEFT);
@@ -274,7 +210,6 @@ public class NotificationsController implements Initializable {
             ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                     "Offerta rimossa", "L'offerta è stata rimossa dalla lista.");
         } catch (Exception e) {
-            e.printStackTrace();
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
                     "Impossibile rimuovere l'offerta: " + e.getMessage());
         }
@@ -287,7 +222,6 @@ public class NotificationsController implements Initializable {
             else if(insertion.getType() == typeInsertion.EXCHANGE)
                 NavigationService.getInstance().navigateToExchangeView(event, insertion);
         } catch (Exception e) {
-            e.printStackTrace();
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
                     "Impossibile aprire la pagina del prodotto: " + e.getMessage());
         }
@@ -335,7 +269,6 @@ public class NotificationsController implements Initializable {
                                 desc.append("\n- ").append(offeredInsertion.getTitle());
                             }
                         } catch (SQLException e) {
-                            e.printStackTrace();
                         }
                     }
                 }
@@ -403,17 +336,6 @@ public class NotificationsController implements Initializable {
         return df.format(amount);
     }
 
-    @FXML
-    void onHomeButtonClicked(ActionEvent event) {
-        NavigationService.getInstance().navigateToMainView(event);
-    }
-
-
-    @FXML
-    void onAcceptOfferClicked() {
-
-    }
-
     private void handleAcceptOffer(ActionEvent event, int offerId) {
         try {
             Offer offer = offerService.getOfferById(offerId);
@@ -422,44 +344,31 @@ public class NotificationsController implements Initializable {
 
             switch (insertion.getType()) {
                 case SALE:
-                    // Vendita normale
                     transactionService.recordSale(insertion, offer, buyer);
                     ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                             "Vendita completata", "La vendita è stata completata con successo.");
                     break;
-
                 case EXCHANGE:
-                    // Scambio
                     transactionService.recordExchange(insertion, offer, buyer);
                     ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                             "Scambio accettato", "Lo scambio è stato accettato con successo.");
                     break;
-
                 case GIFT:
-                    // Regalo
                     transactionService.recordGift(insertion, offer, buyer);
                     ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
                             "Regalo accettato", "Il regalo è stato accettato con successo.");
                     break;
             }
 
-            // Aggiorna lo status dell'offerta e del listing
-            offerService.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
+            offerService.acceptOffer(offerId);
             insertionService.updateInsertionStatus(insertion.getInsertionID(), InsertionStatus.SOLD);
 
-            loadUserOffers();
-            //NavigationService.getInstance().navigateToMainView(event);
 
+            loadUserOffers();
         } catch (Exception e) {
-            e.printStackTrace();
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
                     "Impossibile accettare l'offerta: " + e.getMessage());
         }
-    }
-
-    @FXML
-    void onDeclineOfferClicked() {
-        // Called by static buttons in FXML, not used in dynamic generation
     }
 
     private void handleDeclineOffer(int offerId) {
@@ -470,28 +379,15 @@ public class NotificationsController implements Initializable {
                 insertion.setStatus(InsertionStatus.AVAILABLE);
                 insertionService.updateInsertion(insertion);
             }
-            offerService.updateOfferStatus(offerId, InsertionStatus.REJECTED);
+
+            offerService.rejectOffer(offerId);
             loadUserOffers();
-            ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION, "Offerta rifiutata", "L'offerta è stata rifiutata con successo.");
+            ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,
+                    "Offerta rifiutata", "L'offerta è stata rifiutata con successo.");
         } catch (Exception e) {
-            e.printStackTrace();
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile rifiutare l'offerta: " + e.getMessage());
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
+                    "Impossibile rifiutare l'offerta: " + e.getMessage());
         }
-    }
-
-    @FXML
-    void onCounterOfferClicked() {
-        System.out.println("Counter button clicked");
-    }
-
-    @FXML
-    void onAcceptSwapClicked() {
-        // Logic for handling swaps
-    }
-
-    @FXML
-    void onDeclineSwapClicked() {
-        // Logic for handling swaps
     }
 
 }

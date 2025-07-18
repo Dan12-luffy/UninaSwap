@@ -13,7 +13,6 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
@@ -89,7 +88,6 @@
 
                             <VBox alignment="CENTER" spacing="5">
                                 <Label fx:id="userNameLabel" styleClass="profile-name" text="Nome Utente" />
-                                <Label fx:id="userEmailLabel" styleClass="profile-email" text="email@studenti.unina.it" />
                                 <Label fx:id="memberSinceLabel" styleClass="member-since" text="Membro dal Gennaio 2023" />
                             </VBox>
 

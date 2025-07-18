@@ -30,30 +30,7 @@ public class SaleController {
     private static final ValidationService validationService = ValidationService.getInstance();
     private static final InsertionService insertionService = InsertionService.getInstance();
 
-    public void setListing(Insertion insertion) {
-        this.insertion = insertion;
-        if (insertion != null) {
-            productTitleLabel.setText(insertion.getTitle());
-            productDescriptionLabel.setText(insertion.getDescription());
-            productPriceLabel.setText("€" + insertion.getPrice());
-            sellerNameLabel.setText(insertionService.getSellerFullName(insertion.getUserId()));
 
-            setProductImage();
-        }
-    }
-
-    public void setProductImage() {
-        try {
-            File imageFile = new File(insertion.getImageUrl());
-            this.productImageView.setImage(new Image(imageFile.toURI().toString()));
-            productImageView.setVisible(true);
-            noImageLabel.setVisible(false);
-        } catch (Exception e) {
-            // Se non riesce a caricare l'immagine, mostra il placeholder
-            productImageView.setVisible(false);
-            noImageLabel.setVisible(true);
-        }
-    }
 
     @FXML
     private void initialize() {
@@ -75,7 +52,6 @@ public class SaleController {
         offerAmountField.setPromptText("0.00");
     }
 
-    //TODO separa la logica di validazione in un metodo a parte
     @FXML
     private void handleSubmitOffer(ActionEvent event) {
         if (insertion == null) {
@@ -132,5 +108,30 @@ public class SaleController {
     @FXML
     private void onExitButtonClicked(ActionEvent event) {
         NavigationService.getInstance().navigateToMainView(event);
+    }
+
+    public void setListing(Insertion insertion) {
+        this.insertion = insertion;
+        if (insertion != null) {
+            productTitleLabel.setText(insertion.getTitle());
+            productDescriptionLabel.setText(insertion.getDescription());
+            productPriceLabel.setText("€" + insertion.getPrice());
+            sellerNameLabel.setText(insertionService.getSellerFullName(insertion.getUserId()));
+
+            setProductImage();
+        }
+    }
+
+    public void setProductImage() {
+        try {
+            File imageFile = new File(insertion.getImageUrl());
+            this.productImageView.setImage(new Image(imageFile.toURI().toString()));
+            productImageView.setVisible(true);
+            noImageLabel.setVisible(false);
+        } catch (Exception e) {
+            // Se non riesce a caricare l'immagine, mostra il placeholder
+            productImageView.setVisible(false);
+            noImageLabel.setVisible(true);
+        }
     }
 }

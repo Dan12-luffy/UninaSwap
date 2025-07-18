@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class OfferDaoImpl implements OfferDao {
+
     @Override
     public int createOffer(Offer o) {
         String sql = "INSERT INTO offer (insertionid, userid, amount, status, message, typeoffer, offer_date) VALUES (?, ?, ?, ?, ?, ?, ?)";

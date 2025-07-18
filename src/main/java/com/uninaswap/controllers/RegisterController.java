@@ -18,16 +18,8 @@ public class RegisterController {
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
-    @FXML private Hyperlink loginButton;
-    @FXML private Button registerButton;
-    @FXML private VBox passwordRequirements;
-    @FXML private Label uppercaseCheck;
-    @FXML private Label specialCharCheck;
-    @FXML private Label numberCheck;
-    @FXML private Label lengthCheck;
 
     private final UserService userService = UserService.getInstance();
-    private final ValidationService validationService = ValidationService.getInstance();
 
     @FXML
     public void initialize(){

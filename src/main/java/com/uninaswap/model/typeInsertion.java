@@ -1,9 +1,9 @@
 package com.uninaswap.model;
 
 public enum typeInsertion {
-        EXCHANGE("scambio"),
-        GIFT("regalo"),
-        SALE("vendita"),
+        EXCHANGE("Scambio"),
+        GIFT("Regalo"),
+        SALE("Vendita"),
         UNDEFINED("Non definito");
 
         private final String type;

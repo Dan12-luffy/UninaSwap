@@ -38,9 +38,8 @@ public class TransactionDaoImpl implements TransactionDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
-        return -1; // Indicating failure to create transaction
+        return -1; // Se ritorna -1, significa che la transazione non è stata creata correttamente
     }
 
     public Transaction findById(int transactionId) {

@@ -25,6 +25,7 @@ public class InsertionDaoImpl implements InsertionDao {
         }
     }
 
+    @Override
     public void delete(int insertionID) {
         String sql = "DELETE FROM insertion WHERE insertionid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
@@ -36,6 +37,7 @@ public class InsertionDaoImpl implements InsertionDao {
         }
     }
 
+    @Override
     public void update(Insertion insertion) {
         String sql = "UPDATE insertion SET title = ?, imageUrl = ?, description = ?, delivery_method = ?, type = ?, price = ?, status = ?, publishDate = ?, userId = ?, category_id = ? WHERE insertionid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
@@ -161,6 +163,7 @@ public class InsertionDaoImpl implements InsertionDao {
 
         return executeFilterQuery(sql.toString(), parameters);
     }
+
     @Override
     public List<Insertion> findAvailableInsertionsByUserId(int userId) throws SQLException {
         List<Insertion> insertions = new ArrayList<>();
@@ -374,7 +377,6 @@ public class InsertionDaoImpl implements InsertionDao {
             }
         } catch (SQLException e) {
             System.err.println("Errore durante il recupero dell'annuncio con ID " + insertionID + ": " + e.getMessage());
-            e.printStackTrace();
         }
         return null;
     }
@@ -430,7 +432,6 @@ public class InsertionDaoImpl implements InsertionDao {
                     Insertion insertion = createInsertionFromResultSet(rs);
                     insertions.add(insertion);
                 } catch (Exception e) {
-                    e.printStackTrace();
                     System.err.println("Errore nel processare la lista " + e.getMessage());
                 }
             }
@@ -476,7 +477,6 @@ public class InsertionDaoImpl implements InsertionDao {
     }
 
     private void logDatabaseError(String operation, Exception e){
-        e.printStackTrace();
         System.err.println("Errore durante l'operazione '" + operation + "': " + e.getMessage());
     }
 }

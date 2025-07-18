@@ -2,13 +2,11 @@ package com.uninaswap.services;
 
 import com.uninaswap.controllers.*;
 import com.uninaswap.model.Insertion;
-import com.uninaswap.model.Offer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import javafx.scene.input.MouseEvent;
@@ -59,7 +57,7 @@ public class NavigationService {
     }
     public void navigateToNewInsertionView(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/newInsertionInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/insertionFormInterface.fxml"));
             Parent root = loader.load();
             setScene(event, root);
         } catch (IOException e) {
@@ -104,7 +102,7 @@ public class NavigationService {
 
     public void navigateToCreateListingView(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/newInsertionInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/insertionFormInterface.fxml"));
             Parent root = loader.load();
             setScene(event, root);
         } catch (IOException e) {
@@ -113,7 +111,7 @@ public class NavigationService {
     }
     public void navigateToEditListingView(ActionEvent event, Insertion insertion) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/newInsertionInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/insertionFormInterface.fxml"));
             Parent root = loader.load();
             InsertionFormController controller = loader.getController();
             controller.setInsertion(insertion);
@@ -162,7 +160,7 @@ public class NavigationService {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/giftInterface.fxml"));
             Parent root = loader.load();
             GiftController controller = loader.getController();
-            controller.setListing(insertion);
+            controller.setInsertion(insertion);
             setScene(event, root);
         } catch (IOException e) {
             ValidationService.getInstance().showFailedToOpenPageError();

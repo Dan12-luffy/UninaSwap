@@ -1,6 +1,5 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.Insertion;
 import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
@@ -28,7 +27,6 @@ public class ProductDetailsController {
     @FXML private Label sellerInitialsLabel;
     @FXML private Button actionButton;
     @FXML private Button offerButton;
-    @FXML private Button backButton;
     @FXML private Label availabilityLabel;
     @FXML private Label dateLabel;
     @FXML private VBox actionButtonsVbox;
@@ -40,8 +38,6 @@ public class ProductDetailsController {
 
     @FXML
     public void initialize() {
-
-        // TODO aggiungere a listings le condizioni conditionBadge.setText("N/A");
     }
 
     @FXML
@@ -68,13 +64,6 @@ public class ProductDetailsController {
             }
         } catch (Exception e) {
             ValidationService.getInstance().showFailedToOpenPageError();
-        }
-    }
-
-    @FXML
-    private void onContactButtonClicked(ActionEvent event) {
-        if (insertion != null) {
-            System.out.println("Contatta venditore: " + insertion.getUserId());
         }
     }
 

@@ -158,7 +158,7 @@
                     </TitledPane>
 
                     <!-- Sezione Descrizione -->
-                    <TitledPane expanded="true" styleClass="form-section" text="📄 Descrizione Dettagliata">
+                    <TitledPane fx:id="productDescription" expanded="true" styleClass="form-section" text="📄 Descrizione Dettagliata">
                         <VBox spacing="15">
                             <VBox spacing="5">
                                 <TextArea fx:id="descriptionArea" prefHeight="150.0" promptText="Descrivi l'articolo in dettaglio: condizioni, anno di acquisto, motivo della vendita, eventuali difetti, contenuti inclusi..." styleClass="main-text-area" wrapText="true" />

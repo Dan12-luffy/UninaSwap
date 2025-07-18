@@ -42,7 +42,6 @@ public class ProfileSecurityService {
             return success;
 
         }catch(Exception e){
-            e.printStackTrace();
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante il cambio della password");
             return false;
         }

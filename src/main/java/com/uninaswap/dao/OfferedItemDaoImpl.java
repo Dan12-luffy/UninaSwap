@@ -24,7 +24,6 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
             stmt.executeUpdate();
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'oggetto offerto: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -37,24 +36,8 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
             stmt.executeUpdate();
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile eliminare l'oggetto offerto: " + e.getMessage());
-            e.printStackTrace();
         }
     }
-
-    /*@Override
-    public void updateOfferedItem(int offerItemId, String offeredItemDescription, BigDecimal amount) {
-        String sql = "UPDATE offereditems SET offereditemdescription = ?, offereditemvalue = ? WHERE offereditemid = ?";
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, offeredItemDescription);
-            stmt.setBigDecimal(2, amount);
-            stmt.setInt(3, offerItemId);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aggiornare l'oggetto offerto: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }*/
 
     @Override
     public OfferedItem findOfferedItemById(int offerItemId) {
@@ -71,7 +54,6 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
             return offeredItem;
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare l'oggetto offerto: " + e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
@@ -94,7 +76,6 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
             return offeredItems;
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare gli oggetti offerti per l'ID offerta: " + e.getMessage());
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -117,7 +98,6 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
             return offeredItems;
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare gli oggetti offerti per l'ID inserzione: " + e.getMessage());
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -141,7 +121,6 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
             return offeredItems;
         } catch (SQLException e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare gli oggetti offerti per l'ID offerta e inserzione: " + e.getMessage());
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }

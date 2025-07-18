@@ -20,44 +20,9 @@ public class PurchaseConfirmationController {
     @FXML private ImageView productImageView;
 
     private Insertion insertion;
-    private ValidationService validationService = ValidationService.getInstance();
-    private OfferService offerService = OfferService.getInstance();
+    private final ValidationService validationService = ValidationService.getInstance();
 
-    public void setListing(Insertion insertion) {
-        this.insertion = insertion;
-        populateData();
-    }
 
-    private void populateData(){
-        if(insertion != null){
-            titleLabel.setText(insertion.getTitle());
-            priceLabel.setText(String.format("€%.2f", insertion.getPrice()));
-            try{
-                String sellerName = InsertionService.getInstance().getSellerFullName(insertion.getUserId());
-                sellerLabel.setText("Venditore : " + sellerName);
-            }catch(Exception e){
-                sellerLabel.setText("Venditore : informazioni non disponibili");
-
-            }
-            descriptionLabel.setText(insertion.getDescription());
-            if(insertion.getImageUrl() != null && !insertion.getImageUrl().isEmpty()){
-                try{
-                    Image image = new Image(insertion.getImageUrl());
-                    productImageView.setImage(image);
-                } catch (Exception e) {
-                    productImageView.setVisible(false);
-                }
-            }else{
-                productImageView.setVisible(false);
-            }
-        }
-    }
-    private void verifyUser(User currentUser) throws IllegalArgumentException{
-
-        if(insertion.getUserId() == currentUser.getId()){
-            throw new  IllegalArgumentException("Non puoi acquistare il tuo stesso prodotto.");
-        }
-    }
     @FXML
     private void onConfirmPurchase(ActionEvent event) {
         if(insertion == null){
@@ -92,8 +57,38 @@ public class PurchaseConfirmationController {
         NavigationService.getInstance().navigateToMainView(event);
     }
 
+    public void setListing(Insertion insertion) {
+        this.insertion = insertion;
+        populateData();
+    }
 
+    private void populateData(){
+        if(insertion != null){
+            titleLabel.setText(insertion.getTitle());
+            priceLabel.setText(String.format("€%.2f", insertion.getPrice()));
+            try{
+                String sellerName = InsertionService.getInstance().getSellerFullName(insertion.getUserId());
+                sellerLabel.setText("Venditore : " + sellerName);
+            }catch(Exception e){
+                sellerLabel.setText("Venditore : informazioni non disponibili");
 
-
-
+            }
+            descriptionLabel.setText(insertion.getDescription());
+            if(insertion.getImageUrl() != null && !insertion.getImageUrl().isEmpty()){
+                try{
+                    Image image = new Image(insertion.getImageUrl());
+                    productImageView.setImage(image);
+                } catch (Exception e) {
+                    productImageView.setVisible(false);
+                }
+            }else{
+                productImageView.setVisible(false);
+            }
+        }
+    }
+    private void verifyUser(User currentUser) throws IllegalArgumentException{
+        if(insertion.getUserId() == currentUser.getId()){
+            throw new  IllegalArgumentException("Non puoi acquistare il tuo stesso prodotto.");
+        }
+    }
 }

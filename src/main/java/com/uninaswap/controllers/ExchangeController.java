@@ -1,14 +1,15 @@
 package com.uninaswap.controllers;
 
+import com.uninaswap.Exception.ExchangeException;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -21,9 +22,6 @@ import java.util.*;
 
 public class ExchangeController{
 
-    @FXML private Button helpButton;
-    @FXML private ImageView logoImage;
-    @FXML private Button backButton;
     @FXML private VBox yourProductsContainer;
     @FXML private Label selectedCountLabel;
     @FXML private Label totalValueLabel;
@@ -35,11 +33,7 @@ public class ExchangeController{
     @FXML private Label yourTotalValueLabel;
     @FXML private Label desiredValueLabel;
     @FXML private Label differenceLabel;
-    @FXML private VBox differenceMessageContainer;
-    @FXML private Label differenceMessageLabel;
-    @FXML private Button cancelExchangeButton;
-    @FXML private Button previewExchangeButton;
-    @FXML private Button confirmExchangeButton;
+
 
     private Insertion desiredProduct;
     private final List<Insertion> selectedInsertions = new ArrayList<>();
@@ -49,7 +43,7 @@ public class ExchangeController{
 
    @FXML
     public void initialize() {
-        loadUserListings();
+        loadUserInsertions();
     }
 
     @FXML
@@ -65,16 +59,7 @@ public class ExchangeController{
 
     @FXML
     private void confirmExchange(ActionEvent event) {
-        double differenceValue = Double.parseDouble(this.differenceLabel.getText().replace("Differenza: €", ""));
-        String confirmMessage;
-
-        if(differenceValue > 0) {
-            confirmMessage = "Sei sicuro di voler procedere con lo scambio? Il valore dei tuoi prodotti è superiore a quello del prodotto desiderato.";
-        } else if(differenceValue < 0) {
-            confirmMessage = "Sei sicuro di voler procedere con lo scambio? Il valore dei tuoi prodotti è inferiore a quello del prodotto desiderato.";
-        } else {
-            confirmMessage = "Sei sicuro di voler procedere con lo scambio?";
-        }
+        String confirmMessage = getConfirmMessage();
 
         confirmAction(confirmMessage).ifPresent(response -> {
             if (response == ButtonType.OK) {
@@ -89,12 +74,31 @@ public class ExchangeController{
                         ValidationService.getInstance().showOfferProposalSuccess();
                         NavigationService.getInstance().navigateToMainView(event);
                     }
+                } catch (ExchangeException e) {
+                    ExchangeException.showError(e.getMessage());
+                }
+                catch (SQLException e) {
+                    ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante la creazione dell'offerta: " + e.getMessage());
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile completare lo scambio: " + e.getMessage());
+                    throw new RuntimeException(e);
                 }
             }
         });
+    }
+
+
+    private String getConfirmMessage() {
+        double differenceValue = Double.parseDouble(this.differenceLabel.getText().replace("Differenza: €", ""));
+        String confirmMessage;
+
+        if(differenceValue > 0) {
+            confirmMessage = "Sei sicuro di voler procedere con lo scambio? Il valore dei tuoi prodotti è superiore a quello del prodotto desiderato.";
+        } else if(differenceValue < 0) {
+            confirmMessage = "Sei sicuro di voler procedere con lo scambio? Il valore dei tuoi prodotti è inferiore a quello del prodotto desiderato.";
+        } else {
+            confirmMessage = "Sei sicuro di voler procedere con lo scambio?";
+        }
+        return confirmMessage;
     }
 
     private void updateCalculations(Insertion insertion, boolean isSelected) {
@@ -118,19 +122,9 @@ public class ExchangeController{
 
         double difference = this.desiredProduct.getPrice().doubleValue() - totalValue;
         differenceLabel.setText("Differenza: €" + String.format("%.2f", difference));
-
-        updateDifferenceMessage();
-        toggleConfirmButton();
-    }
-    private void updateDifferenceMessage() {
-        // Update the message explaining the exchange difference
     }
 
-    private void toggleConfirmButton() {
-        // Enable/disable the confirm button based on selection status
-    }
-
-    private HBox createListingCard(Insertion insertion) {
+    private HBox createInsertionCard(Insertion insertion) {
         HBox card = new HBox(15);
         card.setPrefWidth(this.yourProductsContainer.getPrefWidth() - 20);
         card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
@@ -208,7 +202,7 @@ public class ExchangeController{
         return card;
     }
 
-    private void loadUserListings() {
+    private void loadUserInsertions() {
         try {
             List<Insertion> insertions = insertionService.getCurrentUserAvailableInsertions();
             this.yourProductsContainer.getChildren().clear();
@@ -218,12 +212,11 @@ public class ExchangeController{
                 this.yourProductsContainer.getChildren().add(emptyLabel);
             } else {
                 for (Insertion insertion : insertions) {
-                    this.yourProductsContainer.getChildren().add(createListingCard(insertion));
+                    this.yourProductsContainer.getChildren().add(createInsertionCard(insertion));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            Label errorLabel = new Label("Errore nel caricamento degli annunci");
+            Label errorLabel = new Label("Errore nel caricamento degli annunci: " + e.getMessage());
             yourProductsContainer.getChildren().add(errorLabel);
         }
     }

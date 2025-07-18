@@ -25,47 +25,20 @@ import java.util.Optional;
 
 
 public class MyProfileController {
-    @FXML private ImageView logoImage;
-    @FXML private Button notificationsButton;
-    @FXML private Button helpButton;
-    @FXML private Button editProfileButton;
-    @FXML private Button backButton;
-    @FXML private ImageView profileAvatarView;
-    @FXML private Button changeAvatarButton;
     @FXML private Label userNameLabel;
-    @FXML private Label userEmailLabel;
-    @FXML private Label memberSinceLabel;
-    @FXML private Label userRatingLabel;
-    @FXML private Label verifiedBadge;
     @FXML private Label totalAdsLabel;
     @FXML private Label activeSalesLabel;
     @FXML private Label completedSalesLabel;
     @FXML private Label totalEarningsLabel;
-    @FXML private TabPane profileTabPane;
     @FXML private TextField firstNameField;
     @FXML private TextField lastNameField;
-    @FXML private TextField emailField;
-    @FXML private TextField phoneField;
     @FXML private ComboBox<String> facultyComboBox;
-    @FXML private TextArea bioTextArea;
-    @FXML private Button cancelChangesButton;
-    @FXML private Button saveChangesButton;
-    @FXML private ComboBox<String> adsFilterComboBox;
-    @FXML private Button newAdButton;
     @FXML private VBox userAdsContainer;
     @FXML private TextField currentUsernameField;
     @FXML private TextField newUsernameField;
     @FXML private PasswordField currentPasswordField;
     @FXML private PasswordField newPasswordField;
     @FXML private PasswordField confirmPasswordField;
-    @FXML private Button changeUsernameButton;
-    @FXML private Button emailVisibilityButton;
-    @FXML private Button messagesFromStrangersButton;
-    @FXML private Button pushNotificationsButton;
-    @FXML private Button changePasswordButton;
-    @FXML private Button enable2FAButton;
-    @FXML private Button logoutButton;
-    @FXML private Label totalOffersStat;
     @FXML private Label acceptedOffersStat;
     @FXML private Label pendingOffersStat;
     @FXML private Label rejectedOffersStat;
@@ -121,8 +94,7 @@ public class MyProfileController {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            Label errorLabel = new Label("Errore nel caricamento degli annunci");
+            Label errorLabel = new Label("Errore nel caricamento degli annunci" + e.getMessage());
             userAdsContainer.getChildren().add(errorLabel);
         }
     }
@@ -172,11 +144,9 @@ public class MyProfileController {
             this.maxPriceLabel.setText(String.format("€%.2f", maxPrice));
 
         } catch (Exception e) {
-            this.totalOffersStat.setText("0");
             this.maxPriceLabel.setText("€0.00");
             this.minPriceLabel.setText("€0.00");
             this.avgPriceLabel.setText("€0.00");
-            e.printStackTrace();
         }
     }
     private void loadAcceptedSaleOfferStatistics() {
@@ -187,8 +157,6 @@ public class MyProfileController {
             minPriceLabel.setText(String.format("€%.2f", stats.get("min")));
             maxPriceLabel.setText(String.format("€%.2f", stats.get("max")));
         } catch (SQLException e) {
-            e.printStackTrace();
-
             avgPriceLabel.setText("€0.00");
             minPriceLabel.setText("€0.00");
             maxPriceLabel.setText("€0.00");
@@ -297,7 +265,6 @@ public class MyProfileController {
             this.activeSalesLabel.setText("0");
             this.completedSalesLabel.setText("0");
             this.totalEarningsLabel.setText("€0.00");
-            e.printStackTrace();
         }
     }
 
@@ -323,7 +290,6 @@ public class MyProfileController {
                 listingDao.delete(insertion.getInsertionID());
                 loadUserListings();
             } catch (Exception e) {
-                e.printStackTrace();
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Errore");
                 errorAlert.setHeaderText("Impossibile eliminare l'annuncio");
@@ -355,7 +321,7 @@ public class MyProfileController {
            series.getData().add(new BarChart.Data<>("Rifiutati", insertionObservableList.stream().filter(l -> l.getStatus() == InsertionStatus.REJECTED).count()));
            this.acceptedOffersBarChart.getData().add(series);
        } catch (Exception e) {
-           e.printStackTrace();
+           ValidationService.getInstance().showFailedToSetStatsError();
        }
     }
 
@@ -466,8 +432,7 @@ public class MyProfileController {
             }
 
         }catch(Exception e){
-            e.printStackTrace();
-            Label errorLabel = new Label("Errore nel caricamento delle offerte in sospeso");
+            Label errorLabel = new Label("Errore nel caricamento delle offerte in sospeso " + e.getMessage());
             pendingOffersContainer.getChildren().add(errorLabel);
         }
     }
@@ -520,8 +485,7 @@ public class MyProfileController {
             card.getChildren().addAll(imageView, textContent, buttonContainer);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            Label errorLabel = new Label("Errore nel caricamento dell'offerta");
+            Label errorLabel = new Label("Errore nel caricamento dell'offerta" + e.getMessage());
             card.getChildren().add(errorLabel);
         }
 
@@ -542,8 +506,7 @@ public class MyProfileController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            Label errorLabel = new Label("Errore nel caricamento delle operazioni completate");
+            Label errorLabel = new Label("Errore nel caricamento delle operazioni completate " + e.getMessage());
             completedOperationsContainer.getChildren().add(errorLabel);
         }
     }
@@ -551,13 +514,12 @@ public class MyProfileController {
         try {
             boolean success = offerService.rejectOffer(offerId);
             if (success) {
-                validationService.showAlert(Alert.AlertType.INFORMATION, "Successo", "Offerta annullata con successo.");
+                validationService.showInsertionAnnulledSuccess();
                 loadPendingOffers();
             } else {
                 validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile annullare l'offerta.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante l'annullamento dell'offerta.");
         }
     }

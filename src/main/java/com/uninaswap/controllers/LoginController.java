@@ -1,6 +1,5 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.model.User;
 import com.uninaswap.services.NavigationService;
 import com.uninaswap.services.UserService;
 import com.uninaswap.services.ValidationService;
@@ -12,15 +11,11 @@ public class LoginController {
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
-    @FXML private Button loginButton;
-    @FXML private Hyperlink registerButton;
 
     private final UserService userService = UserService.getInstance();
 
     @FXML
-    public void initialize() {
-        // Initialization logic here
-    }
+    public void initialize() {}
 
     @FXML
     private void onLoginButtonClicked(ActionEvent event) {

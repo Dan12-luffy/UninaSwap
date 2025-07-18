@@ -90,9 +90,6 @@
                                 <HBox spacing="8" styleClass="notification-actions">
                                     <Label styleClass="offer-amount" text="Offerta: 25€" />
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <Button fx:id="declineOffer1" onAction="#onDeclineOfferClicked" styleClass="decline-button" text="Rifiuta" />
-                                    <Button fx:id="acceptOffer1" onAction="#onAcceptOfferClicked" styleClass="accept-button" text="Accetta" />
-                                    <Button fx:id="counterOffer1" onAction="#onCounterOfferClicked" styleClass="counter-button" text="Controfferta" />
                                 </HBox>
                             </VBox>
                         </HBox>
@@ -115,9 +112,6 @@
                                 <HBox spacing="8" styleClass="notification-actions">
                                     <Label styleClass="offer-amount" text="Offerta: 18€" />
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <Button fx:id="declineOffer2" onAction="#onDeclineOfferClicked" styleClass="decline-button" text="Rifiuta" />
-                                    <Button fx:id="acceptOffer2" onAction="#onAcceptOfferClicked" styleClass="accept-button" text="Accetta" />
-                                    <Button fx:id="counterOffer2" onAction="#onCounterOfferClicked" styleClass="counter-button" text="Controfferta" />
                                 </HBox>
                             </VBox>
                         </HBox>
@@ -139,8 +133,6 @@
                                 <Label prefHeight="18.0" prefWidth="125.0" styleClass="notification-description" text="Proposta offerta da:" />
                                 <HBox spacing="8" styleClass="notification-actions">
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <Button fx:id="declineSwap1" onAction="#onDeclineSwapClicked" styleClass="decline-button" text="Rifiuta" />
-                                    <Button fx:id="acceptSwap1" onAction="#onAcceptSwapClicked" styleClass="accept-button" text="Accetta Scambio" />
                                 </HBox>
                             </VBox>
                         </HBox>

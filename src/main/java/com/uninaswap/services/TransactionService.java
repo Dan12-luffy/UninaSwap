@@ -24,8 +24,8 @@ public class TransactionService {
         }
         return instance;
     }
-    //crea una nuova transazione e la registra nel database
-    public int recordSale(Insertion insertion, Offer offer, User buyer) throws  SQLException{
+
+    public int recordSale(Insertion insertion, Offer offer, User buyer){
         Transaction transaction = new Transaction(
                 insertion.getInsertionID(),
                 offer != null ? offer.getOfferID() : null,
@@ -39,7 +39,7 @@ public class TransactionService {
         return transactionDao.createTransaction(transaction);
     }
 
-    public int recordExchange(Insertion insertion, Offer offer, User buyer) throws SQLException {
+    public void recordExchange(Insertion insertion, Offer offer, User buyer){
         Transaction transaction = new Transaction(
                 insertion.getInsertionID(),
                 offer.getOfferID(),
@@ -50,10 +50,10 @@ public class TransactionService {
                 "COMPLETED",
                 "Scambio di: " + insertion.getTitle()
         );
-        return transactionDao.createTransaction(transaction);
+        transactionDao.createTransaction(transaction);
     }
 
-    public int recordGift(Insertion insertion, Offer offer , User buyer) throws SQLException {
+    public void recordGift(Insertion insertion, Offer offer , User buyer){
         Transaction transaction = new Transaction(
                 insertion.getInsertionID(),
                 offer.getOfferID(),
@@ -64,33 +64,10 @@ public class TransactionService {
                 "COMPLETED",
                 "Regalo di: " + insertion.getTitle()
         );
-        return transactionDao.createTransaction(transaction);
+        transactionDao.createTransaction(transaction);
     }
     //ottiene tutte le transazioni effettuate da un utente
     public List<Transaction> getTransactionsByUserId(int userId) throws SQLException {
         return transactionDao.findByUserId(userId);
-    }
-
-    public double getTotalSales(int sellerId) throws SQLException {
-        List<Transaction> transactions = transactionDao.findByUserId(sellerId);  //recupera tutte le transizioni dell' utente(come venditore o compratore)
-        return transactions.stream()
-                //filtra solo le transazioni dove l' utente è il venditore e sono completate
-                .filter(t -> t.getSellerId() == sellerId && "COMPLETED".equals(t.getStatus()))
-                //estrae l' importo di ogni transazione
-                .mapToDouble(Transaction::getAmount)
-                //somma tutti gli importi delle transazioni filtrate
-                .sum();
-    }
-
-    //calcola il totale degli acquisti per un compratore
-    public double getTotalPurchases(int buyerId) throws SQLException {
-        List<Transaction> transactions = transactionDao.findByUserId(buyerId);
-        return transactions.stream()
-                //DIFFERENZA: qui si filtra per l' ID del compratore
-                .filter(t -> t.getBuyerId() == buyerId && "COMPLETED".equals(t.getStatus()))
-                //estrae l' importo di ogni transazione
-                .mapToDouble(Transaction::getAmount)
-                //somma tutti gli importi delle transazioni filtrate
-                .sum();
     }
 }
