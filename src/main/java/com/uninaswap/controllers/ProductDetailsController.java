@@ -30,6 +30,7 @@ public class ProductDetailsController {
     @FXML private Label availabilityLabel;
     @FXML private Label dateLabel;
     @FXML private VBox actionButtonsVbox;
+    @FXML private Label deliveryMethodLabel;
 
     private Insertion insertion;
 
@@ -78,6 +79,7 @@ public class ProductDetailsController {
         this.availabilityLabel.setText(insertion.getStatus().toString());
         this.dateLabel.setText(insertion.getPublishDate().toString());
         this.sellerInitialsLabel.setText(insertionService.getSellerInitials(insertion.getUserId()));
+        this.deliveryMethodLabel.setText(insertion.getDeliveryMethod());
 
         if (insertion.getPrice() != null) {
             this.priceLabel.setText("€" + insertion.getPrice().toString());

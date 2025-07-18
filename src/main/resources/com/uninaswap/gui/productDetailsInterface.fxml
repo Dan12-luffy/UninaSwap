@@ -184,13 +184,8 @@
 
                             <children>
                                 <VBox spacing="8" styleClass="delivery-info-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                                    <Label styleClass="card-title" text="Luogo di Ritiro" />
-                                    <Label fx:id="locationLabel" styleClass="card-content" text="Facoltà di Ingegneria" />
-                                </VBox>
-
-                                <VBox spacing="8" styleClass="delivery-info-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                                    <Label styleClass="card-title" text="Modalità Consegna" />
-                                    <Label fx:id="deliveryLabel" styleClass="card-content" text="Consegna a mano, orari flessibili" />
+                                    <Label styleClass="card-title" text="Informazioni sulla consegna" />
+                                    <Label fx:id="deliveryMethodLabel" styleClass="card-content" text="Facoltà di Ingegneria" />
                                 </VBox>
                             </children>
                         </GridPane>

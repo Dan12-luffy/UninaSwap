@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class InsertionFormController {
     @FXML private TextField titleField;
@@ -192,10 +193,11 @@ public class InsertionFormController {
             }
 
             if (insertion.getImageUrl() != null && !insertion.getImageUrl().isEmpty()) {
-                this.mainImagePreview.setImage(new Image(insertion.getImageUrl()));
+                File imageFile = new File(insertion.getImageUrl());
+                this.mainImagePreview.setImage(new Image(imageFile.toURI().toString()));
                 this.imagePathField.setText(insertion.getImageUrl());
             } else {
-                this.mainImagePreview.setImage(new Image(this.defaultImagePath));
+                this.mainImagePreview.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
                 this.imagePathField.setText(this.defaultImagePath);
             }
         }

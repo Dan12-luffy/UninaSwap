@@ -111,6 +111,7 @@ public abstract class Insertion {
     public String getDeliveryMethod() {
         return deliveryMethod;
     }
+
     public void setDeliveryMethod(String deliveryMethod) {
         this.deliveryMethod = deliveryMethod;
     }
@@ -129,6 +130,7 @@ public abstract class Insertion {
                 ", publishDate=" + publishDate +
                 ", userId=" + userId +
                 ", categoryId=" + category +
+                ", deliveryMethod='" + deliveryMethod + '\'' +
                 '}';
     }
 }
