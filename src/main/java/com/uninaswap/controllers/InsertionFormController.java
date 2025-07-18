@@ -38,7 +38,7 @@ public class InsertionFormController {
     @FXML private TitledPane productDescription;
     @FXML private Label headFunctionalityLabel;
 
-    private final String defaultImagePath = "file:/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png";
+    private final String defaultImagePath = "/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png";
     private File selectedImageFile;
     private final InsertionService insertionService = InsertionService.getInstance();
     private boolean isEditedInsertion = false; // Flag che serve per capire se si sta modificando un'inserzione esistente o creando una nuova
@@ -58,7 +58,7 @@ public class InsertionFormController {
         this.typeComboBox.setValue("Vendita");
         this.categoryComboBox.setValue("Altro");
         this.locationComboBox.setValue("Monte Sant'Angelo");
-        this.mainImagePreview.setImage(new Image(this.defaultImagePath));
+        this.mainImagePreview.setImage(new Image("file:"+this.defaultImagePath));
 
         this.typeComboBox.valueProperty().addListener((_, _, _) -> {
             if(this.typeComboBox.getValue().equals("Regalo")){
@@ -74,7 +74,6 @@ public class InsertionFormController {
         });
         this.priceField.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
-
             if (newText.isEmpty()) {
                 return change;
             }

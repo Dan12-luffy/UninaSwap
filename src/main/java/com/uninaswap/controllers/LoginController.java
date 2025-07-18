@@ -15,7 +15,12 @@ public class LoginController {
     private final UserService userService = UserService.getInstance();
 
     @FXML
-    public void initialize() {}
+    public void initialize() {
+        int usernameMaxLength = 30;
+        this.usernameField.setTextFormatter(createTextFormatter(usernameMaxLength));
+        int passwordMaxLength = 30;
+        this.passwordField.setTextFormatter(createTextFormatter(passwordMaxLength));
+    }
 
     @FXML
     private void onLoginButtonClicked(ActionEvent event) {
@@ -32,6 +37,14 @@ public class LoginController {
     @FXML
     private void navigateToRegister(ActionEvent event){
         NavigationService.getInstance().navigateToRegisterView(event);
+    }
+    private TextFormatter<String> createTextFormatter(int maxLength) {
+        return new TextFormatter<>(change -> {
+            if (change.getControlNewText().length() <= maxLength) {
+                return change;
+            }
+            return null;
+        });
     }
 }
 

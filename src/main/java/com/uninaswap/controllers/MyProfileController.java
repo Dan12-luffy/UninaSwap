@@ -63,6 +63,10 @@ public class MyProfileController {
         this.firstNameField.setText(currentUser.getFirst_name());
         this.lastNameField.setText(currentUser.getLast_name());
         this.currentUsernameField.setText(currentUser.getUsername());
+        this.newUsernameField.setTextFormatter(createTextFormatter(30));
+        this.newPasswordField.setTextFormatter(createTextFormatter(30));
+        this.currentPasswordField.setTextFormatter(createTextFormatter(30));
+        this.confirmPasswordField.setTextFormatter(createTextFormatter(30));
 
         for (Faculty faculty : Faculty.values()) {
             this.facultyComboBox.getItems().add(faculty.getFacultyName());
@@ -522,6 +526,12 @@ public class MyProfileController {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante l'annullamento dell'offerta.");
         }
     }
-
-
+    private TextFormatter<String> createTextFormatter(int maxLength) {
+        return new TextFormatter<>(change -> {
+            if (change.getControlNewText().length() <= maxLength) {
+                return change;
+            }
+            return null;
+        });
+    }
 }

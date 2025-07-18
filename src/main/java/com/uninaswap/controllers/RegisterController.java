@@ -23,6 +23,12 @@ public class RegisterController {
         for (Faculty faculty : Faculty.values()) {
             this.facultyComboBox.getItems().add(faculty.getFacultyName());
         }
+        int maxLength = 30;
+        this.nameField.setTextFormatter(createTextFormatter(maxLength));
+        this.surnameField.setTextFormatter(createTextFormatter(maxLength));
+        this.passwordField.setTextFormatter(createTextFormatter(maxLength));
+        this.confirmPasswordField.setTextFormatter(createTextFormatter(maxLength));
+        this.usernameField.setTextFormatter(createTextFormatter(maxLength));
     }
 
     @FXML
@@ -34,5 +40,13 @@ public class RegisterController {
     @FXML
     private void navigateToLogin(ActionEvent event) {
         NavigationService.getInstance().navigateToLoginView(event);
+    }
+    private TextFormatter<String> createTextFormatter(int maxLength) {
+        return new TextFormatter<>(change -> {
+            if (change.getControlNewText().length() <= maxLength) {
+                return change;
+            }
+            return null;
+        });
     }
 }
