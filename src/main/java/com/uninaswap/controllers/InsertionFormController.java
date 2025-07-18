@@ -37,6 +37,7 @@ public class InsertionFormController {
     @FXML private ComboBox<String> deliveryMethodComboBox;
     @FXML private TitledPane productDescription;
     @FXML private Label headFunctionalityLabel;
+    @FXML private Button backButton;
 
     private final String defaultImagePath = "/home/dan/Desktop/UninaSwap/src/main/resources/com/uninaswap/images/default_image.png";
     private File selectedImageFile;
@@ -213,6 +214,7 @@ public class InsertionFormController {
             this.typeComboBox.setValue(insertion.getType().toString());
             this.categoryComboBox.setValue(insertion.getCategory());
             this.headFunctionalityLabel.setText("Modifica Inserzione");
+            this.backButton.setOnAction(event -> {NavigationService.getInstance().navigateToMyProfileView(event);});
 
             if (insertion.getDeliveryMethod() != null && !insertion.getDeliveryMethod().isEmpty()) {
                 this.deliveryMethodComboBox.setValue(insertion.getDeliveryMethod());
