@@ -45,25 +45,26 @@ public class NotificationsController implements Initializable {
         NavigationService.getInstance().navigateToMainView(event);
     }
     private void loadUserOffers() throws Exception {
-        notificationsContainer.getChildren().clear();
+        this.notificationsContainer.getChildren().clear();
         List<Offer> offers = offerService.getOffersToCurrentUser();
         List<Offer> rejectedOffers = offerService.getRejectedOffersForCurrentUser();
 
         int totalNotifications = offers.size() + rejectedOffers.size();
-        notificationsCountLabel.setText(totalNotifications + " notifiche");
+        this.notificationsCountLabel.setText(totalNotifications + " notifiche");
 
         for (Offer offer : offers) {
             VBox offerCard = createOfferCard(offer);
-            notificationsContainer.getChildren().add(offerCard);
+            this.notificationsContainer.getChildren().add(offerCard);
         }
 
         for (Offer rejectedOffer : rejectedOffers) {
             VBox rejectedOfferCard = createRejectedOfferCard(rejectedOffer);
-            notificationsContainer.getChildren().add(rejectedOfferCard);
+            this.notificationsContainer.getChildren().add(rejectedOfferCard);
         }
     }
 
     private VBox createOfferCard(Offer offer) throws SQLException {
+        //Crea la card principale
         VBox card = new VBox();
         card.setStyle("-fx-effect: none !important; -fx-background-insets: 0; -fx-border-color: #e0e0e0; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-padding: 12;");
 
@@ -71,14 +72,14 @@ public class NotificationsController implements Initializable {
         content.setAlignment(Pos.CENTER_LEFT);
         content.setSpacing(16);
 
+        //Crea la vbox per il contenuto dell'offerta
         VBox offerContent = new VBox();
         offerContent.setSpacing(8);
         HBox.setHgrow(offerContent, Priority.ALWAYS);
 
         Insertion insertion = insertionService.getInsertionByID(offer.getInsertionID());
         User offerUser = userService.getUserById(offer.getUserID());
-        List<OfferedItem> offeredItems = OfferedItemsService.getInstance()
-                .findOfferedItemsByOfferId(offer.getOfferID());
+        List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offer.getOfferID());
 
         String notificationType = getNotificationTypeFromInsertion(insertion.getType());
 
@@ -117,6 +118,7 @@ public class NotificationsController implements Initializable {
     }
 
     private VBox createRejectedOfferCard(Offer offer) throws SQLException {
+        //Crea la card principale per l'offerta rifiutata
         VBox card = new VBox();
         card.setStyle("-fx-effect: none !important; -fx-background-insets: 0; -fx-border-color: #ff6b6b; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-padding: 12;");
 
@@ -181,6 +183,7 @@ public class NotificationsController implements Initializable {
         return card;
     }
     private HBox createRejectedOfferActions(Offer offer, Insertion insertion) {
+        //Crea la card principale per le azioni dell'offerta rifiutata
         HBox actions = new HBox();
         actions.setSpacing(10);
         actions.getStyleClass().add("notification-actions");
@@ -280,6 +283,7 @@ public class NotificationsController implements Initializable {
     }
 
     private HBox createActionButtons(Offer offer, typeInsertion insertionType) {
+        // Crea la card principale per le azioni dell'offerta
         HBox actions = new HBox();
         actions.setSpacing(10);
         actions.getStyleClass().add("notification-actions");

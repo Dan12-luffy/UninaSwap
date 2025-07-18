@@ -119,9 +119,9 @@ public class ProductDetailsController {
                     this.offerButton.setVisible(true);
             }
         } else {
-            actionButton.setVisible(false);
-            offerButton.setVisible(false);
-            actionButtonsVbox.setVisible(false);
+            this.actionButton.setVisible(false);
+            this.offerButton.setVisible(false);
+            this.actionButtonsVbox.setVisible(false);
         }
     }
 
@@ -146,7 +146,7 @@ public class ProductDetailsController {
     }
 
     private void onGiftButtonClicked(ActionEvent event) {
-        if (insertion != null) {
+        if (this.insertion != null) {
             NavigationService.getInstance().navigateToGiftView(event, this.insertion);
         }
     }

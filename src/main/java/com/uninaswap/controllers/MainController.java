@@ -62,7 +62,7 @@ public class MainController {
     @FXML private CheckBox giftCheck;
 
 
-    private final int ALL_CATEGORIES_ID = -1; //Used to represent "All filter Categories", needed to clear the arraylist and filters
+    private final int ALL_CATEGORIES_ID = -1; //Usato per rappresentare "Tutto" nelle categorie, necessario per resettare i filtri
     private FilterCriteria currentFilter = new FilterCriteria();
     private final List<Integer> selectedCategories = new ArrayList<>();
     private final CategoryService categoryService = CategoryService.getInstance();
@@ -142,24 +142,18 @@ public class MainController {
     }
 
     @FXML
-    private void onSellButtonClicked() {
-        // TODO: Implement sell/proposals logic
-        System.out.println("Sell/Proposals button clicked");
-    }
-
-    @FXML
     private void onApplyFiltersClicked() {
 
-        // Get faculty filter values
+        // Prende i valori di ricerca delle facoltà
         List<String> selectedFaculties = getSelectedFaculties();
 
-        // Set faculty filter if any selected
+        // Setta le checkbox delle facoltà
         if (!selectedFaculties.isEmpty()) {
             this.currentFilter.setFacultyNames(selectedFaculties);
         } else {
             this.currentFilter.setFacultyNames(null);
         }
-        //Get type filter values
+        //Prende i valori di ricerca delle categorie
         List<typeInsertion> selectedTypes = new ArrayList<>();
         if (this.saleCheck.isSelected()) selectedTypes.add(typeInsertion.SALE);
         if (this.swapCheck.isSelected()) selectedTypes.add(typeInsertion.EXCHANGE);
@@ -179,7 +173,7 @@ public class MainController {
     private List<String> getSelectedFaculties() {
         List<String> selectedFaculties = new ArrayList<>();
         if (this.computerScienceCheck.isSelected()) selectedFaculties.add("Informatica");
-        if(this.scienceCheck.isSelected()) selectedFaculties.add("Scienze");
+        if (this.scienceCheck.isSelected()) selectedFaculties.add("Scienze");
         if (this.mathCheck.isSelected()) selectedFaculties.add("Matematica");
         if (this.economyCheck.isSelected()) selectedFaculties.add("Economia");
         if (this.artCheck.isSelected()) selectedFaculties.add("Arte");
@@ -224,7 +218,6 @@ public class MainController {
     @FXML
     private void onProfileButtonClicked(ActionEvent event) {
         NavigationService.getInstance().navigateToMyProfileView(event);
-
     }
 
     @FXML
@@ -357,7 +350,7 @@ public class MainController {
     }
 
     private VBox createItemCard(Insertion insertion) {
-        // Create card layout
+        // Crea il layout principale per la card
         VBox card = new VBox(10);
         card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;");
         card.setPrefWidth(200);
@@ -365,20 +358,18 @@ public class MainController {
         card.setMaxWidth(200);
         card.setMaxHeight(250);
 
-        // Create and configure image view
+        // Create configura l' image view
         ImageView imageView = new ImageView();
         imageView.setFitWidth(180);
         imageView.setFitHeight(140);
         imageView.setSmooth(true);
         imageView.setPreserveRatio(false);
 
-        // Default image path
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
             File imageFile = new File(insertion.getImageUrl());
             imageView.setImage(new Image(imageFile.toURI().toString()));
         } catch (Exception e) {
-            //System.out.println("Impossibile caricare l'immagine: " + e.getMessage());
             imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(defaultImagePath))));
         }
 
@@ -411,7 +402,6 @@ public class MainController {
     }
 
     private void toggleButtonsSettings() throws Exception {
-        //CategoryDaoImpl categoryDao = new CategoryDaoImpl();
 
         this.allCategoryButton.setToggleGroup(null);
         this.booksCategoryButton.setToggleGroup(null);

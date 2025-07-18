@@ -25,7 +25,7 @@ public class PurchaseConfirmationController {
 
     @FXML
     private void onConfirmPurchase(ActionEvent event) {
-        if(insertion == null){
+        if(this.insertion == null){
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Nessun prodotto selezionato.");
             return;
         }
@@ -36,7 +36,7 @@ public class PurchaseConfirmationController {
             int transactionId = TransactionService.getInstance().recordSale(insertion,null ,currentUser);
 
             if(transactionId > 0) {
-                insertion.setStatus(InsertionStatus.SOLD);
+                this.insertion.setStatus(InsertionStatus.SOLD);
                 InsertionService.getInstance().updateInsertion(insertion);
                 validationService.showAlert(Alert.AlertType.INFORMATION, "Acquisto effettuato",
                         "Acquisto completato con successo! Il prodotto è ora tuo.");
@@ -63,31 +63,31 @@ public class PurchaseConfirmationController {
     }
 
     private void populateData(){
-        if(insertion != null){
-            titleLabel.setText(insertion.getTitle());
-            priceLabel.setText(String.format("€%.2f", insertion.getPrice()));
+        if(this.insertion != null){
+            this.titleLabel.setText(this.insertion.getTitle());
+            this.priceLabel.setText(String.format("€%.2f", insertion.getPrice()));
             try{
                 String sellerName = InsertionService.getInstance().getSellerFullName(insertion.getUserId());
-                sellerLabel.setText("Venditore : " + sellerName);
+                this.sellerLabel.setText("Venditore : " + sellerName);
             }catch(Exception e){
-                sellerLabel.setText("Venditore : informazioni non disponibili");
+                this.sellerLabel.setText("Venditore : informazioni non disponibili");
 
             }
-            descriptionLabel.setText(insertion.getDescription());
-            if(insertion.getImageUrl() != null && !insertion.getImageUrl().isEmpty()){
+            this.descriptionLabel.setText(this.insertion.getDescription());
+            if(this.insertion.getImageUrl() != null && !this.insertion.getImageUrl().isEmpty()){
                 try{
                     Image image = new Image(insertion.getImageUrl());
-                    productImageView.setImage(image);
+                    this.productImageView.setImage(image);
                 } catch (Exception e) {
-                    productImageView.setVisible(false);
+                    this.productImageView.setVisible(false);
                 }
             }else{
-                productImageView.setVisible(false);
+                this.productImageView.setVisible(false);
             }
         }
     }
     private void verifyUser(User currentUser) throws IllegalArgumentException{
-        if(insertion.getUserId() == currentUser.getId()){
+        if(this.insertion.getUserId() == currentUser.getId()){
             throw new  IllegalArgumentException("Non puoi acquistare il tuo stesso prodotto.");
         }
     }

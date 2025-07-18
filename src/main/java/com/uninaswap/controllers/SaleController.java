@@ -21,10 +21,8 @@ public class SaleController {
     @FXML private Label productDescriptionLabel;
     @FXML private Label productPriceLabel;
     @FXML private TextField offerAmountField;
-    @FXML private Button submitOfferButton;
     @FXML private ImageView productImageView;
     @FXML private Label noImageLabel;
-    @FXML private Label offerValidationLabel;
     @FXML private Label sellerNameLabel;
 
     private static final ValidationService validationService = ValidationService.getInstance();
@@ -34,7 +32,7 @@ public class SaleController {
 
     @FXML
     private void initialize() {
-        offerAmountField.setTextFormatter(new TextFormatter<>(change -> {
+        this.offerAmountField.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
 
             if (newText.isEmpty()) {
@@ -49,35 +47,35 @@ public class SaleController {
             return null;
         }));
 
-        offerAmountField.setPromptText("0.00");
+        this.offerAmountField.setPromptText("0.00");
     }
 
     @FXML
     private void handleSubmitOffer(ActionEvent event) {
-        if (insertion == null) {
+        if (this.insertion == null) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Nessun prodotto selezionato.");
             return;
         }
 
-        String offerAmountStr = offerAmountField.getText().replace("€", "").trim();
+        String offerAmountStr = this.offerAmountField.getText().replace("€", "").trim();
         if (offerAmountStr.isEmpty()) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "L'importo dell'offerta non può essere vuoto.");
             return;
         }
 
-        double offerAmount = Double.parseDouble(offerAmountField.getText().trim());
+        double offerAmount = Double.parseDouble(this.offerAmountField.getText().trim());
         if (offerAmount <= 0) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "L'importo deve essere positivo.");
             return;
         }
 
-        if (insertion.getPrice() != null && offerAmount >= insertion.getPrice().doubleValue()) {
+        if (this.insertion.getPrice() != null && offerAmount >= this.insertion.getPrice().doubleValue()) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Per offerte pari o superiori al prezzo di listino, usa 'Acquista Ora'.");
             return;
         }
 
         int currentUserId = UserSession.getInstance().getCurrentUser().getId();
-        if (insertion.getUserId() == currentUserId) {
+        if (this.insertion.getUserId() == currentUserId) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Non puoi fare offerte sui tuoi annunci.");
             return;
         }
@@ -113,10 +111,10 @@ public class SaleController {
     public void setInsertion(Insertion insertion) {
         this.insertion = insertion;
         if (insertion != null) {
-            productTitleLabel.setText(insertion.getTitle());
-            productDescriptionLabel.setText(insertion.getDescription());
-            productPriceLabel.setText("€" + insertion.getPrice());
-            sellerNameLabel.setText(insertionService.getSellerFullName(insertion.getUserId()));
+            this.productTitleLabel.setText(insertion.getTitle());
+            this.productDescriptionLabel.setText(insertion.getDescription());
+            this.productPriceLabel.setText("€" + insertion.getPrice());
+            this.sellerNameLabel.setText(insertionService.getSellerFullName(insertion.getUserId()));
 
             setProductImage();
         }
@@ -124,10 +122,10 @@ public class SaleController {
 
     public void setProductImage() {
         try {
-            File imageFile = new File(insertion.getImageUrl());
+            File imageFile = new File(this.insertion.getImageUrl());
             this.productImageView.setImage(new Image(imageFile.toURI().toString()));
-            productImageView.setVisible(true);
-            noImageLabel.setVisible(false);
+            this.productImageView.setVisible(true);
+            this. noImageLabel.setVisible(false);
         } catch (Exception e) {
             // Se non riesce a caricare l'immagine, mostra il placeholder
             productImageView.setVisible(false);

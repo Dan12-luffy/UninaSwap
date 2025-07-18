@@ -116,12 +116,12 @@ public class ExchangeController{
             count -= 1;
         }
 
-        selectedCountLabel.setText(String.valueOf(count));
-        totalValueLabel.setText("€" + String.format("%.2f", totalValue));
-        yourTotalValueLabel.setText("Il tuo valore totale: €" + String.format("%.2f", totalValue));
+        this.selectedCountLabel.setText(String.valueOf(count));
+        this.totalValueLabel.setText("€" + String.format("%.2f", totalValue));
+        this.yourTotalValueLabel.setText("Il tuo valore totale: €" + String.format("%.2f", totalValue));
 
         double difference = this.desiredProduct.getPrice().doubleValue() - totalValue;
-        differenceLabel.setText("Differenza: €" + String.format("%.2f", difference));
+        this.differenceLabel.setText("Differenza: €" + String.format("%.2f", difference));
     }
 
     private HBox createInsertionCard(Insertion insertion) {
@@ -187,10 +187,10 @@ public class ExchangeController{
 
             if (newState) {
                 card.setStyle("-fx-padding: 10; -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f1f8e9;");
-                selectedInsertions.add(insertion);
+                this.selectedInsertions.add(insertion);
             } else {
                 card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
-                selectedInsertions.remove(insertion);
+                this.selectedInsertions.remove(insertion);
             }
             updateCalculations(insertion, newState);
         });

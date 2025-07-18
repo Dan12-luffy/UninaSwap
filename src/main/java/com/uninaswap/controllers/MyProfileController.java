@@ -1,6 +1,5 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.dao.InsertionDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.*;
 import javafx.collections.FXCollections;
@@ -153,21 +152,23 @@ public class MyProfileController {
         try {
             Map<String, Double> stats = offerService.getAcceptedSaleOfferStatistics();
 
-            avgPriceLabel.setText(String.format("€%.2f", stats.get("avg")));
-            minPriceLabel.setText(String.format("€%.2f", stats.get("min")));
-            maxPriceLabel.setText(String.format("€%.2f", stats.get("max")));
+            this.avgPriceLabel.setText(String.format("€%.2f", stats.get("avg")));
+            this.minPriceLabel.setText(String.format("€%.2f", stats.get("min")));
+            this.maxPriceLabel.setText(String.format("€%.2f", stats.get("max")));
         } catch (SQLException e) {
-            avgPriceLabel.setText("€0.00");
-            minPriceLabel.setText("€0.00");
-            maxPriceLabel.setText("€0.00");
+            this.avgPriceLabel.setText("€0.00");
+            this.minPriceLabel.setText("€0.00");
+            this.maxPriceLabel.setText("€0.00");
         }
     }
     private HBox createInsertionCard(Insertion insertion) {
+        //Crea la card principale
         HBox card = new HBox(15);
         card.setPrefWidth(this.userAdsContainer.getPrefWidth() - 20);
         card.getStyleClass().add("listing-card");
         card.setPrefHeight(100);
 
+        //Crea la card per l'imageview
         ImageView imageView = new ImageView();
         imageView.setFitWidth(80);
         imageView.setFitHeight(80);
@@ -341,7 +342,7 @@ public class MyProfileController {
     }
 
     @FXML
-    private void handleChangeUsername(ActionEvent event) {
+    private void handleChangeUsername() {
         String newUsername = newUsernameField.getText().trim();
 
         if (newUsername.isEmpty()) {
@@ -355,7 +356,7 @@ public class MyProfileController {
         confirmAlert.setTitle("Conferma cambio username");
         confirmAlert.setHeaderText("Cambiare username?");
         confirmAlert.setContentText("Stai per cambiare il tuo username da '" +
-                currentUsernameField.getText() + "' a '" + newUsername + "'.\n" +
+                this.currentUsernameField.getText() + "' a '" + newUsername + "'.\n" +
                 "Sei sicuro di voler continuare?");
 
         Optional<ButtonType> result = confirmAlert.showAndWait();
