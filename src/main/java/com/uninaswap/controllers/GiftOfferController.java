@@ -14,7 +14,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class GiftController {
+public class GiftOfferController {
     private Insertion insertion;
 
     @FXML private TextArea motivationTextArea;

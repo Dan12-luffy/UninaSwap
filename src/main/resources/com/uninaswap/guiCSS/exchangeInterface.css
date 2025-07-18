@@ -1,40 +1,27 @@
-/* UninaSwap - Exchange Interface CSS */
-/* Design system coerente con myProfileInterface.css */
-
-/* ============================
-   VARIABILI COLORE
-   ============================ */
 * {
-    -fx-primary: #9B2000;             /* Colore principale - bordeaux */
-    -fx-primary-light: #C62828;       /* Versione più chiara */
-    -fx-primary-dark: #6D0000;        /* Versione più scura */
-    -fx-primary-transparent: rgba(155, 32, 0, 0.1); /* Versione trasparente */
+    -fx-primary: #9B2000;
+    -fx-primary-light: #C62828;
+    -fx-primary-dark: #6D0000;
+    -fx-primary-transparent: rgba(155, 32, 0, 0.1);
 
-    -fx-secondary: #E8E1D5;           /* Colore secondario - beige chiaro */
-    -fx-accent: #FFA726;              /* Accento - arancione */
-    -fx-neutral: #F5F5F5;             /* Neutro - quasi bianco */
-    -fx-neutral-dark: #212121;        /* Testo scuro */
-    -fx-muted: #757575;               /* Testo secondario */
+    -fx-secondary: #E8E1D5;
+    -fx-accent: #FFA726;
+    -fx-neutral: #F5F5F5;
+    -fx-neutral-dark: #212121;
+    -fx-muted: #757575;
 
-    -fx-success: #43A047;             /* Verde */
-    -fx-warning: #FFA000;             /* Arancione */
-    -fx-danger: #E53935;              /* Rosso */
+    -fx-success: #43A047;
+    -fx-warning: #FFA000;
+    -fx-danger: #E53935;
 
     -fx-shadow-low: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
     -fx-shadow-medium: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
     -fx-shadow-high: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 12, 0, 0, 4);
 }
 
-/* ============================
-   CONTAINER PRINCIPALE
-   ============================ */
 .exchange-container {
     -fx-background-color: #F8F8F8;
 }
-
-/* ============================
-   HEADER E NAVIGAZIONE
-   ============================ */
 .top-banner {
     -fx-background-color: -fx-primary-dark;
     -fx-padding: 5px 15px;
@@ -113,9 +100,6 @@
     -fx-background-color: #F5F5F5;
 }
 
-/* ============================
-   AREA CONTENUTI
-   ============================ */
 .content-scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -129,19 +113,12 @@
     -fx-background-color: transparent;
 }
 
-/* ============================
-   CONTAINER PRINCIPALE SCAMBIO
-   ============================ */
 .exchange-main-container {
     -fx-background-color: white;
     -fx-background-radius: 12px;
     -fx-padding: 20px;
     -fx-effect: -fx-shadow-medium;
 }
-
-/* ============================
-   SEZIONE I TUOI PRODOTTI
-   ============================ */
 .your-products-section {
     -fx-background-color: #FAFAFA;
     -fx-background-radius: 10px;
@@ -182,9 +159,6 @@
     -fx-padding: 30px 10px;
 }
 
-/* ============================
-   CARD PRODOTTO SELEZIONABILE
-   ============================ */
 .product-selection-card {
     -fx-background-color: white;
     -fx-background-radius: 8px;
@@ -233,9 +207,6 @@
     -fx-text-fill: -fx-muted;
 }
 
-/* ============================
-   RIEPILOGO SELEZIONE
-   ============================ */
 .selection-summary {
     -fx-background-color: rgba(67, 160, 71, 0.1);
     -fx-background-radius: 8px;
@@ -294,10 +265,6 @@
     -fx-font-weight: bold;
     -fx-text-fill: -fx-primary;
 }
-
-/* ============================
-   SEZIONE PRODOTTO DESIDERATO
-   ============================ */
 .desired-product-section {
     -fx-background-color: #FAFAFA;
     -fx-background-radius: 10px;
@@ -381,18 +348,11 @@
     -fx-font-weight: bold;
     -fx-text-fill: -fx-primary;
 }
-
-/* ============================
-   SEPARATORE PRINCIPALE
-   ============================ */
 .main-separator {
     -fx-background-color: #E0E0E0;
     -fx-padding: 15px 0;
 }
 
-/* ============================
-   CALCOLO DIFFERENZA
-   ============================ */
 .difference-calculation {
     -fx-background-color: white;
     -fx-background-radius: 12px;
@@ -451,9 +411,6 @@
     -fx-text-alignment: RIGHT;
 }
 
-/* ============================
-   MESSAGGIO DIFFERENZA
-   ============================ */
 .difference-message {
     -fx-background-color: rgba(67, 160, 71, 0.1);
     -fx-background-radius: 8px;
@@ -489,9 +446,6 @@
     -fx-text-fill: -fx-danger;
 }
 
-/* ============================
-   SEZIONE AZIONI
-   ============================ */
 .actions-section {
     -fx-background-color: white;
     -fx-background-radius: 12px;
@@ -510,9 +464,6 @@
     -fx-text-alignment: CENTER;
 }
 
-/* ============================
-   PULSANTI AZIONI
-   ============================ */
 .cancel-exchange-button {
     -fx-background-color: white;
     -fx-text-fill: -fx-danger;
@@ -574,10 +525,6 @@
     -fx-cursor: default;
     -fx-effect: none;
 }
-
-/* ============================
-   NOTE SCAMBIO
-   ============================ */
 .exchange-notes {
     -fx-background-color: rgba(255, 167, 38, 0.05);
     -fx-background-radius: 8px;
@@ -600,9 +547,6 @@
     -fx-wrap-text: true;
 }
 
-/* ============================
-   SCROLLBAR PERSONALIZZATE
-   ============================ */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -648,9 +592,6 @@
     -fx-shape: "";
 }
 
-/* ============================
-   STATI SPECIALI
-   ============================ */
 .product-selection-card.unavailable {
     -fx-background-color: #F5F5F5;
     -fx-opacity: 0.6;
@@ -675,9 +616,6 @@
     -fx-text-fill: -fx-muted;
 }
 
-/* ============================
-   ANIMAZIONI E TRANSIZIONI
-   ============================ */
 .cancel-exchange-button,
 .preview-button,
 .confirm-exchange-button {
@@ -696,9 +634,6 @@
     -fx-transition: -fx-border-color 0.2s ease-in-out, -fx-effect 0.2s ease-in-out;
 }
 
-/* ============================
-   RESPONSIVE DESIGN
-   ============================ */
 @media (max-width: 1000px) {
     .exchange-main-container {
         -fx-orientation: vertical;
@@ -764,9 +699,6 @@
     }
 }
 
-/* ============================
-   ACCESSIBILITÀ
-   ============================ */
 .product-selection-card:focused {
     -fx-border-color: -fx-primary;
     -fx-border-width: 2;
@@ -779,7 +711,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 0);
 }
 
-/* Indicatori per screen reader */
 .sr-only {
     -fx-opacity: 0;
     -fx-pref-width: 0;

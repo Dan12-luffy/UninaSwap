@@ -1,40 +1,25 @@
-/* UninaSwap - Purchase Confirmation CSS */
-/* Basato sul design system principale */
-
-/* ============================
-   VARIABILI COLORE
-   ============================ */
 * {
-    -fx-primary: #9B2000;             /* Colore principale - bordeaux */
-    -fx-primary-light: #C62828;       /* Versione più chiara */
-    -fx-primary-dark: #6D0000;        /* Versione più scura */
-    -fx-primary-transparent: rgba(155, 32, 0, 0.1); /* Versione trasparente */
-
-    -fx-secondary: #E8E1D5;           /* Colore secondario - beige chiaro */
-    -fx-accent: #FFA726;              /* Accento - arancione */
-    -fx-neutral: #F5F5F5;             /* Neutro - quasi bianco */
-    -fx-neutral-dark: #212121;        /* Testo scuro */
-    -fx-muted: #757575;               /* Testo secondario */
-
-    -fx-success: #43A047;             /* Verde */
-    -fx-warning: #FFA000;             /* Arancione */
-    -fx-danger: #E53935;              /* Rosso */
-
+    -fx-primary: #9B2000;
+    -fx-primary-light: #C62828;
+    -fx-primary-dark: #6D0000;
+    -fx-primary-transparent: rgba(155, 32, 0, 0.1);
+    -fx-secondary: #E8E1D5;
+    -fx-accent: #FFA726;
+    -fx-neutral: #F5F5F5;
+    -fx-neutral-dark: #212121;
+    -fx-muted: #757575;
+    -fx-success: #43A047;
+    -fx-warning: #FFA000;
+    -fx-danger: #E53935;
     -fx-shadow-low: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
     -fx-shadow-medium: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
     -fx-shadow-high: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 12, 0, 0, 4);
 }
 
-/* ============================
-   CONTAINER PRINCIPALE
-   ============================ */
 .main-container {
     -fx-background-color: #F8F8F8;
 }
 
-/* ============================
-   HEADER
-   ============================ */
 .header-section {
     -fx-background-color: -fx-primary;
 }
@@ -54,9 +39,6 @@
     -fx-background-color: -fx-primary-dark;
 }
 
-/* ============================
-   CONTENT AREA
-   ============================ */
 .content-scroll {
     -fx-background-color: transparent;
     -fx-padding: 0;
@@ -71,9 +53,6 @@
     -fx-background-color: transparent;
 }
 
-/* ============================
-   LAYOUT PRODOTTO E ACQUISTO
-   ============================ */
 .product-purchase-container {
     -fx-background-color: white;
     -fx-background-radius: 12px;
@@ -94,9 +73,6 @@
     -fx-padding: 10px 0 0 0;
 }
 
-/* ============================
-   SEZIONE IMMAGINE
-   ============================ */
 .image-section {
     -fx-background-color: white;
     -fx-background-radius: 10px;
@@ -124,9 +100,6 @@
     -fx-font-style: italic;
 }
 
-/* ============================
-   SEZIONE DETTAGLI PRODOTTO
-   ============================ */
 .product-details-section {
     -fx-background-color: #FAFAFA;
     -fx-background-radius: 10px;
@@ -150,9 +123,6 @@
     -fx-line-spacing: 1.2;
 }
 
-/* ============================
-   SEZIONE VENDITORE
-   ============================ */
 .seller-section {
     -fx-background-color: rgba(67, 160, 71, 0.05);
     -fx-background-radius: 10px;
@@ -197,9 +167,6 @@
     -fx-text-fill: -fx-muted;
 }
 
-/* ============================
-   SEZIONE ACQUISTO
-   ============================ */
 .purchase-section {
     -fx-background-color: white;
     -fx-background-radius: 10px;
@@ -241,9 +208,6 @@
     -fx-text-fill: -fx-primary;
 }
 
-/* ============================
-   SEZIONE VANTAGGI ACQUISTO
-   ============================ */
 .benefits-section {
     -fx-background-color: rgba(255, 167, 38, 0.05);
     -fx-background-radius: 10px;
@@ -260,9 +224,6 @@
     -fx-padding: 2px 0;
 }
 
-/* ============================
-   SEZIONE AVVISI
-   ============================ */
 .warning-section {
     -fx-background-color: rgba(229, 57, 53, 0.05);
     -fx-background-radius: 10px;
@@ -285,9 +246,6 @@
     -fx-padding: 2px 0;
 }
 
-/* ============================
-   BOTTONI
-   ============================ */
 .button-section {
     -fx-padding: 10px 0 0 0;
 }
@@ -341,9 +299,6 @@
     -fx-scale-y: 0.98;
 }
 
-/* ============================
-   SCROLLBAR PERSONALIZZATE
-   ============================ */
 .scroll-bar:horizontal,
 .scroll-bar:vertical {
     -fx-background-color: transparent;
@@ -380,9 +335,6 @@
     -fx-shape: "";
 }
 
-/* ============================
-   TRANSIZIONI E ANIMAZIONI
-   ============================ */
 .confirm-button, .cancel-button {
     -fx-transition: -fx-background-color 0.2s ease-out,
     -fx-scale-x 0.2s ease-out,
@@ -390,9 +342,6 @@
     -fx-effect 0.2s ease-out;
 }
 
-/* ============================
-   RESPONSIVE DESIGN
-   ============================ */
 @media (max-width: 768px) {
     .product-purchase-container {
         -fx-orientation: vertical;

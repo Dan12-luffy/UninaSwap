@@ -49,10 +49,6 @@
     -fx-background-radius: 4px;
     -fx-spacing: 10px;
 }
-
-/* ============================
-   RESPONSIVE DESIGN
-   ============================ */
 @media (max-width: 1000px) {
     .profile-container {
         -fx-padding: 10px;
@@ -88,9 +84,6 @@
     }
 }
 
-/* ============================
-   NOTIFICHE
-   ============================ */
 .notification-badge {
     -fx-background-color: -fx-danger;
     -fx-background-radius: 50%;
@@ -100,9 +93,6 @@
     -fx-font-weight: bold;
 }
 
-/* ============================
-   PLACEHOLDER PER SEZIONI VUOTE
-   ============================ */
 .empty-placeholder {
     -fx-padding: 30px;
     -fx-alignment: center;
@@ -126,9 +116,6 @@
     -fx-text-alignment: center;
 }
 
-/* ============================
-   ANIMAZIONI
-   ============================ */
 .fade-in {
     -fx-opacity: 0;
     -fx-animation: fadeInAnimation 0.3s ease-in forwards;
@@ -139,9 +126,6 @@
     to { -fx-opacity: 1; }
 }
 
-/* ============================
-   TOOLTIP PERSONALIZZATI
-   ============================ */
 .tooltip {
     -fx-background-color: -fx-neutral-dark;
     -fx-text-fill: white;
@@ -150,9 +134,6 @@
     -fx-background-radius: 4px;
 }
 
-/* ============================
-   VALUTAZIONI E RECENSIONI
-   ============================ */
 .rating-stars {
     -fx-spacing: 2px;
 }
@@ -192,9 +173,6 @@
     -fx-wrap-text: true;
 }
 
-/* ============================
-   DIALOGHI E POPUP
-   ============================ */
 .dialog-overlay {
     -fx-background-color: rgba(0, 0, 0, 0.5);
 }
@@ -221,9 +199,6 @@
     -fx-alignment: center-right;
 }
 
-/* ============================
-   PROGRESS INDICATORS
-   ============================ */
 .progress-indicator {
     -fx-progress-color: -fx-primary;
 }
@@ -238,9 +213,6 @@
     -fx-background-radius: 2px;
 }
 
-/* ============================
-   ACCORDI E BADGE SPECIALI
-   ============================ */
 .deal-status {
     -fx-padding: 3px 8px;
     -fx-background-radius: 50px;
@@ -267,10 +239,6 @@
     -fx-background-color: #E3F2FD;
     -fx-text-fill: #1976D2;
 }
-
-/* ============================
-   CRONOLOGIA E FILTRI
-   ============================ */
 .history-filter {
     -fx-padding: 10px;
     -fx-spacing: 10px;
@@ -298,9 +266,6 @@
     -fx-background-color: white;
 }
 
-/* ============================
-   PAGINAZIONE
-   ============================ */
 .pagination {
     -fx-page-information-visible: false;
 }
@@ -327,9 +292,6 @@
     -fx-text-fill: white;
 }
 
-/* ============================
-   STATISTICHE E GRAFICI
-   ============================ */
 .chart-container {
     -fx-background-color: white;
     -fx-background-radius: 4px;
@@ -359,7 +321,6 @@
     -fx-background-color: -fx-primary;
 }
 
-/* Barra di ricerca all'interno delle sezioni */
 .section-search {
     -fx-spacing: 10px;
     -fx-padding: 0 0 10px 0;
@@ -380,7 +341,6 @@
     -fx-border-color: -fx-primary;
 }
 
-/* Aggiunte per il supporto di immagini multiple */
 .item-images-container {
     -fx-spacing: 5px;
 }
@@ -403,7 +363,6 @@
     -fx-border-width: 2;
 }
 
-/* Aggiunte per il completamento dell'interfaccia */
 .settings-tabs .tab-pane {
     -fx-tab-min-height: 40px;
 }
@@ -416,9 +375,6 @@
     -fx-spacing: 15px;
 }
 
-/* ============================
-   MENU CONTESTUALI
-   ============================ */
 .context-menu {
     -fx-background-color: white;
     -fx-background-radius: 4px;
@@ -441,9 +397,6 @@
     -fx-background-color: -fx-primary-transparent;
 }
 
-/* ============================
-   MESSAGGISTICA
-   ============================ */
 .chat-bubble {
     -fx-padding: 10px 15px;
     -fx-background-radius: 15px;
@@ -468,7 +421,6 @@
     -fx-font-style: italic;
 }
 
-/* Sistema di messaggistica integrato */
 .message-composer {
     -fx-padding: 10px;
     -fx-spacing: 10px;
@@ -500,9 +452,6 @@
     -fx-background-color: -fx-primary-light;
 }
 
-/* ============================
-   OTTIMIZZAZIONI FINALI
-   ============================ */
 .scroll-container {
     -fx-background-color: transparent;
     -fx-padding: 0;
@@ -512,14 +461,12 @@
     -fx-background-color: transparent;
 }
 
-/* Miglioramenti per la visualizzazione su schermi ad alta risoluzione */
 .hires {
     -fx-font-smoothing-type: lcd;
 }
 
-/* Supporto per eventuale tema scuro */
 .dark-mode {
-    -fx-primary: #F44336;              /* Colore principale più vivace sul tema scuro */
+    -fx-primary: #F44336;
     -fx-primary-light: #FF5252;
     -fx-primary-dark: #D32F2F;
     -fx-primary-transparent: rgba(244, 67, 54, 0.15);

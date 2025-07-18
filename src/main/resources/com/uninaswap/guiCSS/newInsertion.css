@@ -1,40 +1,25 @@
-/* UninaSwap - New Insertion CSS */
-/* Basato sul design system principale di mainInterface.css */
-
-/* ============================
-   VARIABILI COLORE
-   ============================ */
 * {
-    -fx-primary: #9B2000;             /* Colore principale - bordeaux */
-    -fx-primary-light: #C62828;       /* Versione più chiara */
-    -fx-primary-dark: #6D0000;        /* Versione più scura */
-    -fx-primary-transparent: rgba(155, 32, 0, 0.1); /* Versione trasparente */
-
-    -fx-secondary: #E8E1D5;           /* Colore secondario - beige chiaro */
-    -fx-accent: #FFA726;              /* Accento - arancione */
-    -fx-neutral: #F5F5F5;             /* Neutro - quasi bianco */
-    -fx-neutral-dark: #212121;        /* Testo scuro */
-    -fx-muted: #757575;               /* Testo secondario */
-
-    -fx-success: #43A047;             /* Verde */
-    -fx-warning: #FFA000;             /* Arancione */
-    -fx-danger: #E53935;              /* Rosso */
-
+    -fx-primary: #9B2000;
+    -fx-primary-light: #C62828;
+    -fx-primary-dark: #6D0000;
+    -fx-primary-transparent: rgba(155, 32, 0, 0.1);
+    -fx-secondary: #E8E1D5;
+    -fx-accent: #FFA726;
+    -fx-neutral: #F5F5F5;
+    -fx-neutral-dark: #212121;
+    -fx-muted: #757575;
+    -fx-success: #43A047;
+    -fx-warning: #FFA000;
+    -fx-danger: #E53935;
     -fx-shadow-low: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
     -fx-shadow-medium: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
     -fx-shadow-high: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 12, 0, 0, 3);
 }
 
-/* ============================
-   CONTAINER PRINCIPALE
-   ============================ */
 .insertion-container {
     -fx-background-color: #F8F8F8;
 }
 
-/* ============================
-   HEADER E NAVIGAZIONE
-   ============================ */
 .top-banner {
     -fx-background-color: -fx-primary-dark;
     -fx-padding: 5px 15px;
@@ -69,7 +54,6 @@
     -fx-spacing: 20px;
 }
 
-/* Logo container - stesso stile di mainInterface */
 .logo-container {
     -fx-padding: 5px 20px 5px 5px;
     -fx-alignment: center-left;
@@ -131,9 +115,6 @@
     -fx-background-color: #F5F5F5;
 }
 
-/* ============================
-   BARRA DI PROGRESSO
-   ============================ */
 .progress-bar {
     -fx-background-color: white;
     -fx-border-color: #E0E0E0;
@@ -158,9 +139,6 @@
     -fx-background-color: -fx-primary-transparent;
 }
 
-/* ============================
-   AREA CONTENUTI
-   ============================ */
 .form-scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -174,9 +152,6 @@
     -fx-background-color: transparent;
 }
 
-/* ============================
-   SEZIONI FORM
-   ============================ */
 .form-section {
     -fx-background-color: white;
     -fx-background-radius: 12px;
@@ -203,9 +178,6 @@
     -fx-border-width: 0 0 1 0;
 }
 
-/* ============================
-   CAMPI FORM
-   ============================ */
 .form-grid {
     -fx-padding: 0;
 }
@@ -291,9 +263,6 @@
     -fx-background-color: white;
 }
 
-/* ============================
-   HINTS E SUGGERIMENTI
-   ============================ */
 .field-hint {
     -fx-font-size: 12px;
     -fx-text-fill: -fx-muted;
@@ -321,9 +290,6 @@
     -fx-font-weight: bold;
 }
 
-/* ============================
-   TIPS E CONSIGLI
-   ============================ */
 .tips-container {
     -fx-background-color: rgba(67, 160, 71, 0.1);
     -fx-background-radius: 8px;
@@ -345,9 +311,6 @@
     -fx-padding: 2px 0;
 }
 
-/* ============================
-   UPLOAD IMMAGINI
-   ============================ */
 .image-upload-main {
     -fx-background-color: #FAFAFA;
     -fx-background-radius: 8px;
@@ -395,9 +358,6 @@
     -fx-effect: -fx-shadow-low;
 }
 
-/* ============================
-   PULSANTI AZIONE
-   ============================ */
 .action-buttons {
     -fx-padding: 20px 0;
     -fx-background-color: white;
@@ -471,9 +431,6 @@
     -fx-effect: -fx-shadow-high;
 }
 
-/* ============================
-   FOOTER INFORMATIVO
-   ============================ */
 .footer-info {
     -fx-background-color: rgba(155, 32, 0, 0.05);
     -fx-background-radius: 12px;
@@ -491,9 +448,6 @@
     -fx-padding: 15px 0;
 }
 
-/* ============================
-   SCROLLBAR PERSONALIZZATE
-   ============================ */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -539,9 +493,6 @@
     -fx-shape: "";
 }
 
-/* ============================
-   ANIMAZIONI E TRANSIZIONI
-   ============================ */
 .form-section {
     -fx-transition: -fx-effect 0.2s ease-in-out;
 }
@@ -559,9 +510,6 @@
     -fx-transition: -fx-background-color 0.2s ease-in-out, -fx-effect 0.2s ease-in-out;
 }
 
-/* ============================
-   RESPONSIVE DESIGN
-   ============================ */
 @media (max-width: 800px) {
     .main-header {
         -fx-padding: 10px;

@@ -1,4 +1,3 @@
-/* Placeholder quando non ci sono articoli */
 .no-items-placeholder {
     -fx-padding: 40px;
     -fx-alignment: CENTER;
@@ -14,39 +13,29 @@
 .placeholder-subtext {
     -fx-font-size: 14px;
     -fx-text-fill: #BDBDBD;
-}/* UninaSwap CSS ottimizzato con dimensioni ridotte */
+}
 
-/* Variabili di colore */
 * {
-    -fx-primary: #9B2000;             /* Colore principale - bordeaux */
-    -fx-primary-light: #C62828;       /* Versione più chiara */
-    -fx-primary-dark: #6D0000;        /* Versione più scura */
-    -fx-primary-transparent: rgba(155, 32, 0, 0.1); /* Versione trasparente */
-
-    -fx-secondary: #E8E1D5;           /* Colore secondario - beige chiaro */
-    -fx-accent: #FFA726;              /* Accento - arancione */
-    -fx-neutral: #F5F5F5;             /* Neutro - quasi bianco */
-    -fx-neutral-dark: #212121;        /* Testo scuro */
-    -fx-muted: #757575;               /* Testo secondario */
-
-    -fx-success: #43A047;             /* Verde */
-    -fx-warning: #FFA000;             /* Arancione */
-    -fx-danger: #E53935;              /* Rosso */
-
+    -fx-primary: #9B2000;
+    -fx-primary-light: #C62828;
+    -fx-primary-dark: #6D0000;
+    -fx-primary-transparent: rgba(155, 32, 0, 0.1);
+    -fx-secondary: #E8E1D5;
+    -fx-accent: #FFA726;
+    -fx-neutral: #F5F5F5;
+    -fx-neutral-dark: #212121;
+    -fx-muted: #757575;
+    -fx-success: #43A047;
+    -fx-warning: #FFA000;
+    -fx-danger: #E53935;
     -fx-shadow-low: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
     -fx-shadow-medium: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
 }
 
-/* ============================
-   CONTAINER PRINCIPALE
-   ============================ */
 .main-container {
     -fx-background-color: #F8F8F8;
 }
 
-/* ============================
-   HEADER E NAVIGAZIONE
-   ============================ */
 .top-banner {
     -fx-background-color: -fx-primary-dark;
     -fx-padding: 5px;
@@ -171,9 +160,6 @@
     -fx-font-weight: bold;
 }
 
-/* ============================
-   PANNELLO FILTRI
-   ============================ */
 .filters-panel {
     -fx-background-color: white;
     -fx-padding: 15px;
@@ -299,9 +285,6 @@
     -fx-background-color: -fx-primary-light;
 }
 
-/* ============================
-   SEZIONE UTENTE
-   ============================ */
 .user-section {
     -fx-padding: 8px 0 0 0;
     -fx-spacing: 8px;
@@ -346,7 +329,6 @@
     -fx-background-color: rgba(229, 57, 53, 0.1);
 }
 
-/* Scroll pane per i filtri */
 .filters-scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -357,9 +339,6 @@
     -fx-background-color: white;
 }
 
-/* ============================
-   AREA CONTENUTI
-   ============================ */
 .content-area {
     -fx-background-color: #F8F8F8;
     -fx-padding: 15px;
@@ -410,9 +389,6 @@
     -fx-padding: 5px;
 }
 
-/* ============================
-   VISUALIZZAZIONE LISTA ARTICOLI
-   ============================ */
 .items-grid {
     -fx-padding: 0;
 }
@@ -472,17 +448,14 @@
     -fx-text-fill: -fx-danger;
 }
 
-/* Stile per le righe alternate */
 .row-alternate {
     -fx-background-color: rgba(0, 0, 0, 0.02);
 }
 
-/* Stile per le righe quando passate sopra con il mouse */
 .item-row:hover {
     -fx-background-color: rgba(155, 32, 0, 0.05);
 }
 
-/* Pulsante per caricare più risultati */
 .load-more-button {
     -fx-background-color: transparent;
     -fx-border-color: -fx-primary;
@@ -500,9 +473,6 @@
     -fx-background-color: -fx-primary-transparent;
 }
 
-/* ============================
-   COMPONENTI GENERALI
-   ============================ */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -537,7 +507,6 @@
     -fx-background-color: #B0B0B0;
 }
 
-/* Rimuove i bottoni dalle scrollbar */
 .scroll-bar .increment-button,
 .scroll-bar .decrement-button {
     -fx-padding: 0 0 0 0;
@@ -550,20 +519,15 @@
     -fx-shape: "";
 }
 
-/* ============================
-   STATO HOVER
-   ============================ */
 .button:hover {
     -fx-cursor: hand;
 }
+
 .notification-badge-text {
     -fx-font-size: 10px;
     -fx-font-weight: bold;
 }
 
-/* ============================
-   RESPONSIVE
-   ============================ */
 @media (max-width: 800px) {
     .main-header {
         -fx-padding: 8px;
@@ -577,6 +541,7 @@
     .filters-panel {
         -fx-padding: 10px;
     }
+
     .logo-container {
         -fx-padding: 5px 20px 5px 5px;
         -fx-alignment: center-left;

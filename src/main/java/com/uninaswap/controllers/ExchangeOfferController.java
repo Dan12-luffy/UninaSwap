@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -20,7 +19,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
-public class ExchangeController{
+public class ExchangeOfferController {
 
     @FXML private VBox yourProductsContainer;
     @FXML private Label selectedCountLabel;

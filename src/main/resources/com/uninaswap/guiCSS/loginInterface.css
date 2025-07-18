@@ -1,45 +1,27 @@
-/* Stili CSS per la schermata di login UninaSwap (sfondo bianco) */
-
-/* ============================
-   VARIABILI PRINCIPALI
-   ============================ */
 * {
-    /* Colori principali */
-    -fx-primary: #9B2000;            /* Bordeaux - colore primario */
-    -fx-primary-dark: #771800;       /* Versione più scura del primario */
-    -fx-primary-light: #CB3522;      /* Versione più chiara del primario */
-    -fx-accent: #FE8A00;             /* Colore accent (arancione) */
-
-    /* Colori neutrali */
-    -fx-background-light: #F8F8F8;   /* Sfondo chiaro */
-    -fx-text-dark: #333333;          /* Testo principale */
-    -fx-text-medium: #666666;        /* Testo secondario */
-    -fx-text-light: #999999;         /* Testo terziario */
-    -fx-divider: #E1E1E1;            /* Linee divisorie */
+    -fx-primary: #9B2000;
+    -fx-primary-dark: #771800;
+    -fx-primary-light: #CB3522;
+    -fx-accent: #FE8A00;
+    -fx-background-light: #F8F8F8;
+    -fx-text-dark: #333333;
+    -fx-text-medium: #666666;
+    -fx-text-light: #999999;
+    -fx-divider: #E1E1E1;
 }
 
-/* ============================
-   CONTAINER PRINCIPALE
-   ============================ */
 .login-container {
     -fx-background-color: white;
 }
 
-/* ============================
-   HEADER E LOGO
-   ============================ */
 .logo-header {
     -fx-background-color: white;
     -fx-padding: 20px 0px 10px 0px;
 }
 
 .logo-image {
-    /* Nessuna proprietà speciale richiesta, usa le dimensioni naturali */
 }
 
-/* ============================
-   FORM LOGIN
-   ============================ */
 .form-container {
     -fx-background-color: white;
     -fx-padding: 20px 10px;
@@ -103,9 +85,6 @@
     -fx-background-color: -fx-primary-dark;
 }
 
-/* ============================
-   FOOTER
-   ============================ */
 .footer-container {
     -fx-background-color: white;
     -fx-padding: 15px 0px;

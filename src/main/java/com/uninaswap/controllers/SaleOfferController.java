@@ -14,7 +14,7 @@ import javafx.scene.image.Image;
 import java.io.File;
 import java.time.LocalDate;
 
-public class SaleController {
+public class SaleOfferController {
     private Insertion insertion;
 
     @FXML private Label productTitleLabel;

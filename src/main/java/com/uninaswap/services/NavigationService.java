@@ -123,10 +123,10 @@ public class NavigationService {
 
     public void navigateToExchangeView(ActionEvent event, Insertion insertion) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/exchangeInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/exchangeOfferInterface.fxml"));
             Parent root = loader.load();
             // Assuming you have a controller for the exchange view
-            ExchangeController controller = loader.getController();
+            ExchangeOfferController controller = loader.getController();
             controller.loadDesiredProduct(insertion);
             setScene(event, root);
         } catch (IOException e) {
@@ -144,10 +144,10 @@ public class NavigationService {
     }
     public void navigateToMakeOfferView(ActionEvent event, Insertion insertion) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/makeOfferInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/saleOfferInterface.fxml"));
             Parent root = loader.load();
 
-            SaleController controller = loader.getController();
+            SaleOfferController controller = loader.getController();
             controller.setInsertion(insertion);
             setScene(event, root);
         } catch (IOException e) {
@@ -157,9 +157,9 @@ public class NavigationService {
 
     public void navigateToGiftView(ActionEvent event, Insertion insertion) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/giftInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/uninaswap/gui/giftOfferInterface.fxml"));
             Parent root = loader.load();
-            GiftController controller = loader.getController();
+            GiftOfferController controller = loader.getController();
             controller.setInsertion(insertion);
             setScene(event, root);
         } catch (IOException e) {
