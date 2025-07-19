@@ -20,8 +20,7 @@ public abstract class Insertion {
 
     // Costruttore completo
     protected Insertion(Integer insertionID, String title, String imageUrl, String description,
-                        typeInsertion type, InsertionStatus status,
-                        LocalDate publishDate, Integer userId, String category) {
+                        typeInsertion type, InsertionStatus status, LocalDate publishDate, Integer userId, String category) {
         this.insertionID = insertionID;
         this.title = title;
         this.imageUrl = imageUrl;
@@ -34,8 +33,7 @@ public abstract class Insertion {
     }
     //Costruttore senza id
     protected Insertion(String title, String imageUrl, String description,
-                        typeInsertion type, InsertionStatus status,
-                        LocalDate publishDate, Integer userId, String category) {
+                        typeInsertion type, InsertionStatus status, LocalDate publishDate, Integer userId, String category, String deliveryMethod) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -44,6 +42,7 @@ public abstract class Insertion {
         this.publishDate = publishDate;
         this.userId = userId;
         this.category = category;
+        this.deliveryMethod = deliveryMethod;
     }
 
     // Getter e Setter

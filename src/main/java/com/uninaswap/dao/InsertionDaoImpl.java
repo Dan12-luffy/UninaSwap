@@ -1,6 +1,7 @@
 package com.uninaswap.dao;
 
 import com.uninaswap.databaseUtils.FilterCriteria;
+import com.uninaswap.exceptions.DatabaseOperationException;
 import com.uninaswap.model.*;
 import com.uninaswap.services.UserSession;
 import com.uninaswap.utility.DatabaseUtil;
@@ -13,15 +14,14 @@ import java.util.List;
 public class InsertionDaoImpl implements InsertionDao {
 
     @Override
-    public void insert(Insertion insertion) throws SQLException {
+    public void insert(Insertion insertion){
         String sql = "INSERT INTO insertion (title, imageUrl, description, delivery_method, type, price, status, publishDate, userId, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             populateInsertionStatement(stmt, insertion);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            logDatabaseError("Insert", e);
-            throw e;
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
 
@@ -33,7 +33,7 @@ public class InsertionDaoImpl implements InsertionDao {
             stmt.setInt(1, insertionID);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            logDatabaseError("Delete", e);
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
 
@@ -46,7 +46,7 @@ public class InsertionDaoImpl implements InsertionDao {
             stmt.setInt(11, insertion.getInsertionID());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            logDatabaseError("Update", e);
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
 
@@ -65,9 +65,8 @@ public class InsertionDaoImpl implements InsertionDao {
                 try {
                     Insertion insertion = createInsertionFromResultSet(rs);
                     insertions.add(insertion);
-                } catch (SQLException e) {
-                    logDatabaseError("FindAll", e);
-                    System.err.println("Errore nel processare la lista " + e.getMessage());
+                } catch (Exception e) {
+                    throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
                 }
             }
         }
@@ -75,93 +74,98 @@ public class InsertionDaoImpl implements InsertionDao {
     }
 
     @Override
-    public List<Insertion> findByFilters(FilterCriteria criteria) throws SQLException {
-        StringBuilder sql = new StringBuilder();
-        sql.append("SELECT i.*, c.name as category_name FROM insertion i ");
-        sql.append("LEFT JOIN category c ON i.category_id = c.category_id ");
-        sql.append("LEFT JOIN users u ON i.userId = u.userId ");
-        sql.append("WHERE 1=1 ");
+    public List<Insertion> findByFilters(FilterCriteria criteria){
+        try {
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT i.*, c.name as category_name FROM insertion i ");
+            sql.append("LEFT JOIN category c ON i.category_id = c.category_id ");
+            sql.append("LEFT JOIN users u ON i.userId = u.userId ");
+            sql.append("WHERE 1=1 ");
 
-        List<Object> parameters = new ArrayList<>();
+            List<Object> parameters = new ArrayList<>();
 
-        if (criteria.getStatus() != null) {
-            sql.append("AND i.status = ? ");
-            parameters.add(criteria.getStatus());
-        } else {
-            sql.append("AND i.status = 'AVAILABLE' ");
-        }
+            if (criteria.getStatus() != null) {
+                sql.append("AND i.status = ? ");
+                parameters.add(criteria.getStatus());
+            } else {
+                sql.append("AND i.status = 'AVAILABLE' ");
+            }
 
-        if (criteria.getExcludeUserId() != null) {
-            sql.append("AND i.userid != ? ");
-            parameters.add(criteria.getExcludeUserId());
-        }
+            if (criteria.getExcludeUserId() != null) {
+                sql.append("AND i.userid != ? ");
+                parameters.add(criteria.getExcludeUserId());
+            }
 
-        if (criteria.hasTextSearch()) {
-            sql.append("AND (LOWER(i.title) LIKE LOWER(?) OR LOWER(i.description) LIKE LOWER(?)) ");
-            String searchPattern = "%" + criteria.getSearchText() + "%";
-            parameters.add(searchPattern);
-            parameters.add(searchPattern);
-        }
+            if (criteria.hasTextSearch()) {
+                sql.append("AND (LOWER(i.title) LIKE LOWER(?) OR LOWER(i.description) LIKE LOWER(?)) ");
+                String searchPattern = "%" + criteria.getSearchText() + "%";
+                parameters.add(searchPattern);
+                parameters.add(searchPattern);
+            }
 
-        if (criteria.hasCategoryFilter() && !criteria.getCategoryIds().contains(-1)) {
-            sql.append("AND i.category_id IN (");
-            for (int i = 0; i < criteria.getCategoryIds().size(); ++i) {
-                sql.append("?");
-                if (i < criteria.getCategoryIds().size() - 1) {
-                    sql.append(",");
+            if (criteria.hasCategoryFilter() && !criteria.getCategoryIds().contains(-1)) {
+                sql.append("AND i.category_id IN (");
+                for (int i = 0; i < criteria.getCategoryIds().size(); ++i) {
+                    sql.append("?");
+                    if (i < criteria.getCategoryIds().size() - 1) {
+                        sql.append(",");
+                    }
+                }
+                sql.append(") ");
+                parameters.addAll(criteria.getCategoryIds());
+            }
+
+            if (criteria.hasPriceFilter()) {
+                if (criteria.getMinPrice() != null) {
+                    sql.append("AND i.price >= ? ");
+                    parameters.add(criteria.getMinPrice());
+                }
+                if (criteria.getMaxPrice() != null) {
+                    sql.append("AND i.price <= ? ");
+                    parameters.add(criteria.getMaxPrice());
                 }
             }
-            sql.append(") ");
-            parameters.addAll(criteria.getCategoryIds());
-        }
 
-        if (criteria.hasPriceFilter()) {
-            if (criteria.getMinPrice() != null) {
-                sql.append("AND i.price >= ? ");
-                parameters.add(criteria.getMinPrice());
+            if (criteria.hasFacultyFilter()) {
+                sql.append("AND u.faculty IN (");
+                for (int i = 0; i < criteria.getFacultyNames().size(); i++) {
+                    sql.append("?");
+                    if (i < criteria.getFacultyNames().size() - 1) {
+                        sql.append(",");
+                    }
+                }
+                sql.append(") ");
+                parameters.addAll(criteria.getFacultyNames());
             }
-            if (criteria.getMaxPrice() != null) {
-                sql.append("AND i.price <= ? ");
-                parameters.add(criteria.getMaxPrice());
-            }
-        }
 
-        if (criteria.hasFacultyFilter()) {
-            sql.append("AND u.faculty IN (");
-            for (int i = 0; i < criteria.getFacultyNames().size(); i++) {
-                sql.append("?");
-                if (i < criteria.getFacultyNames().size() - 1) {
-                    sql.append(",");
+            if (criteria.hasTypeInsertionFilter()) {
+                sql.append("AND i.type IN (");
+                for (int i = 0; i < criteria.getTypes().size(); ++i) {
+                    sql.append("?");
+                    if (i < criteria.getTypes().size() - 1) {
+                        sql.append(",");
+                    }
+                }
+                sql.append(") ");
+                for (typeInsertion type : criteria.getTypes()) {
+                    parameters.add(type.name());
                 }
             }
-            sql.append(") ");
-            parameters.addAll(criteria.getFacultyNames());
-        }
 
-        if(criteria.hasTypeInsertionFilter()) {
-            sql.append("AND i.type IN (");
-            for (int i = 0; i < criteria.getTypes().size(); ++i) {
-                sql.append("?");
-                if (i < criteria.getTypes().size() - 1) {
-                    sql.append(",");
-                }
+            sql.append("ORDER BY ");
+            if ("price_asc".equals(criteria.getSortBy())) {
+                sql.append("i.price ASC ");
+            } else if ("price_desc".equals(criteria.getSortBy())) {
+                sql.append("i.price DESC ");
+            } else {
+                sql.append("i.publishDate DESC ");
             }
-            sql.append(") ");
-            for (typeInsertion type : criteria.getTypes()) {
-                parameters.add(type.name());
-            }
-        }
 
-        sql.append("ORDER BY ");
-        if ("price_asc".equals(criteria.getSortBy())) {
-            sql.append("i.price ASC ");
-        } else if ("price_desc".equals(criteria.getSortBy())) {
-            sql.append("i.price DESC ");
-        } else {
-            sql.append("i.publishDate DESC ");
+            return executeFilterQuery(sql.toString(), parameters);
         }
-
-        return executeFilterQuery(sql.toString(), parameters);
+        catch (Exception e) {
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
+        }
     }
 
     @Override
@@ -180,6 +184,8 @@ public class InsertionDaoImpl implements InsertionDao {
                     Insertion insertion = createInsertionFromResultSet(resultSet);
                     insertions.add(insertion);
                 }
+            } catch (Exception e) {
+                throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
             }
         }
         return insertions;
@@ -222,19 +228,14 @@ public class InsertionDaoImpl implements InsertionDao {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, status.name());
             stmt.setInt(2, insertionID);
-            int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Stato dell'inserzione aggiornato con successo.");
-            } else {
-                System.out.println("Nessuna riga aggiornata. Controlla l'ID dell'inserzione.");
-            }
-        } catch (SQLException e) {
-            logDatabaseError("Update Status", e);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
 
     @Override
-    public List<Insertion> findInsertionsExcludingCurrentUser() throws SQLException {
+    public List<Insertion> findInsertionsExcludingCurrentUser(){
         List<Insertion> insertions = new ArrayList<>();
         String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
                 "LEFT JOIN category c ON i.category_id = c.category_id " +
@@ -245,6 +246,9 @@ public class InsertionDaoImpl implements InsertionDao {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, UserSession.getInstance().getCurrentUser().getId());
             executeQueryAndCreateTheList(insertions, stmt);
+        }
+        catch (Exception e){
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
         return insertions;
     }
@@ -347,7 +351,7 @@ public class InsertionDaoImpl implements InsertionDao {
     }
 
     @Override
-    public List<Insertion> findByPriceRange(double minPrice, double maxPrice) throws SQLException {
+    public List<Insertion> findByPriceRange(double minPrice, double maxPrice){
         List<Insertion> insertions = new ArrayList<>();
         String sql = "SELECT i.*, c.name as category_name FROM insertion i " +
                 "LEFT JOIN category c ON i.category_id = c.category_id " +
@@ -358,6 +362,9 @@ public class InsertionDaoImpl implements InsertionDao {
             stmt.setDouble(2, maxPrice);
             stmt.setInt(3, UserSession.getInstance().getCurrentUser().getId());
             executeQueryAndCreateTheList(insertions, stmt);
+        }
+        catch (Exception e){
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
         return insertions;
     }
@@ -376,56 +383,67 @@ public class InsertionDaoImpl implements InsertionDao {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Errore durante il recupero dell'annuncio con ID " + insertionID + ": " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
         return null;
     }
 
-    private void populateInsertionStatement(PreparedStatement stmt, Insertion insertion) throws SQLException {
-        stmt.setString(1, insertion.getTitle());
-        stmt.setString(2, insertion.getImageUrl());
-        stmt.setString(3, insertion.getDescription());
-        stmt.setString(4, insertion.getDeliveryMethod());
-        stmt.setString(5, insertion.getType().name());
+    private void populateInsertionStatement(PreparedStatement stmt, Insertion insertion){
+        try {
+            stmt.setString(1, insertion.getTitle());
+            stmt.setString(2, insertion.getImageUrl());
+            stmt.setString(3, insertion.getDescription());
+            stmt.setString(4, insertion.getDeliveryMethod());
+            stmt.setString(5, insertion.getType().name());
 
-        switch (insertion) {
-            case SaleInsertion saleInsertion -> stmt.setBigDecimal(6, saleInsertion.getPrice());
-            case ExchangeInsertion exchangeInsertion -> stmt.setBigDecimal(6, exchangeInsertion.getPrice());
-            case GiftInsertion giftInsertion -> stmt.setBigDecimal(6, BigDecimal.ZERO);
-            default -> {
-                stmt.setBigDecimal(6, BigDecimal.ZERO);
-                throw new SQLException("Tipo di inserzione sconosciuto");
+            switch (insertion) {
+                case SaleInsertion saleInsertion -> stmt.setBigDecimal(6, saleInsertion.getPrice());
+                case ExchangeInsertion exchangeInsertion -> stmt.setBigDecimal(6, exchangeInsertion.getPrice());
+                case GiftInsertion giftInsertion -> stmt.setBigDecimal(6, BigDecimal.ZERO);
+                default -> {
+                    stmt.setBigDecimal(6, BigDecimal.ZERO);
+                    throw new SQLException("Tipo di inserzione sconosciuto");
+                }
             }
+
+            stmt.setString(7, insertion.getStatus().name());
+            stmt.setDate(8, new java.sql.Date(insertion.getPublishDate().toEpochDay() * 24 * 60 * 60 * 1000));
+            stmt.setInt(9, insertion.getUserId());
+
+            CategoryDaoImpl category = new CategoryDaoImpl();
+            int categoryId = category.getCategoryIdByName(insertion.getCategory());
+            stmt.setInt(10, categoryId);
         }
-
-        stmt.setString(7, insertion.getStatus().name());
-        stmt.setDate(8, new java.sql.Date(insertion.getPublishDate().toEpochDay() * 24 * 60 * 60 * 1000));
-        stmt.setInt(9, insertion.getUserId());
-
-        CategoryDaoImpl category = new CategoryDaoImpl();
-        int categoryId = category.getCategoryIdByName(insertion.getCategory());
-        stmt.setInt(10, categoryId);
+        catch (Exception e){
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
+        }
     }
 
-    public Insertion createInsertionFromResultSet(ResultSet rs) throws SQLException {
-        int insertionID = rs.getInt("insertionid");
-        String title = rs.getString("title");
-        String imageUrl = rs.getString("imageUrl");
-        String description = rs.getString("description");
-        typeInsertion type = parseType(rs.getString("type"));
-        InsertionStatus status = parseStatus(rs.getString("status"));
-        java.time.LocalDate publishDate = rs.getDate("publishDate").toLocalDate();
-        int userId = rs.getInt("userId");
-        String category = rs.getString("category_name");
-        BigDecimal price = rs.getBigDecimal("price");
-        String deliveryMethod = rs.getString("delivery_method");
+    public Insertion createInsertionFromResultSet(ResultSet rs){
+        try {
 
-        Insertion insertion = InsertionFactory.createInsertion(title, imageUrl, description, type, price, status, publishDate, userId, category, deliveryMethod);
-        insertion.setInsertionID(insertionID);
-        return insertion;
+            int insertionID = rs.getInt("insertionid");
+            String title = rs.getString("title");
+            String imageUrl = rs.getString("imageUrl");
+            String description = rs.getString("description");
+            typeInsertion type = parseType(rs.getString("type"));
+            InsertionStatus status = parseStatus(rs.getString("status"));
+            java.time.LocalDate publishDate = rs.getDate("publishDate").toLocalDate();
+            int userId = rs.getInt("userId");
+            String category = rs.getString("category_name");
+            BigDecimal price = rs.getBigDecimal("price");
+            String deliveryMethod = rs.getString("delivery_method");
+
+            Insertion insertion = InsertionFactory.createInsertion(title, imageUrl, description, type, price, status, publishDate, userId, category, deliveryMethod);
+            insertion.setInsertionID(insertionID);
+            return insertion;
+        }
+        catch (Exception e){
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
+        }
     }
 
-    private void executeQueryAndCreateTheList(List<Insertion> insertions, PreparedStatement stmt) throws SQLException {
+    private void executeQueryAndCreateTheList(List<Insertion> insertions, PreparedStatement stmt){
         try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 try {
@@ -436,13 +454,15 @@ public class InsertionDaoImpl implements InsertionDao {
                 }
             }
         }
+        catch (Exception e){
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
+        }
     }
 
     private typeInsertion parseType(String typeStr) {
         try {
             return typeInsertion.valueOf(typeStr);
         } catch (IllegalArgumentException e) {
-            System.err.println("Tipo sconosciuto " + typeStr + " - default a SALE");
             return typeInsertion.SALE;
         }
     }
@@ -451,7 +471,6 @@ public class InsertionDaoImpl implements InsertionDao {
         try {
             return InsertionStatus.valueOf(statusStr);
         } catch (IllegalArgumentException e) {
-            System.err.println("Stato sconosciuto " + statusStr + " - default a AVAILABLE");
             return InsertionStatus.AVAILABLE;
         }
     }
@@ -474,9 +493,5 @@ public class InsertionDaoImpl implements InsertionDao {
             }
         }
         return insertions;
-    }
-
-    private void logDatabaseError(String operation, Exception e){
-        System.err.println("Errore durante l'operazione '" + operation + "': " + e.getMessage());
     }
 }

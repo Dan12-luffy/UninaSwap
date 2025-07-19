@@ -4,7 +4,6 @@ import com.uninaswap.model.*;
 import com.uninaswap.services.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -21,7 +20,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class NotificationsController implements Initializable {
+public class NotificationsController {
 
     @FXML private Label notificationsCountLabel;
     @FXML private VBox notificationsContainer;
@@ -31,8 +30,8 @@ public class NotificationsController implements Initializable {
     private final UserService userService = UserService.getInstance();
     private final TransactionService transactionService = TransactionService.getInstance();
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    @FXML
+    private void initialize() {
         try {
             loadUserOffers();
         } catch (Exception e) {

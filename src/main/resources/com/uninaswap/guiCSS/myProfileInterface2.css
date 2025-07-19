@@ -1,40 +1,25 @@
-/* UninaSwap - My Profile CSS */
-/* Basato sul design system principale di mainInterface.css */
-
-/* ============================
-   VARIABILI COLORE
-   ============================ */
 * {
-    -fx-primary: #9B2000;             /* Colore principale - bordeaux */
-    -fx-primary-light: #C62828;       /* Versione più chiara */
-    -fx-primary-dark: #6D0000;        /* Versione più scura */
-    -fx-primary-transparent: rgba(155, 32, 0, 0.1); /* Versione trasparente */
-
-    -fx-secondary: #E8E1D5;           /* Colore secondario - beige chiaro */
-    -fx-accent: #FFA726;              /* Accento - arancione */
-    -fx-neutral: #F5F5F5;             /* Neutro - quasi bianco */
-    -fx-neutral-dark: #212121;        /* Testo scuro */
-    -fx-muted: #757575;               /* Testo secondario */
-
-    -fx-success: #43A047;             /* Verde */
-    -fx-warning: #FFA000;             /* Arancione */
-    -fx-danger: #E53935;              /* Rosso */
-
+    -fx-primary: #9B2000;
+    -fx-primary-light: #C62828;
+    -fx-primary-dark: #6D0000;
+    -fx-primary-transparent: rgba(155, 32, 0, 0.1);
+    -fx-secondary: #E8E1D5;
+    -fx-accent: #FFA726;
+    -fx-neutral: #F5F5F5;
+    -fx-neutral-dark: #212121;
+    -fx-muted: #757575;
+    -fx-success: #43A047;
+    -fx-warning: #FFA000;
+    -fx-danger: #E53935;
     -fx-shadow-low: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
     -fx-shadow-medium: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
     -fx-shadow-high: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 12, 0, 0, 4);
 }
 
-/* ============================
-   CONTAINER PRINCIPALE
-   ============================ */
 .profile-container {
     -fx-background-color: #F8F8F8;
 }
 
-/* ============================
-   HEADER E NAVIGAZIONE
-   ============================ */
 .top-banner {
     -fx-background-color: -fx-primary-dark;
     -fx-padding: 5px 15px;
@@ -69,7 +54,6 @@
     -fx-spacing: 20px;
 }
 
-/* Logo container - stesso stile delle altre interfacce */
 .logo-container {
     -fx-padding: 5px 20px 5px 5px;
     -fx-alignment: center-left;
@@ -131,9 +115,6 @@
     -fx-background-color: #F5F5F5;
 }
 
-/* ============================
-   AREA CONTENUTI
-   ============================ */
 .content-scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -147,9 +128,6 @@
     -fx-background-color: transparent;
 }
 
-/* ============================
-   CONTAINER PROFILO PRINCIPALE
-   ============================ */
 .main-profile-container {
     -fx-background-color: white;
     -fx-background-radius: 12px;
@@ -157,9 +135,6 @@
     -fx-effect: -fx-shadow-medium;
 }
 
-/* ============================
-   SIDEBAR PROFILO
-   ============================ */
 .profile-sidebar {
     -fx-max-width: 280px;
     -fx-min-width: 280px;
@@ -224,9 +199,6 @@
     -fx-text-fill: -fx-muted;
 }
 
-/* ============================
-   SEZIONE RATING
-   ============================ */
 .rating-section {
     -fx-background-color: rgba(255, 167, 38, 0.1);
     -fx-background-radius: 10px;
@@ -260,9 +232,6 @@
     -fx-font-size: 24px;
 }
 
-/* ============================
-   STATISTICHE
-   ============================ */
 .stats-section {
     -fx-background-color: white;
     -fx-background-radius: 10px;
@@ -304,9 +273,6 @@
     -fx-font-weight: bold;
 }
 
-/* ============================
-   TABS PROFILO
-   ============================ */
 .profile-main-content {
     -fx-background-color: white;
     -fx-background-radius: 12px;
@@ -346,9 +312,6 @@
     -fx-text-fill: inherit;
 }
 
-/* ============================
-   SEZIONI INFO
-   ============================ */
 .info-section {
     -fx-background-color: white;
     -fx-background-radius: 10px;
@@ -384,9 +347,6 @@
     -fx-text-fill: -fx-neutral-dark;
 }
 
-/* ============================
-   CAMPI FORM
-   ============================ */
 .field-label {
     -fx-font-size: 13px;
     -fx-font-weight: bold;
@@ -459,9 +419,6 @@
     -fx-font-style: italic;
 }
 
-/* ============================
-   PULSANTI
-   ============================ */
 .action-buttons {
     -fx-padding: 15px 0 0 0;
 }
@@ -499,9 +456,6 @@
     -fx-text-fill: -fx-neutral-dark;
 }
 
-/* ============================
-   SEZIONE ANNUNCI
-   ============================ */
 .ads-header {
     -fx-background-color: #FAFAFA;
     -fx-background-radius: 8px;
@@ -551,9 +505,6 @@
     -fx-padding: 40px;
 }
 
-/* ============================
-   SEZIONE STATISTICHE PROFILO
-   ============================ */
 .profile-stats-box {
     -fx-background-color: #FAFAFA;
     -fx-background-radius: 8px;
@@ -601,9 +552,6 @@
     -fx-padding: 8px 0;
 }
 
-/* ============================
-   GRAFICI STATISTICHE
-   ============================ */
 .chart-section-title {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -656,9 +604,6 @@
     -fx-font-weight: bold;
 }
 
-/* ============================
-   STATISTICHE PREZZI
-   ============================ */
 .profile-price-stats {
     -fx-background-color: rgba(255, 167, 38, 0.05);
     -fx-background-radius: 8px;
@@ -701,9 +646,6 @@
     -fx-text-alignment: CENTER;
 }
 
-/* ============================
-   PULSANTI STATISTICHE
-   ============================ */
 .stats-action-button {
     -fx-background-color: white;
     -fx-text-fill: -fx-primary;
@@ -723,9 +665,6 @@
     -fx-effect: -fx-shadow-medium;
 }
 
-/* ============================
-   SEZIONE SICUREZZA
-   ============================ */
 .security-section {
     -fx-background-color: rgba(229, 57, 53, 0.05);
     -fx-background-radius: 10px;
@@ -799,9 +738,6 @@
     -fx-background-color: derive(-fx-warning, 10%);
 }
 
-/* ============================
-   FOOTER PROFILO
-   ============================ */
 .profile-footer {
     -fx-background-color: white;
     -fx-background-radius: 12px;
@@ -866,9 +802,6 @@
     -fx-padding: 10px 0;
 }
 
-/* ============================
-   SCROLLBAR PERSONALIZZATE
-   ============================ */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -914,9 +847,6 @@
     -fx-shape: "";
 }
 
-/* ============================
-   ANIMAZIONI E TRANSIZIONI
-   ============================ */
 .save-button,
 .cancel-button,
 .security-button,
@@ -940,9 +870,6 @@
     -fx-transition: -fx-background-color 0.2s ease-in-out, -fx-border-color 0.2s ease-in-out;
 }
 
-/* ============================
-   RESPONSIVE DESIGN
-   ============================ */
 @media (max-width: 800px) {
     .main-profile-container {
         -fx-orientation: vertical;

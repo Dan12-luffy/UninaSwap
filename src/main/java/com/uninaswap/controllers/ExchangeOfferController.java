@@ -1,6 +1,6 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.Exception.ExchangeException;
+import com.uninaswap.exceptions.ExchangeException;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.*;
@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -20,7 +19,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
-public class ExchangeController{
+public class ExchangeOfferController {
 
     @FXML private VBox yourProductsContainer;
     @FXML private Label selectedCountLabel;
@@ -43,7 +42,6 @@ public class ExchangeController{
 
    @FXML
     public void initialize() {
-
        loadUserInsertions();
     }
 
@@ -70,9 +68,9 @@ public class ExchangeController{
                     if (offerId > 0) {
                         for (Insertion insertion : selectedInsertions) {
                             OfferedItem offeredItem = new OfferedItem(offerId, insertion.getInsertionID());
+                            insertionService.updateInsertionStatus(insertion.getInsertionID(), InsertionStatus.PENDING);
                             offeredItemsService.createOfferedItem(offeredItem);
                         }
-                        NavigationService.getInstance().navigateToMainView(event);
                         ValidationService.getInstance().showOfferProposalSuccess();
                     }
                 } catch (ExchangeException e) {
@@ -83,10 +81,10 @@ public class ExchangeController{
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+                NavigationService.getInstance().navigateToMainView(event);
             }
         });
     }
-
 
     private String getConfirmMessage() {
         double differenceValue = Double.parseDouble(this.differenceLabel.getText().replace("Differenza: €", ""));

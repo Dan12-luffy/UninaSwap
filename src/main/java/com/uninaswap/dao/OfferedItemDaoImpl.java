@@ -1,5 +1,6 @@
 package com.uninaswap.dao;
 
+import com.uninaswap.exceptions.DatabaseOperationException;
 import com.uninaswap.model.OfferedItem;
 import com.uninaswap.services.ValidationService;
 import com.uninaswap.utility.DatabaseUtil;
@@ -23,7 +24,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
             stmt.setInt(2, offeredItem.getInsertionId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile inserire l'oggetto offerto: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
 
@@ -35,7 +36,7 @@ public class OfferedItemDaoImpl implements OfferedItemDao {
             stmt.setInt(1, offerItemId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile eliminare l'oggetto offerto: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
 

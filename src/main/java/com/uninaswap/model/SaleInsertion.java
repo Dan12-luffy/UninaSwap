@@ -18,8 +18,8 @@ public class SaleInsertion extends Insertion {
     // Costruttore senza id
     public SaleInsertion(String title, String imageUrl, String description,
                          typeInsertion type, BigDecimal price, InsertionStatus status,
-                         LocalDate publishDate, Integer userId, String category) {
-        super(title, imageUrl, description, type, status, publishDate, userId, category);
+                         LocalDate publishDate, Integer userId, String category, String deliveryMethod) {
+        super(title, imageUrl, description, type, status, publishDate, userId, category, deliveryMethod);
         this.insertionPrice = price;
     }
 

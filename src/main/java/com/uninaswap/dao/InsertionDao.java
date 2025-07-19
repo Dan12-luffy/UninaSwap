@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface InsertionDao {
-    // CRUD operations
 
     void insert(Insertion insertion) throws SQLException;
     void delete(int insertionID) throws SQLException;

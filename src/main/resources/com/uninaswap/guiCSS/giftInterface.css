@@ -1,9 +1,4 @@
-/* UninaSwap - Gift Interface CSS */
-/* Design system coerente con exchangeInterface.css */
 
-/* ============================
-   VARIABILI COLORE
-   ============================ */
 * {
     -fx-primary: #9B2000;             /* Colore principale - bordeaux */
     -fx-primary-light: #C62828;       /* Versione più chiara */
@@ -25,16 +20,10 @@
     -fx-shadow-high: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 12, 0, 0, 4);
 }
 
-/* ============================
-   CONTAINER PRINCIPALE
-   ============================ */
 .main-container {
     -fx-background-color: #F8F8F8;
 }
 
-/* ============================
-   HEADER E NAVIGAZIONE
-   ============================ */
 .header-section {
     -fx-background-color: transparent;
 }
@@ -138,9 +127,6 @@
     -fx-background-color: transparent;
 }
 
-/* ============================
-   CONTAINER PRINCIPALE REGALO
-   ============================ */
 .gift-offer-container {
     -fx-background-color: white;
     -fx-background-radius: 12px;
@@ -149,9 +135,6 @@
     -fx-alignment: TOP_LEFT;
 }
 
-/* ============================
-   COLONNA SINISTRA - PRODOTTO
-   ============================ */
 .left-column {
     -fx-min-width: 350px;
     -fx-max-width: 350px;
@@ -194,9 +177,6 @@
     -fx-font-style: italic;
 }
 
-/* ============================
-   DETTAGLI PRODOTTO
-   ============================ */
 .product-details-section {
     -fx-background-color: white;
     -fx-background-radius: 10px;
@@ -246,9 +226,6 @@
     -fx-text-fill: -fx-accent;
 }
 
-/* ============================
-   INFORMAZIONI PROPRIETARIO
-   ============================ */
 .gift-giver-section {
     -fx-background-color: white;
     -fx-background-radius: 10px;
@@ -296,10 +273,6 @@
     -fx-font-size: 11px;
     -fx-text-fill: -fx-muted;
 }
-
-/* ============================
-   COLONNA DESTRA - MESSAGGIO
-   ============================ */
 .right-column {
     -fx-min-width: 450px;
     -fx-padding: 0 0 0 15px;
@@ -379,9 +352,6 @@
     -fx-font-weight: bold;
 }
 
-/* ============================
-   SUGGERIMENTI
-   ============================ */
 .gift-tips {
     -fx-background-color: rgba(255, 167, 38, 0.05);
     -fx-background-radius: 10px;
@@ -420,9 +390,6 @@
     -fx-font-style: italic;
 }
 
-/* ============================
-   SEZIONE BOTTONI
-   ============================ */
 .button-section {
     -fx-background-color: white;
     -fx-background-radius: 10px;
@@ -476,9 +443,6 @@
     -fx-background-color: rgba(229, 57, 53, 0.1);
 }
 
-/* ============================
-   NOTE REGALO
-   ============================ */
 .gift-notes {
     -fx-background-color: rgba(67, 160, 71, 0.05);
     -fx-background-radius: 8px;
@@ -503,9 +467,6 @@
     -fx-padding: 1px 0;
 }
 
-/* ============================
-   SCROLLBAR PERSONALIZZATE
-   ============================ */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -551,9 +512,6 @@
     -fx-shape: "";
 }
 
-/* ============================
-   ANIMAZIONI E TRANSIZIONI
-   ============================ */
 .submit-button,
 .cancel-button {
     -fx-transition: -fx-background-color 0.2s ease-in-out, -fx-effect 0.2s ease-in-out;
@@ -571,9 +529,6 @@
     -fx-effect: -fx-shadow-medium;
 }
 
-/* ============================
-   RESPONSIVE DESIGN
-   ============================ */
 @media (max-width: 1000px) {
     .gift-offer-container {
         -fx-orientation: vertical;
@@ -654,9 +609,6 @@
     }
 }
 
-/* ============================
-   ACCESSIBILITÀ
-   ============================ */
 .message-input:focused {
     -fx-border-color: -fx-primary;
     -fx-border-width: 2;
@@ -673,7 +625,6 @@
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 4, 0, 0, 0);
 }
 
-/* Indicatori per screen reader */
 .sr-only {
     -fx-opacity: 0;
     -fx-pref-width: 0;
@@ -682,9 +633,6 @@
     -fx-max-height: 0;
 }
 
-/* ============================
-   STATI SPECIALI
-   ============================ */
 .gift-badge.featured {
     -fx-background-color: -fx-accent;
     -fx-effect: dropshadow(gaussian, rgba(255, 167, 38, 0.3), 6, 0, 0, 2);
@@ -720,9 +668,6 @@
     -fx-background-color: #2E7D32;
 }
 
-/* ============================
-   EFFETTI HOVER AVANZATI
-   ============================ */
 .product-details-section:hover {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 3);
     -fx-border-color: rgba(155, 32, 0, 0.3);

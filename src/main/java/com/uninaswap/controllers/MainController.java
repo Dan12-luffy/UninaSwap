@@ -85,6 +85,7 @@ public class MainController {
         this.searchField.focusedProperty().addListener((_, _, _) -> {
             this.searchButton.setDefaultButton(true);
         });
+        this.searchField.setTextFormatter(createTextFormatter(100));
         setUpCategoryButtons();
         initializePriceRange();
         loadAllItems();
@@ -475,5 +476,13 @@ public class MainController {
             this.priceSlider.setMax(3000.0);
             this.priceSlider.setMin(0.0);
         }
+    }
+    private TextFormatter<String> createTextFormatter(int maxLength) {
+        return new TextFormatter<>(change -> {
+            if (change.getControlNewText().length() <= maxLength) {
+                return change;
+            }
+            return null;
+        });
     }
 }

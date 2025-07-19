@@ -63,6 +63,10 @@ public class MyProfileController {
         this.firstNameField.setText(currentUser.getFirst_name());
         this.lastNameField.setText(currentUser.getLast_name());
         this.currentUsernameField.setText(currentUser.getUsername());
+        this.newUsernameField.setTextFormatter(createTextFormatter(30));
+        this.newPasswordField.setTextFormatter(createTextFormatter(30));
+        this.currentPasswordField.setTextFormatter(createTextFormatter(30));
+        this.confirmPasswordField.setTextFormatter(createTextFormatter(30));
 
         for (Faculty faculty : Faculty.values()) {
             this.facultyComboBox.getItems().add(faculty.getFacultyName());
@@ -79,7 +83,7 @@ public class MyProfileController {
 
     private void loadUserInsertions() {
         try {
-            List<Insertion> insertions = insertionService.getCurrentUserAvailableInsertions();
+            List<Insertion> insertions = insertionService.getCurrentUserInsertions();
 
             // Clear existing content
             this.userAdsContainer.getChildren().clear();
@@ -99,7 +103,7 @@ public class MyProfileController {
     }
     private void setStatisticsSection() {
         try {
-            List<Insertion> insertions = insertionService.getCurrentUserAvailableInsertions();
+            List<Insertion> insertions = insertionService.getCurrentUserInsertions();
 
             double minPrice = Double.MAX_VALUE;
             double maxPrice = 0;
@@ -225,6 +229,7 @@ public class MyProfileController {
             editInsertion(event, insertion);
         });
 
+
         Button deleteButton = new Button("Elimina");
         deleteButton.getStyleClass().add("delete-button");
 
@@ -233,6 +238,13 @@ public class MyProfileController {
             deleteInsertion(insertion);
             setTotalAdsLabel();
         });
+        if(insertion.getStatus().equals(InsertionStatus.PENDING)) {
+            deleteButton.setDisable(true);
+            editButton.setDisable(true);
+        }
+        if(insertion.getStatus().equals(InsertionStatus.SOLD)) {
+            editButton.setDisable(true);
+        }
 
         actionButtons.getChildren().addAll(editButton, deleteButton);
 
@@ -509,19 +521,22 @@ public class MyProfileController {
             completedOperationsContainer.getChildren().add(errorLabel);
         }
     }
+
     private void cancelOffer(int offerId) {
         try {
-            boolean success = offerService.rejectOffer(offerId);
-            if (success) {
+            offerService.deleteOffer(offerId);
                 validationService.showInsertionAnnulledSuccess();
                 loadPendingOffers();
-            } else {
-                validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile annullare l'offerta.");
-            }
         } catch (Exception e) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante l'annullamento dell'offerta.");
         }
     }
-
-
+    private TextFormatter<String> createTextFormatter(int maxLength) {
+        return new TextFormatter<>(change -> {
+            if (change.getControlNewText().length() <= maxLength) {
+                return change;
+            }
+            return null;
+        });
+    }
 }

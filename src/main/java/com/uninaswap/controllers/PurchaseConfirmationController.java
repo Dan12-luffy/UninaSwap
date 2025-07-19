@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.File;
+
 public class PurchaseConfirmationController {
     @FXML private Label titleLabel;
     @FXML private Label priceLabel;
@@ -21,7 +23,6 @@ public class PurchaseConfirmationController {
 
     private Insertion insertion;
     private final ValidationService validationService = ValidationService.getInstance();
-
 
     @FXML
     private void onConfirmPurchase(ActionEvent event) {
@@ -76,8 +77,8 @@ public class PurchaseConfirmationController {
             this.descriptionLabel.setText(this.insertion.getDescription());
             if(this.insertion.getImageUrl() != null && !this.insertion.getImageUrl().isEmpty()){
                 try{
-                    Image image = new Image(insertion.getImageUrl());
-                    this.productImageView.setImage(image);
+                    File imageFile = new File(insertion.getImageUrl());
+                    this.productImageView.setImage(new Image(imageFile.toURI().toString()));
                 } catch (Exception e) {
                     this.productImageView.setVisible(false);
                 }

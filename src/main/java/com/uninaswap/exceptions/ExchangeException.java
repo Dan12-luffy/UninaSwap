@@ -1,4 +1,4 @@
-package com.uninaswap.Exception;
+package com.uninaswap.exceptions;
 
 import com.uninaswap.services.ValidationService;
 import javafx.scene.control.Alert;
