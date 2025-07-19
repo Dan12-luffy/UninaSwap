@@ -126,11 +126,21 @@ public class ExchangeOfferController {
     private HBox createInsertionCard(Insertion insertion) {
         HBox card = new HBox(15);
         card.setPrefWidth(this.yourProductsContainer.getPrefWidth() - 20);
+        card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
         card.setPrefHeight(100);
-        card.getStyleClass().add("insertion-card");
 
-        // Usa userData per tracciare lo stato di selezione
         card.setUserData(false);
+
+        card.setOnMouseEntered(e -> {
+            if (!((boolean) card.getUserData())) {
+                card.setStyle("-fx-padding: 10; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f8f8f8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);");
+            }
+        });
+        card.setOnMouseExited(e -> {
+            if (!((boolean) card.getUserData())) {
+                card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
+            }
+        });
 
         // Product image
         ImageView imageView = new ImageView();
@@ -138,7 +148,7 @@ public class ExchangeOfferController {
         imageView.setFitHeight(80);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
-        imageView.getStyleClass().add("product-image");
+        imageView.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 0); -fx-background-radius: 3;");
 
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
@@ -153,31 +163,32 @@ public class ExchangeOfferController {
         HBox.setHgrow(textContent, javafx.scene.layout.Priority.ALWAYS);
 
         Label titleLabel = new Label(insertion.getTitle());
-        titleLabel.getStyleClass().add("product-title");
+        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         titleLabel.setWrapText(true);
 
         String priceText;
         if (insertion.getType() == typeInsertion.GIFT) {
             priceText = "Gratis";
-        } else {
+        }
+        else {
             priceText = String.format("€%.2f", insertion.getPrice());
         }
 
         Label priceLabel = new Label(priceText);
-        priceLabel.getStyleClass().add("product-price");
+        priceLabel.setStyle("-fx-font-size: 14px;");
 
         textContent.getChildren().addAll(titleLabel, priceLabel);
 
         card.setOnMouseClicked(event -> {
-            boolean currentState = (boolean) card.getUserData();
+            boolean currentState = (boolean)card.getUserData();
             boolean newState = !currentState;
             card.setUserData(newState);
 
             if (newState) {
-                card.getStyleClass().add("selected");
+                card.setStyle("-fx-padding: 10; -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f1f8e9;");
                 this.selectedInsertions.add(insertion);
             } else {
-                card.getStyleClass().remove("selected");
+                card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: white;");
                 this.selectedInsertions.remove(insertion);
             }
             updateCalculations(insertion, newState);

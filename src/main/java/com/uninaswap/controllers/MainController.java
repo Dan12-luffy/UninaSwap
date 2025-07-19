@@ -353,13 +353,13 @@ public class MainController {
     private VBox createItemCard(Insertion insertion) {
         // Crea il layout principale per la card
         VBox card = new VBox(10);
-        card.getStyleClass().add("item-card");
+        card.setStyle("-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;");
         card.setPrefWidth(200);
         card.setPrefHeight(250);
         card.setMaxWidth(200);
         card.setMaxHeight(250);
 
-        // Configura l'image view
+        // Create configura l' image view
         ImageView imageView = new ImageView();
         imageView.setFitWidth(180);
         imageView.setFitHeight(140);
@@ -376,22 +376,21 @@ public class MainController {
 
         Label titleLabel = new Label(insertion.getTitle());
         titleLabel.setWrapText(true);
-        titleLabel.getStyleClass().add("item-title");
-
+        titleLabel.setStyle("-fx-font-weight: bold;");
         Label priceLabel;
-        if (insertion.getType().equals(typeInsertion.GIFT) || insertion.getType().equals(typeInsertion.EXCHANGE)) {
+        if(insertion.getType().equals(typeInsertion.GIFT) || insertion.getType().equals(typeInsertion.EXCHANGE)) {
             priceLabel = new Label("Disponibile per: " + insertion.getType());
         } else {
             priceLabel = new Label("€" + insertion.getPrice());
         }
-        priceLabel.getStyleClass().add("item-price");
+        priceLabel.setStyle("-fx-font-size: 14px;");
 
         String labelText = insertion.getCategory();
         if (labelText == null || labelText.isEmpty()) {
             labelText = insertion.getType().toString();
         }
         Label categoryLabel = new Label(labelText);
-        categoryLabel.getStyleClass().add("item-category");
+        categoryLabel.setStyle("-fx-font-size: 12px; -fx-background-color: #f0f0f0; -fx-padding: 2 5; -fx-background-radius: 3;");
 
         card.getChildren().addAll(imageView, titleLabel, priceLabel, categoryLabel);
         card.setOnMouseClicked(event -> showItemDetails(event, insertion));
