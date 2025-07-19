@@ -10,10 +10,10 @@ import java.util.List;
 
 public class FilterService {
     private final static FilterService instance = new FilterService();
-    private final InsertionDao insertionDao;
+    private final InsertionService insertionService = InsertionService.getInstance();
 
     private FilterService() {
-        this.insertionDao = new InsertionDaoImpl();
+
     }
 
     public static FilterService getInstance() {
@@ -25,15 +25,15 @@ public class FilterService {
         if (criteria.getExcludeUserId() == null && UserSession.getInstance().getCurrentUser() != null) {
             criteria.setExcludeUserId(UserSession.getInstance().getCurrentUser().getId());
         }
-        return insertionDao.findByFilters(criteria);
+        return insertionService.getInsertionsByFilters(criteria);
     }
 
     public BigDecimal getMaxAvailablePrice() throws SQLException {
-        return insertionDao.getMaxPrice();
+        return insertionService.getInsertionMaxPrice();
     }
 
     public BigDecimal getMinAvailablePrice() throws SQLException {
-        return insertionDao.getMinPrice();
+        return insertionService.getInsertionMinPrice();
     }
 
     // Metodi di convenienza

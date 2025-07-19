@@ -27,6 +27,7 @@ public class SaleController {
 
     private static final ValidationService validationService = ValidationService.getInstance();
     private static final InsertionService insertionService = InsertionService.getInstance();
+    private static final OfferService offerService = OfferService.getInstance();
 
 
 
@@ -91,7 +92,7 @@ public class SaleController {
         );
 
         try {
-            int offerId = OfferService.getInstance().createOffer(offer);
+            int offerId = offerService.createOffer(offer);
             if (offerId > 0) {
                 validationService.showAlert(Alert.AlertType.INFORMATION, "Offerta inviata", "La tua offerta è stata inviata con successo al venditore!");
                 NavigationService.getInstance().navigateToMainView(event);

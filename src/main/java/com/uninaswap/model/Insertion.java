@@ -11,7 +11,6 @@ public abstract class Insertion {
     private typeInsertion type; //ENUM
     private InsertionStatus status; //ENUM
     private LocalDate publishDate;
-
     private int userId;
     private String category;
     private String deliveryMethod;

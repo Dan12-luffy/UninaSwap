@@ -31,9 +31,7 @@ public class ProductDetailsController {
     @FXML private Label dateLabel;
     @FXML private VBox actionButtonsVbox;
     @FXML private Label deliveryMethodLabel;
-
     private Insertion insertion;
-
     private final InsertionService insertionService = InsertionService.getInstance();
     private final UserService userService = UserService.getInstance();
 
