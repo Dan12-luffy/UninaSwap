@@ -39,6 +39,7 @@ public class OfferService {
         offerDao.deleteOffer(offer.getOfferID());
         for(OfferedItem item : OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId)) {
             OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
+            updateOfferStatus(item.getOfferedItemId(), InsertionStatus.AVAILABLE);
         }
     }
 
