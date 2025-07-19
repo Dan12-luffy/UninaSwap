@@ -174,19 +174,54 @@ public class MyProfileController {
         }
     }
     private HBox createInsertionCard(Insertion insertion) {
-        //Crea la card principale
+        // Crea la card principale
         HBox card = new HBox(15);
         card.setPrefWidth(this.userAdsContainer.getPrefWidth() - 20);
-        card.getStyleClass().add("listing-card");
         card.setPrefHeight(100);
 
-        //Crea la card per l'imageview
+        // Applica stili alla card principale
+        card.setStyle(
+                "-fx-padding: 10;" +
+                        "-fx-border-color: #ddd;" +
+                        "-fx-border-radius: 5;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-background-color: white;"
+        );
+
+        // Aggiungi effetto hover alla card
+        card.setOnMouseEntered(e -> {
+            card.setStyle(
+                    "-fx-padding: 10;" +
+                            "-fx-border-color: #ccc;" +
+                            "-fx-border-radius: 5;" +
+                            "-fx-background-radius: 5;" +
+                            "-fx-background-color: #f8f8f8;" +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);"
+            );
+        });
+
+        card.setOnMouseExited(e -> {
+            card.setStyle(
+                    "-fx-padding: 10;" +
+                            "-fx-border-color: #ddd;" +
+                            "-fx-border-radius: 5;" +
+                            "-fx-background-radius: 5;" +
+                            "-fx-background-color: white;"
+            );
+        });
+
+        // Crea la card per l'imageview
         ImageView imageView = new ImageView();
         imageView.setFitWidth(80);
         imageView.setFitHeight(80);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
-        imageView.getStyleClass().add("listing-image");
+
+        // Applica stili all'immagine
+        imageView.setStyle(
+                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 0);" +
+                        "-fx-background-radius: 3;"
+        );
 
         String defaultImagePath = "/com/uninaswap/images/default_image.png";
         try {
@@ -201,7 +236,10 @@ public class MyProfileController {
         HBox.setHgrow(textContent, javafx.scene.layout.Priority.ALWAYS);
 
         Label titleLabel = new Label(insertion.getTitle());
-        titleLabel.getStyleClass().add("listing-title");
+        titleLabel.setStyle(
+                "-fx-font-weight: bold;" +
+                        "-fx-font-size: 14px;"
+        );
         titleLabel.setWrapText(true);
 
         String priceText;
@@ -214,14 +252,23 @@ public class MyProfileController {
         }
 
         Label priceLabel = new Label(priceText);
-        priceLabel.getStyleClass().add("listing-price");
+        priceLabel.setStyle("-fx-font-size: 14px;");
 
         HBox infoBox = new HBox(10);
+
         Label statusLabel = new Label(insertion.getStatus().toString());
-        statusLabel.getStyleClass().add("listing-status");
+        statusLabel.setStyle(
+                "-fx-font-size: 12px;" +
+                        "-fx-background-color: #f0f0f0;" +
+                        "-fx-padding: 2 5;" +
+                        "-fx-background-radius: 3;"
+        );
 
         Label dateLabel = new Label(insertion.getPublishDate() != null ? insertion.getPublishDate().toString() : "");
-        dateLabel.getStyleClass().add("listing-date");
+        dateLabel.setStyle(
+                "-fx-font-size: 11px;" +
+                        "-fx-text-fill: #888;"
+        );
 
         infoBox.getChildren().addAll(statusLabel, dateLabel);
         textContent.getChildren().addAll(titleLabel, priceLabel, infoBox);
@@ -231,21 +278,31 @@ public class MyProfileController {
         actionButtons.setPrefWidth(80);
 
         Button editButton = new Button("Modifica");
-        editButton.getStyleClass().add("edit-button");
+        editButton.setStyle(
+                "-fx-background-color: #f0f0f0;" +
+                        "-fx-text-fill: #444;" +
+                        "-fx-background-radius: 3;" +
+                        "-fx-pref-width: 75;"
+        );
 
         editButton.setOnAction(event -> {
             editInsertion(event, insertion);
         });
 
-
         Button deleteButton = new Button("Elimina");
-        deleteButton.getStyleClass().add("delete-button");
+        deleteButton.setStyle(
+                "-fx-background-color: #ffecec;" +
+                        "-fx-text-fill: #d32f2f;" +
+                        "-fx-background-radius: 3;" +
+                        "-fx-pref-width: 75;"
+        );
 
         deleteButton.setOnAction(event -> {
             event.consume();
             deleteInsertion(insertion);
             setTotalAdsLabel();
         });
+
         if(insertion.getStatus().equals(InsertionStatus.PENDING)) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
@@ -457,8 +514,40 @@ public class MyProfileController {
     }
     private HBox createOfferCard(Offer offer, boolean isCompleted) {
         HBox card = new HBox(15);
-        card.getStyleClass().add("offer-card");
+        card.setStyle(
+                "-fx-padding: 10;" +
+                        "-fx-border-color: #ddd;" +
+                        "-fx-border-radius: 5;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-background-color: white;" +
+                        "-fx-spacing: 15;"
+        );
         card.setPrefHeight(100);
+
+        // Aggiungi effetto hover alla card
+        card.setOnMouseEntered(e -> {
+            card.setStyle(
+                    "-fx-padding: 10;" +
+                            "-fx-border-color: #bbb;" +
+                            "-fx-border-radius: 5;" +
+                            "-fx-background-radius: 5;" +
+                            "-fx-background-color: #f9f9f9;" +
+                            "-fx-spacing: 15;" +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 0);"
+            );
+        });
+
+        card.setOnMouseExited(e -> {
+            card.setStyle(
+                    "-fx-padding: 10;" +
+                            "-fx-border-color: #ddd;" +
+                            "-fx-border-radius: 5;" +
+                            "-fx-background-radius: 5;" +
+                            "-fx-background-color: white;" +
+                            "-fx-spacing: 15;"
+            );
+        });
+
         try {
             Insertion insertion = insertionService.getInsertionByID(offer.getInsertionID());
 
@@ -480,14 +569,25 @@ public class MyProfileController {
             HBox.setHgrow(textContent, javafx.scene.layout.Priority.ALWAYS);
 
             Label titleLabel = new Label(insertion.getTitle());
-            titleLabel.getStyleClass().add("offer-title");
+            titleLabel.setStyle(
+                    "-fx-font-weight: bold;" +
+                            "-fx-font-size: 14px;" +
+                            "-fx-text-fill: #333;"
+            );
 
             String dateText = "Data: " + offer.getOfferDate();
             Label dateLabel = new Label(dateText);
-            dateLabel.getStyleClass().add("offer-date");
+            dateLabel.setStyle(
+                    "-fx-font-size: 12px;" +
+                            "-fx-text-fill: #666;"
+            );
 
             Label valueLabel = new Label(String.format("Valore: €%.2f", offer.getAmount()));
-            valueLabel.getStyleClass().add("offer-value");
+            valueLabel.setStyle(
+                    "-fx-font-size: 13px;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-text-fill: #2e7d32;"
+            );
 
             textContent.getChildren().addAll(titleLabel, dateLabel, valueLabel);
 
@@ -496,7 +596,61 @@ public class MyProfileController {
 
             if (!isCompleted) {
                 Button cancelButton = new Button("Annulla");
-                cancelButton.getStyleClass().add("cancel-button");
+                cancelButton.setStyle(
+                        "-fx-background-color: #ffebee;" +
+                                "-fx-text-fill: #c62828;" +
+                                "-fx-background-radius: 4;" +
+                                "-fx-border-color: #ef5350;" +
+                                "-fx-border-radius: 4;" +
+                                "-fx-border-width: 1;" +
+                                "-fx-pref-width: 80;" +
+                                "-fx-pref-height: 30;" +
+                                "-fx-font-size: 12px;"
+                );
+
+                // Effetti hover per il pulsante
+                cancelButton.setOnMouseEntered(e -> {
+                    cancelButton.setStyle(
+                            "-fx-background-color: #ffcdd2;" +
+                                    "-fx-text-fill: #c62828;" +
+                                    "-fx-background-radius: 4;" +
+                                    "-fx-border-color: #d32f2f;" +
+                                    "-fx-border-radius: 4;" +
+                                    "-fx-border-width: 1;" +
+                                    "-fx-pref-width: 80;" +
+                                    "-fx-pref-height: 30;" +
+                                    "-fx-font-size: 12px;"
+                    );
+                });
+
+                cancelButton.setOnMouseExited(e -> {
+                    cancelButton.setStyle(
+                            "-fx-background-color: #ffebee;" +
+                                    "-fx-text-fill: #c62828;" +
+                                    "-fx-background-radius: 4;" +
+                                    "-fx-border-color: #ef5350;" +
+                                    "-fx-border-radius: 4;" +
+                                    "-fx-border-width: 1;" +
+                                    "-fx-pref-width: 80;" +
+                                    "-fx-pref-height: 30;" +
+                                    "-fx-font-size: 12px;"
+                    );
+                });
+
+                cancelButton.setOnMousePressed(e -> {
+                    cancelButton.setStyle(
+                            "-fx-background-color: #ef9a9a;" +
+                                    "-fx-text-fill: #c62828;" +
+                                    "-fx-background-radius: 4;" +
+                                    "-fx-border-color: #d32f2f;" +
+                                    "-fx-border-radius: 4;" +
+                                    "-fx-border-width: 1;" +
+                                    "-fx-pref-width: 80;" +
+                                    "-fx-pref-height: 30;" +
+                                    "-fx-font-size: 12px;"
+                    );
+                });
+
                 cancelButton.setOnAction(event -> cancelOffer(offer.getOfferID()));
                 buttonContainer.getChildren().add(cancelButton);
             }
