@@ -35,12 +35,11 @@ public class OfferService {
     }
 
     public void deleteOffer(int offerId) throws Exception {
-        Offer offer = offerDao.findOfferById(offerId);
-        offerDao.deleteOffer(offer.getOfferID());
         for(OfferedItem item : OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId)) {
-            updateOfferStatus(item.getOfferedItemId(), InsertionStatus.AVAILABLE);
+            InsertionService.getInstance().updateInsertionStatus(item.getInsertionId(), InsertionStatus.AVAILABLE);
             OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
         }
+        offerDao.deleteOffer(offerId);
     }
 
     public List<Offer> getOffersForInsertion(int insertionID) throws Exception {
@@ -54,38 +53,6 @@ public class OfferService {
         return offerDao.findOffersToCurrentUser();
     }
 
-    public boolean completeOfferAcceptance(int offerId) throws Exception {
-        Offer offer = offerDao.findOfferById(offerId);
-        if (offer == null) return false;
-
-        Insertion insertion = InsertionService.getInstance().getInsertionByID(offer.getInsertionID());
-        User buyer = UserService.getInstance().getUserById(offer.getUserID());
-        switch (insertion.getType()) {
-            case SALE -> TransactionService.getInstance().recordSale(insertion, offer, buyer);
-            case EXCHANGE -> TransactionService.getInstance().recordExchange(insertion, offer, buyer);
-            case GIFT -> TransactionService.getInstance().recordGift(insertion, offer, buyer);
-        }
-
-        offerDao.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
-        InsertionService.getInstance().updateInsertionStatus(insertion.getInsertionID(), InsertionStatus.SOLD);
-
-        return true;
-    }
-
-    public boolean completeOfferRejection(int offerId) throws Exception {
-        Offer offer = offerDao.findOfferById(offerId);
-        if (offer == null) return false;
-
-        List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId);
-        for (OfferedItem item : offeredItems) {
-            Insertion insertion = InsertionService.getInstance().getInsertionByID(item.getInsertionId());
-            insertion.setStatus(InsertionStatus.AVAILABLE);
-            InsertionService.getInstance().updateInsertion(insertion);
-        }
-
-        offerDao.updateOfferStatus(offerId, InsertionStatus.REJECTED);
-        return true;
-    }
 
     public void acceptOffer(int offerId) {
         try {

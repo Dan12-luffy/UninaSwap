@@ -436,7 +436,6 @@ public class MyProfileController {
     }
 
     private void loadPendingOffers(){
-
         try{
             pendingOffersContainer.getChildren().clear();
 
@@ -529,12 +528,13 @@ public class MyProfileController {
             completedOperationsContainer.getChildren().add(errorLabel);
         }
     }
-
     private void cancelOffer(int offerId) {
         try {
             offerService.deleteOffer(offerId);
-                validationService.showInsertionAnnulledSuccess();
-                loadPendingOffers();
+            validationService.showInsertionAnnulledSuccess();
+            loadPendingOffers();
+            loadUserInsertions();
+            setPieChartAndBarChart();
         } catch (Exception e) {
             validationService.showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante l'annullamento dell'offerta.");
         }
