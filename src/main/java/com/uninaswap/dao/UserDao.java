@@ -9,6 +9,7 @@ public interface UserDao {
     boolean updatePassword(int userId, String hashedPassword);
     boolean updateUsername(int userId, String username);
     boolean usernameAlreadyExists(String username);
+    boolean updateFaculty(int userId, String faculty);
     String findUsernameFromID(int id);
     String findFullNameFromID(int id);
     User findUserFromID(int id);

@@ -96,4 +96,12 @@ public class UserService {
             return false;
         }
     }
+    public boolean updateFaculty(int userId, String faculty) {
+        try {
+            return userDao.updateFaculty(userId, faculty);
+        } catch (Exception e) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aggiornare la facoltà: " + e.getMessage());
+            return false;
+        }
+    }
 }

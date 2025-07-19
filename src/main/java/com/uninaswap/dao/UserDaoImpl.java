@@ -160,6 +160,20 @@ public class UserDaoImpl implements UserDao {
         return null;
     }
 
+    @Override
+    public boolean updateFaculty(int userId, String faculty) {
+        String sql = "UPDATE users SET faculty = ? WHERE userId = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, faculty);
+            stmt.setInt(2, userId);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0; //Restituisce true se è stata aggiornata almeno una riga
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     @Nullable
     private User getNewUser(PreparedStatement stmt) throws SQLException {
@@ -176,5 +190,5 @@ public class UserDaoImpl implements UserDao {
             }
         }
         return null;
-    }
+        }
     }
