@@ -242,6 +242,9 @@ public class MyProfileController {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
         }
+        if(insertion.getStatus().equals(InsertionStatus.SOLD)) {
+            editButton.setDisable(true);
+        }
 
         actionButtons.getChildren().addAll(editButton, deleteButton);
 
