@@ -1,6 +1,6 @@
 package com.uninaswap.controllers;
 
-import com.uninaswap.Exception.ExchangeException;
+import com.uninaswap.exceptions.ExchangeException;
 import com.uninaswap.dao.UserDaoImpl;
 import com.uninaswap.model.*;
 import com.uninaswap.services.*;
@@ -42,7 +42,6 @@ public class ExchangeOfferController {
 
    @FXML
     public void initialize() {
-
        loadUserInsertions();
     }
 
@@ -69,9 +68,9 @@ public class ExchangeOfferController {
                     if (offerId > 0) {
                         for (Insertion insertion : selectedInsertions) {
                             OfferedItem offeredItem = new OfferedItem(offerId, insertion.getInsertionID());
+                            insertionService.updateInsertionStatus(insertion.getInsertionID(), InsertionStatus.PENDING);
                             offeredItemsService.createOfferedItem(offeredItem);
                         }
-                        NavigationService.getInstance().navigateToMainView(event);
                         ValidationService.getInstance().showOfferProposalSuccess();
                     }
                 } catch (ExchangeException e) {
@@ -82,10 +81,10 @@ public class ExchangeOfferController {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+                NavigationService.getInstance().navigateToMainView(event);
             }
         });
     }
-
 
     private String getConfirmMessage() {
         double differenceValue = Double.parseDouble(this.differenceLabel.getText().replace("Differenza: €", ""));

@@ -1,5 +1,6 @@
 package com.uninaswap.dao;
 
+import com.uninaswap.exceptions.DatabaseOperationException;
 import com.uninaswap.model.InsertionStatus;
 import com.uninaswap.model.Offer;
 import com.uninaswap.model.typeOffer;
@@ -61,12 +62,12 @@ public class OfferDaoImpl implements OfferDao {
             stmt.setInt(1, offerId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile eliminare l'offerta: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
 
     @Override
-    public void updateOffer(Offer offer) throws SQLException {
+    public void updateOffer(Offer offer){
         String query = "UPDATE offer SET insertionid = ?, userid = ?, amount = ?, message = ?, status = ?, typeoffer = ?, offer_date = ? WHERE offerid = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -79,6 +80,8 @@ public class OfferDaoImpl implements OfferDao {
             stmt.setDate(7, java.sql.Date.valueOf(offer.getOfferDate()));
             stmt.setInt(8, offer.getOfferID());
             stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
 
@@ -150,7 +153,7 @@ public class OfferDaoImpl implements OfferDao {
             stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
             return getInsertionOffers(stmt);
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte per l'utente corrente: " + e.getMessage());
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte fatte dall'utente corrente: " + e.getMessage());
         }
         return new ArrayList<>();
     }
@@ -163,7 +166,7 @@ public class OfferDaoImpl implements OfferDao {
             stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
             return getInsertionOffers(stmt);
         } catch (SQLException e) {
-            e.printStackTrace();
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile trovare le offerte per l'utente corrente: " + e.getMessage());
         }
         return new ArrayList<>();
     }
@@ -177,7 +180,7 @@ public class OfferDaoImpl implements OfferDao {
             stmt.setInt(2, offerId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aggiornare lo stato dell'offerta: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
 
@@ -195,7 +198,7 @@ public class OfferDaoImpl implements OfferDao {
     }
 
     @NotNull
-    private List<Offer> getInsertionOffers(PreparedStatement stmt) throws SQLException {
+    private List<Offer> getInsertionOffers(PreparedStatement stmt){
         try (ResultSet rs = stmt.executeQuery()) {
             List<Offer> offers = new ArrayList<>();
             while(rs.next()) {
@@ -204,9 +207,12 @@ public class OfferDaoImpl implements OfferDao {
             }
             return offers;
         }
+        catch (Exception e) {
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
+        }
     }
     @Override
-    public Map<String, Double> getAcceptedSaleOfferStatistics() throws SQLException {
+    public Map<String, Double> getAcceptedSaleOfferStatistics() throws SQLException{
         Map<String, Double> statistics = new HashMap<>();
         statistics.put("avg", 0.0);
         statistics.put("min", 0.0);
@@ -220,29 +226,30 @@ public class OfferDaoImpl implements OfferDao {
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
+            try{
+                if (rs.next()) {
+                    double avg = rs.getDouble("avg_price");
+                    double min = rs.getDouble("min_price");
+                    double max = rs.getDouble("max_price");
 
-            if (rs.next()) {
-                double avg = rs.getDouble("avg_price");
-                double min = rs.getDouble("min_price");
-                double max = rs.getDouble("max_price");
-
-                if (!rs.wasNull()) {
-                    statistics.put("avg", avg);
-                    statistics.put("min", min);
-                    statistics.put("max", max);
+                    if (!rs.wasNull()) {
+                        statistics.put("avg", avg);
+                        statistics.put("min", min);
+                        statistics.put("max", max);
+                    }
                 }
+            } catch (SQLException e) {
+                throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
             }
         }
 
         return statistics;
     }
-    public List<Offer> getPendingOffersByUser() throws SQLException {
+    public List<Offer> getPendingOffersByUser(){
         List<Offer> pendingOffers = new ArrayList<>();
 
         String sentSql = "SELECT * FROM offer WHERE userid = ? AND status = 'PENDING'";
 
-
-        // try per le offerte che sono state inviate dall'utente
         try (Connection conn = DatabaseUtil.getConnection()) {
             try (PreparedStatement stmt = conn.prepareStatement(sentSql)) {
                 stmt.setInt(1, UserSession.getInstance().getCurrentUserId());
@@ -252,17 +259,15 @@ public class OfferDaoImpl implements OfferDao {
                     }
                 }
             }
-
-
+        } catch (Exception e) {
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
 
         return pendingOffers;
     }
 
-    public List<Offer> getCompletedOffersByUser(int userId) throws SQLException {
+    public List<Offer> getCompletedOffersByUser(int userId) throws  SQLException{
         List<Offer> completedOffers = new ArrayList<>();
-
-        // Get offers sent by the user with ACCEPTED status
         String sentSql = "SELECT * FROM offer WHERE userid = ? AND status = 'ACCEPTED'";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sentSql)) {
@@ -272,11 +277,14 @@ public class OfferDaoImpl implements OfferDao {
                     completedOffers.add(mapResultSetToOffer(rs));
                 }
             }
+            catch (Exception e) {
+                throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
+            }
         }
         return completedOffers;
     }
 
-    public List<Offer> getDirectPurchaseByUser(int userId) throws SQLException {
+    public List<Offer> getDirectPurchaseByUser(int userId){
         List<Offer> directPurchaseOffers = new ArrayList<>();
 
        String directPurchaseSql =
@@ -305,18 +313,22 @@ public class OfferDaoImpl implements OfferDao {
                 }
             }
        } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile recuperare le offerte di acquisto diretto: " + e.getMessage());
+           throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
        }
         return directPurchaseOffers;
     }
 
-    public List<Offer> getAllCompletedOperationsByUser(int userId) throws SQLException {
+    public List<Offer> getAllCompletedOperationsByUser(int userId) {
         List<Offer> completedOperations = new ArrayList<>();
+        try {
 
-        completedOperations.addAll(getCompletedOffersByUser(userId));
-        completedOperations.addAll(getDirectPurchaseByUser(userId));
-        return completedOperations;
-
+            completedOperations.addAll(getCompletedOffersByUser(userId));
+            completedOperations.addAll(getDirectPurchaseByUser(userId));
+            return completedOperations;
+        }
+        catch (SQLException e) {
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
+        }
     }
     @NotNull
     private Offer mapResultSetToOffer(ResultSet rs) throws SQLException {

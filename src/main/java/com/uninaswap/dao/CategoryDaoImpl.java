@@ -1,5 +1,6 @@
 package com.uninaswap.dao;
 
+import com.uninaswap.exceptions.DatabaseOperationException;
 import com.uninaswap.model.Category;
 import com.uninaswap.services.ValidationService;
 import com.uninaswap.utility.DatabaseUtil;
@@ -24,8 +25,7 @@ public class CategoryDaoImpl implements CategoryDao {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Errore" +
-                    "Impossibile inserire la categoria: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
 
@@ -36,9 +36,8 @@ public class CategoryDaoImpl implements CategoryDao {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, categoryId);
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Errore" +
-                    "Impossibile eliminare la categoria: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
     @Override
@@ -50,8 +49,7 @@ public class CategoryDaoImpl implements CategoryDao {
             stmt.setInt(2, categoryId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Errore" +
-                    "Impossibile aggiornare la categoria: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
     }
     @Override
@@ -65,8 +63,7 @@ public class CategoryDaoImpl implements CategoryDao {
                 return rs.getString("name");
             }
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Errore" +
-                    "Impossibile trovare la categoria: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
         return null;
     }
@@ -81,8 +78,7 @@ public class CategoryDaoImpl implements CategoryDao {
                 return rs.getString("name");
             }
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Errore" +
-                    "Impossibile trovare la categoria: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
         return null;
     }
@@ -99,10 +95,8 @@ public class CategoryDaoImpl implements CategoryDao {
             }
             return categories;
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Errore" +
-                    "Impossibile recuperare le categorie: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
-        return null;
     }
     @Override
     public int getCategoryIdByName(String categoryName) {
@@ -115,8 +109,7 @@ public class CategoryDaoImpl implements CategoryDao {
                 return rs.getInt("category_id");
             }
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Errore" +
-                    "Impossibile trovare l'ID della categoria: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
 
         return -1; // Indica che la categoria non è stata trovata
@@ -132,8 +125,7 @@ public class CategoryDaoImpl implements CategoryDao {
                 return rs.getString("name");
             }
         } catch (SQLException e) {
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Errore" +
-                    "Impossibile trovare il nome della categoria: " + e.getMessage());
+            throw new DatabaseOperationException("findInsertionsExcludingCurrentUser", e);
         }
         return null;
     }
