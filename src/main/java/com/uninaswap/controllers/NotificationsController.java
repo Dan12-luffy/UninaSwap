@@ -363,8 +363,6 @@ public class NotificationsController {
 
             offerService.acceptOffer(offerId);
             insertionService.updateInsertionStatus(insertion.getInsertionID(), InsertionStatus.SOLD);
-
-
             loadUserOffers();
         } catch (Exception e) {
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore",
