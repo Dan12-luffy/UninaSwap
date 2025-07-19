@@ -37,6 +37,9 @@ public class OfferService {
     public void deleteOffer(int offerId) throws Exception {
         Offer offer = offerDao.findOfferById(offerId);
         offerDao.deleteOffer(offer.getOfferID());
+        for(OfferedItem item : OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId)) {
+            OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
+        }
     }
 
     public List<Offer> getOffersForInsertion(int insertionID) throws Exception {
