@@ -157,4 +157,11 @@ public class ValidationService {
     public void showSqlError(SQLException e) {
         showAlert(Alert.AlertType.ERROR, "Errore SQL", "Si è verificato un errore durante l'esecuzione della query: " + e.getMessage());
     }
+
+    public void showUpdateFacltySuccess() {
+        showAlert(Alert.AlertType.INFORMATION, "Successo", "Facoltà aggiornata con successo.");
+    }
+    public void showUpdateFacultyError() {
+        showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aggiornare la facoltà.");
+    }
 }

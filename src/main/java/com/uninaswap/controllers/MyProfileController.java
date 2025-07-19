@@ -57,7 +57,6 @@ public class MyProfileController {
 
     @FXML
     public void initialize() {
-
         User currentUser = userService.getUserById(UserSession.getInstance().getCurrentUserId());
         this.userNameLabel.setText(currentUser.getUsername());
         this.firstNameField.setText(currentUser.getFirst_name());
@@ -79,6 +78,15 @@ public class MyProfileController {
         loadAcceptedSaleOfferStatistics();
         loadPendingOffers();
         loadCompletedOperations();
+    }
+    @FXML
+    private void onSaveChangesButtonClicked() {
+        boolean success = userService.updateFaculty(UserSession.getInstance().getCurrentUserId(), facultyComboBox.getValue());
+        if (success){
+            validationService.showUpdateFacltySuccess();
+        } else {
+            validationService.showUpdateFacultyError();
+        }
     }
 
     private void loadUserInsertions() {
@@ -385,7 +393,7 @@ public class MyProfileController {
     }
 
     @FXML
-    private void handleChangePassword(ActionEvent event) {
+    private void handleChangePassword() {
         String currentPassword = currentPasswordField.getText();
         String newPassword = newPasswordField.getText();
         String confirmPassword = confirmPasswordField.getText();
