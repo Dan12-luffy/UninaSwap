@@ -304,7 +304,7 @@ public class NotificationsController {
 
         Button acceptButton = new Button(acceptButtonText);
         acceptButton.getStyleClass().add("accept-button");
-        acceptButton.setOnAction(e -> handleAcceptOffer(e, offer.getOfferID()));
+        acceptButton.setOnAction(e -> handleAcceptOffer(offer.getOfferID()));
 
         if (insertionType == typeInsertion.SALE) {
             Label offerAmount = new Label("Offerta: " + formatAmount(offer.getAmount()));
@@ -337,7 +337,7 @@ public class NotificationsController {
         return df.format(amount);
     }
 
-    private void handleAcceptOffer(ActionEvent event, int offerId) {
+    private void handleAcceptOffer(int offerId) {
         try {
             Offer offer = offerService.getOfferById(offerId);
             Insertion insertion = insertionService.getInsertionByID(offer.getInsertionID());
@@ -372,13 +372,6 @@ public class NotificationsController {
 
     private void handleDeclineOffer(int offerId) {
         try {
-            List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId);
-            for (OfferedItem item : offeredItems) {
-                Insertion insertion = insertionService.getInsertionByID(item.getInsertionId());
-                insertion.setStatus(InsertionStatus.AVAILABLE);
-                insertionService.updateInsertion(insertion);
-            }
-
             offerService.rejectOffer(offerId);
             loadUserOffers();
             ValidationService.getInstance().showAlert(Alert.AlertType.INFORMATION,

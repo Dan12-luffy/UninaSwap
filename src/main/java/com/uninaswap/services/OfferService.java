@@ -38,8 +38,8 @@ public class OfferService {
         Offer offer = offerDao.findOfferById(offerId);
         offerDao.deleteOffer(offer.getOfferID());
         for(OfferedItem item : OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId)) {
-            OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
             updateOfferStatus(item.getOfferedItemId(), InsertionStatus.AVAILABLE);
+            OfferedItemsService.getInstance().deleteOfferedItem(item.getOfferedItemId());
         }
     }
 
@@ -87,33 +87,35 @@ public class OfferService {
         return true;
     }
 
-    public boolean acceptOffer(int offerId) {
+    public void acceptOffer(int offerId) {
         try {
             Offer offer = offerDao.findOfferById(offerId);
             if (offer == null) {
-                return false;
+                return;
             }
             offerDao.updateOfferStatus(offerId, InsertionStatus.ACCEPTED);
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public boolean rejectOffer(int offerId) {
+    public void rejectOffer(int offerId) {
         try {
             Offer offer = offerDao.findOfferById(offerId);
             if (offer == null) {
-                return false;
+                return;
+            }
+            List<OfferedItem> offeredItems = OfferedItemsService.getInstance().findOfferedItemsByOfferId(offerId);
+            for (OfferedItem item : offeredItems) {
+                Insertion insertion = InsertionService.getInstance().getInsertionByID(item.getInsertionId());
+                insertion.setStatus(InsertionStatus.AVAILABLE);
+                InsertionService.getInstance().updateInsertion(insertion);
             }
             offerDao.updateOfferStatus(offerId, InsertionStatus.REJECTED);
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
