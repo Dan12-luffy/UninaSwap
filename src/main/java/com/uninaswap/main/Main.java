@@ -1,4 +1,4 @@
-package com.uninaswap.logic;
+package com.uninaswap.main;
 
 import java.util.Objects;
 

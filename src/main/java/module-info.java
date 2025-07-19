@@ -22,7 +22,7 @@ module com.uninaswap.uninaswap {
 
     exports com.uninaswap.controllers;
     opens com.uninaswap.controllers to javafx.fxml;
-    exports com.uninaswap.logic;
+    exports com.uninaswap.main;
     exports com.uninaswap.model;
-    opens com.uninaswap.logic to javafx.fxml;
+    opens com.uninaswap.main to javafx.fxml;
 }
