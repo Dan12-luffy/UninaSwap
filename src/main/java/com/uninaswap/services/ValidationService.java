@@ -3,7 +3,6 @@ package com.uninaswap.services;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import org.checkerframework.checker.units.qual.Current;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
@@ -30,6 +29,7 @@ public class ValidationService {
         }
         return true;
     }
+
     public boolean validateInputFromRegistration(@NotNull TextField nameField, TextField surnameField, TextField usernameField, PasswordField passwordField, PasswordField confirmPasswordField){ //TODO forse si potrebbero implementare delle eccezioni
         if(nameField.getText().trim().isEmpty() ||
                 surnameField.getText().trim().isEmpty() ||
@@ -39,30 +39,18 @@ public class ValidationService {
             ValidationService.getInstance().showRegistrationFieldsEmptyError();
             return false;
         }
-        if(!isValidUsername(usernameField.getText())){
-            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Attenzione si accettano solo lettere,numeri e underscore");
+        if(!ProfileSecurityService.getInstance().isValidUsername(usernameField.getText())){
             return false;
         }
 
-        if(!isStrongPassword(passwordField.getText())){
+        if(!ProfileSecurityService.getInstance().isValidPassword(passwordField.getText())){
             ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "La password deve contenere almeno 8 caratteri, una lettera maiuscola e un numero ");
             return false;
         }
-        return isValidPassword(passwordField, confirmPasswordField);
+        return doesPasswordMatch(passwordField, confirmPasswordField);
     }
 
-    private boolean isStrongPassword(String password){
-        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$";
-        return password.matches(passwordRegex);
-
-    }
-
-    private boolean isValidUsername(String username){
-        String usernameRegex = "^[a-zA-Z0-9_-]{3,16}$";
-        return username.matches(usernameRegex);
-    }
-
-    private  boolean isValidPassword(PasswordField passwordField, PasswordField confirmPasswordField) {
+    private  boolean doesPasswordMatch(PasswordField passwordField, PasswordField confirmPasswordField) {
         if(!passwordField.getText().equals(confirmPasswordField.getText())){
             ValidationService.getInstance().showPasswordMismatchError();
             return false;

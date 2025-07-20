@@ -78,35 +78,39 @@ public class ProfileSecurityService {
 
     public boolean isValidUsername(String username){
 
-        if(username == null || username.isEmpty()) return false;
-        if(username.length() < 5 || username.length() > 20) return false;
-        if(!username.matches("^[a-zA-Z0-9_]+$")) return false; // Controlla che contenga solo lettere, numeri e underscore
+        if(username == null || username.isEmpty()) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Lo username non può essere vuoto");
+            return false;
+        }
+        if(username.length() < 5 || username.length() > 20) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Lo username deve essere tra 5 e 20 caratteri");
+            return false;
+        }
+        // Controlla che contenga solo lettere, numeri e underscore
+        if(!username.matches("^[a-zA-Z0-9_]+$")) {
+            ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Lo username può contenere solo lettere, numeri e underscore");
+            return false;
+        }
         return true;
     }
 
     public boolean isValidPassword(String password) {
         if(password == null || password.isEmpty()) {
-            System.out.println("La password non può essere vuota");
             return false;
         }
         if(password.length() < 8 || password.length() > 20) {
-            System.out.println("La password deve essere tra 8 e 20 caratteri");
             return false;
         }
         if(!password.matches(".*[a-z].*")) {
-            System.out.println("La password deve contenere almeno una lettera minuscola");
             return false;
         }
         if(!password.matches(".*[A-Z].*")) {
-            System.out.println("La password deve contenere almeno una lettera maiuscola");
             return false;
         }
         if(!password.matches(".*\\d.*")) {
-            System.out.println("La password deve contenere almeno un numero");
             return false;
         }
         if(!password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
-            System.out.println("La password deve contenere almeno un carattere speciale");
             return false;
         }
         return true;

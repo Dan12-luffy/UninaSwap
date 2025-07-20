@@ -16,9 +16,9 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        int usernameMaxLength = 30;
+        int usernameMaxLength = 20;
         this.usernameField.setTextFormatter(createTextFormatter(usernameMaxLength));
-        int passwordMaxLength = 30;
+        int passwordMaxLength = 20;
         this.passwordField.setTextFormatter(createTextFormatter(passwordMaxLength));
     }
 

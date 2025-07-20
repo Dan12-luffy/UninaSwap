@@ -33,7 +33,6 @@ public class ExchangeOfferController {
     @FXML private Label desiredValueLabel;
     @FXML private Label differenceLabel;
 
-
     private Insertion desiredProduct;
     private final List<Insertion> selectedInsertions = new ArrayList<>();
     private final InsertionService insertionService = InsertionService.getInstance();

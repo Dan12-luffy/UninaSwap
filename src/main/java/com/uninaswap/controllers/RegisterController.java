@@ -23,7 +23,7 @@ public class RegisterController {
         for (Faculty faculty : Faculty.values()) {
             this.facultyComboBox.getItems().add(faculty.getFacultyName());
         }
-        int maxLength = 30;
+        int maxLength = 20;
         this.nameField.setTextFormatter(createTextFormatter(maxLength));
         this.surnameField.setTextFormatter(createTextFormatter(maxLength));
         this.passwordField.setTextFormatter(createTextFormatter(maxLength));
