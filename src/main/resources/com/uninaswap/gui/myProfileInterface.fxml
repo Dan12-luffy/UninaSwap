@@ -27,7 +27,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" styleClass="profile-container" stylesheets="@../guiCSS/myProfileInterface2.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.MyProfileController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1167.0" styleClass="profile-container" stylesheets="@../guiCSS/myProfileInterface2.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uninaswap.controllers.MyProfileController">
 
     <top>
         <VBox spacing="0">
@@ -143,8 +143,8 @@
                     </VBox>
 
                     <!-- Right Column - Tabs with Detailed Information -->
-                    <VBox styleClass="profile-main-content" HBox.hgrow="ALWAYS">
-                        <TabPane fx:id="profileTabPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="632.0" prefWidth="633.0" styleClass="profile-tabs" tabClosingPolicy="UNAVAILABLE">
+                    <VBox prefHeight="632.0" prefWidth="822.0" styleClass="profile-main-content" HBox.hgrow="ALWAYS">
+                        <TabPane fx:id="profileTabPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="632.0" prefWidth="829.0" styleClass="profile-tabs" tabClosingPolicy="UNAVAILABLE">
                             <!-- Personal Information Tab -->
                             <Tab styleClass="profile-tab" text=" 👤Informazioni">
                                 <VBox spacing="20">
@@ -233,7 +233,7 @@
                                     <Separator styleClass="profile-separator" />
 
                                     <!-- Charts -->
-                                    <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="216.0" prefWidth="603.0" spacing="15" VBox.vgrow="ALWAYS">
+                                    <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="216.0" prefWidth="603.0" spacing="15" translateX="95.0" VBox.vgrow="ALWAYS">
 
                                         <VBox spacing="8" HBox.hgrow="ALWAYS">
                                             <Label styleClass="chart-section-title" text="Distribuzione Offerte per Tipologia" />
