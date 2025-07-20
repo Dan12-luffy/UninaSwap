@@ -308,6 +308,7 @@ public class MyProfileController {
             editButton.setDisable(true);
         }
         if(insertion.getStatus().equals(InsertionStatus.SOLD)) {
+            deleteButton.setDisable(true);
             editButton.setDisable(true);
         }
 
