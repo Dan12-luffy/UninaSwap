@@ -26,18 +26,5 @@ public class ExchangeException extends Exception {
         ValidationService.getInstance().showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile completare lo scambio: " + message
         );
     }
-
-
-    private static void handleSQLException(SQLException e) {
-        String message = e.getMessage();
-        if (message.contains("insertion_status_check")) {
-            showError("Lo stato del prodotto non può essere aggiornato. Verificare che sia ancora disponibile.");
-        } else if (message.contains("validate_offer_content")) {
-            showError("L'offerta non rispetta i requisiti per questo tipo di prodotto.");
-        } else {
-            showError("Errore di database: " + message);
-        }
-        logger.log(Level.SEVERE, "Database error during exchange", e);
-    }
 }
 

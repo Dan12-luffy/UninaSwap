@@ -3,6 +3,7 @@ package com.uninaswap.services;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.checkerframework.checker.units.qual.Current;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
@@ -122,23 +123,23 @@ public class ValidationService {
     public void showInvalidPriceRangeError() {
         showAlert(Alert.AlertType.ERROR, "Errore", "Il prezzo minimo non deve essere maggiore del prezzo massimo");
     }
-
-    public void showAlert(javafx.scene.control.Alert.AlertType alertType, String title, String message) {
-        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
     public void showNewInsertionSuccess() {
         showAlert(Alert.AlertType.INFORMATION, "Inserzione salvata", "L'inserzione è stata salvata con successo!");
     }
     public void showWrongOfferError() {
         showAlert(Alert.AlertType.ERROR, "Errore", "Non puoi fare un'offerta su una tua inserzione.");
     }
+
     public void showOfferProposalSuccess() {
-        showAlert(Alert.AlertType.INFORMATION, "Offerta Inviata", "La tua offerta è stata inviata con successo!");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Successo");
+        alert.setHeaderText("Offerta inviata");
+        alert.setContentText("La tua offerta di scambio è stata inviata con successo.");
+        alert.initOwner(javafx.stage.Window.getWindows().stream().filter(javafx.stage.Window::isShowing).findFirst().orElse(null));
+        alert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        alert.showAndWait();
     }
+
     public void showCancelExchangeMessage() {
         showAlert(Alert.AlertType.INFORMATION, "Scambio Annullato", "Lo scambio è stato annullato con successo, tornerai alla pagina principale.");
     }
@@ -163,5 +164,18 @@ public class ValidationService {
     }
     public void showUpdateFacultyError() {
         showAlert(Alert.AlertType.ERROR, "Errore", "Impossibile aggiornare la facoltà.");
+    }
+
+    public void showGiftOfferSuccessMessage() {
+        showAlert(Alert.AlertType.INFORMATION, "Offerta Inviata", "La tua offerta di regalo è stata inviata con successo!");
+
+    }
+
+    public void showAlert(Alert.AlertType alertType, String title, String message) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

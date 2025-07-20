@@ -113,7 +113,7 @@
 
                                 <TextArea fx:id="motivationTextArea" onKeyTyped="#updateCharacterCount" prefHeight="150.0" prefWidth="400.0" promptText="Caro/a proprietario/a, sono interessato/a al tuo prodotto perché..." styleClass="message-input" wrapText="true" />
 
-                                <Label fx:id="characterCountLabel" styleClass="message-counter" text="0/500 caratteri" />
+                                <Label fx:id="characterCountLabel" styleClass="message-counter" text="500/500 caratteri" textFill="GREEN" />
                                 <Label fx:id="validationMessageLabel" styleClass="validation-message" text="" />
                             </VBox>
                         </VBox>

@@ -18,6 +18,7 @@ module com.uninaswap.uninaswap {
     requires java.desktop;
     requires svg.salamander;
     requires javafx.graphics;
+    requires org.checkerframework.checker.qual;
 
 
     exports com.uninaswap.controllers;

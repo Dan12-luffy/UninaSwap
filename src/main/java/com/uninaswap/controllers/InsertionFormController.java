@@ -162,7 +162,6 @@ public class InsertionFormController {
 
             ValidationService.getInstance().showNewInsertionSuccess();
             NavigationService.getInstance().navigateToMainView(event);
-
         } catch (Exception e) {
             ValidationService.getInstance().showNewInsertionError();
         }

@@ -50,6 +50,7 @@ public class GiftOfferController {
         try {
             Offer offer = new Offer(this.insertion.getInsertionID(), UserSession.getInstance().getCurrentUserId(), 0, message, typeOffer.GIFT_OFFER, InsertionStatus.PENDING, LocalDate.now());
             offerService.createOffer(offer);
+            ValidationService.getInstance().showGiftOfferSuccessMessage();
             NavigationService.getInstance().navigateToMainView(event);
         }
         catch (Exception ex) {

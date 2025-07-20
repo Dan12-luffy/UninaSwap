@@ -332,7 +332,7 @@
 
 .message-counter {
     -fx-font-size: 11px;
-    -fx-text-fill: -fx-muted;
+    -fx-text-full: green;
     -fx-text-alignment: RIGHT;
 }
 
